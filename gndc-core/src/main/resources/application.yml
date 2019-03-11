@@ -6,13 +6,19 @@ logging:
 mapper:
   check-example-entity-class: true
   identity: MYSQL
-  mappers: com.gndc.common.mybatis.MyMapper
+  mappers:
+    - com.gndc.common.mybatis.MyMapper
   not-empty: false
   safe-delete: true
   safe-update: true
   seq-format: true
   style: camelhumpAndLowercase
   wrap-keyword: '`{0}`'
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
   type-aliases-package: com.gndc.core.model
