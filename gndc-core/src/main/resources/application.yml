@@ -20,7 +20,7 @@ pagehelper:
   supportMethodsArguments: true
   params: count=countSql
 mybatis:
-  mapper-locations: classpath:mapper/*Mapper.xml
+  mapper-locations: classpath:mapper/simple/*.xml
   type-aliases-package: com.gndc.core.model
 server:
   port: 9111

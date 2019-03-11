@@ -2,31 +2,4 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gndc.core.mapper.simple.CommonQuestionMapper">
 
-    <sql id="page_list_where">
-        <where>
-            <trim>
-                <if test="record.status != null and record.status != ''">
-                    and status = #{record.status, jdbcType=TINYINT}
-                </if>
-            </trim>
-        </where>
-    </sql>
-
-    <select id="selectQuestionPageList" resultMap="BaseResultMapEx">
-        select
-        <include refid="Base_Column_List"/>,
-        <include refid="Blob_Column_List"/>
-        from dc_common_question
-        <include refid="page_list_where"/>
-        ORDER by id
-        LIMIT
-        #{page.startRowNum, jdbcType=INTEGER}, #{page.size, jdbcType=INTEGER}
-    </select>
-
-    <select id="selectQuestionCount" resultType="java.lang.Long">
-        select
-        count(*)
-        from dc_common_question
-        <include refid="page_list_where"/>
-    </select>
 </mapper>

@@ -15,12 +15,12 @@ import java.util.List;
 @Mapper
 public interface EventFeeMapper extends MyMapper<EventFee, Long> {
 
-    long selectCount(@Param("feeType") Byte feeType,
-                     @Param("partnerId") int partnerId,
-                     @Param("feeStatus") Byte feeStatus,
-                     @Param("status") Byte status,
-                     @Param("year") int year,
-                     @Param("month") int month);
+    long selectCountByDate(@Param("feeType") Byte feeType,
+                           @Param("partnerId") int partnerId,
+                           @Param("feeStatus") Byte feeStatus,
+                           @Param("status") Byte status,
+                           @Param("year") int year,
+                           @Param("month") int month);
 
     List<Integer> selectProductIds(@Param("partnerId") int partnerId,
                                    @Param("feeType") Byte feeType,

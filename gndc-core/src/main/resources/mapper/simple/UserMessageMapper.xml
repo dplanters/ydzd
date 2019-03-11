@@ -2,28 +2,4 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gndc.core.mapper.simple.UserMessageMapper">
 
-    <resultMap id="ExtBaseResultMap" type="com.gndc.core.etc.message.ExUserMessage" extends="BaseResultMap">
-        <result column="android_link" jdbcType="VARCHAR" property="androidLink"/>
-        <result column="ios_link" jdbcType="VARCHAR" property="iosLink"/>
-    </resultMap>
-
-    <select id="getMessageList" resultMap="ExtBaseResultMap">
-    select 
-    a.id, a.user_id, a.product_id, a.message_type, a.message, a.status, a.create_time, a.update_time,b.android_link, b.ios_link
-	from dc_user_message a
-	left join dc_product b on a.product_id = b.id
-	where user_id= #{userId,jdbcType=INTEGER}
-    ORDER BY `status` ASC,id DESC
-  	LIMIT 
-       #{page.startRowNum, jdbcType=INTEGER}, #{page.size, jdbcType=INTEGER}
-  </select>
-
-
-    <select id="selectMessageCountByUser" resultType="java.lang.Long">
-    select count(1)
-    from dc_user_message a
-    left join dc_product b on a.product_id = b.id
-    where user_id = #{userId,jdbcType=INTEGER}
-  </select>
-
 </mapper>
