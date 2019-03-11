@@ -17,7 +17,7 @@ mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
   type-aliases-package: com.gndc.core.model
 server:
-  port: 9041
+  port: 9111
 spring:
   profiles:
     active: @profileActive@

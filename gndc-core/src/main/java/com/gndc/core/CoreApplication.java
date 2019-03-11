@@ -12,7 +12,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  */
 @EnableDiscoveryClient
 @MapperScan(basePackages = "com.gndc.core.mapper")
-@SpringBootApplication(scanBasePackages = {"com.gndc.core", "com.gndc.common.aspect"})
+@SpringBootApplication(scanBasePackages = {"com.gndc.core", "com.gndc.common.config"})
 public class CoreApplication {
 
 
