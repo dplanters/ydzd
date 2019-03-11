@@ -9,6 +9,4 @@ import java.util.List;
 @Mapper
 public interface PartnerMapper extends MyMapper<Partner, Integer> {
 
-    List<Partner> selectAll();
-
 }

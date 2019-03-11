@@ -1,5 +1,7 @@
 package com.gndc.core.service.partner.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gndc.common.api.HjException;
 import com.gndc.common.api.Page;
 import com.gndc.common.api.ResponseMessage;
@@ -23,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tk.mybatis.mapper.weekend.Weekend;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -135,14 +138,19 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
             Page page = request.getHeader().getPage();
             ValidateUtil.validatePage(page);
 
-            List<PartnerAccountLog> rechargeList =
-                    partnerAccountLogMapper.selectRechargeList(request.getAdmin().getPartnerId(),
-                            PartnerAccountLogType.RECHARGET.getCode(), page);
-            long total = partnerAccountLogMapper.selectRechargeCount(request.getAdmin().getPartnerId(),
-                    PartnerAccountLogType.RECHARGET.getCode());
+            Weekend<PartnerAccountLog> weekend = Weekend.of(PartnerAccountLog.class);
+            Integer partnerId = 1;
+            weekend.weekendCriteria()
+                    .andEqualTo(PartnerAccountLog::getPartnerId, partnerId)
+                    .andEqualTo(PartnerAccountLog::getType, PartnerAccountLogType.RECHARGET.getCode());
+
+            PageHelper.startPage(page.getIndex(), page.getSize());
+            List<PartnerAccountLog> rechargeList = partnerAccountLogMapper.selectByExample(weekend);
+
+            PageInfo<PartnerAccountLog> pageInfo = new PageInfo<>(rechargeList);
 
             response.setData(rechargeList);
-            page.setTotal(total);
+            page.setTotal(pageInfo.getTotal());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
 
