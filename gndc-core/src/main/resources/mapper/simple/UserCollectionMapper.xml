@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gndc.core.mapper.simple.UserCollectionMapper">
+
+    <resultMap extends="BaseResultMap" id="UserCollectionExtResultMap"
+               type="com.gndc.core.etc.user.UserCollectionExt">
+        <result column="name" jdbcType="VARCHAR" property="productName"/>
+        <result column="is_del" jdbcType="TINYINT" property="isDel"/>
+    </resultMap>
+
+    <select id="selectUserCollectionByUserId" resultMap="UserCollectionExtResultMap">
+    SELECT b.name, b.status, a.create_time, b.is_del
+    FROM dc_user_collection a LEFT JOIN dc_product b ON a.product_id = b.id WHERE a.user_id = #{userId, jdbcType=INTEGER} and a.status = 1 and b.is_del = 1
+    ORDER by a.create_time desc 
+    LIMIT 
+       #{page.startRowNum, jdbcType=INTEGER}, #{page.size, jdbcType=INTEGER}
+  </select>
+
+    <resultMap id="ProductBaseResultMap" type="com.gndc.core.etc.product.ProductDataExpansion">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="product_id" jdbcType="INTEGER" property="productId"/>
+        <result column="data_type" jdbcType="TINYINT" property="dataType"/>
+        <result column="borrow_amount" jdbcType="DECIMAL" property="borrowAmount"/>
+        <result column="borrow_period_start" jdbcType="INTEGER" property="minBorrowPeriod" />
+        <result column="borrow_period_end" jdbcType="INTEGER" property="maxBorrowPeriod" />
+        <result column="borrow_period_unit" jdbcType="TINYINT" property="borrowPeriodUnit" />
+        <result column="borrow_time_description" jdbcType="VARCHAR" property="borrowTimeDescription" />
+        <result column="day_rate" jdbcType="DECIMAL" property="dayRate"/>
+        <result column="question_title" jdbcType="VARCHAR" property="questionTitle"/>
+        <result column="answer" jdbcType="VARCHAR" property="answer"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="logo_url" jdbcType="VARCHAR" property="logoUrl"/>
+        <result column="minBorrowAmount" jdbcType="DECIMAL" property="minBorrowAmount"/>
+        <result column="maxBorrowAmount" jdbcType="DECIMAL" property="maxBorrowAmount"/>
+        <result column="minBorrowPeriod" jdbcType="INTEGER" property="minBorrowPeriod"/>
+        <result column="maxBorrowPeriod" jdbcType="INTEGER" property="maxBorrowPeriod"/>
+        <result column="minDayRate" jdbcType="DECIMAL" property="dayRate"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+    </resultMap>
+
+    <select id="selectUserCollectionByUserIdNotOffline" resultMap="ProductBaseResultMap">
+     SELECT a.id, MIN(c.day_rate) minDayRate, MAX(c.day_rate) maxDayRate, b.`name`, b.id product_id, b.description, b.logo_url, 
+     min(c.borrow_amount) minBorrowAmount, MAX(c.borrow_amount) maxBorrowAmount,MIN(c.borrow_period_start) minBorrowPeriod,MAX(c.borrow_period_start) maxBorrowPeriod
+    FROM dc_user_collection a LEFT JOIN dc_product b ON a.product_id = b.id LEFT JOIN dc_product_data c ON b.id = c.product_id WHERE a.user_id = #{userId, jdbcType=INTEGER} and b.`status` = 2
+    and a.status = 1 and b.is_del = 1 and c.`status` = 1 and c.data_type = 1 GROUP BY product_id
+    ORDER by a.create_time desc 
+  </select>
+
+    <select id="selectUserCollectionByUserIdCount" resultType="java.lang.Long">
+    SELECT count(1)
+    FROM dc_user_collection a LEFT JOIN dc_product b ON a.product_id = b.id WHERE a.user_id = #{userId, jdbcType=INTEGER} and a.status = 1 and b.is_del = 1
+  </select>
+</mapper>

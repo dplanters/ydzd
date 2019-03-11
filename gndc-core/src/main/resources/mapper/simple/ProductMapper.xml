@@ -1,0 +1,692 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gndc.core.mapper.simple.ProductMapper">
+  <!--
+      自定义方法
+   -->
+
+  <resultMap id="ProductDetailResultMap" type="com.gndc.core.etc.product.ProductDetail">
+    <id column="productId" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
+    <result column="coope_mode" jdbcType="TINYINT" property="coopeMode" />
+    <result column="online_time" jdbcType="TIMESTAMP" property="onlineTime" />
+    <result column="offline_time" jdbcType="TIMESTAMP" property="offlineTime" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="apply_condition" jdbcType="VARCHAR" property="applyCondition" />
+    <result column="apply_process" jdbcType="VARCHAR" property="applyProcess" />
+    <result column="repay_info" jdbcType="VARCHAR" property="repayInfo" />
+    <result column="position" jdbcType="TINYINT" property="position" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="cust_serv_phone" jdbcType="VARCHAR" property="custServPhone" />
+    <result column="sort_type" jdbcType="TINYINT" property="sortType" />
+    <result column="fixed_sort_type" jdbcType="INTEGER" property="fixedSortType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="android_link" jdbcType="VARCHAR" property="androidLink" />
+    <result column="ios_link" jdbcType="VARCHAR" property="iosLink" />
+    <result column="borrow_amount_str" jdbcType="VARCHAR" property="borrowAmountStr" />
+    <result column="borrow_period_str" jdbcType="VARCHAR" property="borrowPeriodStr" />
+    <result column="hotStatus" jdbcType="TINYINT" property="hotStatus" />
+    <result column="is_detail" jdbcType="TINYINT" property="isDetail" />
+    <result column="borrow_amount_begin" jdbcType="DECIMAL" property="borrowAmountBegin" />
+    <result column="borrow_amount_end" jdbcType="DECIMAL" property="borrowAmountEnd" />
+    <result column="day_rate" jdbcType="DECIMAL" property="dayRate" />
+    <collection ofType="com.gndc.core.etc.product.ProductDataExt" property="productData" resultMap="productDataExtResultMap" />
+  </resultMap>
+
+  <resultMap extends="com.gndc.core.mapper.simple.ProductDataMapper.BaseResultMap" id="productDataExtResultMap" type="com.gndc.core.etc.product.ProductDataExt">
+    <result column="repay_amount" jdbcType="VARCHAR" property="repayAmount" />
+    <result column="interest" jdbcType="VARCHAR" property="interest" />
+  </resultMap>
+
+  <select id="selectProductByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dc_product
+    where name = #{name,jdbcType=VARCHAR} and is_del = 1
+  </select>
+
+
+
+  <select id="selectBySort" resultMap="ProductBaseResultMap">
+    select
+    dp.id productId, dp.name, dp.coope_mode, dp.logo_url, dp.description, dp.cust_serv_phone, dp.apply_condition, dp.apply_process,
+    dp.repay_info, dp.position, dp.online_time, dp.offline_time, dp.sort_type, dp.fixed_sort_type, dp.status,
+    dp.is_del, dp.android_link, dp.ios_link, dp.create_time, dp.update_time ,dp.borrow_amount_begin,dp.borrow_amount_end,
+    dpd.day_rate,dp.is_detail,dpd.borrow_period_start,dpd.borrow_period_end,dpd.borrow_period_unit,dpd.borrow_time_description
+    from dc_product dp left join dc_product_data dpd on dpd.product_id = dp.id
+    where dp.is_del = 1 and dpd.data_type = 1
+    <if test="sqlWhere.status != 0 and sqlWhere.status != null">
+      and dp.status = #{sqlWhere.status}
+    </if>
+
+
+    <choose>
+      <when test="sqlWhere.amountStart == -1">
+      </when>
+      <when test="sqlWhere.amountEnd == -2">
+        and dp.borrow_amount_end <![CDATA[>=]]> #{sqlWhere.amountStart}
+      </when>
+      <otherwise>
+
+        and (
+        (dp.borrow_amount_begin <![CDATA[<=]]> #{sqlWhere.amountStart} and dp.borrow_amount_end <![CDATA[>=]]> #{sqlWhere.amountStart})
+        or (dp.borrow_amount_begin <![CDATA[<=]]> #{sqlWhere.amountEnd} and dp.borrow_amount_end <![CDATA[>=]]> #{sqlWhere.amountEnd})
+        )
+      </otherwise>
+    </choose>
+    <if test="sqlWhere.optionKey == 'approve'">
+      and find_in_set('1', dp.tags)
+    </if>
+
+    <if test="sqlWhere.optionKey == ''">
+      order by dp.create_time desc,dp.id
+    </if>
+
+    <if test="sqlWhere.optionKey == 'rateAsc'">
+      order by dpd.day_rate
+    </if>
+    <if test="sqlWhere.optionKey == 'borrowDesc'">
+      order by dp.borrow_amount_end desc
+    </if>
+    LIMIT
+    #{page.startRowNum, jdbcType=INTEGER}, #{page.size, jdbcType=INTEGER}
+  </select>
+
+  <select id="staticProductUV" resultType="com.gndc.core.etc.product.PProductStaticUV">
+      select count(1) staticCount,product_id productId
+      from dc_event_fee
+      where 1=1
+      <if test="productIds != null and productIds.size &gt; 0">
+        and product_id in
+        <foreach close=")" collection="productIds" item="productId" open="(" separator=",">
+          #{productId}
+        </foreach>
+      </if>
+      <if test="eventTypes != null and eventTypes.size &gt; 0">
+        and event_type in
+        <foreach close=")" collection="eventTypes" item="eventType" open="(" separator=",">
+          #{eventType}
+        </foreach>
+      </if>
+      group by product_id
+  </select>
+
+
+
+  <select id="selectBySortCount" resultType="java.lang.Long">
+    select
+    count(1)
+    from dc_product
+    where is_del = 1
+    <if test="sqlWhere.status != 0 and sqlWhere.status != null">
+      and status = #{sqlWhere.status}
+    </if>
+  </select>
+
+  <resultMap id="ProductBaseResultMap" type="com.gndc.core.etc.product.ProductDataExpansion">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="data_type" jdbcType="TINYINT" property="dataType" />
+    <result column="borrow_amount" jdbcType="DECIMAL" property="borrowAmount" />
+    <result column="borrow_period_start" jdbcType="INTEGER" property="minBorrowPeriod" />
+    <result column="borrow_period_end" jdbcType="INTEGER" property="maxBorrowPeriod" />
+    <result column="borrow_period_unit" jdbcType="TINYINT" property="borrowPeriodUnit" />
+    <result column="borrow_time_description" jdbcType="VARCHAR" property="borrowTimeDescription" />
+    <result column="day_rate" jdbcType="DECIMAL" property="dayRate" />
+    <result column="question_title" jdbcType="VARCHAR" property="questionTitle" />
+    <result column="answer" jdbcType="VARCHAR" property="answer" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
+    <result column="minBorrowAmount" jdbcType="DECIMAL" property="minBorrowAmount" />
+    <result column="maxBorrowAmount" jdbcType="DECIMAL" property="maxBorrowAmount" />
+    <result column="minBorrowPeriod" jdbcType="INTEGER" property="minBorrowPeriod" />
+    <result column="maxBorrowPeriod" jdbcType="INTEGER" property="maxBorrowPeriod" />
+    <result column="fixed_sort_type" jdbcType="INTEGER" property="fixedSortType" />
+    <result column="minDayRate" jdbcType="DECIMAL" property="dayRate" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+
+    <result column="borrow_amount_begin" jdbcType="DECIMAL" property="borrowAmountBegin" />
+    <result column="borrow_amount_end" jdbcType="DECIMAL" property="borrowAmountEnd" />
+    <result column="is_detail" jdbcType="TINYINT" property="isDetail" />
+
+    <result column="android_link" jdbcType="VARCHAR" property="androidLink" />
+    <result column="ios_link" jdbcType="VARCHAR" property="iosLink" />
+  </resultMap>
+
+  <select id="selectProductRecommendDetailWithRowbounds" parameterType="java.lang.Byte" resultMap="ProductBaseResultMap">
+  	select
+  		a.id as productId,
+  		a.name,
+  		a.logo_url,
+  		c.position,
+  		a.description,
+  		a.apply_condition,
+  		a.apply_process,
+  		a.repay_info,
+  		a.day_rate minDayRate,
+  		a.day_rate day_rate,
+  		a.borrow_amount_begin borrow_amount_begin,
+  	    a.borrow_amount_end borrow_amount_end,
+  	    MIN(b.borrow_period_start) minBorrowPeriod,
+  	    MAX(b.borrow_period_start) maxBorrowPeriod,
+  		b.borrow_amount,
+  		b.borrow_period_start,
+  		a.android_link,
+  		a.ios_link,
+  		a.is_detail,
+  		b.borrow_time_description
+	    from dc_product a
+	    left join dc_product_data b on a.id=b.product_id and b.data_type =1 and b.status=1, dc_product_hot c
+    where
+          a.id=c.product_id and
+          a.is_del =1 and
+          a.status=2 and
+          c.status=#{status,jdbcType=TINYINT}
+ 		  GROUP BY a.id
+    order by c.position
+  </select>
+
+
+  <select id="selectProductBySortTypeWithRowbounds" resultMap="ProductBaseResultMap">
+    select
+    a.id as productId,
+    a.name,
+    a.apply_condition,
+    a.apply_process,
+    a.repay_info,
+    a.logo_url,
+    a.description,
+    MIN(b.day_rate) minDayRate,
+    min(b.borrow_amount) minBorrowAmount,
+    MAX(b.borrow_amount) maxBorrowAmount,
+    MIN(b.borrow_period_start) minBorrowPeriod,
+    MAX(b.borrow_period_start) maxBorrowPeriod
+    from dc_product a
+    left join dc_product_data b on a.id=b.product_id and b.status=1 and b.data_type = 1
+    where
+    a.is_del =1 and
+    a.status=2
+    group by a.id, a.name
+    <if test="sort == 0">
+      order by a.id
+    </if>
+    <if test="sort == 1">
+      order by maxBorrowAmount desc,a.id
+    </if>
+    <if test="sort == 2">
+      order by minDayRate,a.id
+    </if>
+    <if test="sort == 3">
+      order by maxBorrowPeriod desc,a.id
+    </if>
+  </select>
+
+  <select id="selectProductBySortType" resultMap="ProductBaseResultMap">
+    select
+    a.id as productId,
+    a.name,
+    a.apply_condition,
+    a.apply_process,
+    a.repay_info,
+    a.logo_url,
+    a.description,
+    a.fixed_sort_type,
+    MIN(b.day_rate) minDayRate,
+    min(b.borrow_amount) minBorrowAmount,
+    MAX(b.borrow_amount) maxBorrowAmount,
+    MIN(b.borrow_period_start) minBorrowPeriod,
+    MAX(b.borrow_period_start) maxBorrowPeriod
+    from dc_product a
+    left join dc_product_data b on a.id=b.product_id and b.status=1 and b.data_type = 1
+    where
+    a.is_del =1 and
+    a.sort_type=1 and
+    a.status=2
+    group by a.id, a.name
+    <if test="sort == 0">
+      order by  a.id
+    </if>
+    <if test="sort == 1">
+      order by maxBorrowAmount desc, a.id
+    </if>
+    <if test="sort == 2">
+      order by  minDayRate, a.id
+    </if>
+    <if test="sort == 3">
+      order by maxBorrowPeriod desc, a.id
+    </if>
+  </select>
+
+
+  <select id="selectFixedPositionProductList" resultMap="ProductBaseResultMap">
+  	select
+  		a.id as productId,
+  		a.name,
+  		a.apply_condition,
+  		a.apply_process,
+  		a.repay_info,
+  		a.logo_url,
+  		a.description,
+  		a.fixed_sort_type,
+  		MIN(b.day_rate) minDayRate,
+  		min(b.borrow_amount) minBorrowAmount,
+  	    MAX(b.borrow_amount) maxBorrowAmount,
+  	    MIN(b.borrow_period_start) minBorrowPeriod,
+  	    MAX(b.borrow_period_start) maxBorrowPeriod
+	    from dc_product a
+	    left join dc_product_data b on a.id=b.product_id and b.status=1 and b.data_type = 1
+    where
+          a.is_del =1 and
+          a.fixed_sort_type &gt;0 and
+          a.sort_type = -1 and
+          a.status=2
+    group by a.id
+    order by a.fixed_sort_type
+  </select>
+
+  <select id="getProductDataDetail" resultMap="ProductDetailResultMap">
+    select
+    a.id as productId,
+    a.name,
+    a.coope_mode,
+    a.logo_url,
+    a.android_link,
+    a.ios_link,
+    a.description,
+    a.apply_condition,
+    a.apply_process,
+    a.repay_info,
+    a.fixed_sort_type,
+    a.sort_type,
+    a.cust_serv_phone,
+    b.data_type,
+    b.id,
+    floor(b.borrow_amount) as borrow_amount,
+    b.borrow_period_start,
+    floor((b.borrow_amount + b.borrow_amount*b.day_rate*b.borrow_period_start/100)) as repay_amount,
+    floor((b.borrow_amount*b.day_rate*b.borrow_period_start/100)) as interest,
+    b.question_title,
+    b.answer,
+    a.is_detail,
+    a.borrow_amount_begin,
+    a.borrow_amount_end,
+    a.day_rate
+    from dc_product a
+    left join dc_product_data b on a.id=b.product_id and b.status=1
+    <if test="isHotProduct != null and isHotProduct==true">
+      ,dc_product_hot c
+    </if>
+    where
+    a.id=#{id,jdbcType=INTEGER} and a.is_del=1  and a.status=2
+    <if test="isHotProduct != null and isHotProduct==true">
+      and c.status=2 and a.id=c.product_id
+    </if>
+    order by b.borrow_amount ,b.borrow_period_start,b.id
+  </select>
+
+  <select id="getProductDataDetailByAdmin" resultMap="ProductDetailResultMap">
+  	 	select
+  		a.id as productId,
+  		a.name,
+  		a.coope_mode,
+  		a.logo_url,
+  		a.android_link,
+  		a.ios_link,
+  		a.description,
+  		a.apply_condition,
+  		a.apply_process,
+  		a.repay_info,
+  		a.fixed_sort_type,
+  		a.sort_type,
+  		a.cust_serv_phone,
+  		b.data_type,
+  		b.id,
+  		floor(b.borrow_amount) as borrow_amount,
+  		b.borrow_period_start,
+  		floor((b.borrow_amount + b.borrow_amount*b.day_rate*b.borrow_period_start/100)) as repay_amount,
+  		floor((b.borrow_amount*b.day_rate*b.borrow_period_start/100)) as interest,
+  		b.question_title,
+  		b.answer,
+  		a.is_detail,
+  		a.borrow_amount_begin,
+  		a.borrow_amount_end,
+  		a.day_rate
+	    from dc_product a
+	    left join dc_product_data b on a.id=b.product_id and b.status=1
+    where
+        a.id=#{id,jdbcType=INTEGER} and a.is_del=1
+        order by b.borrow_amount ,b.borrow_period_start,b.id
+  </select>
+
+
+
+  <select id="selectProductListWithRowbounds" resultMap="ProductDetailResultMap">
+    select
+    a.id as productId,
+    a.name,
+    a.coope_mode,
+    a.create_time,
+    a.online_time,
+    a.offline_time,
+    a.status,
+    <!-- 		group_concat(floor(b.borrow_amount) order by b.borrow_amount separator ' ') as borrow_amount_str,
+            group_concat(b.borrow_period_start order by b.borrow_period_start separator ' ') as borrow_period_str, -->
+    concat(floor(a.borrow_amount_begin),'~',floor(a.borrow_amount_end)) as borrow_amount_str,
+    case when max(b.borrow_period_start)=min(b.borrow_period_start) then max(b.borrow_period_start) else concat(min(b.borrow_period_start),'~', max(b.borrow_period_start)) end as borrow_period_str,
+    c.status hotStatus,
+    a.day_rate
+    from dc_product a
+    left join dc_product_data b on a.id=b.product_id and b.data_type=1 and b.status=1
+    left join dc_product_hot c on c.product_id = a.id
+    where a.is_del=1
+    <if test="sqlWhere.name != null and sqlWhere.name != ''">
+      and a.name=#{sqlWhere.name}
+    </if>
+    <if test="sqlWhere.coopeMode != null and sqlWhere.coopeMode != 0">
+      and a.coope_mode=#{sqlWhere.coopeMode}
+    </if>
+    <if test="sqlWhere.status!= null and sqlWhere.status!=0">
+      and a.status=#{sqlWhere.status}
+    </if>
+    <if test="sqlWhere.borrowAmount != null and sqlWhere.borrowAmount != '' ">
+      and a.borrow_amount_begin &lt;= #{sqlWhere.borrowAmount}
+    </if>
+    <if test="sqlWhere.borrowAmount != null and sqlWhere.borrowAmount != '' ">
+      and a.borrow_amount_end &gt;= #{sqlWhere.borrowAmount}
+    </if>
+    <if test="sqlWhere.borrowPeriod != null and sqlWhere.borrowPeriod != '' ">
+      and b.borrow_period_start = #{sqlWhere.borrowPeriod}
+    </if>
+    group by a.id
+    order by a.status desc, a.id
+  </select>
+
+
+  <select id="selectActiveAdminFixedPositionProductList" resultMap="ProductDetailResultMap">
+    select
+    a.id as productId,
+    a.name,
+    a.coope_mode,
+    a.create_time,
+    a.online_time,
+    a.offline_time,
+    a.status,
+    a.fixed_sort_type,
+    <!-- case when max(b.borrow_amount)=min(b.borrow_amount) then floor(min(b.borrow_amount)) else concat(floor(min(b.borrow_amount)),'~',floor(max(b.borrow_amount))) end as borrow_amount_str, -->
+    concat(floor(a.borrow_amount_begin),'~',floor(a.borrow_amount_end)) as borrow_amount_str,
+    case when max(b.borrow_period_start)=min(b.borrow_period_start) then max(b.borrow_period_start) else concat(min(b.borrow_period_start),'~', max(b.borrow_period_start)) end as borrow_period_str,
+    c.status hotStatus,
+    a.day_rate
+    from dc_product a
+    left join dc_product_data b on a.id=b.product_id and b.data_type=1 and b.status=1
+    left join dc_product_hot c on c.product_id = a.id
+    where a.is_del=1
+    and a.fixed_sort_type&gt;0
+    and a.sort_type=-1
+    and a.status=2
+
+    <if test="sqlWhere.name != null and sqlWhere.name != ''">
+      and a.name=#{sqlWhere.name}
+    </if>
+    <if test="sqlWhere.coopeMode != null and sqlWhere.coopeMode != 0">
+      and a.coope_mode=#{sqlWhere.coopeMode}
+    </if>
+    <if test="sqlWhere.status!= null and sqlWhere.status!=0">
+      and a.status=#{sqlWhere.status}
+    </if>
+    <if test="sqlWhere.borrowAmount != null and sqlWhere.borrowAmount != '' ">
+      and a.borrow_amount_begin &lt;= #{sqlWhere.borrowAmount}
+    </if>
+    <if test="sqlWhere.borrowAmount != null and sqlWhere.borrowAmount != '' ">
+      and a.borrow_amount_end &gt;= #{sqlWhere.borrowAmount}
+    </if>
+    <if test="sqlWhere.borrowPeriod != null and sqlWhere.borrowPeriod != '' ">
+      and b.borrow_period_start = #{sqlWhere.borrowPeriod}
+    </if>
+    group by a.id
+    order by a.fixed_sort_type
+  </select>
+
+
+  <select id="selectAdminUnfixedPositionProductList" resultMap="ProductDetailResultMap">
+    select
+    a.id as productId,
+    a.name,
+    a.coope_mode,
+    a.create_time,
+    a.online_time,
+    a.offline_time,
+    a.status,
+    <!-- case when max(b.borrow_amount)=min(b.borrow_amount) then floor(min(b.borrow_amount)) else concat(floor(min(b.borrow_amount)),'~',floor(max(b.borrow_amount))) end as borrow_amount_str, -->
+    concat(floor(a.borrow_amount_begin),'~',floor(a.borrow_amount_end)) as borrow_amount_str,
+    case when max(b.borrow_period_start)=min(b.borrow_period_start) then max(b.borrow_period_start) else concat(min(b.borrow_period_start),'~', max(b.borrow_period_start)) end as borrow_period_str,
+    c.status hotStatus,
+    a.day_rate
+    from dc_product a
+    left join dc_product_data b on a.id=b.product_id and b.data_type=1 and b.status=1
+    left join dc_product_hot c on c.product_id = a.id
+    where a.is_del=1
+    and a.sort_type=1
+
+    <if test="sqlWhere.name != null and sqlWhere.name != ''">
+      and a.name=#{sqlWhere.name}
+    </if>
+    <if test="sqlWhere.coopeMode != null and sqlWhere.coopeMode != 0">
+      and a.coope_mode=#{sqlWhere.coopeMode}
+    </if>
+    <if test="sqlWhere.status!= null and sqlWhere.status!=0">
+      and a.status=#{sqlWhere.status}
+    </if>
+    <if test="sqlWhere.borrowAmount != null and sqlWhere.borrowAmount != '' ">
+      and a.borrow_amount_begin &lt;= #{sqlWhere.borrowAmount}
+    </if>
+    <if test="sqlWhere.borrowAmount != null and sqlWhere.borrowAmount != '' ">
+      and a.borrow_amount_end &gt;= #{sqlWhere.borrowAmount}
+    </if>
+    <if test="sqlWhere.borrowPeriod != null and sqlWhere.borrowPeriod != '' ">
+      and b.borrow_period_start = #{sqlWhere.borrowPeriod}
+    </if>
+    group by a.id
+
+    union all
+
+    select
+    a.id as productId,
+    a.name,
+    a.coope_mode,
+    a.create_time,
+    a.online_time,
+    a.offline_time,
+    a.status,
+    case when max(b.borrow_amount)=min(b.borrow_amount) then floor(min(b.borrow_amount)) else concat(floor(min(b.borrow_amount)),'~',floor(max(b.borrow_amount))) end as borrow_amount_str,
+    case when max(b.borrow_period_start)=min(b.borrow_period_start) then max(b.borrow_period_start) else concat(min(b.borrow_period_start),'~', max(b.borrow_period_start)) end as borrow_period_str,
+    c.status hotStatus
+    from dc_product a
+    left join dc_product_data b on a.id=b.product_id and b.data_type=1 and b.status=1
+    left join dc_product_hot c on c.product_id = a.id
+    where a.is_del=1
+    and a.sort_type=-1
+    and a.status in (-1,1)
+
+    <if test="sqlWhere.name != null and sqlWhere.name != ''">
+      and a.name=#{sqlWhere.name}
+    </if>
+    <if test="sqlWhere.coopeMode != null and sqlWhere.coopeMode != 0">
+      and a.coope_mode=#{sqlWhere.coopeMode}
+    </if>
+    <if test="sqlWhere.status!= null and sqlWhere.status!=0">
+      and a.status=#{sqlWhere.status}
+    </if>
+    <if test="sqlWhere.borrowAmount != null and sqlWhere.borrowAmount != '' ">
+      and b.borrow_amount = #{sqlWhere.borrowAmount}
+    </if>
+    <if test="sqlWhere.borrowPeriod != null and sqlWhere.borrowPeriod != '' ">
+      and b.borrow_period_start = #{sqlWhere.borrowPeriod}
+    </if>
+    group by a.id
+
+    order by status desc, productId
+  </select>
+
+    <resultMap id="aoProductListResultMap" type="com.gndc.core.api.product.AOProductListResponse">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="partner_name" jdbcType="VARCHAR" property="partnerName" />
+        <result column="coope_mode" jdbcType="TINYINT" property="coopeMode" />
+        <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="borrow_time_description" jdbcType="VARCHAR" property="borrowTimeDescription" />
+        <result column="status" jdbcType="TINYINT" property="status" />
+        <result column="hot_status" jdbcType="TINYINT" property="hotStatus" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="online_time" jdbcType="TIMESTAMP" property="onlineTime" />
+        <result column="offline_time" jdbcType="TIMESTAMP" property="offlineTime" />
+        <result column="coope_price" jdbcType="DECIMAL" property="coopePrice" />
+        <result column="borrow_amount_range" jdbcType="VARCHAR" property="borrowAmountRange" />
+        <result column="borrow_time_range" jdbcType="VARCHAR" property="borrowTimeRange" />
+    </resultMap>
+
+    <select id="aoProductListCount" resultType="long">
+        select
+        count(*)
+        from dc_product a
+        left join dc_product_data b on a.id=b.product_id
+        left join dc_product_hot c on c.product_id = a.id
+        left join dc_partner d on a.partner_id = d.id
+        where 1 = 1 and
+        <if test="sqlWhere != null">
+            <trim prefix="(" prefixOverrides="and" suffix=")">
+                <if test="sqlWhere.coopeMode != null and sqlWhere.coopeMode != 0">
+                    and a.coope_mode=#{sqlWhere.coopeMode}
+                </if>
+                <if test="sqlWhere.status != null and sqlWhere.status != 0">
+                    and a.status=#{sqlWhere.status}
+                </if>
+                <if test="sqlWhere.partnerId != null and sqlWhere.partnerId != 0">
+                    and a.partner_id=#{sqlWhere.partnerId}
+                </if>
+                <if test="sqlWhere.startDate != null and sqlWhere.startDate != ''">
+                    and date(a.create_time) &gt;= str_to_date(#{sqlWhere.startDate}, '%Y-%m-%d %H:%i:%s')
+                </if>
+                <if test="sqlWhere.endDate != null and sqlWhere.endDate != ''">
+                    and date(a.create_time) &lt;= str_to_date(#{sqlWhere.endDate},'%Y-%m-%d %H:%i:%s')
+                </if>
+                <if test="'1 = 1'">
+                    and b.data_type = 1 and a.is_del = 1
+                </if>
+            </trim>
+        </if>
+    </select>
+
+    <select id="aoProductList" resultMap="aoProductListResultMap">
+        select
+        a.id,
+        a.name,
+        a.coope_mode,
+        a.logo_url,
+        a.description,
+        a.status,
+        a.online_time,
+        a.offline_time,
+        a.create_time,
+        a.coope_price,
+        concat(floor(a.borrow_amount_begin),'~',floor(a.borrow_amount_end)) as borrow_amount_range,
+        concat(b.borrow_period_start,'~', b.borrow_period_end) as borrow_time_range,
+        b.borrow_time_description,
+        c.status hot_status,
+        a.day_rate,
+        d.name partner_name
+        from dc_product a
+        left join dc_product_data b on a.id=b.product_id
+        left join dc_product_hot c on c.product_id = a.id
+        left join dc_partner d on a.partner_id = d.id
+        where
+        <if test="sqlWhere != null">
+            <trim prefix="(" prefixOverrides="and" suffix=")">
+                <if test="sqlWhere.coopeMode != null and sqlWhere.coopeMode != 0">
+                    and a.coope_mode=#{sqlWhere.coopeMode}
+                </if>
+                <if test="sqlWhere.status != null and sqlWhere.status != 0">
+                    and a.status=#{sqlWhere.status}
+                </if>
+                <if test="sqlWhere.name != null and sqlWhere.name != ''">
+                    and a.name like concat('%', #{sqlWhere.name}, '%')
+                </if>
+                <if test="sqlWhere.partnerId != null and sqlWhere.partnerId != 0">
+                    and a.partner_id=#{sqlWhere.partnerId}
+                </if>
+                <if test="sqlWhere.startDate != null and sqlWhere.startDate != ''">
+                    and date(a.create_time) &gt;= str_to_date(#{sqlWhere.startDate}, '%Y-%m-%d %H:%i:%s')
+                </if>
+                <if test="sqlWhere.endDate != null and sqlWhere.endDate != ''">
+                    and date(a.create_time) &lt;= str_to_date(#{sqlWhere.endDate},'%Y-%m-%d %H:%i:%s')
+                </if>
+                <if test="'1 = 1'">
+                    and b.data_type = 1 and a.is_del = 1
+                </if>
+            </trim>
+            LIMIT
+            #{page.startRowNum, jdbcType=INTEGER}, #{page.size, jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="aoProductHotListCount" resultType="long">
+      select
+      count(*)
+      from dc_product_hot c
+      left join dc_product a on c.product_id = a.id
+      left join dc_partner d on a.partner_id = d.id
+      where c.status = 2
+      <if test="sqlWhere != null">
+        <if test="sqlWhere.name != null and sqlWhere.name != ''">
+          and a.name like concat('%', #{sqlWhere.name}, '%')
+        </if>
+        <if test="sqlWhere.partnerId != null and sqlWhere.partnerId != 0">
+          and a.partner_id=#{sqlWhere.partnerId}
+        </if>
+      </if>
+    </select>
+
+    <resultMap id="aoProductHotListResultMap" type="com.gndc.core.api.product.AOProductHotListResponse">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="name" jdbcType="VARCHAR" property="name" />
+      <result column="partner_name" jdbcType="VARCHAR" property="partnerName" />
+      <result column="coope_mode" jdbcType="TINYINT" property="coopeMode" />
+      <result column="hot_status" jdbcType="TINYINT" property="hotStatus" />
+      <result column="position" jdbcType="TINYINT" property="position" />
+      <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="online_time" jdbcType="TIMESTAMP" property="onlineTime" />
+      <result column="coope_price" jdbcType="DECIMAL" property="coopePrice" />
+    </resultMap>
+
+    <select id="aoProductHotList" resultMap="aoProductHotListResultMap">
+      select
+      a.id,
+      a.name,
+      a.coope_mode,
+      a.status,
+      a.coope_price,
+      c.status hot_status,
+      c.position position,
+      c.create_time,
+      c.online_time,
+      d.name partner_name
+      from dc_product_hot c
+      left join dc_product a on c.product_id = a.id
+      left join dc_partner d on a.partner_id = d.id
+      where c.status = 2
+      <if test="sqlWhere != null">
+          <if test="sqlWhere.name != null and sqlWhere.name != ''">
+            and a.name like concat('%', #{sqlWhere.name}, '%')
+          </if>
+          <if test="sqlWhere.partnerId != null and sqlWhere.partnerId != 0">
+            and a.partner_id=#{sqlWhere.partnerId}
+          </if>
+      </if>
+      order by position
+      limit ${page.startRowNum}, ${page.size}
+    </select>
+</mapper>

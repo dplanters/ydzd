@@ -2,7 +2,7 @@ package com.gndc.core.mapper.simple;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gndc.core.CoreApplication;
-import com.gndc.core.model.UserModel;
+import com.gndc.core.model.Product;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,26 +20,13 @@ import javax.annotation.Resource;
 public class UserModelMapperTest {
 
     @Resource
-    private UserModelMapper userModelMapper;
+    private ProductMapper productMapper;
 
-    @Test
-    public void insert() {
-        UserModel userModel = new UserModel();
-        userModel.setName("机智的小哪吒");
-        userModel.setRealName("景凯辉");
-        userModel.setAge((byte) 24);
-        userModelMapper.insert(userModel);
-    }
 
     @Test
     public void selectOneByProperty() {
-        UserModel userModel = userModelMapper.selectOneByProperty("id", 12);
-        System.out.println(JSONObject.toJSONString(userModel, true));
+        Product product = productMapper.selectByPrimaryKey(134);
+        System.out.println(JSONObject.toJSONString(product, true));
     }
 
-    @Test
-    public void selectCountByProperty() {
-        int id = userModelMapper.selectCountExistByProperty("name", "机智的小哪吒0");
-        System.out.println(id);
-    }
 }

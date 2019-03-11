@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gndc.core.mapper.simple.RoleMapper">
+
+    <select id="selectRole" parameterType="com.gndc.core.etc.admin.Role" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from dc_role
+        <where>
+            <if test="id != null ">
+                and id = #{id, jdbcType=TINYINT}
+            </if>
+            <if test="roleName != null ">
+                and role_name = #{roleName, jdbcType=VARCHAR}
+            </if>
+            <if test="roleStatus != null ">
+                and status = #{roleStatus, jdbcType=TINYINT}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectRoleNameByRoleIds" resultType="map">
+        select id as roleId,role_name as roleName
+        from dc_role
+        where id
+        in
+        <foreach close=")" collection="list" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <sql id="base_where">
+        <where>
+            <if test="role.roleStatus != 0 ">
+                and status = #{role.roleStatus, jdbcType=TINYINT}
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectRolePageList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from dc_role
+        <include refid="base_where"/>
+        <if test="whereReq.id != 0 ">
+            and id = #{whereReq.id}
+        </if>
+        <if test="whereReq.addTimeBegin != null and whereReq.addTimeBegin != '' ">
+            and date(create_time) &gt;= str_to_date(#{whereReq.addTimeBegin},'%Y-%m-%d')
+        </if>
+        <if test="whereReq.addTimeEnd != null and whereReq.addTimeEnd != '' ">
+            and date(create_time) &lt;= str_to_date(#{whereReq.addTimeEnd},'%Y-%m-%d')
+        </if>
+        ORDER by update_time desc
+        LIMIT
+        #{page.startRowNum, jdbcType=INTEGER}, #{page.size, jdbcType=INTEGER}
+    </select>
+
+    <select id="selectRoleCount" resultType="java.lang.Long">
+        select count(*)
+        from dc_role
+        <include refid="base_where"/>
+        <if test="whereReq.id != 0 ">
+            and id = #{whereReq.id}
+        </if>
+        <if test="whereReq.addTimeBegin != null and whereReq.addTimeBegin != '' ">
+            and date(create_time) &gt;= str_to_date(#{whereReq.addTimeBegin},'%Y-%m-%d')
+        </if>
+        <if test="whereReq.addTimeEnd != null and whereReq.addTimeEnd != '' ">
+            and date(create_time) &lt;= str_to_date(#{whereReq.addTimeEnd},'%Y-%m-%d')
+        </if>
+    </select>
+
+    <select id="selectRoleByEdit" parameterType="com.gndc.core.etc.admin.Role" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from dc_role
+        <where>
+            <if test="id != 0 ">
+                and id &lt;&gt; #{id, jdbcType=TINYINT}
+            </if>
+            <if test="roleName != null ">
+                and role_name = #{roleName, jdbcType=VARCHAR}
+            </if>
+            <if test="roleStatus != 0 ">
+                and status = #{roleStatus, jdbcType=TINYINT}
+            </if>
+        </where>
+    </select>
+
+</mapper>

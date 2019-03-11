@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gndc.core.mapper.simple.SmsLogMapper">
+
+    <!-- 批量插入 -->
+    <insert id="batInsert">
+        insert into dc_sms_log ( user_id, mobile,
+        sms_type, sms_param, message,
+        create_time, update_time, third_channel, paasoo_phone_val_errcode,
+        paasoo_phone_val_format, paasoo_phone_val_str,
+        paasoo_sms_messageid, paasoo_sms_status, paasoo_sms_status_code,
+        paasoo_sms_str
+        )
+        values
+        <foreach collection="list" item="sms" separator=",">
+            ( #{sms.userId}, #{sms.mobile},
+            #{sms.smsType,}, #{sms.smsParam}, #{sms.message},
+            #{sms.createTime}, #{sms.updateTime}, #{sms.thirdChannel}, #{sms.paasooPhoneValErrcode},
+            #{sms.paasooPhoneValFormat}, #{sms.paasooPhoneValStr},
+            #{sms.paasooSmsMessageid}, #{sms.paasooSmsStatus}, #{sms.paasooSmsStatusCode},
+            #{sms.paasooSmsStr}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByPaasooSmsMessageid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from dc_sms_log
+        where paasoo_sms_messageid = #{paasooSmsMessageid,jdbcType=VARCHAR}
+    </select>
+</mapper>

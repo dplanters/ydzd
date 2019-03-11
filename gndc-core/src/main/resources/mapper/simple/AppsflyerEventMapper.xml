@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gndc.core.mapper.simple.AppsflyerEventMapper">
+
+    <resultMap id="ChannelDataResultMap" type="com.gndc.core.etc.appsflyer.ChannelData">
+        <result column="time" jdbcType="TIMESTAMP" property="time"/>
+        <result column="str_time" jdbcType="VARCHAR" property="strTime"/>
+        <result column="media_source" jdbcType="INTEGER" property="mediaSource"/>
+        <result column="install_count" jdbcType="INTEGER" property="installCount"/>
+        <result column="register_count" jdbcType="INTEGER" property="registerCount"/>
+        <result column="app_type" jdbcType="TINYINT" property="appType"/>
+    </resultMap>
+
+    <sql id="request_where">
+        <trim>
+            <if test="requestWhere.mediaSource != 0">
+                and media_source = #{requestWhere.mediaSource}
+            </if>
+            <if test="requestWhere.timeBegin != null and requestWhere.timeBegin != ''">
+                and date(event_time) &gt;= str_to_date(#{requestWhere.timeBegin},'%Y-%m-%d')
+            </if>
+            <if test="requestWhere.timeEnd != null and requestWhere.timeEnd != ''">
+                and date(event_time) &lt;= str_to_date(#{requestWhere.timeEnd},'%Y-%m-%d')
+            </if>
+            <if test="requestWhere.appType != 0 and requestWhere.appType != null">
+                and app_type = #{requestWhere.appType}
+            </if>
+        </trim>
+    </sql>
+
+    <select id="selectChannelDataByDay" resultMap="ChannelDataResultMap">
+        select
+        event_time time,media_source,app_type,
+        sum(case when event_type=1 then 1 else 0 end) install_count,
+        sum(case when event_type=2 then 1 else 0 end) register_count
+        from dc_appsflyer_events
+        where 1=1
+        <include refid="request_where"/>
+        group by DATE_FORMAT(event_time,'%Y-%m-%d'), media_source,app_type
+        order by event_time desc
+        LIMIT
+        #{page.startRowNum, jdbcType=INTEGER}, #{page.size, jdbcType=INTEGER}
+    </select>
+
+    <select id="selectChannelDataCountByDay" resultType="java.lang.Long">
+        select count(1)
+        from(
+        select
+        event_time time,media_source,app_type,
+        sum(case when event_type=1 then 1 else 0 end) install_count,
+        sum(case when event_type=2 then 1 else 0 end) register_count
+        from dc_appsflyer_events
+        where 1=1
+        <include refid="request_where"/>
+        group by DATE_FORMAT(event_time,'%Y-%m-%d'), media_source,app_type
+        order by event_time desc
+        ) a
+    </select>
+
+    <select id="selectChannelDataByWeek" resultMap="ChannelDataResultMap">
+        select
+        date_format(event_time,'%Y-%u') str_time,media_source,app_type,
+        sum(case when event_type=1 then 1 else 0 end) install_count,
+        sum(case when event_type=2 then 1 else 0 end) register_count
+        from dc_appsflyer_events
+        where 1=1
+        <include refid="request_where"/>
+        <if test="requestWhere.timeWeek != null and requestWhere.timeWeek != ''">
+            and date_format(event_time,'%Y-%u') = #{requestWhere.timeWeek}
+        </if>
+        group by DATE_FORMAT(event_time,'%Y-%u'), media_source,app_type
+        order by event_time desc
+        LIMIT
+        #{page.startRowNum, jdbcType=INTEGER}, #{page.size, jdbcType=INTEGER}
+    </select>
+
+    <select id="selectChannelDataCountByWeek" resultType="java.lang.Long">
+        select count(1)
+        from(
+        select
+        date_format(event_time,'%Y-%u') str_time,media_source,app_type,
+        sum(case when event_type=1 then 1 else 0 end) install_count,
+        sum(case when event_type=2 then 1 else 0 end) register_count
+        from dc_appsflyer_events
+        where 1=1
+        <include refid="request_where"/>
+        <if test="requestWhere.timeWeek != null and requestWhere.timeWeek != ''">
+            and date_format(event_time,'%Y-%u') = #{requestWhere.timeWeek}
+        </if>
+        group by DATE_FORMAT(event_time,'%Y-%u'), media_source,app_type
+        order by event_time desc
+        ) a
+    </select>
+
+    <select id="selectChannelDataByMonth" resultMap="ChannelDataResultMap">
+        select
+        event_time time,media_source,app_type,
+        sum(case when event_type=1 then 1 else 0 end) install_count,
+        sum(case when event_type=2 then 1 else 0 end) register_count
+        from dc_appsflyer_events
+        where 1=1
+        <include refid="request_where"/>
+        <if test="requestWhere.timeWeek != null and requestWhere.timeWeek != ''">
+            and date_format(event_time,'%Y-%m') = #{requestWhere.timeWeek}
+        </if>
+        group by DATE_FORMAT(event_time,'%Y-%m'), media_source,app_type
+        order by event_time desc
+        LIMIT
+        #{page.startRowNum, jdbcType=INTEGER}, #{page.size, jdbcType=INTEGER}
+    </select>
+
+    <select id="selectChannelDataCountByMonth" resultType="java.lang.Long">
+        select count(1)
+        from(
+        select
+        event_time time,media_source,app_type,
+        sum(case when event_type=1 then 1 else 0 end) install_count,
+        sum(case when event_type=2 then 1 else 0 end) register_count
+        from dc_appsflyer_events
+        where 1=1
+        <include refid="request_where"/>
+        <if test="requestWhere.timeWeek != null and requestWhere.timeWeek != ''">
+            and date_format(event_time,'%Y-%m') = #{requestWhere.timeWeek}
+        </if>
+        group by DATE_FORMAT(event_time,'%Y-%m'), media_source,app_type
+        order by event_time desc
+        ) a
+    </select>
+
+    <select id="selectChannelDataDayAll" resultMap="ChannelDataResultMap">
+        select
+        event_time time,media_source,app_type,
+        sum(case when event_type=1 then 1 else 0 end) install_count,
+        sum(case when event_type=2 then 1 else 0 end) register_count
+        from dc_appsflyer_events
+        where 1=1
+        <include refid="request_where"/>
+        group by DATE_FORMAT(event_time,'%Y-%m-%d'), media_source,app_type
+    </select>
+
+    <select id="selectChannelDataWeekAll" resultMap="ChannelDataResultMap">
+        select
+        event_time time,media_source,app_type,
+        sum(case when event_type=1 then 1 else 0 end) install_count,
+        sum(case when event_type=2 then 1 else 0 end) register_count
+        from dc_appsflyer_events
+        where 1=1
+        <include refid="request_where"/>
+        <if test="requestWhere.timeWeek != null and requestWhere.timeWeek != ''">
+            and date_format(event_time,'%Y-%u') = #{requestWhere.timeWeek}
+        </if>
+        group by DATE_FORMAT(event_time,'%Y-%u'), media_source,app_type
+    </select>
+
+    <select id="selectChannelDataMonthAll" resultMap="ChannelDataResultMap">
+        select
+        event_time time,media_source,app_type,
+        sum(case when event_type=1 then 1 else 0 end) install_count,
+        sum(case when event_type=2 then 1 else 0 end) register_count
+        from dc_appsflyer_events
+        where 1=1
+        <include refid="request_where"/>
+        <if test="requestWhere.timeWeek != null and requestWhere.timeWeek != ''">
+            and date_format(event_time,'%Y-%m') = #{requestWhere.timeWeek}
+        </if>
+        group by DATE_FORMAT(event_time,'%Y-%m'), media_source,app_type
+    </select>
+
+</mapper>

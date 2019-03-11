@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gndc.core.mapper.simple.UserMapper">
+
+    <!-- 用户列表查询 -->
+    <sql id="user_list_where">
+        <trim>
+            <if test="userWhere.userId != 0">
+                and id = #{userWhere.userId}
+            </if>
+            <if test="userWhere.phone != null and userWhere.phone != ''">
+                and phone = #{userWhere.phone}
+            </if>
+            <if test="userWhere.appName != null and userWhere.appName != ''">
+                and app_name = #{userWhere.appName}
+            </if>
+            <if test="userWhere.regDateBegin != null and userWhere.regDateBegin != ''">
+                and date(reg_time) &gt;= str_to_date(#{userWhere.regDateBegin},'%Y-%m-%d')
+            </if>
+            <if test="userWhere.regDateEnd != null and userWhere.regDateEnd != ''">
+                and date(reg_time) &lt;= str_to_date(#{userWhere.regDateEnd},'%Y-%m-%d')
+            </if>
+            <if test="userWhere.regChannel != null and userWhere.regChannel != ''">
+                and reg_channel = #{userWhere.regChannel}
+            </if>
+            <if test="userWhere.status != 0">
+                and status = #{userWhere.status}
+            </if>
+        </trim>
+    </sql>
+
+    <resultMap extends="BaseResultMap" id="UserExpBaseResultMap" type="com.gndc.model.UserExpansion">
+
+    </resultMap>
+
+    <select id="searchUserList" resultMap="UserExpBaseResultMap">
+        select * from dc_user where 1=1
+        <include refid="user_list_where"/>
+        order by create_time DESC
+    </select>
+
+    <select id="searchUserListCount" resultType="java.lang.Long">
+        SELECT
+        count(1)
+        FROM
+        dc_user
+        WHERE
+        1 = 1
+        <include refid="user_list_where"/>
+
+    </select>
+    <select id="getLossUserCount" resultType="java.lang.Long">
+    SELECT count(1) FROM dc_user b WHERE b.id NOT IN (SELECT DISTINCT(a.user_id) FROM dc_user_events a WHERE 
+    a.event_type = 6 AND date(a.event_time) &gt;= date(#{sevenDay,jdbcType=TIMESTAMP}) AND date(a.event_time) &lt;= date(#{now,jdbcType=TIMESTAMP})) 
+    AND EXISTS (SELECT 1 FROM dc_user_events c WHERE b.id = c.user_id AND date(c.event_time) = date(#{eightDay,jdbcType=TIMESTAMP}))
+	
+  </select>
+
+    <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="UserExpBaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from dc_user
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <update id="updatePassword" parameterType="com.gndc.core.model.User">
+        update dc_user
+            set
+            password = #{password},
+            password_sign = #{passwordSign}
+            where id = #{id}
+    </update>
+
+    <select id="selectUserByPhone" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from dc_user
+        where phone = #{phone,jdbcType=CHAR}
+    </select>
+
+    <select id="selectUserEventWithRowbounds" resultType="map">
+      select due.create_time eventTime,due.product_id productId,due.event_type eventType,dp.name
+      from dc_user_events due
+        left join dc_product dp on due.product_id = dp.id
+      where event_type in (1,2,8)
+        <if test="query.eventDateBegin != null and query.eventDateBegin != ''
+                    and query.eventDateEnd != null and query.eventDateEnd != ''">
+            and create_time <![CDATA[>=]]> #{query.eventDateBegin}
+            and create_time <![CDATA[<=]]> #{query.eventDateEnd}
+        </if>
+        <if test="query.eventDateBegin != null and query.eventDateBegin != ''
+                    and (query.eventDateEnd == null or query.eventDateEnd == '')">
+            and create_time <![CDATA[>=]]> #{query.eventDateBegin}
+        </if>
+        <if test="(query.eventDateBegin == null or query.eventDateBegin == '')
+                    and query.eventDateEnd != null and query.eventDateEnd != ''">
+            and create_time <![CDATA[<=]]> #{query.eventDateEnd}
+        </if>
+        <if test="query.userId != null and query.userId != ''">
+            and due.user_id = #{query.userId}
+        </if>
+    </select>
+</mapper>

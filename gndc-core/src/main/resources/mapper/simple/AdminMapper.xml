@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gndc.core.mapper.simple.AdminMapper">
+
+    <resultMap id="ModelAdminResultMap" type="com.gndc.model.Admin">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="oper_id" jdbcType="INTEGER" property="operId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="password" jdbcType="CHAR" property="password"/>
+        <result column="password_sign" jdbcType="VARCHAR" property="passwordSign"/>
+        <result column="operate_sign" jdbcType="VARCHAR" property="operateSign"/>
+        <result column="is_lock" jdbcType="TINYINT" property="isLock"/>
+        <result column="lock_time" jdbcType="TIMESTAMP" property="lockTime"/>
+        <result column="login_count" jdbcType="INTEGER" property="loginCount"/>
+        <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime"/>
+        <result column="last_login_ip" jdbcType="VARCHAR" property="lastLoginIp"/>
+        <result column="last_logout_time" jdbcType="TIMESTAMP" property="lastLogoutTime"/>
+        <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="level" jdbcType="TINYINT" property="level"/>
+        <result column="partner_id" jdbcType="INTEGER" property="partnerId"/>
+        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="create_admin_id" jdbcType="INTEGER" property="createAdminId"/>
+        <result column="update_admin_id" jdbcType="INTEGER" property="updateAdminId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <select id="selectAdminByLoginName" resultMap="ModelAdminResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from dc_admin
+        where login_name = #{loginName, jdbcType=VARCHAR}
+        and status = 1
+    </select>
+
+    <sql id="base_where">
+        <where>
+            <if test="admin.status != 0 ">
+                and status = #{admin.status, jdbcType=TINYINT}
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectAdminPageList" resultMap="ModelAdminResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from dc_admin
+        <include refid="base_where"/>
+        <if test="whereReq.loginName != null and  whereReq.loginName != '' ">
+            and login_name = #{whereReq.loginName}
+        </if>
+        <if test="whereReq.name != null and whereReq.name != '' ">
+            and name = #{whereReq.name}
+        </if>
+        <if test="whereReq.phone != null and whereReq.phone != '' ">
+            and phone = #{whereReq.phone}
+        </if>
+        <if test="whereReq.roleId != null and whereReq.roleId != '' ">
+            and role_id = #{whereReq.roleId}
+        </if>
+        <if test="whereReq.addTimeBegin != null and whereReq.addTimeBegin != '' ">
+            and date(create_time) &gt;= str_to_date(#{whereReq.addTimeBegin},'%Y-%m-%d')
+        </if>
+        <if test="whereReq.addTimeEnd != null and whereReq.addTimeEnd != '' ">
+            and date(create_time) &lt;= str_to_date(#{whereReq.addTimeEnd},'%Y-%m-%d')
+        </if>
+        ORDER by update_time desc
+        LIMIT
+        #{page.startRowNum, jdbcType=INTEGER}, #{page.size, jdbcType=INTEGER}
+    </select>
+
+    <select id="selectAdminCount" resultType="java.lang.Long">
+        select count(*)
+        from dc_admin
+        <include refid="base_where"/>
+        <if test="whereReq.loginName != null and whereReq.loginName != '' ">
+            and login_name = #{whereReq.loginName}
+        </if>
+        <if test="whereReq.name != null and whereReq.name != '' ">
+            and name = #{whereReq.name}
+        </if>
+        <if test="whereReq.phone != null and whereReq.phone != '' ">
+            and phone = #{whereReq.phone}
+        </if>
+        <if test="whereReq.roleId != null and whereReq.roleId != ''">
+            and role_id = #{whereReq.roleId}
+        </if>
+        <if test="whereReq.addTimeBegin != null and whereReq.addTimeBegin != '' ">
+            and date(create_time) &gt;= str_to_date(#{whereReq.addTimeBegin},'%Y-%m-%d')
+        </if>
+        <if test="whereReq.addTimeEnd != null and whereReq.addTimeEnd != '' ">
+            and date(create_time) &lt;= str_to_date(#{whereReq.addTimeEnd},'%Y-%m-%d')
+        </if>
+    </select>
+
+    <select id="selectListByRoleId" parameterType="java.lang.Integer" resultMap="ModelAdminResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from dc_admin
+        where role_id = #{roleId,jdbcType=INTEGER}
+        and status = 1
+        <!--  (select admin_id from tb_admin_role where role_id = #{roleId,jdbcType=INTEGER})-->
+    </select>
+
+    <update id="updateByIdSelective" parameterType="com.gndc.model.Admin">
+        update dc_admin
+        <set>
+            <if test="operId != null">
+                oper_id = #{operId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="loginName != null">
+                login_name = #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=CHAR},
+            </if>
+            <if test="passwordSign != null">
+                password_sign = #{passwordSign,jdbcType=VARCHAR},
+            </if>
+            <if test="operateSign != null">
+                operate_sign = #{operateSign,jdbcType=VARCHAR},
+            </if>
+            <if test="isLock != null">
+                is_lock = #{isLock,jdbcType=TINYINT},
+            </if>
+            <if test="lockTime != null">
+                lock_time = #{lockTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="loginCount != null">
+                login_count = #{loginCount,jdbcType=INTEGER},
+            </if>
+            <if test="lastLoginTime != null">
+                last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastLoginIp != null">
+                last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
+            </if>
+            <if test="lastLogoutTime != null">
+                last_logout_time = #{lastLogoutTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="telephone != null">
+                telephone = #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=TINYINT},
+            </if>
+            <if test="roleId != null">
+                role_id = #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="createAdminId != null">
+                create_admin_id = #{createAdminId,jdbcType=INTEGER},
+            </if>
+            <if test="updateAdminId != null">
+                update_admin_id = #{updateAdminId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+</mapper>

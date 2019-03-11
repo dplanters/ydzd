@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gndc.core.mapper.simple.BannerMapper">
+
+    <select id="searchBannerList" resultMap="BaseResultMapEx">
+        select
+        a.id, product_id, title, a.status, a.is_del, a.position, link, img_url, begin_time, end_time,
+        a.create_time, a.update_time,name
+        from dc_operation_banner a,dc_product b
+        where product_id = b.id and a.is_del = 1
+        <if test="sqlWhere.onlineTimeBegin != null and sqlWhere.onlineTimeBegin != ''">
+            and date(a.create_time) &gt;= str_to_date(#{sqlWhere.onlineTimeBegin},'%Y-%m-%d')
+        </if>
+        <if test="sqlWhere.onlineTimeEnd != null and sqlWhere.onlineTimeEnd != '' ">
+            and date(a.create_time) &lt;= str_to_date(#{sqlWhere.onlineTimeEnd},'%Y-%m-%d')
+        </if>
+        <if test="sqlWhere.status != 0">
+            and a.status = #{sqlWhere.status}
+        </if>
+        order by position
+        limit ${page.startRowNum}, ${page.size}
+    </select>
+
+    <select id="selectPBanners" resultMap="BaseResultMap">
+        select dob.id, dob.product_id, dob.title, dob.status, dob.is_del, dob.position, dob.link, dob.img_url,
+         dob.begin_time, dob.end_time, dob.create_time, dob.update_time
+        from dc_operation_banner dob ,dc_product dp
+        where dob.product_id = dp.id
+        and dob.begin_time <![CDATA[<=]]> curtime()
+		and dob.end_time <![CDATA[>=]]> curtime()
+        and dob.is_del = 1
+        and dob.status = 2
+        order by position
+    </select>
+
+    <select id="searchBannerListCount" resultType="java.lang.Long">
+        select
+        count(1)
+        from dc_operation_banner a,dc_product b
+        where product_id = b.id and a.is_del = 1
+        <if test="sqlWhere.onlineTimeBegin != null and sqlWhere.onlineTimeBegin != ''">
+            and date(a.create_time) &gt;= str_to_date(#{sqlWhere.onlineTimeBegin},'%Y-%m-%d')
+        </if>
+        <if test="sqlWhere.onlineTimeEnd != null and sqlWhere.onlineTimeEnd != '' ">
+            and date(a.create_time) &lt;= str_to_date(#{sqlWhere.onlineTimeEnd},'%Y-%m-%d')
+        </if>
+        <if test="sqlWhere.status != 0">
+            and a.status = #{sqlWhere.status}
+        </if>
+    </select>
+
+    <update id="updateDownPosition" parameterType="java.lang.Integer">
+    update dc_operation_banner
+    set position=position+1
+    where position &gt;= #{position,jdbcType=INTEGER}
+  </update>
+
+    <update id="updateUpPosition" parameterType="java.lang.Integer">
+    update dc_operation_banner
+    set position=position-1
+    where position &gt;= #{position,jdbcType=INTEGER}
+  </update>
+
+    <update id="updateDownEditPosition" parameterType="java.lang.Integer">
+    update dc_operation_banner
+    set position=position + 1
+    where position &gt;= #{position,jdbcType=INTEGER} and position &lt;= #{getPosition,jdbcType=INTEGER}
+  </update>
+
+    <update id="updateUpEditPosition" parameterType="java.lang.Integer">
+    update dc_operation_banner
+    set position=position - 1
+    where position &gt; #{getPosition,jdbcType=INTEGER} and position &lt;= #{position,jdbcType=INTEGER}
+  </update>
+
+    <select id="selectByPosition" parameterType="java.lang.Integer" resultType="com.gndc.core.model.Banner">
+        select
+        <include refid="Base_Column_List"/>
+        from dc_operation_banner
+        where position = #{position,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectPositionMax" resultType="java.lang.Integer">
+    select 
+	position
+    from dc_operation_banner
+   	ORDER BY position desc
+	limit 1
+  </select>
+
+    <select id="selectOnLineCount" resultType="java.lang.Integer">
+    select 
+	count(1)
+    from dc_operation_banner
+    where status = 2 and is_del = 1
+  </select>
+
+    <select id="selectByProductId" resultType="com.gndc.core.model.Banner">
+        select
+        <include refid="Base_Column_List"/>
+        from dc_operation_banner
+        where product_id = #{productId,jdbcType=INTEGER} and is_del = 1
+    </select>
+</mapper>
