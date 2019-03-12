@@ -27,15 +27,12 @@ public class ValidateUtil {
      * 报文头有效性校验
      *
      * @return
-     * @throws RtfException
+     * @throws HjException
      */
     public static boolean validate(Header header) throws HjException {
         if (header == null) {
             header = new Header();
             throw new HjException(ResultCode.HEADER_ISNULL);
-        }
-        if (StringUtils.isEmpty(header.getAction())) {
-            throw new HjException(ResultCode.ACTION_ISNULL);
         }
         // if (StringUtils.isEmpty(header.getUserid())) {
         // throw new HjException(StockErrorCode.USERID_ISNULL, "用户ID不能为空");

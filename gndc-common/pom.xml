@@ -63,6 +63,17 @@
             <artifactId>mapper-spring-boot-starter</artifactId>
             <scope>provided</scope>
         </dependency>
+
+        <!-- google 电话号码解析库 start -->
+        <dependency>
+            <groupId>com.googlecode.libphonenumber</groupId>
+            <artifactId>libphonenumber</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.libphonenumber</groupId>
+            <artifactId>geocoder</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

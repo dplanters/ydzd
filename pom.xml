@@ -51,6 +51,8 @@
         <javafaker.version>0.16</javafaker.version>
         <hutool-all.version>4.3.1</hutool-all.version>
         <mapstruct.version>1.2.0.Final</mapstruct.version>
+        <libphonenumber.version>6.3</libphonenumber.version>
+        <geocoder.version>2.15</geocoder.version>
 
         <!-- 分布式服务部分 -->
 
@@ -98,6 +100,18 @@
                 <artifactId>mapper-spring-boot-starter</artifactId>
                 <version>${mapper-spring-boot-starter.version}</version>
             </dependency>
+            <!-- google 电话号码解析库 start -->
+            <dependency>
+                <groupId>com.googlecode.libphonenumber</groupId>
+                <artifactId>libphonenumber</artifactId>
+                <version>${libphonenumber.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.googlecode.libphonenumber</groupId>
+                <artifactId>geocoder</artifactId>
+                <version>${geocoder.version}</version>
+            </dependency>
+            <!-- google 电话号码解析库 end -->
         </dependencies>
     </dependencyManagement>
 
