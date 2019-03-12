@@ -1,6 +1,6 @@
 package com.gndc.core.mappers;
 
-import com.gndc.core.api.product.APProductListResponse;
+import com.gndc.core.api.partner.product.APProductListResponse;
 import com.gndc.core.model.Product;
 import com.gndc.core.model.ProductData;
 import org.mapstruct.Mapper;

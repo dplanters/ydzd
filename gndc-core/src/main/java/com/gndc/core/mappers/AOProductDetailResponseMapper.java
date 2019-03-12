@@ -1,6 +1,6 @@
 package com.gndc.core.mappers;
 
-import com.gndc.core.api.product.AOProductDetailResponse;
+import com.gndc.core.api.admin.product.AOProductDetailResponse;
 import com.gndc.core.model.Product;
 import com.gndc.core.model.ProductData;
 import org.mapstruct.Mapper;

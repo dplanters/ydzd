@@ -1,4 +1,4 @@
-package com.gndc.core.api.product;
+package com.gndc.core.api.admin.product;
 
 import com.gndc.common.api.HjAction;
 import com.gndc.common.api.RequestMessage;

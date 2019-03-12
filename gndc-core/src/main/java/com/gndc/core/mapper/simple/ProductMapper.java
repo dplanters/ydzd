@@ -1,10 +1,11 @@
 package com.gndc.core.mapper.simple;
 
 
-import com.github.pagehelper.PageInfo;
-import com.gndc.common.api.Page;
 import com.gndc.common.mybatis.MyMapper;
-import com.gndc.core.api.product.*;
+import com.gndc.core.api.admin.product.AOProductHotListRequest;
+import com.gndc.core.api.admin.product.AOProductHotListResponse;
+import com.gndc.core.api.admin.product.AOProductListRequest;
+import com.gndc.core.api.admin.product.AOProductListResponse;
 import com.gndc.core.model.Product;
 import com.gndc.core.etc.product.PProductStaticUV;
 import org.apache.ibatis.annotations.Mapper;

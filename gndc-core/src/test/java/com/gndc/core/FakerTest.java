@@ -2,7 +2,6 @@ package com.gndc.core;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.javafaker.Faker;
-import com.gndc.core.api.product.AOProductListRequest;
 
 import java.util.Locale;
 

@@ -1,11 +1,10 @@
 package com.gndc.core.service.product;
 
 import com.gndc.common.api.ResponseMessage;
-import com.gndc.core.api.product.*;
+import com.gndc.core.api.admin.product.*;
+import com.gndc.core.api.partner.product.APProductListRequest;
+import com.gndc.core.api.partner.product.APProductListResponse;
 import com.gndc.core.model.Product;
-import com.sun.org.apache.regexp.internal.RE;
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface IProductService {

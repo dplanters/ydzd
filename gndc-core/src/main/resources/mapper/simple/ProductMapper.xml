@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gndc.core.mapper.simple.ProductMapper">
 
-    <resultMap id="aoProductListResultMap" type="com.gndc.core.api.product.AOProductListResponse">
+    <resultMap id="aoProductListResultMap" type="com.gndc.core.api.admin.product.AOProductListResponse">
         <id column="id" jdbcType="INTEGER" property="id" />
         <result column="name" jdbcType="VARCHAR" property="name" />
         <result column="partner_name" jdbcType="VARCHAR" property="partnerName" />
@@ -102,7 +102,7 @@
         </if>
     </select>
 
-    <resultMap id="aoProductHotListResultMap" type="com.gndc.core.api.product.AOProductHotListResponse">
+    <resultMap id="aoProductHotListResultMap" type="com.gndc.core.api.admin.product.AOProductHotListResponse">
       <id column="id" jdbcType="INTEGER" property="id" />
       <result column="name" jdbcType="VARCHAR" property="name" />
       <result column="partner_name" jdbcType="VARCHAR" property="partnerName" />

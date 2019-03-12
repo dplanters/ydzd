@@ -1,6 +1,6 @@
 package com.gndc.core.mappers;
 
-import com.gndc.core.api.product.AOProductAddModifyRequest;
+import com.gndc.core.api.admin.product.AOProductAddModifyRequest;
 import com.gndc.core.model.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

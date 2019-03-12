@@ -1,4 +1,4 @@
-package com.gndc.core.api.product;
+package com.gndc.core.api.admin.product;
 
 import lombok.Getter;
 import lombok.Setter;
