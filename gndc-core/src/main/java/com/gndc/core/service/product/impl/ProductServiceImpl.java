@@ -221,6 +221,11 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             ValidateUtil.validateBean(request);
             Product product = productMapper.selectByPrimaryKey(request.getId());
 
+            if (product == null) {
+                response.createError(ResultCode.PRODUCT_NOT_EXIST);
+                return response;
+            }
+
             Weekend<ProductData> weekend = Weekend.of(ProductData.class);
             weekend.weekendCriteria()
                     .andEqualTo(ProductData::getProductId, product.getId())
@@ -236,7 +241,6 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
             return response;
         } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             logger.error(e.getMessage(), e);
             response.createError(ResultCode.RECORD_SEARCH_FAIL);
             logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
@@ -287,7 +291,8 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
 
         try {
             ValidateUtil.validateBean(request);
-            Product product = productMapper.selectByPrimaryKey(request.getId());
+            Integer id = request.getId();
+            Product product = productMapper.selectByPrimaryKey(id);
             if (product == null) {
                 response.createError(ResultCode.PRODUCT_NOT_EXIST);
                 return response;
@@ -301,15 +306,10 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
 
             Weekend<ProductData> weekend = Weekend.of(ProductData.class);
             weekend.weekendCriteria()
-                    .andEqualTo(ProductData::getProductId, request.getId());
+                    .andEqualTo(ProductData::getProductId, id);
 
-
-            ProductData productData = new ProductData();
-            productData.setStatus(StatusType.DISABLED.getCode());
-
-            boolean affectedRows = productDataMapper.updateByExampleSelective(productData, weekend) > 0;
-
-            boolean affected = productMapper.updateByPrimaryKey(product) == 1;
+            boolean affectedRows = productDataMapper.deleteByExample(weekend) > 0;
+            boolean affected = productMapper.deleteByPrimaryKey(id) == 1;
             response.setData(affectedRows && affected);
             return response;
         } catch (HjException e) {

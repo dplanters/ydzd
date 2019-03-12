@@ -97,6 +97,7 @@ public class Product extends BaseEntity {
     /**
      * 状态  1存在；-1删除
      */
+    @LogicDelete(isDeletedValue = -1, notDeletedValue = 1)
     private Byte isDel;
 
     /**

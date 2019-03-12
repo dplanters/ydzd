@@ -1,6 +1,7 @@
 package com.gndc.core.model;
 
 import com.gndc.common.model.BaseEntity;
+import tk.mybatis.mapper.annotation.LogicDelete;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -70,6 +71,7 @@ public class ProductData extends BaseEntity {
     /**
      * 状态  1存在；-1删除
      */
+    @LogicDelete(isDeletedValue = -1, notDeletedValue = 1)
     private Byte status;
 
     /**

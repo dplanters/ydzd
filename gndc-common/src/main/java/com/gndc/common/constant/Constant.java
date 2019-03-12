@@ -29,7 +29,7 @@ public class Constant {
     // 请求融云发生异常
     public static final int RONG_ERROR_CODE_EXCEPTION = -500;
     // 国家
-    public static String COUNTRY = "VN";// VN
+    public static String COUNTRY = "CN";// VN
     // 国家编码
     public static String COUNTRY_CODE = "62";
     // 与中国时差
