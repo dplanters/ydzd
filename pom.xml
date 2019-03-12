@@ -59,10 +59,7 @@
         <!-- 测试部分 -->
 
         <!-- 插件部分 -->
-        <checkstyle.config.location>check-style.xml</checkstyle.config.location>
-        <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
         <mybatis-generator-maven-plugin.version>1.3.5</mybatis-generator-maven-plugin.version>
-        <springloaded.version>1.2.5.RELEASE</springloaded.version>
 
     </properties>
 
@@ -106,6 +103,7 @@
                 <artifactId>libphonenumber</artifactId>
                 <version>${libphonenumber.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.googlecode.libphonenumber</groupId>
                 <artifactId>geocoder</artifactId>
