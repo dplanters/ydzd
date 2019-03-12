@@ -1,6 +1,7 @@
 package com.gndc.core.model;
 
 import com.gndc.common.model.BaseEntity;
+import tk.mybatis.mapper.annotation.LogicDelete;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

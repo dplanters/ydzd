@@ -99,26 +99,7 @@
                     and b.data_type = 1 and a.is_del = 1
                 </if>
             </trim>
-            LIMIT
-            #{page.startRowNum, jdbcType=INTEGER}, #{page.size, jdbcType=INTEGER}
         </if>
-    </select>
-
-    <select id="aoProductHotListCount" resultType="long">
-      select
-      count(*)
-      from dc_product_hot c
-      left join dc_product a on c.product_id = a.id
-      left join dc_partner d on a.partner_id = d.id
-      where c.status = 2
-      <if test="sqlWhere != null">
-        <if test="sqlWhere.name != null and sqlWhere.name != ''">
-          and a.name like concat('%', #{sqlWhere.name}, '%')
-        </if>
-        <if test="sqlWhere.partnerId != null and sqlWhere.partnerId != 0">
-          and a.partner_id=#{sqlWhere.partnerId}
-        </if>
-      </if>
     </select>
 
     <resultMap id="aoProductHotListResultMap" type="com.gndc.core.api.product.AOProductHotListResponse">
@@ -158,6 +139,5 @@
           </if>
       </if>
       order by position
-      limit ${page.startRowNum}, ${page.size}
     </select>
 </mapper>
