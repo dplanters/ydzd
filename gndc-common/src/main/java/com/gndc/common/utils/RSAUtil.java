@@ -71,44 +71,6 @@ public class RSAUtil {
         return java.util.Base64.getEncoder().encodeToString(result);
     }
 
-    // /**
-    // * 生成密钥
-    // */
-    // public static Map<String, Object> initKey() throws Exception {
-    // /* 初始化密钥生成器 */
-    // KeyPairGenerator keyPairGenerator =
-    // KeyPairGenerator.getInstance(ENCRYPTION_ALGORITHM);
-    // keyPairGenerator.initialize(1024);
-    //
-    // /* 生成密钥 */
-    // KeyPair keyPair = keyPairGenerator.generateKeyPair();
-    // RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-    // RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-    //
-    // Map<String, Object> keyMap = new HashMap<String, Object>(2);
-    // keyMap.put("PublicKey", publicKey);
-    // keyMap.put("PrivateKey", privateKey);
-    // return keyMap;
-    // }
-    //
-    // /**
-    // * 取得公钥
-    // */
-    // public static String getPublicKey(Map<String, Object> keyMap) throws
-    // Exception {
-    // Key key = (Key) keyMap.get("PublicKey");
-    // return Base64.encodeBase64String(key.getEncoded());
-    // }
-    //
-    // /**
-    // * 取得私钥
-    // */
-    // public static String getPrivateKey(Map<String, Object> keyMap) throws
-    // Exception {
-    // Key key = (Key) keyMap.get("PrivateKey");
-    // return Base64.encodeBase64String(key.getEncoded());
-    // }
-
     /**
      * 解密
      */

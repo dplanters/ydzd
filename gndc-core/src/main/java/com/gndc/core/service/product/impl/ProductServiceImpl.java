@@ -1,5 +1,6 @@
 package com.gndc.core.service.product.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.api.HjException;
@@ -27,6 +28,8 @@ import com.gndc.core.model.ProductHot;
 import com.gndc.core.service.product.IProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -177,7 +180,6 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             ProductData productData = ProductDataMapping.INSTANCE.convert(aoProductDataRequest);
             if (request.getId() == null) {
                 //新增
-//                request.setExtra(null);
 
                 productMapper.insertSelective(product);
 
