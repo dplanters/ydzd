@@ -8,7 +8,10 @@
  ***************************************************************************/
 package com.gndc.common.api;
 
+import com.github.pagehelper.PageInfo;
 import com.gndc.common.utils.DateUtil;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -19,6 +22,8 @@ import java.util.Date;
  * @Description 请求响应头封装
  * @date 2018年1月27日 上午10:19:23
  */
+@Getter
+@Setter
 public class Header implements Serializable {
     /**
      * 请求
@@ -95,7 +100,7 @@ public class Header implements Serializable {
     /**
      * 分页信息
      */
-    private Page page;
+    private PageInfo page;
     /**
      * 错误号，0：成功，非0：失败
      */
@@ -154,134 +159,6 @@ public class Header implements Serializable {
             this.sessionId = header.sessionId;
             this.page = header.page;
         }
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public Integer getMsgType() {
-        return msgType;
-    }
-
-    public void setMsgType(Integer msgType) {
-        this.msgType = msgType;
-    }
-
-    public String getDeviceType() {
-        return deviceType;
-    }
-
-    public void setDeviceType(String deviceType) {
-        this.deviceType = deviceType;
-    }
-
-    public String getClientModel() {
-        return clientModel;
-    }
-
-    public void setClientModel(String clientModel) {
-        this.clientModel = clientModel;
-    }
-
-    public String getClientVersion() {
-        return clientVersion;
-    }
-
-    public void setClientVersion(String clientVersion) {
-        this.clientVersion = clientVersion;
-    }
-
-    public double getLocLatitude() {
-        return locLatitude;
-    }
-
-    public void setLocLatitude(double locLatitude) {
-        this.locLatitude = locLatitude;
-    }
-
-    public double getLocLongitude() {
-        return locLongitude;
-    }
-
-    public void setLocLongitude(double locLongitude) {
-        this.locLongitude = locLongitude;
-    }
-
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
-
-    public String getSendingTime() {
-        return sendingTime;
-    }
-
-    public void setSendingTime(String sendingTime) {
-        this.sendingTime = sendingTime;
-    }
-
-    public String getSignMode() {
-        return signMode;
-    }
-
-    public void setSignMode(String signMode) {
-        this.signMode = signMode;
-    }
-
-    public String getSignMsg() {
-        return signMsg;
-    }
-
-    public void setSignMsg(String signMsg) {
-        this.signMsg = signMsg;
-    }
-
-    public Page getPage() {
-        return page;
-    }
-
-    public void setPage(Page page) {
-        this.page = page;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public Object getMsgExt() {
-        return msgExt;
-    }
-
-    public void setMsgExt(Object msgExt) {
-        this.msgExt = msgExt;
     }
 
 }

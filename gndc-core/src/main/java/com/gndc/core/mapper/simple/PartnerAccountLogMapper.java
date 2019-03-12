@@ -12,13 +12,6 @@ import java.util.List;
 @Mapper
 public interface PartnerAccountLogMapper extends MyMapper<PartnerAccountLog, Integer> {
 
-    List<PartnerAccountLog> selectWithdrawCashList(
-            @Param("partnerId") Integer partnerId,
-            @Param("type") Byte type,
-            @Param("page") Page page);
-
-    long selectWithdrawCashCount(@Param("partnerId") Integer partnerId,
-                                 @Param("type") Byte type);
 
     BigDecimal sumAmount(@Param("partnerId") Integer partnerId,
                          @Param("type") Byte type,

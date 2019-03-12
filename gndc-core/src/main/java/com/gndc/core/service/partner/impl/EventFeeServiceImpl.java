@@ -2,6 +2,8 @@ package com.gndc.core.service.partner.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gndc.common.api.HjException;
 import com.gndc.common.api.Page;
 import com.gndc.common.api.ResponseMessage;
@@ -33,11 +35,13 @@ import com.gndc.core.model.Product;
 import com.gndc.core.model.User;
 import com.gndc.core.model.UserEvent;
 import com.gndc.core.service.partner.IEventFeeService;
+import com.sun.rowset.internal.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tk.mybatis.mapper.weekend.Weekend;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -258,8 +262,7 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
         APDataAnalysisRequest request = JsonUtil.getObject(requestStr, APDataAnalysisRequest.class);
         ResponseMessage<APDataAnalysisTableResponse> response = new ResponseMessage<>(request);
         try {
-            Page page = request.getHeader().getPage();
-            ValidateUtil.validatePage(page);
+            PageInfo page = request.getHeader().getPage();
             ValidateUtil.validateBean(request);
 
 //            Integer partnerId = request.getAdmin().getPartnerId();
@@ -272,6 +275,17 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
 
             apDataAnalysisTableResponse.setProductName(product.getName());
 
+            Weekend<EventFee> weekend = Weekend.of(EventFee.class);
+            weekend.weekendCriteria()
+                    .andEqualTo(EventFee::getPartnerId, partnerId)
+                    .andEqualTo(EventFee::getProductId, productId)
+                    .andEqualTo(EventFee::getFeeType, EventFeeType.H5.getCode())
+                    .andEqualTo(EventFee::getCoopeMode, CoopeMode.CPC.getCode())
+                    .andEqualTo(EventFee::getEventType, UserEventsType.PRODUCT_CLICK.getCode())
+                    .andEqualTo(EventFee::getFeeStatus, EventFeeStatus.COMPLETE.getCode())
+                    .andEqualTo(EventFee::getStatus, StatusType.NORMAL.getCode())
+                    .andGreaterThanOrEqualTo(EventFee::getCreateTime, request.getStartDate())
+                    .andLessThanOrEqualTo(EventFee::getCreateTime, request.getEndDate());
             //一个产品的统计项
             List<APDataAnalysisTableRow> rows = eventFeeMapper.apDataAnalysis(partnerId, productId,
                     EventFeeType.H5.getCode(),
@@ -279,13 +293,10 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
                     EventFeeStatus.COMPLETE.getCode(), StatusType.NORMAL.getCode(),
                     request.getStartDate(), request.getEndDate(), page);
 
-            long total = eventFeeMapper.apDataAnalysisCount(partnerId, productId,
-                    EventFeeType.H5.getCode(), CoopeMode.CPC.getCode(), UserEventsType.PRODUCT_CLICK.getCode(),
-                    EventFeeStatus.COMPLETE.getCode(), StatusType.NORMAL.getCode(),
-                    request.getStartDate(), request.getEndDate());
-            apDataAnalysisTableResponse.setRows(rows);
+            PageInfo<APDataAnalysisTableRow> pageInfo = new PageInfo<>(rows);
 
-            response.getHeader().getPage().setTotal(total);
+            apDataAnalysisTableResponse.setRows(rows);
+            response.getHeader().setPage(pageInfo);
             response.setData(apDataAnalysisTableResponse);
 
             return response;
@@ -308,10 +319,8 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
         APFinanceExpenseTableRequest request = JsonUtil.getObject(requestStr, APFinanceExpenseTableRequest.class);
         ResponseMessage<APFinanceExpenseTableResponse> response = new ResponseMessage<>(request);
         try {
-            Page page = request.getHeader().getPage();
-            ValidateUtil.validatePage(page);
+            PageInfo page = request.getHeader().getPage();
             ValidateUtil.validateBean(request);
-
 
             Integer productId = request.getProductId();
             Product product = productMapper.selectByPrimaryKey(productId);
@@ -325,10 +334,6 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
                     productId, null, null, null, EventFeeStatus.COMPLETE.getCode(), StatusType.NORMAL.getCode(),
                     request.getStartDate(), request.getEndDate(), page);
 
-            long total = eventFeeMapper.selectEventFeeListCount(request.getAdmin().getPartnerId(),
-                    productId, null, null, null, EventFeeStatus.COMPLETE.getCode(), StatusType.NORMAL.getCode(),
-                    request.getStartDate(), request.getEndDate());
-
             for (int i = 0; i < rows.size(); i++) {
                 Integer eventId = rows.get(i).getEventId();
                 UserEvent userEvent = userEventMapper.selectByPrimaryKey(eventId);
@@ -339,7 +344,7 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
             apFinanceExpenseTableResponse.setRows(rows);
 
             response.setData(apFinanceExpenseTableResponse);
-            response.getHeader().getPage().setTotal(total);
+            response.getHeader().setPage(page);
             return response;
         } catch (HjException e) {
             logger.error(e.getMessage(), e);
@@ -360,8 +365,7 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
         AOPartnerCostStatisticRequest request = JsonUtil.getObject(requestStr, AOPartnerCostStatisticRequest.class);
         ResponseMessage<List<AOPartnerCostStatisticResponse>> response = new ResponseMessage<>(request);
         try {
-            Page page = request.getHeader().getPage();
-            ValidateUtil.validatePage(page);
+            PageInfo page = request.getHeader().getPage();
             ValidateUtil.validateBean(request);
 
             Integer partnerId = request.getPartnerId();

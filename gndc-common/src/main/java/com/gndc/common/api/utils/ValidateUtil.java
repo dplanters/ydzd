@@ -1,6 +1,7 @@
 package com.gndc.common.api.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import com.gndc.common.api.Header;
 import com.gndc.common.api.HjException;
 import com.gndc.common.api.Page;
@@ -23,12 +24,6 @@ import java.util.Set;
  * @date 2017年5月25日 上午11:37:08
  */
 public class ValidateUtil {
-    /**
-     * 报文头有效性校验
-     *
-     * @return
-     * @throws HjException
-     */
     public static boolean validate(Header header) throws HjException {
         if (header == null) {
             header = new Header();
@@ -42,19 +37,6 @@ public class ValidateUtil {
         }
         if (Header.REQUEST != header.getMsgType()) {
             throw new HjException(ResultCode.INVALID_MSGTYPE);
-        }
-        return true;
-    }
-
-    public static boolean validatePage(Page page) throws HjException {
-        if (page == null) {
-            throw new HjException(ResultCode.PAGE_ISNULL);
-        }
-        if (page.getIndex() <= 0) {
-            page.setIndex(1);
-        }
-        if (page.getSize() <= 0 || page.getSize() > 200) {
-            page.setSize(20);
         }
         return true;
     }

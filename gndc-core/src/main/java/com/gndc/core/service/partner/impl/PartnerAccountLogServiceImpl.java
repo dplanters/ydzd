@@ -23,6 +23,7 @@ import com.gndc.core.service.partner.IPartnerAccountLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.weekend.Weekend;
@@ -127,16 +128,13 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
 
     @Override
     @RequestMapping(value = "/rechargeList")
-    public ResponseMessage<List<?>> rechargeList(String requestStr) {
-        logger.info(String.format("请求:%s", requestStr));
-        RechargeListRequest request = JsonUtil.getObject(requestStr, RechargeListRequest.class);
+    public ResponseMessage<List<?>> rechargeList(@RequestBody RechargeListRequest request) {
         ResponseMessage<List<?>> response = new ResponseMessage<>(request);
 
         try {
             ValidateUtil.validate(request.getHeader());
 
-            Page page = request.getHeader().getPage();
-            ValidateUtil.validatePage(page);
+            PageInfo page = request.getHeader().getPage();
 
             Weekend<PartnerAccountLog> weekend = Weekend.of(PartnerAccountLog.class);
             Integer partnerId = 1;
@@ -144,13 +142,13 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
                     .andEqualTo(PartnerAccountLog::getPartnerId, partnerId)
                     .andEqualTo(PartnerAccountLog::getType, PartnerAccountLogType.RECHARGET.getCode());
 
-            PageHelper.startPage(page.getIndex(), page.getSize());
+            PageHelper.startPage(page.getStartRow(), page.getSize());
             List<PartnerAccountLog> rechargeList = partnerAccountLogMapper.selectByExample(weekend);
 
             PageInfo<PartnerAccountLog> pageInfo = new PageInfo<>(rechargeList);
 
             response.setData(rechargeList);
-            page.setTotal(pageInfo.getTotal());
+            response.getHeader().setPage(pageInfo);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
 
@@ -163,25 +161,27 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
 
     @Override
     @RequestMapping(value = "/withdrawList")
-    public ResponseMessage<List<?>> withdrawList(String requestStr) {
-        logger.info(String.format("请求:%s", requestStr));
-        WithDrawCashListRequest request = JsonUtil.getObject(requestStr, WithDrawCashListRequest.class);
+    public ResponseMessage<List<?>> withdrawList(@RequestBody WithDrawCashListRequest request) {
         ResponseMessage<List<?>> response = new ResponseMessage<>(request);
 
         try {
             ValidateUtil.validate(request.getHeader());
 
-            Page page = request.getHeader().getPage();
-            ValidateUtil.validatePage(page);
+            PageInfo page = request.getHeader().getPage();
 
-            List<PartnerAccountLog> withdrawCashList =
-                    partnerAccountLogMapper.selectWithdrawCashList(request.getAdmin().getPartnerId(),
-                            PartnerAccountLogType.WITHDRAW.getCode(), page);
-            long total = partnerAccountLogMapper.selectWithdrawCashCount(request.getAdmin().getPartnerId(),
-                    PartnerAccountLogType.WITHDRAW.getCode());
+            Weekend<PartnerAccountLog> weekend = Weekend.of(PartnerAccountLog.class);
+            Integer partnerId = 1;
+            weekend.weekendCriteria()
+                    .andEqualTo(PartnerAccountLog::getPartnerId, partnerId)
+                    .andEqualTo(PartnerAccountLog::getType, PartnerAccountLogType.WITHDRAW.getCode());
+
+            PageHelper.startPage(page.getStartRow(), page.getSize());
+            List<PartnerAccountLog> withdrawCashList = partnerAccountLogMapper.selectByExample(weekend);
+
+            PageInfo<PartnerAccountLog> pageInfo = new PageInfo<>(withdrawCashList);
 
             response.setData(withdrawCashList);
-            page.setTotal(total);
+            response.getHeader().setPage(pageInfo);
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

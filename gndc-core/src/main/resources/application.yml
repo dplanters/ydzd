@@ -19,6 +19,8 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
+  row-bounds-with-count: true
+  offset-as-page-num: true
 mybatis:
   mapper-locations: classpath:mapper/simple/*.xml
   type-aliases-package: com.gndc.core.model
