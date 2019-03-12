@@ -28,13 +28,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tk.mybatis.mapper.entity.Example;
-import tk.mybatis.mapper.entity.SqlsCriteria;
 import tk.mybatis.mapper.weekend.Weekend;
-import tk.mybatis.mapper.weekend.WeekendCriteria;
-import tk.mybatis.mapper.weekend.WeekendSqls;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -54,9 +51,8 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     private ProductHotMapper productHotMapper;
 
     @Override
-    @RequestMapping("apProductList")
-    public ResponseMessage<List<APProductListResponse>> apProductList(String requestStr) {
-        APProductListRequest request = JsonUtil.getObject(requestStr, APProductListRequest.class);
+    @RequestMapping("/partner/product/productList")
+    public ResponseMessage<List<APProductListResponse>> productList(@RequestBody APProductListRequest request) {
         ResponseMessage<List<APProductListResponse>> response = new ResponseMessage<>(request);
 
         try {
@@ -95,16 +91,14 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     }
 
     @Override
-    @PostMapping("/aoProductList")
-    public ResponseMessage<List<AOProductListResponse>> aoProductList(String requestStr) {
-        AOProductListRequest request = JsonUtil.getObject(requestStr, AOProductListRequest.class);
+    @PostMapping("/admin/product/productList")
+    public ResponseMessage<List<AOProductListResponse>> productList(@RequestBody AOProductListRequest request) {
         ResponseMessage<List<AOProductListResponse>> response = new ResponseMessage<>(request);
-
         try {
             PageInfo page = request.getHeader().getPage();
             ValidateUtil.validateBean(request);
 
-            PageHelper.startPage(page.getStartRow(), page.getSize());
+            PageHelper.startPage(page.getPageNum(), page.getPageSize());
             List<AOProductListResponse> aoProductListResponses = productMapper.aoProductList(request);
 
             long total = productMapper.aoProductListCount(request);
@@ -127,15 +121,15 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     }
 
     @Override
-    @PostMapping("/aoProductNameAll")
-    public ResponseMessage<List<Product>> aoProductNameAll(String requestStr) {
-        AOAllProductNameRequest request = JsonUtil.getObject(requestStr, AOAllProductNameRequest.class);
+    @PostMapping("/admin/product/productNameAll")
+    public ResponseMessage<List<Product>> productNameAll(@RequestBody AOAllProductNameRequest request) {
         ResponseMessage<List<Product>> response = new ResponseMessage<>(request);
 
         try {
             ValidateUtil.validateBean(request);
 
             Weekend<Product> weekend = Weekend.of(Product.class);
+            weekend.selectProperties("id", "name");
             weekend.weekendCriteria()
                     .andEqualTo(Product::getIsDel, DelType.NORMAL.getCode())
                     .andEqualTo(Product::getStatus, ProductStatus.ON_LINE.getCode());
@@ -165,10 +159,9 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     }
 
     @Override
-    @PostMapping("/aoProductAddModify")
+    @PostMapping("/admin/product/aoProductAddModify")
     @Transactional
-    public ResponseMessage<Integer> aoProductAddModify(String requestStr) {
-        AOProductAddModifyRequest request = JsonUtil.getObject(requestStr, AOProductAddModifyRequest.class);
+    public ResponseMessage<Integer> productAddModify(@RequestBody AOProductAddModifyRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>(request);
 
         try {
@@ -182,7 +175,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             ProductData productData = ProductDataMapping.INSTANCE.convert(aoProductDataRequest);
             if (request.getId() == null) {
                 //新增
-                request.setExtra(null);
+//                request.setExtra(null);
 
                 productMapper.insertSelective(product);
 
@@ -211,16 +204,15 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             logger.error(e.getMessage(), e);
-            response.createError(ResultCode.RECORD_SEARCH_FAIL);
+            response.createError(ResultCode.RECORD_SAVE_FAIL);
             logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
             return response;
         }
     }
 
+    @PostMapping("/admin/product/productDetail")
     @Override
-    @PostMapping("/aoProductDetail")
-    public ResponseMessage<AOProductDetailResponse> aoProductDetail(String requestStr) {
-        AOProductDetailRequest request = JsonUtil.getObject(requestStr, AOProductDetailRequest.class);
+    public ResponseMessage<AOProductDetailResponse> productDetail(@RequestBody AOProductDetailRequest request) {
         ResponseMessage<AOProductDetailResponse> response = new ResponseMessage<>(request);
 
         try {
@@ -251,9 +243,8 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     }
 
     @Override
-    @PostMapping("/aoProductUpperAndLowerLine")
-    public ResponseMessage<Boolean> aoProductUpperAndLowerLine(String requestStr) {
-        AOUpperAndLowerLineRequest request = JsonUtil.getObject(requestStr, AOUpperAndLowerLineRequest.class);
+    @PostMapping("/admin/product/aoProductUpperAndLowerLine")
+    public ResponseMessage<Boolean> productUpperAndLowerLine(@RequestBody AOUpperAndLowerLineRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>(request);
 
         try {
@@ -288,9 +279,8 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     }
 
     @Override
-    @PostMapping("/aoProductDelete")
-    public ResponseMessage<Boolean> aoProductDelete(String requestStr) {
-        AOProductDeleteRequest request = JsonUtil.getObject(requestStr, AOProductDeleteRequest.class);
+    @PostMapping("/admin/product/aoProductDelete")
+    public ResponseMessage<Boolean> productDelete(@RequestBody AOProductDeleteRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>(request);
 
         try {
@@ -334,9 +324,8 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     }
 
     @Override
-    @PostMapping("/aoProductHotList")
-    public ResponseMessage<List<AOProductHotListResponse>> aoProductHotList(String requestStr) {
-        AOProductHotListRequest request = JsonUtil.getObject(requestStr, AOProductHotListRequest.class);
+    @PostMapping("/admin/product/productHotList")
+    public ResponseMessage<List<AOProductHotListResponse>> productHotList(@RequestBody AOProductHotListRequest request) {
         ResponseMessage<List<AOProductHotListResponse>> response = new ResponseMessage<>(request);
 
         try {
@@ -365,10 +354,9 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     }
 
     @Override
-    @PostMapping("/aoProductHotEdit")
+    @PostMapping("/admin/product/productHotEdit")
     @Transactional
-    public ResponseMessage<Integer> aoProductHotEdit(String requestStr) {
-        AOProductHotEditRequest request = JsonUtil.getObject(requestStr, AOProductHotEditRequest.class);
+    public ResponseMessage<Integer> productHotEdit(@RequestBody AOProductHotEditRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>(request);
 
         try {
