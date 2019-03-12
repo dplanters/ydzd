@@ -1,11 +1,10 @@
 package com.gndc.core.service.partner.impl;
 import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.api.ResultCode;
-import com.gndc.common.service.BaseService;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.common.utils.JsonUtil;
 import com.gndc.core.api.partner.PartnerContactAddRequest;
-import com.gndc.core.api.partner.RechargeRecordRequest;
+import com.gndc.core.api.partner.finance.account.APRechargeRequest;
 import com.gndc.core.mapper.simple.PartnerContactMapper;
 import com.gndc.core.model.PartnerContact;
 import com.gndc.core.service.partner.IPartnerContactService;
@@ -47,7 +46,7 @@ public class PartnerContactServiceImpl extends BaseServiceImpl<PartnerContact, I
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
 
-            ResponseMessage<Boolean> response = new ResponseMessage<>(new RechargeRecordRequest());
+            ResponseMessage<Boolean> response = new ResponseMessage<>(new APRechargeRequest());
             response.createError(ResultCode.RECORD_SAVE_FAIL);
             logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
             return response;

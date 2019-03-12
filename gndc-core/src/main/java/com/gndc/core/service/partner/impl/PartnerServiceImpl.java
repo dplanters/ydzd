@@ -4,11 +4,11 @@ import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.api.ResultCode;
 import com.gndc.common.enums.partner.PartnerAccountLogStatus;
 import com.gndc.common.enums.partner.PartnerAccountLogType;
-import com.gndc.common.service.BaseService;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.common.utils.JsonUtil;
-import com.gndc.core.api.partner.PartnerRequest;
-import com.gndc.core.etc.partner.PartnerInfo;
+import com.gndc.core.api.partner.common.APAllPartnerRequest;
+import com.gndc.core.api.partner.finance.account.APPartnerInfoRequest;
+import com.gndc.core.api.partner.finance.account.APPartnerInfoResponse;
 import com.gndc.core.mapper.simple.PartnerAccountLogMapper;
 import com.gndc.core.mapper.simple.PartnerMapper;
 import com.gndc.core.model.Partner;
@@ -16,6 +16,7 @@ import com.gndc.core.service.partner.IPartnerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,23 +36,20 @@ public class PartnerServiceImpl extends BaseServiceImpl<Partner, Integer> implem
     private PartnerAccountLogMapper partnerAccountLogMapper;
 
     @Override
-    @RequestMapping(value = "/getPartner")
-    public ResponseMessage<PartnerInfo> getPartner(String requestStr) {
-        logger.info(String.format("请求:%s", requestStr));
-
-        PartnerRequest request = JsonUtil.getObject(requestStr, PartnerRequest.class);
-        ResponseMessage<PartnerInfo> response = new ResponseMessage<>(request);
+    @RequestMapping(value = "/partner/finance/account/getPartnerInfo")
+    public ResponseMessage<APPartnerInfoResponse> getPartner(@RequestBody APPartnerInfoRequest request) {
+        ResponseMessage<APPartnerInfoResponse> response = new ResponseMessage<>(request);
 
         try {
+            Integer partnerId = request.getAdmin().getPartnerId();
+            Partner partner = partnerMapper.selectByPrimaryKey(partnerId);
 
-            Partner partner = partnerMapper.selectByPrimaryKey(request.getAdmin().getPartnerId());
-
-            PartnerInfo partnerInfo = new PartnerInfo();
+            APPartnerInfoResponse partnerInfo = new APPartnerInfoResponse();
 
             BeanUtils.copyProperties(partner, partnerInfo);
 
             //充值中金额
-            BigDecimal processingRechargeAmount = partnerAccountLogMapper.sumAmount(request.getAdmin().getPartnerId(),
+            BigDecimal processingRechargeAmount = partnerAccountLogMapper.sumAmount(partnerId,
                     PartnerAccountLogType.RECHARGET.getCode(), PartnerAccountLogStatus.RECHARGE_PROCESS.getCode());
 
             if (processingRechargeAmount == null) {
@@ -59,7 +57,7 @@ public class PartnerServiceImpl extends BaseServiceImpl<Partner, Integer> implem
             }
 
             //提现中金额
-            BigDecimal processingWithdrawAmount = partnerAccountLogMapper.sumAmount(request.getAdmin().getPartnerId(),
+            BigDecimal processingWithdrawAmount = partnerAccountLogMapper.sumAmount(partnerId,
                     PartnerAccountLogType.WITHDRAW.getCode(), PartnerAccountLogStatus.WITHDRAW_PROCESS.getCode());
 
             if (processingWithdrawAmount == null) {
@@ -81,11 +79,8 @@ public class PartnerServiceImpl extends BaseServiceImpl<Partner, Integer> implem
     }
 
     @Override
-    @RequestMapping(value = "/getAllPartner")
-    public ResponseMessage<List<Partner>> getAllPartner(String requestStr) {
-        logger.info(String.format("请求:%s", requestStr));
-
-        PartnerRequest request = JsonUtil.getObject(requestStr, PartnerRequest.class);
+    @RequestMapping(value = "/partner/common/getAllPartner")
+    public ResponseMessage<List<Partner>> getAllPartner(@RequestBody  APAllPartnerRequest request) {
         ResponseMessage<List<Partner>> response = new ResponseMessage<>(request);
 
         try {

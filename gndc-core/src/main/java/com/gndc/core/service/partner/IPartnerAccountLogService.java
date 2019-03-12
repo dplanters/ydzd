@@ -1,9 +1,10 @@
 package com.gndc.core.service.partner;
 
 import com.gndc.common.api.ResponseMessage;
-import com.gndc.core.api.partner.RechargeListRequest;
-import com.gndc.core.api.partner.WithDrawCashListRequest;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.gndc.core.api.partner.finance.account.APRechargeListRequest;
+import com.gndc.core.api.partner.finance.account.APRechargeRequest;
+import com.gndc.core.api.partner.finance.account.APWithdrawListRequest;
+import com.gndc.core.api.partner.finance.account.APWithdrawRequest;
 
 import java.util.List;
 
@@ -12,32 +13,28 @@ public interface IPartnerAccountLogService {
     /**
      * 生成一条充值记录
      *
-     * @param requestStr
      * @return
      */
-    ResponseMessage<Boolean> generateRechargeRecord(@RequestParam String requestStr);
+    ResponseMessage<Boolean> recharge(APRechargeRequest request);
 
     /**
      * 生成一条充值记录
      *
-     * @param requestStr
      * @return
      */
-    ResponseMessage<Boolean> generateWithdrawCashRecord(@RequestParam String requestStr);
+    ResponseMessage<Boolean> withdraw(APWithdrawRequest request);
 
     /**
      * 充值记录(分页)
      *
-     * @param requestStr
      * @return
      */
-    ResponseMessage<List<?>> rechargeList(RechargeListRequest request);
+    ResponseMessage<List<?>> rechargeList(APRechargeListRequest request);
 
     /**
      * 提现记录(分页)
      *
-     * @param requestStr
      * @return
      */
-    ResponseMessage<List<?>> withdrawList(WithDrawCashListRequest request);
+    ResponseMessage<List<?>> withdrawList(APWithdrawListRequest request);
 }

@@ -334,7 +334,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             PageInfo page = request.getHeader().getPage();
             ValidateUtil.validateBean(request);
 
-            PageHelper.startPage(page.getStartRow(), page.getSize());
+            PageHelper.startPage(page.getPageNum(), page.getPageSize());
             List<AOProductHotListResponse> aoProductListResponses = productMapper.aoProductHotList(request);
 
             PageInfo<AOProductHotListResponse> pageInfo = new PageInfo<>(aoProductListResponses);

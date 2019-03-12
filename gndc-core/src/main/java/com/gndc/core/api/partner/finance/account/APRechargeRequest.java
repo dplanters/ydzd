@@ -1,40 +1,48 @@
-package com.gndc.core.api.partner;
+package com.gndc.core.api.partner.finance.account;
 
 import com.gndc.common.api.HjAction;
 import com.gndc.common.api.RequestMessage;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
-public class WithDrawCashRecordRequest extends RequestMessage {
+public class APRechargeRequest extends RequestMessage {
 
     private static final long serialVersionUID = 1L;
     /**
-     * 收款人银行账号
+     * 充值方式
      */
-    private String payeeBankAccount;
-    /**
-     * 收款人开户行
-     */
-    private String payeeBank;
-    /**
-     * 收款人/公司
-     */
-    private String payee;
+    private Byte rechargeMethod;
     /**
      * 金额
      */
     private BigDecimal amount;
     /**
+     * 打款人/公司
+     */
+    private String payer;
+    /**
+     * 收款人/公司
+     */
+    private String payee;
+    /**
+     * 打款时间
+     */
+    private Date payDate;
+    /**
      * 备注
      */
     private String remark;
+    /**
+     * 支付凭证
+     */
+    private String payVoucher;
 
     @Override
     public void createHeader() {
         super.createHeader();
-        header.setAction(HjAction.A_PARTNER_WITHDRAW_RECORD);
     }
 
 }
