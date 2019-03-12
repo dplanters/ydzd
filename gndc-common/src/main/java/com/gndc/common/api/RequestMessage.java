@@ -10,6 +10,8 @@ package com.gndc.common.api;
 
 import com.gndc.common.model.Admin;
 import com.gndc.common.model.User;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
@@ -19,6 +21,8 @@ import java.io.Serializable;
  * @Description 请求基类封装
  * @date 2018年1月25日 上午9:49:09
  */
+@Getter
+@Setter
 public class RequestMessage implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -29,30 +33,6 @@ public class RequestMessage implements Serializable {
     public void createHeader() {
         header = new Header();
         header.setMsgType(Header.REQUEST);
-    }
-
-    public Header getHeader() {
-        return header;
-    }
-
-    public void setHeader(Header header) {
-        this.header = header;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Admin getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(Admin admin) {
-        this.admin = admin;
     }
 
 }
