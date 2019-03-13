@@ -8,8 +8,7 @@ import com.gndc.core.service.partner.PartnerContactService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
@@ -17,14 +16,13 @@ import javax.annotation.Resource;
  * @author jingkaihui
  * @date 2019/2/25
  */
-@RestController
+@Service
 public class PartnerContactServiceImpl extends BaseServiceImpl<PartnerContact, Integer> implements PartnerContactService {
 
     private static final Logger logger = LoggerFactory.getLogger(PartnerContactServiceImpl.class);
     @Resource
     private PartnerContactMapper partnerContactMapper;
 
-    @RequestMapping(value = "/addPartnerContact")
     @Override
     public Boolean addPartnerContact(PartnerContactAddRequest request) {
         PartnerContact partnerContact = new PartnerContact();

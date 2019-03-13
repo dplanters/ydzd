@@ -1,6 +1,5 @@
 package com.gndc.core.service.partner;
 
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.service.BaseService;
 import com.gndc.core.api.partner.finance.account.APRechargeListRequest;
 import com.gndc.core.api.partner.finance.account.APRechargeRequest;
@@ -17,26 +16,26 @@ public interface PartnerAccountLogService extends BaseService<PartnerAccountLog,
      *
      * @return
      */
-    ResponseMessage<Boolean> recharge(APRechargeRequest request);
+    Boolean recharge(APRechargeRequest request);
 
     /**
      * 生成一条充值记录
      *
      * @return
      */
-    ResponseMessage<Boolean> withdraw(APWithdrawRequest request);
+    Boolean withdraw(APWithdrawRequest request);
 
     /**
      * 充值记录(分页)
      *
      * @return
      */
-    ResponseMessage<List<?>> rechargeList(APRechargeListRequest request);
+    List<?> rechargeList(APRechargeListRequest request);
 
     /**
      * 提现记录(分页)
      *
      * @return
      */
-    ResponseMessage<List<?>> withdrawList(APWithdrawListRequest request);
+    List<?> withdrawList(APWithdrawListRequest request);
 }
