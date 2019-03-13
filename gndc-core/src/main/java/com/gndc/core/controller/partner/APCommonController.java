@@ -18,9 +18,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/partner/common")
-public class CCommonController {
+public class APCommonController {
 
-    private static final Logger logger = LoggerFactory.getLogger(CCommonController.class);
+    private static final Logger logger = LoggerFactory.getLogger(APCommonController.class);
 
     @Autowired
     private PartnerService partnerService;
