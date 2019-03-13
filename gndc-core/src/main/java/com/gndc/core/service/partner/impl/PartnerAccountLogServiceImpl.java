@@ -76,7 +76,7 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
         PageInfo page = request.getHeader().getPage();
 
         Weekend<PartnerAccountLog> weekend = Weekend.of(PartnerAccountLog.class);
-        Integer partnerId = 1;
+        Integer partnerId = request.getAdmin().getPartnerId();
         weekend.weekendCriteria()
                 .andEqualTo(PartnerAccountLog::getPartnerId, partnerId)
                 .andEqualTo(PartnerAccountLog::getType, PartnerAccountLogType.RECHARGET.getCode());
@@ -92,7 +92,7 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
         PageInfo page = request.getHeader().getPage();
 
         Weekend<PartnerAccountLog> weekend = Weekend.of(PartnerAccountLog.class);
-        Integer partnerId = 1;
+        Integer partnerId = request.getAdmin().getPartnerId();
         weekend.weekendCriteria()
                 .andEqualTo(PartnerAccountLog::getPartnerId, partnerId)
                 .andEqualTo(PartnerAccountLog::getType, PartnerAccountLogType.WITHDRAW.getCode());

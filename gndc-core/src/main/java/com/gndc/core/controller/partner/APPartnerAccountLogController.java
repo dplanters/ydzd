@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/partner")
 public class APPartnerAccountLogController {
 
     private static final Logger logger = LoggerFactory.getLogger(APPartnerAccountLogController.class);
@@ -26,7 +26,7 @@ public class APPartnerAccountLogController {
     @Autowired
     private PartnerAccountLogService partnerAccountLogService;
 
-    @RequestMapping(value = "/partner/finance/account/recharge")
+    @RequestMapping(value = "/finance/account/recharge")
     public ResponseMessage<Boolean> recharge(@Validated @RequestBody APRechargeRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
 
@@ -37,7 +37,7 @@ public class APPartnerAccountLogController {
 
     }
 
-    @RequestMapping(value = "/partner/finance/account/withdraw")
+    @RequestMapping(value = "/finance/account/withdraw")
     public ResponseMessage<Boolean> withdraw(@Validated @RequestBody APWithdrawRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
 
@@ -47,7 +47,7 @@ public class APPartnerAccountLogController {
         return response;
     }
 
-    @RequestMapping(value = "/partner/finance/account/rechargeList")
+    @RequestMapping(value = "/finance/account/rechargeList")
     public ResponseMessage<List<?>> rechargeList(@Validated @RequestBody APRechargeListRequest request) {
         ResponseMessage<List<?>> response = new ResponseMessage<>();
 
@@ -59,7 +59,7 @@ public class APPartnerAccountLogController {
         return response;
     }
 
-    @RequestMapping(value = "/partner/finance/account/withdrawList")
+    @RequestMapping(value = "/finance/account/withdrawList")
     public ResponseMessage<List<?>> withdrawList(@Validated @RequestBody APWithdrawListRequest request) {
         ResponseMessage<List<?>> response = new ResponseMessage<>();
 
