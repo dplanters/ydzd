@@ -32,6 +32,7 @@ public class ExceptionHandling implements ProblemHandling {
         ProblemBuilder builder = Problem.builder()
                 .withType(problem.getType())
                 .withStatus(problem.getStatus())
+                .withDetail(problem.getDetail())
                 .withTitle(problem.getTitle())
                 .with("success", false)
                 .with("path", request.getNativeRequest(HttpServletRequest.class).getRequestURI())
@@ -42,7 +43,6 @@ public class ExceptionHandling implements ProblemHandling {
             builder.with("violations", ((ConstraintViolationProblem) problem).getViolations());
         } else if (problem instanceof DefaultProblem){
             builder.withCause(((DefaultProblem) problem).getCause())
-                    .withDetail(problem.getDetail())
                     .withInstance(problem.getInstance());
         } else if (problem instanceof ProblemMarker) {
             builder.with("code", ((ProblemMarker) problem).getCode())
