@@ -1,4 +1,4 @@
-package com.gndc.core.controller.partner;
+package com.gndc.core.controller.partner.product;
 
 import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.partner.product.APProductListRequest;

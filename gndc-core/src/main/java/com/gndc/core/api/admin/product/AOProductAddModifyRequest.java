@@ -5,6 +5,7 @@ import com.gndc.common.api.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
@@ -15,6 +16,7 @@ public class AOProductAddModifyRequest extends RequestMessage {
     /**
      * 产品id
      */
+    @Min(1)
     private Integer id;
 
     /**

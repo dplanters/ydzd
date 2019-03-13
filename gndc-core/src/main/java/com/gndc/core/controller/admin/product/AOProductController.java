@@ -1,4 +1,4 @@
-package com.gndc.core.controller.admin;
+package com.gndc.core.controller.admin.product;
 
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.api.ResponseMessage;

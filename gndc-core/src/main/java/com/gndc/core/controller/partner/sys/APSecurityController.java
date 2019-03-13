@@ -1,4 +1,4 @@
-package com.gndc.core.controller.partner;
+package com.gndc.core.controller.partner.sys;
 
 import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.partner.PartnerContactAddRequest;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping
-public class APPartnerContactController {
+@RequestMapping("/partner")
+public class APSecurityController {
 
-    private static final Logger logger = LoggerFactory.getLogger(APPartnerContactController.class);
+    private static final Logger logger = LoggerFactory.getLogger(APSecurityController.class);
 
     @Autowired
     private PartnerContactService partnerContactService;
