@@ -35,6 +35,7 @@ public class ExceptionHandling implements ProblemHandling {
                 .withTitle(problem.getTitle())
                 .with("success", false)
                 .with("path", request.getNativeRequest(HttpServletRequest.class).getRequestURI())
+                .with("msg", msg)
                 .with("code", code);
 
         if (problem instanceof ConstraintViolationProblem) {

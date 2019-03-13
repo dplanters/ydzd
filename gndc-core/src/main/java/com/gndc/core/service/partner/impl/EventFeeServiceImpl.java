@@ -251,10 +251,8 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
         try {
             PageInfo page = request.getHeader().getPage();
 
+            Integer partnerId = request.getAdmin().getPartnerId();
 
-//            Integer partnerId = request.getAdmin().getPartnerId();
-
-            Integer partnerId = 1;
             APDataAnalysisTableResponse apDataAnalysisTableResponse = new APDataAnalysisTableResponse();
 
             Integer productId = request.getId();
@@ -283,7 +281,7 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
             PageInfo<APDataAnalysisTableRow> pageInfo = new PageInfo<>(rows);
 
             apDataAnalysisTableResponse.setRows(rows);
-            response.getHeader().setPage(pageInfo);
+            response.setPage(pageInfo);
             response.setData(apDataAnalysisTableResponse);
 
             return response;
@@ -326,7 +324,7 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
             apFinanceExpenseTableResponse.setRows(rows);
 
             response.setData(apFinanceExpenseTableResponse);
-            response.getHeader().setPage(page);
+            response.setPage(page);
             return response;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -350,7 +348,7 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
             long total = eventFeeMapper.selectPartnerCostCount(partnerId);
 
             response.setData(aoPartnerCostStatisticResponses);
-            response.getHeader().getPage().setTotal(total);
+            response.getPage().setTotal(total);
 
             return response;
         } catch (Exception e) {

@@ -8,6 +8,7 @@
  ***************************************************************************/
 package com.gndc.common.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.pagehelper.PageInfo;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,17 +19,15 @@ import java.io.Serializable;
 @Setter
 public class ResponseMessage<T> implements Serializable {
     private static final long serialVersionUID = 1L;
-    protected Header header;
-
     /**
      * 返回成功或失败
      */
     private Boolean success = true;
 
     /**
-     * 响应码
+     * 响应码,0为成功
      */
-    private Integer code;
+    private Integer code = 0;
     /**
      * 提交或返回数据
      */
