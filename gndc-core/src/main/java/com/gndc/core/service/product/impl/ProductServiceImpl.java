@@ -108,11 +108,10 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
 
             PageHelper.startPage(page.getPageNum(), page.getPageSize());
             List<AOProductListResponse> aoProductListResponses = productMapper.aoProductList(request);
-
-            long total = productMapper.aoProductListCount(request);
+            PageInfo<AOProductListResponse> pageInfo = new PageInfo<>(aoProductListResponses);
 
             response.setData(aoProductListResponses);
-            response.getHeader().getPage().setTotal(total);
+            response.setPage(pageInfo);
 
             return response;
         } catch (HjException e) {
@@ -343,7 +342,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             List<AOProductHotListResponse> aoProductListResponses = productMapper.aoProductHotList(request);
 
             PageInfo<AOProductHotListResponse> pageInfo = new PageInfo<>(aoProductListResponses);
-            response.getHeader().setPage(pageInfo);
+            response.setPage(pageInfo);
             response.setData(aoProductListResponses);
 
             return response;

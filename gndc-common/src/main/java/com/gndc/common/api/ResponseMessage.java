@@ -8,6 +8,10 @@
  ***************************************************************************/
 package com.gndc.common.api;
 
+import com.github.pagehelper.PageInfo;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 
 /**
@@ -17,14 +21,25 @@ import java.io.Serializable;
  * @Description 响应基类封装
  * @date 2018年1月25日 上午9:50:04
  */
+@Getter
+@Setter
 public class ResponseMessage<T> implements Serializable {
     private static final long serialVersionUID = 1L;
     protected Header header;
 
     /**
+     * 返回成功或失败
+     */
+    private Boolean success = true;
+
+    /**
      * 提交或返回数据
      */
     private T data;
+
+    private String msg = "请求成功";
+
+    private PageInfo page;
 
     public ResponseMessage() {
 
@@ -32,65 +47,21 @@ public class ResponseMessage<T> implements Serializable {
 
     public ResponseMessage(RequestMessage request) {
 
-        if (request.getHeader() == null) {
-            request.createHeader();
-        }
-        createHeader(request.getHeader());
-    }
-
-    public void createHeader() {
-        this.header = new Header();
-        this.header.setMsgType(Header.RESPONSE);
-    }
-
-    public void createHeader(Header header) {
-        if (this.header == null) {
-            this.header = new Header(header);
-        } else {
-            this.header.create(header);
-            this.header.setSendingTime(Header.getDateTime());
-        }
-        this.header.setMsgType(Header.RESPONSE);
     }
 
     public void createError(Header header) {
-        if (this.header == null) {
-            this.createHeader();
-        }
         this.header.setCode(header.getCode());
         this.header.setMsg(header.getMsg());
     }
 
     public void createError(ResultCode result) {
-        if (this.header == null) {
-            this.createHeader();
-        }
         this.header.setCode(result.getCode());
         this.header.setMsg(result.getI18NContent());
     }
 
     public void createError(HjException e) {
-        if (this.header == null) {
-            this.createHeader();
-        }
         this.header.setCode(e.getErrorCode());
         this.header.setMsg(e.getMessage());
         this.header.setMsgExt(e.getMsgExt());
-    }
-
-    public Header getHeader() {
-        return header;
-    }
-
-    public void setHeader(Header header) {
-        this.header = header;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
     }
 }

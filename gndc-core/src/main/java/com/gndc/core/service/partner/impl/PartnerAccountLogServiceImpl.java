@@ -142,7 +142,7 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
             PageInfo<PartnerAccountLog> pageInfo = new PageInfo<>(rechargeList);
 
             response.setData(rechargeList);
-            response.getHeader().setPage(pageInfo);
+            response.setPage(pageInfo);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
 
@@ -175,7 +175,7 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
             PageInfo<PartnerAccountLog> pageInfo = new PageInfo<>(withdrawCashList);
 
             response.setData(withdrawCashList);
-            response.getHeader().setPage(pageInfo);
+            response.setPage(pageInfo);
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

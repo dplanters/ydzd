@@ -102,7 +102,6 @@ public class Header implements Serializable {
      */
     private PageInfo page;
 
-    private Page page1;
     /**
      * 错误号，0：成功，非0：失败
      */
