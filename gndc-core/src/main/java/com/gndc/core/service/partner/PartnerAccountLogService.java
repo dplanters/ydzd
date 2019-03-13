@@ -10,7 +10,7 @@ import com.gndc.core.model.PartnerAccountLog;
 
 import java.util.List;
 
-public interface IPartnerAccountLogService extends BaseService<PartnerAccountLog, Integer> {
+public interface PartnerAccountLogService extends BaseService<PartnerAccountLog, Integer> {
 
     /**
      * 生成一条充值记录

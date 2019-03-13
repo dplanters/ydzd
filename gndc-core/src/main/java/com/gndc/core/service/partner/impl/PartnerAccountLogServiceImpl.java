@@ -12,7 +12,7 @@ import com.gndc.core.api.partner.finance.account.APWithdrawListRequest;
 import com.gndc.core.api.partner.finance.account.APWithdrawRequest;
 import com.gndc.core.mapper.simple.PartnerAccountLogMapper;
 import com.gndc.core.model.PartnerAccountLog;
-import com.gndc.core.service.partner.IPartnerAccountLogService;
+import com.gndc.core.service.partner.PartnerAccountLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccountLog, Integer> implements IPartnerAccountLogService {
+public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccountLog, Integer> implements PartnerAccountLogService {
 
     private static final Logger logger = LoggerFactory.getLogger(PartnerAccountLogServiceImpl.class);
 

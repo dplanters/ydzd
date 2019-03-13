@@ -3,7 +3,6 @@ package com.gndc.core.service.product.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.api.HjException;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.api.ResultCode;
 import com.gndc.common.enums.admin.RightType;
 import com.gndc.common.enums.common.DelType;
@@ -11,7 +10,6 @@ import com.gndc.common.enums.product.ProductDataType;
 import com.gndc.common.enums.product.ProductStatus;
 import com.gndc.common.model.Admin;
 import com.gndc.common.service.impl.BaseServiceImpl;
-import com.gndc.common.utils.JsonUtil;
 import com.gndc.core.api.admin.product.*;
 import com.gndc.core.api.partner.product.APProductListRequest;
 import com.gndc.core.api.partner.product.APProductListResponse;
@@ -32,7 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import tk.mybatis.mapper.weekend.Weekend;
 
 import javax.annotation.Resource;
@@ -58,8 +55,6 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
 
     @Override
     public List<APProductListResponse> productList(@Validated @RequestBody APProductListRequest request) {
-        ResponseMessage<List<APProductListResponse>> response = new ResponseMessage<>();
-
         Integer partnerId = request.getAdmin().getPartnerId();
 
         Weekend<Product> weekend = Weekend.of(Product.class);
@@ -119,7 +114,6 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
 
     @Override
     public AOProductDetailResponse productDetail(AOProductDetailRequest request) {
-
         Product product = productMapper.selectByPrimaryKey(request.getId());
 
         if (product == null) {

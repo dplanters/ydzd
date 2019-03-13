@@ -14,7 +14,7 @@ import java.util.List;
  * @author jingkaihui
  * @date 2019/2/26
  */
-public interface IEventFeeService extends BaseService<EventFee, Long> {
+public interface EventFeeService extends BaseService<EventFee, Long> {
 
 
     /**

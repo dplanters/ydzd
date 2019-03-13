@@ -30,7 +30,7 @@ import com.gndc.core.model.EventFee;
 import com.gndc.core.model.Product;
 import com.gndc.core.model.User;
 import com.gndc.core.model.UserEvent;
-import com.gndc.core.service.partner.IEventFeeService;
+import com.gndc.core.service.partner.EventFeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,7 +51,7 @@ import java.util.List;
  * @date 2019/2/25
  */
 @RestController
-public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> implements IEventFeeService {
+public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> implements EventFeeService {
 
     private static final Logger logger = LoggerFactory.getLogger(EventFeeServiceImpl.class);
     @Resource
