@@ -19,7 +19,11 @@ import java.util.List;
 @Configuration
 public class HttpMessageConverterConfig {
 
-    @Bean
+    /**
+     * 和problem中Jackson冲突，暂时弃用
+     * @return
+     */
+//    @Bean
     public HttpMessageConverters fastJsonHttpMessageConverters(){
         //1.需要定义一个convert转换消息的对象;
         FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter();

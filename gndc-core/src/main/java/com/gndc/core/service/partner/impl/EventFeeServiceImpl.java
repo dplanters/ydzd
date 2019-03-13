@@ -2,14 +2,10 @@ package com.gndc.core.service.partner.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.api.HjException;
-import com.gndc.common.api.Page;
 import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.api.ResultCode;
-import com.gndc.common.api.utils.ErrorUtil;
-import com.gndc.common.api.utils.ValidateUtil;
 import com.gndc.common.enums.admin.RightType;
 import com.gndc.common.enums.common.StatusType;
 import com.gndc.common.enums.partner.EventFeeStatus;
@@ -35,7 +31,6 @@ import com.gndc.core.model.Product;
 import com.gndc.core.model.User;
 import com.gndc.core.model.UserEvent;
 import com.gndc.core.service.partner.IEventFeeService;
-import com.sun.rowset.internal.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -76,9 +71,9 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
     public ResponseMessage<JSONArray> feeStatisticTable(String requestStr) {
         logger.info(String.format("请求:%s", requestStr));
         FeeStatisticTableRequest request = JsonUtil.getObject(requestStr, FeeStatisticTableRequest.class);
-        ResponseMessage<JSONArray> response = new ResponseMessage<>(request);
+        ResponseMessage<JSONArray> response = new ResponseMessage<>();
         try {
-            ValidateUtil.validateBean(request);
+
 
             Admin admin = request.getAdmin();
 
@@ -146,14 +141,11 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
         } catch (HjException e) {
             logger.error(e.getMessage(), e);
 
-            response.createError(e);
-            response = ErrorUtil.createError(new FeeStatisticTableRequest(), e);
             logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
             return response;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
 
-            response = new ResponseMessage<>(new FeeStatisticTableRequest());
             response.createError(ResultCode.ERROR);
             logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
             return response;
@@ -164,9 +156,9 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
     @PostMapping("/statisticUV")
     public ResponseMessage<JSONArray> statisticUV(String requestStr) {
         StatisticUVRequest request = JsonUtil.getObject(requestStr, StatisticUVRequest.class);
-        ResponseMessage<JSONArray> response = new ResponseMessage<>(request);
+        ResponseMessage<JSONArray> response = new ResponseMessage<>();
         try {
-            ValidateUtil.validateBean(request);
+
 
             LocalDateTime now = LocalDateTime.now();
             int minute = now.getMinute();
@@ -243,11 +235,6 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
 
             response.setData(data);
             return response;
-        } catch (HjException e) {
-            logger.error(e.getMessage(), e);
-            response.createError(e);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return response;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             response.createError(ResultCode.ERROR);
@@ -260,10 +247,10 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
     @PostMapping("/apDataAnalysis")
     public ResponseMessage<APDataAnalysisTableResponse> apDataAnalysis(String requestStr) {
         APDataAnalysisRequest request = JsonUtil.getObject(requestStr, APDataAnalysisRequest.class);
-        ResponseMessage<APDataAnalysisTableResponse> response = new ResponseMessage<>(request);
+        ResponseMessage<APDataAnalysisTableResponse> response = new ResponseMessage<>();
         try {
             PageInfo page = request.getHeader().getPage();
-            ValidateUtil.validateBean(request);
+
 
 //            Integer partnerId = request.getAdmin().getPartnerId();
 
@@ -300,11 +287,6 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
             response.setData(apDataAnalysisTableResponse);
 
             return response;
-        } catch (HjException e) {
-            logger.error(e.getMessage(), e);
-            response.createError(e);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return response;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             response.createError(ResultCode.ERROR);
@@ -317,10 +299,10 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
     @PostMapping(value = "/apFinanceExpenseTable")
     public ResponseMessage<APFinanceExpenseTableResponse> apFinanceExpenseTable(String requestStr) {
         APFinanceExpenseTableRequest request = JsonUtil.getObject(requestStr, APFinanceExpenseTableRequest.class);
-        ResponseMessage<APFinanceExpenseTableResponse> response = new ResponseMessage<>(request);
+        ResponseMessage<APFinanceExpenseTableResponse> response = new ResponseMessage<>();
         try {
             PageInfo page = request.getHeader().getPage();
-            ValidateUtil.validateBean(request);
+
 
             Integer productId = request.getProductId();
             Product product = productMapper.selectByPrimaryKey(productId);
@@ -346,11 +328,6 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
             response.setData(apFinanceExpenseTableResponse);
             response.getHeader().setPage(page);
             return response;
-        } catch (HjException e) {
-            logger.error(e.getMessage(), e);
-            response.createError(e);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return response;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             response.createError(ResultCode.ERROR);
@@ -363,10 +340,10 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
     @PostMapping(value = "/aoPartnerCostStatisticTable")
     public ResponseMessage<List<AOPartnerCostStatisticResponse>> aoPartnerCostStatisticTable(String requestStr) {
         AOPartnerCostStatisticRequest request = JsonUtil.getObject(requestStr, AOPartnerCostStatisticRequest.class);
-        ResponseMessage<List<AOPartnerCostStatisticResponse>> response = new ResponseMessage<>(request);
+        ResponseMessage<List<AOPartnerCostStatisticResponse>> response = new ResponseMessage<>();
         try {
             PageInfo page = request.getHeader().getPage();
-            ValidateUtil.validateBean(request);
+
 
             Integer partnerId = request.getPartnerId();
             List<AOPartnerCostStatisticResponse> aoPartnerCostStatisticResponses = eventFeeMapper.selectPartnerCost(partnerId, page);
@@ -375,11 +352,6 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
             response.setData(aoPartnerCostStatisticResponses);
             response.getHeader().getPage().setTotal(total);
 
-            return response;
-        } catch (HjException e) {
-            logger.error(e.getMessage(), e);
-            response.createError(e);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
             return response;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

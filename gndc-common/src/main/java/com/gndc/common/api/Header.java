@@ -122,11 +122,6 @@ public class Header implements Serializable {
         this.clientVersion = "1.0.01";
     }
 
-    public Header(Header header) {
-        this();
-        create(header);
-    }
-
     /**
      * 日期格式："yyyy-MM-dd HH:mm:ss"
      *
@@ -134,10 +129,6 @@ public class Header implements Serializable {
      */
     public static String getDateTime() {
         return DateUtil.timeToString(new Date(), DateUtil.FORMAT_11);
-    }
-
-    public static int getResponse() {
-        return RESPONSE;
     }
 
     public void create(Header header) {
@@ -154,12 +145,5 @@ public class Header implements Serializable {
         }
     }
 
-    public void init(Header header) {
-        if (header != null) {
-            this.deviceType = header.deviceType;
-            this.sessionId = header.sessionId;
-            this.page = header.page;
-        }
-    }
 
 }

@@ -14,13 +14,6 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
-/**
- * @param <T>
- * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
- * @version V1.0.1
- * @Description 响应基类封装
- * @date 2018年1月25日 上午9:50:04
- */
 @Getter
 @Setter
 public class ResponseMessage<T> implements Serializable {
@@ -33,6 +26,10 @@ public class ResponseMessage<T> implements Serializable {
     private Boolean success = true;
 
     /**
+     * 响应码
+     */
+    private Integer code;
+    /**
      * 提交或返回数据
      */
     private T data;
@@ -41,27 +38,10 @@ public class ResponseMessage<T> implements Serializable {
 
     private PageInfo page;
 
-    public ResponseMessage() {
-
-    }
-
-    public ResponseMessage(RequestMessage request) {
-
-    }
-
-    public void createError(Header header) {
-        this.header.setCode(header.getCode());
-        this.header.setMsg(header.getMsg());
-    }
-
     public void createError(ResultCode result) {
-        this.header.setCode(result.getCode());
-        this.header.setMsg(result.getI18NContent());
+        this.success = false;
+        this.code = result.getCode();
+        this.msg = result.getI18NContent();
     }
 
-    public void createError(HjException e) {
-        this.header.setCode(e.getErrorCode());
-        this.header.setMsg(e.getMessage());
-        this.header.setMsgExt(e.getMsgExt());
-    }
 }

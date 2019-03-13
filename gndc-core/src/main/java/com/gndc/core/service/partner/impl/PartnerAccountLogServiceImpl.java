@@ -2,15 +2,10 @@ package com.gndc.core.service.partner.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.gndc.common.api.HjException;
 import com.gndc.common.api.ResponseMessage;
-import com.gndc.common.api.ResultCode;
-import com.gndc.common.api.utils.ErrorUtil;
-import com.gndc.common.api.utils.ValidateUtil;
 import com.gndc.common.enums.partner.PartnerAccountLogStatus;
 import com.gndc.common.enums.partner.PartnerAccountLogType;
 import com.gndc.common.service.impl.BaseServiceImpl;
-import com.gndc.common.utils.JsonUtil;
 import com.gndc.core.api.partner.finance.account.APRechargeListRequest;
 import com.gndc.core.api.partner.finance.account.APRechargeRequest;
 import com.gndc.core.api.partner.finance.account.APWithdrawListRequest;
@@ -50,32 +45,16 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
         partnerAccountLog.setCreateTime(now);
         partnerAccountLog.setUpdateTime(now);
 
-        try {
-            ValidateUtil.validate(request.getHeader());
-            ResponseMessage<Boolean> response = new ResponseMessage<>(request);
+        ResponseMessage<Boolean> response = new ResponseMessage<>();
 
-            partnerAccountLog.setPartnerId(request.getAdmin().getPartnerId());
-            partnerAccountLog.setType(PartnerAccountLogType.RECHARGET.getCode());
-            partnerAccountLog.setPayStatus(PartnerAccountLogStatus.RECHARGE_PROCESS.getCode());
-            partnerAccountLog.setPayDate(request.getPayDate());
-            int affected = partnerAccountLogMapper.insertSelective(partnerAccountLog);
+        partnerAccountLog.setPartnerId(request.getAdmin().getPartnerId());
+        partnerAccountLog.setType(PartnerAccountLogType.RECHARGET.getCode());
+        partnerAccountLog.setPayStatus(PartnerAccountLogStatus.RECHARGE_PROCESS.getCode());
+        partnerAccountLog.setPayDate(request.getPayDate());
+        int affected = partnerAccountLogMapper.insertSelective(partnerAccountLog);
 
-            response.setData(affected == 1);
-            return response;
-        } catch (HjException e) {
-            logger.error(e.getMessage(), e);
-
-            ResponseMessage<Boolean> response = ErrorUtil.createError(new APRechargeRequest(), e);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return response;
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-
-            ResponseMessage<Boolean> response = new ResponseMessage<>(new APRechargeRequest());
-            response.createError(ResultCode.RECORD_SAVE_FAIL);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return response;
-        }
+        response.setData(affected == 1);
+        return response;
 
     }
 
@@ -91,99 +70,61 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
         partnerAccountLog.setCreateTime(now);
         partnerAccountLog.setUpdateTime(now);
 
-        try {
-            ValidateUtil.validate(request.getHeader());
-            ResponseMessage<Boolean> response = new ResponseMessage<>(request);
+        ResponseMessage<Boolean> response = new ResponseMessage<>();
 
-            partnerAccountLog.setPartnerId(request.getAdmin().getPartnerId());
+        partnerAccountLog.setPartnerId(request.getAdmin().getPartnerId());
 
-            partnerAccountLog.setType(PartnerAccountLogType.WITHDRAW.getCode());
-            partnerAccountLog.setPayStatus(PartnerAccountLogStatus.WITHDRAW_PROCESS.getCode());
+        partnerAccountLog.setType(PartnerAccountLogType.WITHDRAW.getCode());
+        partnerAccountLog.setPayStatus(PartnerAccountLogStatus.WITHDRAW_PROCESS.getCode());
 
-            int affected = partnerAccountLogMapper.insertSelective(partnerAccountLog);
+        int affected = partnerAccountLogMapper.insertSelective(partnerAccountLog);
 
-            response.setData(affected == 1);
-            return response;
-        } catch (HjException e) {
-            logger.error(e.getMessage(), e);
-
-            ResponseMessage<Boolean> response = ErrorUtil.createError(new APWithdrawRequest(), e);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return response;
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-
-            ResponseMessage<Boolean> response = new ResponseMessage<>(new APWithdrawRequest());
-            response.createError(ResultCode.RECORD_SAVE_FAIL);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return response;
-        }
+        response.setData(affected == 1);
+        return response;
     }
 
     @Override
     @RequestMapping(value = "/partner/finance/account/rechargeList")
     public ResponseMessage<List<?>> rechargeList(@RequestBody APRechargeListRequest request) {
-        ResponseMessage<List<?>> response = new ResponseMessage<>(request);
+        ResponseMessage<List<?>> response = new ResponseMessage<>();
 
-        try {
-            ValidateUtil.validate(request.getHeader());
+        PageInfo page = request.getHeader().getPage();
 
-            PageInfo page = request.getHeader().getPage();
+        Weekend<PartnerAccountLog> weekend = Weekend.of(PartnerAccountLog.class);
+        Integer partnerId = 1;
+        weekend.weekendCriteria()
+                .andEqualTo(PartnerAccountLog::getPartnerId, partnerId)
+                .andEqualTo(PartnerAccountLog::getType, PartnerAccountLogType.RECHARGET.getCode());
 
-            Weekend<PartnerAccountLog> weekend = Weekend.of(PartnerAccountLog.class);
-            Integer partnerId = 1;
-            weekend.weekendCriteria()
-                    .andEqualTo(PartnerAccountLog::getPartnerId, partnerId)
-                    .andEqualTo(PartnerAccountLog::getType, PartnerAccountLogType.RECHARGET.getCode());
+        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        List<PartnerAccountLog> rechargeList = partnerAccountLogMapper.selectByExample(weekend);
 
-            PageHelper.startPage(page.getPageNum(), page.getPageSize());
-            List<PartnerAccountLog> rechargeList = partnerAccountLogMapper.selectByExample(weekend);
+        PageInfo<PartnerAccountLog> pageInfo = new PageInfo<>(rechargeList);
 
-            PageInfo<PartnerAccountLog> pageInfo = new PageInfo<>(rechargeList);
-
-            response.setData(rechargeList);
-            response.setPage(pageInfo);
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-
-            response.createError(ResultCode.RECORD_SEARCH_FAIL);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return response;
-        }
+        response.setData(rechargeList);
+        response.setPage(pageInfo);
         return response;
     }
 
     @Override
     @RequestMapping(value = "/partner/finance/account/withdrawList")
     public ResponseMessage<List<?>> withdrawList(@RequestBody APWithdrawListRequest request) {
-        ResponseMessage<List<?>> response = new ResponseMessage<>(request);
+        ResponseMessage<List<?>> response = new ResponseMessage<>();
+        PageInfo page = request.getHeader().getPage();
 
-        try {
-            ValidateUtil.validate(request.getHeader());
+        Weekend<PartnerAccountLog> weekend = Weekend.of(PartnerAccountLog.class);
+        Integer partnerId = 1;
+        weekend.weekendCriteria()
+                .andEqualTo(PartnerAccountLog::getPartnerId, partnerId)
+                .andEqualTo(PartnerAccountLog::getType, PartnerAccountLogType.WITHDRAW.getCode());
 
-            PageInfo page = request.getHeader().getPage();
+        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        List<PartnerAccountLog> withdrawCashList = partnerAccountLogMapper.selectByExample(weekend);
 
-            Weekend<PartnerAccountLog> weekend = Weekend.of(PartnerAccountLog.class);
-            Integer partnerId = 1;
-            weekend.weekendCriteria()
-                    .andEqualTo(PartnerAccountLog::getPartnerId, partnerId)
-                    .andEqualTo(PartnerAccountLog::getType, PartnerAccountLogType.WITHDRAW.getCode());
+        PageInfo<PartnerAccountLog> pageInfo = new PageInfo<>(withdrawCashList);
 
-            PageHelper.startPage(page.getPageNum(), page.getPageSize());
-            List<PartnerAccountLog> withdrawCashList = partnerAccountLogMapper.selectByExample(weekend);
-
-            PageInfo<PartnerAccountLog> pageInfo = new PageInfo<>(withdrawCashList);
-
-            response.setData(withdrawCashList);
-            response.setPage(pageInfo);
-
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-
-            response.createError(ResultCode.RECORD_SEARCH_FAIL);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return response;
-        }
+        response.setData(withdrawCashList);
+        response.setPage(pageInfo);
         return response;
     }
 }

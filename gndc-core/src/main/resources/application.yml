@@ -1,5 +1,6 @@
 logging:
   config: classpath:logback-spring.xml
+
 mapper:
   check-example-entity-class: true
   identity: MYSQL
@@ -11,6 +12,7 @@ mapper:
   seq-format: true
   style: camelhumpAndLowercase
   wrap-keyword: '`{0}`'
+
 pagehelper:
   helperDialect: mysql
   reasonable: true
@@ -18,11 +20,14 @@ pagehelper:
   params: count=countSql
   row-bounds-with-count: true
   offset-as-page-num: true
+
 mybatis:
   mapper-locations: classpath:mapper/simple/*.xml
   type-aliases-package: com.gndc.core.model
+
 server:
   port: 11000
+
 spring:
   profiles:
     active: @profileActive@
@@ -35,6 +40,10 @@ spring:
       validationQuery: SELECT 1 FROM dual
   application:
     name: gndc-core
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
 
 
 

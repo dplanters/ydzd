@@ -1,5 +1,6 @@
 package com.gndc.core.service.product;
 
+import com.gndc.common.api.HjException;
 import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.service.BaseService;
 import com.gndc.core.api.admin.product.*;
@@ -60,5 +61,5 @@ public interface IProductService extends BaseService<Product, Integer> {
      * 运营后台-产品管理-精选爆款编辑
      * @return
      */
-    ResponseMessage<Integer> productHotEdit(AOProductHotEditRequest request);
+    ResponseMessage<Integer> productHotEdit(AOProductHotEditRequest request) throws HjException;
 }

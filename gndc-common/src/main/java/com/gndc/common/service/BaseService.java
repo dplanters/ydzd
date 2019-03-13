@@ -28,7 +28,7 @@ public interface BaseService<T, PK> {
      * @param record
      * @return
      */
-    int delete(T record) ;
+    int delete(T record);
 
     /**
      * 根据主键字段进行删除，方法参数必须包含完整的主键属性
@@ -179,7 +179,7 @@ public interface BaseService<T, PK> {
      * 根据属性及对应值进行查询，只能有一个返回值，有多个结果是抛出异常，查询条件使用等号
      *
      * @param property 查询属性
-     * @param value 属性值
+     * @param value    属性值
      * @return
      */
     T selectOneByProperty(String property, Object value);

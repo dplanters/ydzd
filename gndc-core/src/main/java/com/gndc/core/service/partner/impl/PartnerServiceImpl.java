@@ -38,7 +38,7 @@ public class PartnerServiceImpl extends BaseServiceImpl<Partner, Integer> implem
     @Override
     @RequestMapping(value = "/partner/finance/account/getPartnerInfo")
     public ResponseMessage<APPartnerInfoResponse> getPartner(@RequestBody APPartnerInfoRequest request) {
-        ResponseMessage<APPartnerInfoResponse> response = new ResponseMessage<>(request);
+        ResponseMessage<APPartnerInfoResponse> response = new ResponseMessage<>();
 
         try {
             Integer partnerId = request.getAdmin().getPartnerId();
@@ -81,7 +81,7 @@ public class PartnerServiceImpl extends BaseServiceImpl<Partner, Integer> implem
     @Override
     @RequestMapping(value = "/partner/common/getAllPartner")
     public ResponseMessage<List<Partner>> getAllPartner(@RequestBody  APAllPartnerRequest request) {
-        ResponseMessage<List<Partner>> response = new ResponseMessage<>(request);
+        ResponseMessage<List<Partner>> response = new ResponseMessage<>();
 
         try {
             response.setData(partnerMapper.selectAll());

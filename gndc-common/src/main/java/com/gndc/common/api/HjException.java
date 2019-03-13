@@ -8,59 +8,58 @@
  ***************************************************************************/
 package com.gndc.common.api;
 
-/**
- * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
- * @version V1.0.1
- * @Description 异常类封装
- * @date 2018年1月25日 上午9:48:18
- */
-public class HjException extends Exception {
 
-    private static final long serialVersionUID = 1L;
+import com.gndc.common.exception.ProblemMarker;
+import lombok.Getter;
+import lombok.Setter;
+import org.zalando.problem.AbstractThrowableProblem;
+import org.zalando.problem.Status;
 
-    private int errorCode = ResultCode.EXCEPTION.getCode();
+import javax.annotation.Nullable;
+import java.net.URI;
 
-    private Object msgExt;
+@Getter
+@Setter
+public class HjException extends AbstractThrowableProblem implements ProblemMarker {
 
-    public HjException(String message) {
-        super(message);
-    }
+    private ResultCode result;
+
+    private String template;
 
     public HjException(ResultCode result) {
-        super(result.getI18NContent());
-        this.errorCode = result.getCode();
+        super(null, "HjException", Status.BAD_REQUEST, result.getI18NContent());
+        this.result = result;
     }
 
-    public HjException(ResultCode result, Object msgExt) {
-        super(result.getI18NContent());
-        this.errorCode = result.getCode();
-        this.msgExt = msgExt;
+    public HjException(ResultCode result, boolean isRecord) {
+        this(null, "HjException", result.getI18NContent(), isRecord);
+        this.result = result;
     }
 
-    public HjException(int errorCode, String message) {
-        super(message);
-        this.errorCode = errorCode;
+    public HjException(ResultCode result, String template) {
+        super(null, "HjException", Status.BAD_REQUEST, template);
+        this.result = result;
+        this.template = template;
     }
 
-    public HjException(String errorCode, String message) {
-        super(message);
-        this.errorCode = Integer.parseInt(errorCode);
+    public HjException(ResultCode result, String template, boolean isRecord) {
+        this(null, "HjException", template, isRecord);
+        this.result = result;
+        this.template = template;
     }
 
-    public int getErrorCode() {
-        return errorCode;
+    private HjException(@Nullable URI type, @Nullable String title, @Nullable String detail, boolean isRecord) {
+        super(type, title, isRecord ? Status.INTERNAL_SERVER_ERROR : Status.BAD_REQUEST, detail);
     }
 
-    public void setErrorCode(int errorCode) {
-        this.errorCode = errorCode;
+    @Override
+    public Integer getCode() {
+        return result.getCode();
     }
 
-    public Object getMsgExt() {
-        return msgExt;
-    }
-
-    public void setMsgExt(Object msgExt) {
-        this.msgExt = msgExt;
+    @Override
+    public String getMsg() {
+        return null == template ? result.getI18NContent() : template;
     }
 
 }

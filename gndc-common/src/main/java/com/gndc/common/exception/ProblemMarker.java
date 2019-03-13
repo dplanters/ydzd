@@ -6,6 +6,7 @@ package com.gndc.common.exception;
  */
 public interface ProblemMarker {
 
-    String getCode();
+    Integer getCode();
 
+    String getMsg();
 }

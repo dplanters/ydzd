@@ -2,6 +2,7 @@ package com.gndc.core;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import tk.mybatis.spring.annotation.MapperScan;
 
 /**
@@ -10,7 +11,8 @@ import tk.mybatis.spring.annotation.MapperScan;
  * @mail kaihuijing@gmail.com
  */
 @MapperScan(basePackages = "com.gndc.core.mapper")
-@SpringBootApplication(scanBasePackages = {"com.gndc.core", "com.gndc.common.config"})
+@SpringBootApplication(scanBasePackages = {"com.gndc.core", "com.gndc.common.config"}, exclude =
+        ErrorMvcAutoConfiguration.class)
 public class CoreApplication {
 
 
