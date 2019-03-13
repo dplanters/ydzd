@@ -1,6 +1,7 @@
 package com.gndc.core.service.partner;
 
 import com.gndc.common.api.ResponseMessage;
+import com.gndc.common.service.BaseService;
 import com.gndc.core.api.partner.common.APAllPartnerRequest;
 import com.gndc.core.api.partner.finance.account.APPartnerInfoRequest;
 import com.gndc.core.api.partner.finance.account.APPartnerInfoResponse;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-public interface IPartnerService {
+public interface IPartnerService extends BaseService<Partner, Integer> {
 
     /**
      * 获取商户信息

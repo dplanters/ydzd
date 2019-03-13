@@ -2,9 +2,11 @@ package com.gndc.core.service.partner;
 
 import com.alibaba.fastjson.JSONArray;
 import com.gndc.common.api.ResponseMessage;
+import com.gndc.common.service.BaseService;
 import com.gndc.core.api.finance.APFinanceExpenseTableResponse;
 import com.gndc.core.api.partner.APDataAnalysisTableResponse;
 import com.gndc.core.api.statistics.AOPartnerCostStatisticResponse;
+import com.gndc.core.model.EventFee;
 
 import java.util.List;
 
@@ -12,7 +14,7 @@ import java.util.List;
  * @author jingkaihui
  * @date 2019/2/26
  */
-public interface IEventFeeService {
+public interface IEventFeeService extends BaseService<EventFee, Integer> {
 
 
     /**

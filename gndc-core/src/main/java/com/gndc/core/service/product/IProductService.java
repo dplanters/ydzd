@@ -1,13 +1,14 @@
 package com.gndc.core.service.product;
 
 import com.gndc.common.api.ResponseMessage;
+import com.gndc.common.service.BaseService;
 import com.gndc.core.api.admin.product.*;
 import com.gndc.core.api.partner.product.APProductListRequest;
 import com.gndc.core.api.partner.product.APProductListResponse;
 import com.gndc.core.model.Product;
 import java.util.List;
 
-public interface IProductService {
+public interface IProductService extends BaseService<Product, Integer> {
 
     /**
      * 商户后台-获取产品列表

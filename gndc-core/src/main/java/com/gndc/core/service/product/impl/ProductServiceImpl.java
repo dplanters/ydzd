@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.weekend.Weekend;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -54,6 +55,8 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     private ProductDataMapper productDataMapper;
     @Resource
     private ProductHotMapper productHotMapper;
+    @Autowired
+    private RedisTemplate<String, Serializable> redisTemplate;
 
     @Override
     @RequestMapping("/partner/product/productList")
