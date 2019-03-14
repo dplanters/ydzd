@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.gndc.common.api.HjException;
 import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.api.ResultCode;
+import com.gndc.common.constant.Constant;
 import com.gndc.common.enums.admin.AdminType;
 import com.gndc.common.enums.common.DelType;
 import com.gndc.common.utils.Utils;
@@ -12,7 +13,6 @@ import com.gndc.core.api.admin.account.AOLoginResponse;
 import com.gndc.core.model.Admin;
 import com.gndc.core.model.Right;
 import com.gndc.core.model.Role;
-import com.gndc.core.model.RoleRight;
 import com.gndc.core.service.account.AccountService;
 import com.gndc.core.service.account.AdminService;
 import com.gndc.core.service.sys.RightService;
@@ -21,14 +21,17 @@ import com.gndc.core.service.sys.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/account")
@@ -50,6 +53,9 @@ public class AOAccountController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private RedisTemplate<String, Serializable> redisTemplate;
 
     @PostMapping("/login")
     public ResponseMessage<AOLoginResponse> login(@Validated @RequestBody AOLoginRequest request) {
@@ -85,9 +91,8 @@ public class AOAccountController {
 
         //更新登录信息
         adminService.updateByPrimaryKeySelective(admin);
-
         //分配session
-        String sessionId = Utils.getSessionid();
+        String sessionId = Utils.getSessionId();
         //获取权限树
         Byte level = admin.getLevel();
         AdminType adminType = AdminType.fetch(level);
@@ -114,6 +119,9 @@ public class AOAccountController {
         }
         aoLoginResponse.setAdmin(admin);
         aoLoginResponse.setSessionId(sessionId);
+        //缓存半小时
+        redisTemplate.opsForValue().set(Constant.ADMIN_LOGIN_PREFIX + sessionId, aoLoginResponse, 30, TimeUnit.MINUTES);
+
         response.setData(aoLoginResponse);
         return response;
     }

@@ -28,7 +28,9 @@ public class RightServiceImpl extends BaseServiceImpl<Right, Integer> implements
         if (superId.equals(0)) {
             weekend.weekendCriteria()
                     .andEqualTo(Right::getPlatform, platform)
-                    .andEqualTo(Right::getSupperId, superId);
+                    .andEqualTo(Right::getSupperId, superId)
+                    //第一层判断id在权限列表中就行
+                    .andIn(Right::getId, rightIds);
         } else {
             weekend.weekendCriteria()
                     .andEqualTo(Right::getPlatform, platform)

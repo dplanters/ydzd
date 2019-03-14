@@ -1,5 +1,6 @@
 package com.gndc.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gndc.common.model.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;

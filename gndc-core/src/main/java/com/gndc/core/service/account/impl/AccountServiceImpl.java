@@ -29,9 +29,6 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private AdminMapper adminMapper;
 
-    @Autowired
-    private RedisTemplate<String, Serializable> redisTemplate;
-
     @Override
     public Boolean passwordCheck(Admin admin, String password) {
         Boolean pass = true;
