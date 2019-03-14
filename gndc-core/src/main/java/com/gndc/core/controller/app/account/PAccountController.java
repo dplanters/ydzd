@@ -1,8 +1,8 @@
 package com.gndc.core.controller.app.account;
 
-import com.gndc.common.api.HjException;
-import com.gndc.common.api.ResponseMessage;
-import com.gndc.common.api.ResultCode;
+import com.gndc.common.exception.HjException;
+import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.LoginDeviceType;
 import com.gndc.common.enums.user.UserEventsType;
 import com.gndc.common.utils.*;

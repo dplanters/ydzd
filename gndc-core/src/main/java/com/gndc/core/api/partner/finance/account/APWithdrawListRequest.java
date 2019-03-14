@@ -1,6 +1,6 @@
 package com.gndc.core.api.partner.finance.account;
 
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,10 +8,5 @@ import lombok.Setter;
 @Setter
 public class APWithdrawListRequest extends RequestMessage {
     private static final long serialVersionUID = 1L;
-
-    @Override
-    public void createHeader() {
-        super.createHeader();
-    }
 
 }

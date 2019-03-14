@@ -1,7 +1,6 @@
 package com.gndc.core.api.partner.product;
 
-import com.gndc.common.api.HjAction;
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,9 +8,4 @@ import lombok.Setter;
 @Setter
 public class APProductListRequest extends RequestMessage {
 
-    @Override
-    public void createHeader() {
-        super.createHeader();
-        header.setAction(HjAction.AP_PRODUCT_SETTING_LIST);
-    }
 }

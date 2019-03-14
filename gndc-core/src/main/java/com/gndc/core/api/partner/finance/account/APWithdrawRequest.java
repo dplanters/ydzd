@@ -1,12 +1,14 @@
 package com.gndc.core.api.partner.finance.account;
 
-import com.gndc.common.api.HjAction;
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
 public class APWithdrawRequest extends RequestMessage {
 
     private static final long serialVersionUID = 1L;
@@ -30,10 +32,5 @@ public class APWithdrawRequest extends RequestMessage {
      * 备注
      */
     private String remark;
-
-    @Override
-    public void createHeader() {
-        super.createHeader();
-    }
 
 }

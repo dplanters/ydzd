@@ -1,7 +1,6 @@
 package com.gndc.core.controller.admin;
 
-import com.gndc.common.api.ResponseMessage;
-import com.gndc.core.api.partner.APPayeeListRequest;
+import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.api.partner.common.APAllPartnerRequest;
 import com.gndc.core.model.Partner;
 import com.gndc.core.service.partner.PartnerService;

@@ -1,7 +1,6 @@
 package com.gndc.core.api.admin.product;
 
-import com.gndc.common.api.HjAction;
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,11 +17,4 @@ public class AOProductHotListRequest extends RequestMessage {
      * 合作机构id
      */
     private Integer partnerId;
-
-
-    @Override
-    public void createHeader() {
-        super.createHeader();
-        header.setAction(HjAction.AO_PRODUCT_MANAGER_PRODUCT_LIST);
-    }
 }

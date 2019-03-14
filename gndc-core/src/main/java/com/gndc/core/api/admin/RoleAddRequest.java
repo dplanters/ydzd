@@ -8,25 +8,15 @@
  ***************************************************************************/
 package com.gndc.core.api.admin;
 
-import com.gndc.common.api.HjAction;
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-/**
- * 角色新增，修改接口
- *
- * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
- * @version V1.0.1
- * @Description
- * @date 2018年1月24日 下午2:32:10
- */
+@Getter
+@Setter
 public class RoleAddRequest extends RequestMessage {
-
-    /**
-     * @Fields serialVersionUID:
-     */
-    private static final long serialVersionUID = 1L;
 
     /**
      * 角色名
@@ -38,25 +28,4 @@ public class RoleAddRequest extends RequestMessage {
      */
     private List<Integer> rightIds;
 
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-
-    public List<Integer> getRightIds() {
-        return rightIds;
-    }
-
-    public void setRightIds(List<Integer> rightIds) {
-        this.rightIds = rightIds;
-    }
-
-    @Override
-    public void createHeader() {
-        super.createHeader();
-        header.setAction(HjAction.A_ROLE_ADD);
-    }
 }

@@ -1,7 +1,6 @@
 package com.gndc.core.api.partner;
 
-import com.gndc.common.api.HjAction;
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -23,12 +22,5 @@ public class FeeStatisticTableRequest extends RequestMessage {
     @Min(1)
     @Max(12)
     private Integer month;
-
-    @Override
-    public void createHeader() {
-        super.createHeader();
-        header.setAction(HjAction.A_EVENT_FEE_STATISTIC_TABLE);
-    }
-
 
 }

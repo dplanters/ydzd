@@ -2,13 +2,12 @@ package com.gndc.core.service.product.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.gndc.common.api.HjException;
-import com.gndc.common.api.ResultCode;
+import com.gndc.common.exception.HjException;
+import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.admin.RightType;
 import com.gndc.common.enums.common.DelType;
 import com.gndc.common.enums.product.ProductDataType;
 import com.gndc.common.enums.product.ProductStatus;
-import com.gndc.common.model.Admin;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.admin.product.*;
 import com.gndc.core.api.app.product.hot.PHotProductResponse;
@@ -19,6 +18,7 @@ import com.gndc.core.mapper.simple.ProductDataMapper;
 import com.gndc.core.mapper.simple.ProductHotMapper;
 import com.gndc.core.mapper.simple.ProductMapper;
 import com.gndc.core.mappers.*;
+import com.gndc.core.model.Admin;
 import com.gndc.core.model.Product;
 import com.gndc.core.model.ProductData;
 import com.gndc.core.model.ProductHot;
@@ -198,9 +198,6 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             logger.warn("用户未登陆");
             throw new HjException(ResultCode.SESSIONID_ISNULL);
         }
-
-        // 校验权限
-        com.gndc.common.common.utils.VerifyRightUtil.verifyRight(admin, RightType.RIGHT_PLATFORM_PRODUCTHOT_EDIT);
 
         ProductHot productHot4Edit = ProductHotMapping.INSTANCE.convert(request);
 

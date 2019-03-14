@@ -8,8 +8,9 @@
  ***************************************************************************/
 package com.gndc.core.api.admin;
 
-import com.gndc.common.api.HjAction;
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 修改成员
@@ -19,12 +20,9 @@ import com.gndc.common.api.RequestMessage;
  * @Description
  * @date 2018年1月24日 下午2:30:59
  */
+@Getter
+@Setter
 public class AdminEditRequest extends RequestMessage {
-
-    /**
-     * @Fields serialVersionUID:
-     */
-    private static final long serialVersionUID = 1L;
 
     private int id;
     /**
@@ -44,68 +42,4 @@ public class AdminEditRequest extends RequestMessage {
      * 手机号
      */
     private String phone;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
-    }
-
-    /**
-     * @return name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name 要设置的 name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * @return loginName
-     */
-    public String getLoginName() {
-        return loginName;
-    }
-
-    /**
-     * @param loginName 要设置的 loginName
-     */
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
-
-    /**
-     * @return phone
-     */
-    public String getPhone() {
-        return phone;
-    }
-
-    /**
-     * @param phone 要设置的 phone
-     */
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    @Override
-    public void createHeader() {
-        super.createHeader();
-        header.setAction(HjAction.A_ADMIN_EDIT);
-    }
 }

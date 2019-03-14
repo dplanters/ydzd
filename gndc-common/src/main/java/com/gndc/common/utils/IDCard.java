@@ -8,8 +8,9 @@
  ***************************************************************************/
 package com.gndc.common.utils;
 
-import com.gndc.common.api.HjException;
-import com.gndc.common.api.ResultCode;
+
+import com.gndc.common.enums.ResultCode;
+import com.gndc.common.exception.HjException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

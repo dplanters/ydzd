@@ -1,7 +1,7 @@
 package com.gndc.core.service.partner;
 
 import com.alibaba.fastjson.JSONArray;
-import com.gndc.common.api.ResponseMessage;
+import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.common.service.BaseService;
 import com.gndc.core.api.finance.APFinanceExpenseTableResponse;
 import com.gndc.core.api.partner.APDataAnalysisTableResponse;

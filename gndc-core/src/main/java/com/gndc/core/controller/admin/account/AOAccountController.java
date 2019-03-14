@@ -1,9 +1,9 @@
 package com.gndc.core.controller.admin.account;
 
 import cn.hutool.core.util.StrUtil;
-import com.gndc.common.api.HjException;
-import com.gndc.common.api.ResponseMessage;
-import com.gndc.common.api.ResultCode;
+import com.gndc.common.exception.HjException;
+import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.enums.ResultCode;
 import com.gndc.common.constant.Constant;
 import com.gndc.common.enums.admin.AdminType;
 import com.gndc.common.enums.common.DelType;

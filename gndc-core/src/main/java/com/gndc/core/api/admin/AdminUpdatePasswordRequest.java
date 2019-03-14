@@ -8,24 +8,14 @@
  ***************************************************************************/
 package com.gndc.core.api.admin;
 
-import com.gndc.common.api.HjAction;
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 
-/**
- * 管理员修改密码
- *
- * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
- * @version V1.0.1
- * @Description
- * @date 2018年1月24日 下午2:31:43
- */
+@Getter
+@Setter
 public class AdminUpdatePasswordRequest extends RequestMessage {
-
-    /**
-     * @Fields serialVersionUID:
-     */
-    private static final long serialVersionUID = 1L;
 
     /**
      * 新密码
@@ -38,29 +28,4 @@ public class AdminUpdatePasswordRequest extends RequestMessage {
     @NotBlank
     private String oldPassword;
 
-    public static long getSerialversionuid() {
-        return serialVersionUID;
-    }
-
-    public String getOldPassword() {
-        return oldPassword;
-    }
-
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Override
-    public void createHeader() {
-        super.createHeader();
-        header.setAction(HjAction.A_EDIT_PWD);
-    }
 }

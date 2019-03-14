@@ -8,17 +8,12 @@
  ***************************************************************************/
 package com.gndc.core.api.admin;
 
-import com.gndc.common.api.HjAction;
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
+import lombok.Getter;
+import lombok.Setter;
 
-/**
- * 角色删除接口
- *
- * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
- * @version V1.0.1
- * @Description
- * @date 2018年1月24日 下午2:32:25
- */
+@Getter
+@Setter
 public class RoleDeleteRequest extends RequestMessage {
 
     /**
@@ -28,17 +23,4 @@ public class RoleDeleteRequest extends RequestMessage {
 
     private int id;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Override
-    public void createHeader() {
-        super.createHeader();
-        header.setAction(HjAction.A_ROLE_DEL);
-    }
 }

@@ -3,16 +3,15 @@ package com.gndc.core.service.partner.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-import com.gndc.common.api.HjException;
-import com.gndc.common.api.ResponseMessage;
-import com.gndc.common.api.ResultCode;
+import com.gndc.common.exception.HjException;
+import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.admin.RightType;
 import com.gndc.common.enums.common.StatusType;
 import com.gndc.common.enums.partner.EventFeeStatus;
 import com.gndc.common.enums.partner.EventFeeType;
 import com.gndc.common.enums.product.CoopeMode;
 import com.gndc.common.enums.user.UserEventsType;
-import com.gndc.common.model.Admin;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.common.utils.DateUtil;
 import com.gndc.common.utils.JsonUtil;
@@ -26,10 +25,7 @@ import com.gndc.core.mapper.simple.EventFeeMapper;
 import com.gndc.core.mapper.simple.ProductMapper;
 import com.gndc.core.mapper.simple.UserEventMapper;
 import com.gndc.core.mapper.simple.UserMapper;
-import com.gndc.core.model.EventFee;
-import com.gndc.core.model.Product;
-import com.gndc.core.model.User;
-import com.gndc.core.model.UserEvent;
+import com.gndc.core.model.*;
 import com.gndc.core.service.partner.EventFeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,8 +72,6 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
 
 
             Admin admin = request.getAdmin();
-
-            com.gndc.common.common.utils.VerifyRightUtil.verifyRight(request.getAdmin(), RightType.BILL_STATISTIC_TABLE);
 
             LocalDate now = LocalDate.now();
 

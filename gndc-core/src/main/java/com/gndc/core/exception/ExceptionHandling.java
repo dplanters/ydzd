@@ -1,6 +1,6 @@
 package com.gndc.core.exception;
 
-import com.gndc.common.api.ResultCode;
+import com.gndc.common.enums.ResultCode;
 import com.gndc.common.exception.ProblemMarker;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

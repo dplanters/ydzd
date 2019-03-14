@@ -8,17 +8,12 @@
  ***************************************************************************/
 package com.gndc.core.api.admin;
 
-import com.gndc.common.api.HjAction;
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
+import lombok.Getter;
+import lombok.Setter;
 
-/**
- * 列表查询
- *
- * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
- * @version V1.0.1
- * @Description
- * @date 2018年1月24日 下午2:31:11
- */
+@Getter
+@Setter
 public class AdminListRequest extends RequestMessage {
 
     /**
@@ -37,58 +32,4 @@ public class AdminListRequest extends RequestMessage {
     private String addTimeBegin;
 
     private String addTimeEnd;
-
-    @Override
-    public void createHeader() {
-        super.createHeader();
-        header.setAction(HjAction.A_ADMIN_PAGE_LIST);
-    }
-
-    public String getLoginName() {
-        return loginName;
-    }
-
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getAddTimeBegin() {
-        return addTimeBegin;
-    }
-
-    public void setAddTimeBegin(String addTimeBegin) {
-        this.addTimeBegin = addTimeBegin;
-    }
-
-    public String getAddTimeEnd() {
-        return addTimeEnd;
-    }
-
-    public void setAddTimeEnd(String addTimeEnd) {
-        this.addTimeEnd = addTimeEnd;
-    }
 }

@@ -1,6 +1,6 @@
 package com.gndc.core.api.admin.product;
 
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 

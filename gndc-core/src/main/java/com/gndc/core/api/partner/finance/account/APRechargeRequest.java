@@ -1,16 +1,17 @@
 package com.gndc.core.api.partner.finance.account;
 
-import com.gndc.common.api.HjAction;
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 public class APRechargeRequest extends RequestMessage {
 
-    private static final long serialVersionUID = 1L;
     /**
      * 充值方式
      */
@@ -39,10 +40,5 @@ public class APRechargeRequest extends RequestMessage {
      * 支付凭证
      */
     private String payVoucher;
-
-    @Override
-    public void createHeader() {
-        super.createHeader();
-    }
 
 }

@@ -9,14 +9,12 @@
 package com.gndc.core.api.app.user.event;
 
 
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
+import lombok.Getter;
+import lombok.Setter;
 
-/**
- * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
- * @version V1.0.1
- * @Description 获取用户信息
- * @date 2018年1月24日 下午2:39:16
- */
+@Getter
+@Setter
 public class UserEventRequest extends RequestMessage {
 
     private static final long serialVersionUID = 1L;
@@ -27,38 +25,5 @@ public class UserEventRequest extends RequestMessage {
     private byte type;
 
     private int productId;
-
-    /**
-     * @return type
-     */
-    public byte getType() {
-        return type;
-    }
-
-    /**
-     * @param type 要设置的 type
-     */
-    public void setType(byte type) {
-        this.type = type;
-    }
-
-    /**
-     * @return productId
-     */
-    public int getProductId() {
-        return productId;
-    }
-
-    /**
-     * @param productId 要设置的 productId
-     */
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
-
-    @Override
-    public void createHeader() {
-        super.createHeader();
-    }
 
 }

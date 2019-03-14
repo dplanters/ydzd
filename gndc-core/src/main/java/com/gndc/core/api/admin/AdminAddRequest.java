@@ -8,8 +8,7 @@
  ***************************************************************************/
 package com.gndc.core.api.admin;
 
-import com.gndc.common.api.HjAction;
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -59,9 +58,4 @@ public class AdminAddRequest extends RequestMessage {
 
     private int partnerId;
 
-    @Override
-    public void createHeader() {
-        super.createHeader();
-        header.setAction(HjAction.A_ADMIN_ADD);
-    }
 }

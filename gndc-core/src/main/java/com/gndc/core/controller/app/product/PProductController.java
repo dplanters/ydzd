@@ -1,6 +1,6 @@
 package com.gndc.core.controller.app.product;
 
-import com.gndc.common.api.ResponseMessage;
+import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.api.app.product.hot.PHotProductResponse;
 import com.gndc.core.api.common.CommonRequest;
 import com.gndc.core.service.product.ProductService;

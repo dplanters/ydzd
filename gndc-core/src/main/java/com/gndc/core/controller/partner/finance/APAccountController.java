@@ -1,7 +1,7 @@
 package com.gndc.core.controller.partner.finance;
 
 import com.github.pagehelper.PageInfo;
-import com.gndc.common.api.ResponseMessage;
+import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.api.partner.finance.account.*;
 import com.gndc.core.service.partner.PartnerAccountLogService;
 import com.gndc.core.service.partner.PartnerService;

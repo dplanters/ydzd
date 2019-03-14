@@ -1,7 +1,6 @@
 package com.gndc.core.api.partner;
 
-import com.gndc.common.api.HjAction;
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,9 +8,4 @@ import lombok.Setter;
 @Setter
 public class StatisticUVRequest extends RequestMessage {
 
-    @Override
-    public void createHeader() {
-        super.createHeader();
-        header.setAction(HjAction.A_MANAGER_HOME_STATISTIC_UV);
-    }
 }

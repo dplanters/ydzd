@@ -1,10 +1,12 @@
 package com.gndc.core.api.producthot;
 
-import com.gndc.common.api.HjAction;
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class ProductHotAddRequest extends RequestMessage {
-    private static final long serialVersionUID = 1L;
 
     // 产品名字
     private String productName;
@@ -37,12 +39,6 @@ public class ProductHotAddRequest extends RequestMessage {
      */
     public void setProductsort(int productsort) {
         this.productsort = productsort;
-    }
-
-    @Override
-    public void createHeader() {
-        super.createHeader();
-        header.setAction(HjAction.PRODHOT_ADD);
     }
 
 }

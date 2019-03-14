@@ -1,6 +1,6 @@
 package com.gndc.core.controller.app.ad;
 
-import com.gndc.common.api.ResponseMessage;
+import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.common.enums.common.DelType;
 import com.gndc.common.enums.product.ProductStatus;
 import com.gndc.core.api.app.ad.PBannerListRequest;

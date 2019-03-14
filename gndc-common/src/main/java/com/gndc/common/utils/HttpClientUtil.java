@@ -8,8 +8,8 @@
  ***************************************************************************/
 package com.gndc.common.utils;
 
-import com.gndc.common.api.HjException;
-import com.gndc.common.api.ResultCode;
+import com.gndc.common.enums.ResultCode;
+import com.gndc.common.exception.HjException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.NameValuePair;

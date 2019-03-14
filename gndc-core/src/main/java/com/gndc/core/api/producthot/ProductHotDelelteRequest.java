@@ -1,10 +1,12 @@
 package com.gndc.core.api.producthot;
 
-import com.gndc.common.api.HjAction;
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class ProductHotDelelteRequest extends RequestMessage {
-    private static final long serialVersionUID = 1L;
 
     private byte id;
 
@@ -20,12 +22,6 @@ public class ProductHotDelelteRequest extends RequestMessage {
      */
     public void setId(byte id) {
         this.id = id;
-    }
-
-    @Override
-    public void createHeader() {
-        super.createHeader();
-        header.setAction(HjAction.PRODHOT_DELETE);
     }
 
 }

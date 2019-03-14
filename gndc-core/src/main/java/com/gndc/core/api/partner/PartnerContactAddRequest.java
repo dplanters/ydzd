@@ -1,7 +1,9 @@
 package com.gndc.core.api.partner;
 
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.NotNull;
@@ -10,7 +12,8 @@ import javax.validation.constraints.NotNull;
  * @author jingkaihui
  * @date 2019/2/25
  */
-@Data
+@Getter
+@Setter
 public class PartnerContactAddRequest extends RequestMessage {
     private static final long serialVersionUID = 1L;
 

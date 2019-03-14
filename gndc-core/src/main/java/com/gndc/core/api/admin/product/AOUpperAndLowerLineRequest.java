@@ -1,7 +1,6 @@
 package com.gndc.core.api.admin.product;
 
-import com.gndc.common.api.HjAction;
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,9 +26,4 @@ public class AOUpperAndLowerLineRequest extends RequestMessage {
     @NotNull
     private Byte upperAndLowerLine;
 
-    @Override
-    public void createHeader() {
-        super.createHeader();
-        header.setAction(HjAction.AO_PRODUCT_MANAGER_PRODUCT_UPPER_AND_LOWER_LINE);
-    }
 }

@@ -8,20 +8,14 @@
  ***************************************************************************/
 package com.gndc.core.api.app.user.account;
 
-import com.gndc.common.api.HjAction;
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
+import lombok.Getter;
+import lombok.Setter;
 
-/**
- * 用户登录
- *
- * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
- * @version V1.0.1
- * @Description
- * @date 2018年1月24日 下午2:37:52
- */
+@Getter
+@Setter
 public class PUserLoginRequest extends RequestMessage {
 
-    private static final long serialVersionUID = 1L;
     /**
      * 手机号
      */
@@ -56,75 +50,5 @@ public class PUserLoginRequest extends RequestMessage {
      * APP包名
      */
     private String appPackage;
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Override
-    public void createHeader() {
-        super.createHeader();
-        header.setAction(HjAction.P_SMS_LOGIN);
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getImei() {
-        return imei;
-    }
-
-    public void setImei(String imei) {
-        this.imei = imei;
-    }
-
-    public String getValCode() {
-        return valCode;
-    }
-
-    public void setValCode(String valCode) {
-        this.valCode = valCode;
-    }
-
-    public String getTermType() {
-        return termType;
-    }
-
-    public void setTermType(String termType) {
-        this.termType = termType;
-    }
-
-    public String getRegChannel() {
-        return regChannel;
-    }
-
-    public void setRegChannel(String regChannel) {
-        this.regChannel = regChannel;
-    }
-
-    public String getAppName() {
-        return appName;
-    }
-
-    public void setAppName(String appName) {
-        this.appName = appName;
-    }
-
-    public String getAppPackage() {
-        return appPackage;
-    }
-
-    public void setAppPackage(String appPackage) {
-        this.appPackage = appPackage;
-    }
 
 }

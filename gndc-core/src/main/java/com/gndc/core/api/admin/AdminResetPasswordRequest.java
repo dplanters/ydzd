@@ -8,17 +8,12 @@
  ***************************************************************************/
 package com.gndc.core.api.admin;
 
-import com.gndc.common.api.HjAction;
-import com.gndc.common.api.RequestMessage;
+import com.gndc.core.api.common.RequestMessage;
+import lombok.Getter;
+import lombok.Setter;
 
-/**
- * 超级管理员重置密码
- *
- * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
- * @version V1.0.1
- * @Description
- * @date 2018年1月24日 下午2:31:43
- */
+@Getter
+@Setter
 public class AdminResetPasswordRequest extends RequestMessage {
 
     /**
@@ -32,25 +27,4 @@ public class AdminResetPasswordRequest extends RequestMessage {
      */
     private String password;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Override
-    public void createHeader() {
-        super.createHeader();
-        header.setAction(HjAction.A_ADMIN_RESET_PWD);
-    }
 }

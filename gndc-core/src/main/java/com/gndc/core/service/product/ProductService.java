@@ -1,6 +1,6 @@
 package com.gndc.core.service.product;
 
-import com.gndc.common.api.HjException;
+import com.gndc.common.exception.HjException;
 import com.gndc.common.service.BaseService;
 import com.gndc.core.api.admin.product.*;
 import com.gndc.core.api.app.product.hot.PHotProductResponse;

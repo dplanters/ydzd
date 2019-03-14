@@ -5,4 +5,6 @@ import com.gndc.core.model.Role;
 
 public interface RoleService extends BaseService<Role, Integer> {
 
+
+
 }
