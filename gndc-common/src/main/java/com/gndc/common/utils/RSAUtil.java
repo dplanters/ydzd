@@ -12,7 +12,9 @@ import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.crypto.Cipher;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -34,6 +36,7 @@ public class RSAUtil {
     public static final String SIGNATURE_ALGORITHM = "MD5withRSA";
 
     public static String PUBLIC_KEY;
+
     public static String PRIVATE_KEY;
 
     /**

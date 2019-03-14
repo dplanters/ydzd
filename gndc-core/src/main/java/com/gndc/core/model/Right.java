@@ -3,11 +3,10 @@ package com.gndc.core.model;
 import com.gndc.common.model.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
+import tk.mybatis.mapper.annotation.LogicDelete;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,13 +16,14 @@ public class Right extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @LogicDelete(notDeletedValue = 1, isDeletedValue = -1)
     private Byte rightStatus;
 
     private String rightName;
 
     private String rightUrl;
 
-    private String rightPth;
+    private String rightPath;
 
     private String component;
 
@@ -40,5 +40,8 @@ public class Right extends BaseEntity {
     private String uniqueSign;
 
     private Byte rightLevel;
+
+    @Transient
+    private List<Right> rights;
 
 }

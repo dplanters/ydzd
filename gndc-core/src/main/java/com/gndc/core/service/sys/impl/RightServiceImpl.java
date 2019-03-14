@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.weekend.Weekend;
+
+import java.util.List;
 
 @Service
 public class RightServiceImpl extends BaseServiceImpl<Right, Integer> implements RightService {
@@ -18,4 +21,30 @@ public class RightServiceImpl extends BaseServiceImpl<Right, Integer> implements
     @Autowired
     private RightMapper rightMapper;
 
+    @Override
+    public List<Right> rightsTree(Byte rightLevel, Byte platform, Integer superId, List<Integer> rightIds) {
+        Weekend<Right> weekend = Weekend.of(Right.class);
+        weekend.orderBy("rightOrder");
+        if (superId.equals(0)) {
+            weekend.weekendCriteria()
+                    .andEqualTo(Right::getPlatform, platform)
+                    .andEqualTo(Right::getSupperId, superId);
+        } else {
+            weekend.weekendCriteria()
+                    .andEqualTo(Right::getPlatform, platform)
+                    .andEqualTo(Right::getSupperId, superId)
+                    .andIn(Right::getSupperId, rightIds);
+        }
+        List<Right> rights = rightMapper.selectByExample(weekend);
+        if (rights != null && rights.size() > 0) {
+            rightLevel++;
+            for (Right right : rights) {
+                List<Right> rightList = rightsTree(rightLevel, platform, right.getId(), rightIds);
+                right.setRights(rightList);
+            }
+            return rights;
+        } else {
+            return null;
+        }
+    }
 }

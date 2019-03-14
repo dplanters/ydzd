@@ -11,7 +11,8 @@ import tk.mybatis.spring.annotation.MapperScan;
  * @mail kaihuijing@gmail.com
  */
 @MapperScan(basePackages = "com.gndc.core.mapper")
-@SpringBootApplication(scanBasePackages = {"com.gndc.core", "com.gndc.common.config"}, exclude =
+@SpringBootApplication(scanBasePackages = {"com.gndc.core", "com.gndc.common.config", "com.gndc.common.utils"},
+        exclude =
         ErrorMvcAutoConfiguration.class)
 public class CoreApplication {
 

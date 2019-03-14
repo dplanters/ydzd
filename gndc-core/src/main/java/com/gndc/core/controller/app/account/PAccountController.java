@@ -10,7 +10,6 @@ import com.gndc.core.api.app.user.account.PUserLoginRequest;
 import com.gndc.core.api.app.user.account.PUserLoginResponse;
 import com.gndc.core.model.User;
 import com.gndc.core.model.UserEvent;
-import com.gndc.core.service.sys.IUserCacheService;
 import com.gndc.core.service.user.UserEventService;
 import com.gndc.core.service.user.UserService;
 import org.apache.commons.lang.StringUtils;
@@ -39,9 +38,6 @@ public class PAccountController {
 
     @Autowired
     private UserEventService userEventService;
-
-    @Autowired
-    private IUserCacheService userCacheService;
 
     @PostMapping("/login")
     public ResponseMessage<PUserLoginResponse> productList(@Validated @RequestBody PUserLoginRequest request) {
@@ -149,8 +145,6 @@ public class PAccountController {
         pUserLoginResponse.setPhone(phone);
         String sessionId = Utils.getSessionId();
         pUserLoginResponse.setSessionId(sessionId);
-
-        userCacheService.setUser(sessionId, userinfo);
 
         response.setData(pUserLoginResponse);
 

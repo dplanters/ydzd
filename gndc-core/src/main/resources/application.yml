@@ -33,7 +33,9 @@ spring:
     active: @profileActive@
   datasource:
     druid:
-      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      connectionProperties:
+        - druid.stat.mergeSql=true
+        - druid.stat.slowSqlMillis=5000
       filters: stat,wall,slf4j
       maxActive: 20
       testOnReturn: false
