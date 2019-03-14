@@ -14,7 +14,6 @@ import org.apache.ibatis.session.RowBounds;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Mapper
 public interface EventFeeMapper extends MyMapper<EventFee, Long> {
 
     long selectCountByDate(@Param("feeType") Byte feeType,

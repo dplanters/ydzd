@@ -4,6 +4,5 @@ import com.gndc.common.mybatis.MyMapper;
 import com.gndc.core.model.AppException;
 import org.apache.ibatis.annotations.Mapper;
 
-@Mapper
 public interface AppExceptionMapper extends MyMapper<AppException, Integer> {
 }
