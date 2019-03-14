@@ -140,4 +140,62 @@
       </if>
       order by position
     </select>
+
+
+    <resultMap id="PHotProductResultMap" type="com.gndc.core.api.app.product.hot.PHotProductResponse">
+        <result column="product_id" jdbcType="INTEGER" property="productId" />
+        <result column="data_type" jdbcType="TINYINT" property="dataType" />
+        <result column="borrow_period_start" jdbcType="INTEGER" property="minBorrowPeriod" />
+        <result column="borrow_period_end" jdbcType="INTEGER" property="maxBorrowPeriod" />
+        <result column="borrow_period_unit" jdbcType="TINYINT" property="borrowPeriodUnit" />
+        <result column="borrow_time_description" jdbcType="VARCHAR" property="borrowTimeDescription" />
+        <result column="day_rate" jdbcType="DECIMAL" property="dayRate" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
+        <result column="minBorrowAmount" jdbcType="DECIMAL" property="minBorrowAmount" />
+        <result column="maxBorrowAmount" jdbcType="DECIMAL" property="maxBorrowAmount" />
+        <result column="minBorrowPeriod" jdbcType="INTEGER" property="minBorrowPeriod" />
+        <result column="maxBorrowPeriod" jdbcType="INTEGER" property="maxBorrowPeriod" />
+        <result column="fixed_sort_type" jdbcType="INTEGER" property="fixedSortType" />
+        <result column="minDayRate" jdbcType="DECIMAL" property="dayRate" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="borrow_amount_begin" jdbcType="DECIMAL" property="borrowAmountBegin" />
+        <result column="borrow_amount_end" jdbcType="DECIMAL" property="borrowAmountEnd" />
+        <result column="is_detail" jdbcType="TINYINT" property="isDetail" />
+        <result column="android_link" jdbcType="VARCHAR" property="androidLink" />
+        <result column="ios_link" jdbcType="VARCHAR" property="iosLink" />
+    </resultMap>
+
+    <select id="selectPHotProductList" parameterType="java.lang.Byte" resultMap="PHotProductResultMap">
+  	select
+  		a.id as productId,
+  		a.name,
+  		a.logo_url,
+  		c.position,
+  		a.description,
+  		a.apply_condition,
+  		a.apply_process,
+  		a.repay_info,
+  		a.day_rate minDayRate,
+  		a.day_rate day_rate,
+  		a.borrow_amount_begin borrow_amount_begin,
+  	    a.borrow_amount_end borrow_amount_end,
+  	    MIN(b.borrow_period_start) minBorrowPeriod,
+  	    MAX(b.borrow_period_start) maxBorrowPeriod,
+  		b.borrow_amount,
+  		b.borrow_period_start,
+  		a.android_link,
+  		a.ios_link,
+  		a.is_detail,
+  		b.borrow_time_description
+	    from dc_product a
+	    left join dc_product_data b on a.id=b.product_id and b.data_type =1 and b.status=1, dc_product_hot c
+    where
+          a.id=c.product_id and
+          a.is_del =1 and
+          a.status=2 and
+          c.status=#{status,jdbcType=TINYINT}
+ 		  GROUP BY a.id
+    order by c.position
+  </select>
 </mapper>

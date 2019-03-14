@@ -11,6 +11,8 @@ import com.gndc.common.enums.product.ProductStatus;
 import com.gndc.common.model.Admin;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.admin.product.*;
+import com.gndc.core.api.app.product.hot.PHotProductResponse;
+import com.gndc.core.api.common.CommonRequest;
 import com.gndc.core.api.partner.product.APProductListRequest;
 import com.gndc.core.api.partner.product.APProductListResponse;
 import com.gndc.core.mapper.simple.ProductDataMapper;
@@ -243,6 +245,16 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
         }
 
         return productHot4Edit.getId();
+    }
+
+    @Override
+    public List<PHotProductResponse> selectPHotProductList(CommonRequest commonRequest) {
+        PageInfo page = commonRequest.getHeader().getPage();
+
+        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        List<PHotProductResponse> hotProductsList = productMapper.selectPHotProductList();
+
+        return hotProductsList;
     }
 
 }

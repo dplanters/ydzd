@@ -4,7 +4,7 @@ package com.gndc.core.api.app.product.find;
 import com.gndc.common.api.HjAction;
 import com.gndc.common.api.RequestMessage;
 
-public class FindProductsRequest extends RequestMessage {
+public class FindProductRequest extends RequestMessage {
     private static final long serialVersionUID = 1L;
 
     private Byte sort;

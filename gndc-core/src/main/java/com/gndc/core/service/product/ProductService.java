@@ -1,9 +1,10 @@
 package com.gndc.core.service.product;
 
 import com.gndc.common.api.HjException;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.service.BaseService;
 import com.gndc.core.api.admin.product.*;
+import com.gndc.core.api.app.product.hot.PHotProductResponse;
+import com.gndc.core.api.common.CommonRequest;
 import com.gndc.core.api.partner.product.APProductListRequest;
 import com.gndc.core.api.partner.product.APProductListResponse;
 import com.gndc.core.model.Product;
@@ -56,4 +57,9 @@ public interface ProductService extends BaseService<Product, Integer> {
      * @return
      */
     Integer productHotEdit(AOProductHotEditRequest request) throws HjException;
+    /**
+     * 客户端-首页-精选爆款列表
+     * @return
+     */
+    List<PHotProductResponse> selectPHotProductList(CommonRequest commonRequest);
 }

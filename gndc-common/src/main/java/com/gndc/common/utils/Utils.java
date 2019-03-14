@@ -44,11 +44,11 @@ public class Utils {
     }
 
     /**
-     * 获取sessionid
+     * 获取sessionId
      *
      * @return
      */
-    public static String getSessionid() {
+    public static String getSessionId() {
         return UUID.randomUUID().toString().replace("-", "");
     }
 

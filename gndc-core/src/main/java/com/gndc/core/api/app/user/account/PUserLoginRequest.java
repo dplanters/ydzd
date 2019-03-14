@@ -19,7 +19,7 @@ import com.gndc.common.api.RequestMessage;
  * @Description
  * @date 2018年1月24日 下午2:37:52
  */
-public class UserLoginResponse extends RequestMessage {
+public class PUserLoginRequest extends RequestMessage {
 
     private static final long serialVersionUID = 1L;
     /**
