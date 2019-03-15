@@ -36,6 +36,11 @@ public class Right extends BaseEntity {
 
     private Integer rightOrder;
 
+    /**
+     * 是否需要授权；1：需要；0：不需要
+     */
+    private Byte requireAuth;
+
     private String rightPic;
 
     private String uniqueSign;

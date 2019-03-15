@@ -10,6 +10,7 @@ import com.gndc.core.service.product.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.weekend.Weekend;
 
+import java.io.Serializable;
 import java.util.List;
 
 @RestController
@@ -29,7 +31,9 @@ public class AOProductController {
     @Autowired
     private ProductService productService;
 
-    
+    @Autowired
+    private RedisTemplate<String, Serializable> redisTemplate;
+
     @PostMapping("/productList")
     public ResponseMessage<List<AOProductListResponse>> productList(@Validated @RequestBody AOProductListRequest request) {
         ResponseMessage<List<AOProductListResponse>> response = new ResponseMessage<>();

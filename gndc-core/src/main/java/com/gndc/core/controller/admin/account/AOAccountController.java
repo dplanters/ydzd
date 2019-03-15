@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/account")
+@RequestMapping("/admin/account")
 public class AOAccountController {
 
     private static final Logger logger = LoggerFactory.getLogger(AOAccountController.class);
@@ -111,9 +111,14 @@ public class AOAccountController {
                 rights = rightService.rightsTree((byte)1, (byte)1, 0, rightIds);
                 admin.setRights(rights);
                 break;
-            default:
+            case PARTNER_ADMIN:
                 String template = "{} 管理员账号，不允许登录";
                 String msg = StrUtil.format(template, loginName);
+                logger.warn(msg);
+                throw new HjException(ResultCode.ERROR, msg);
+            default:
+                template = "无效的账号类型";
+                msg = StrUtil.format(template, loginName);
                 logger.warn(msg);
                 throw new HjException(ResultCode.ERROR, msg);
         }

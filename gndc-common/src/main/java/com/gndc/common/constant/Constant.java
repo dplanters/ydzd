@@ -76,6 +76,21 @@ public class Constant {
      */
     public static final String USER_LOGIN_PREFIX = "user_";
 
+    /**
+     * redis中存所有角色的key
+     */
+    public static final String ALL_ROLE = "all_role";
+
+    /**
+     * redis中存所有权限的key
+     */
+    public static final String ALL_RIGHT = "all_right";
+
+    /**
+     * redis中存所有角色权限的key
+     */
+    public static final String ALL_ROLE_RIGHT = "all_role_right";
+
     @Value("${COUNTRY}")
     public void setCountry(String country) {
         Constant.COUNTRY = country;

@@ -26,13 +26,10 @@ public class Admin extends BaseEntity {
 
     private String email;
 
-    @JsonIgnore
     private String password;
 
-    @JsonIgnore
     private String passwordSign;
 
-    @JsonIgnore
     private String operateSign;
 
     private Byte isLock;
@@ -40,6 +37,8 @@ public class Admin extends BaseEntity {
     private Date lockTime;
 
     private Integer loginCount;
+
+    private Integer supperId;
 
     private Date lastLoginTime;
 
