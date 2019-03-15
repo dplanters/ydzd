@@ -5,8 +5,16 @@ package com.gndc.common.enums.system;
  */
 public enum SystemOptionEnum {
     REQUEST_URL("REQUEST_URL", "接口请求地址"),
+
     UV_EVENT_FEE("UV_EVENT_FEE", "UV点击收费金额"),
-    SEARCH_CRITERIA("SEARCH_CRITERIA_FIND", "找贷款搜索配置项");
+
+    SEARCH_CRITERIA("SEARCH_CRITERIA_FIND", "找贷款搜索配置项"),
+
+    WECHAT_SERVICE("WECHAT_SERVICE", "微信客服"),
+
+    WECHAT_PUBLIC("WECHAT_PUBLIC", "微信公众号"),
+
+    SERVICE_TEL("SERVICE_TEL", "客服电话");
 
     private String code;
     private String name;

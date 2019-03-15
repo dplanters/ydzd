@@ -3,7 +3,7 @@ package com.gndc.common.enums.product;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum productPeriodUnit {
+public enum ProductPeriodUnit {
 
     /**
      * 日
@@ -17,11 +17,11 @@ public enum productPeriodUnit {
 
     ;
 
-    private static final Map<Byte, productPeriodUnit> map;
+    private static final Map<Byte, ProductPeriodUnit> map;
 
     static {
         map = new HashMap<>();
-        for (productPeriodUnit palt : values()) {
+        for (ProductPeriodUnit palt : values()) {
             map.put(palt.code, palt);
         }
     }
@@ -29,7 +29,7 @@ public enum productPeriodUnit {
     private byte code;
     private String name;
 
-    productPeriodUnit(byte code, String name) {
+    ProductPeriodUnit(byte code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -40,7 +40,7 @@ public enum productPeriodUnit {
      * @param code
      * @return
      */
-    public static productPeriodUnit fetch(byte code) {
+    public static ProductPeriodUnit fetch(byte code) {
         return map.get(code);
     }
 
@@ -51,7 +51,7 @@ public enum productPeriodUnit {
      * @return
      */
     public static String fetchName(byte code) {
-        productPeriodUnit palt = map.get(code);
+        ProductPeriodUnit palt = map.get(code);
         return palt != null ? palt.name : null;
     }
 
