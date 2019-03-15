@@ -1,14 +1,15 @@
 package com.gndc.core.api.app.product.find;
 
-
 import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class FindProductRequest extends RequestMessage {
-    private static final long serialVersionUID = 1L;
+public class PFindProductRequest extends RequestMessage {
+
+
+    private static final long serialVersionUID = 4252234378456355619L;
 
     private Byte sort;
     // 状态

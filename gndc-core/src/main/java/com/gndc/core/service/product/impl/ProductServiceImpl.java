@@ -2,16 +2,17 @@ package com.gndc.core.service.product.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.gndc.common.exception.HjException;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.admin.RightType;
 import com.gndc.common.enums.common.DelType;
 import com.gndc.common.enums.product.ProductDataType;
 import com.gndc.common.enums.product.ProductStatus;
+import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.admin.product.*;
+import com.gndc.core.api.app.product.find.PFindProductRequest;
+import com.gndc.core.api.app.product.find.PFindProductResponse;
+import com.gndc.core.api.app.product.find.PProductStaticUV;
 import com.gndc.core.api.app.product.hot.PHotProductResponse;
-import com.gndc.core.api.common.CommonRequest;
 import com.gndc.core.api.partner.product.APProductListRequest;
 import com.gndc.core.api.partner.product.APProductListResponse;
 import com.gndc.core.mapper.simple.ProductDataMapper;
@@ -51,7 +52,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     private ProductDataMapper productDataMapper;
     @Resource
     private ProductHotMapper productHotMapper;
-    
+
     @Autowired
     private RedisTemplate<String, Serializable> redisTemplate;
 
@@ -202,7 +203,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
         ProductHot productHot4Edit = ProductHotMapping.INSTANCE.convert(request);
 
         Product product = productMapper.selectByPrimaryKey(request.getProductId());
-        if(product == null || !product.getStatus().equals(ProductStatus.ON_LINE.getCode())){
+        if (product == null || !product.getStatus().equals(ProductStatus.ON_LINE.getCode())) {
             logger.warn("产品未上线");
             throw new HjException(ResultCode.PRODUCTS_NOT_ONLINE);
         }
@@ -245,13 +246,18 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     }
 
     @Override
-    public List<PHotProductResponse> selectPHotProductList(CommonRequest commonRequest) {
-        PageInfo page = commonRequest.getHeader().getPage();
+    public List<PHotProductResponse> selectPHotProductList() {
+        return productMapper.selectPHotProductList();
+    }
 
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
-        List<PHotProductResponse> hotProductsList = productMapper.selectPHotProductList();
+    @Override
+    public List<PFindProductResponse> selectPFindProductList(PFindProductRequest findProductRequest) {
+        return productMapper.selectPFindProductList(findProductRequest);
+    }
 
-        return hotProductsList;
+    @Override
+    public List<PProductStaticUV> staticProductUV(List<Integer> productIds, List<Byte> eventTypes) {
+        return productMapper.staticProductUV(productIds, eventTypes);
     }
 
 }
