@@ -2,6 +2,9 @@ package com.gndc.common.mybatis;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
+import tk.mybatis.mapper.provider.base.BaseSelectProvider;
+
+import java.util.List;
 
 /**
  * @param <T> 不能为空
@@ -21,12 +24,33 @@ public interface CustomMapper<T> {
     T selectOneByProperty(@Param("property") String property, @Param("value") Object value);
 
     /**
-     * 根据属性及对应值进行count查询，返回结果数
+     * 根据实体中的属性值进行查询，查询条件使用等号
      *
      * @param property 查询属性
-     * @param value    属性值
+     * @param value 属性值
      * @return
      */
     @SelectProvider(type = CustomSelectProvider.class, method = "dynamicSQL")
-    int selectCountExistByProperty(@Param("property") String property, @Param("value") Object value);
+    List<T> selectByProperty(@Param("property") String property, @Param("value") Object value);
+
+    /**
+     * 根据主键字段查询总数，方法参数必须包含完整的主键属性，查询条件使用等号
+     *
+     * @param property 查询属性
+     * @param value 属性值
+     * @return
+     */
+    @SelectProvider(type = CustomSelectProvider.class, method = "dynamicSQL")
+    boolean existsWithProperty(@Param("property") String property, @Param("value") Object value);
+
+    /**
+     * 根据实体中的属性查询总数，查询条件使用等号
+     *
+     * @param property 查询属性
+     * @param value 属性值
+     * @return
+     */
+    @SelectProvider(type = BaseSelectProvider.class, method = "dynamicSQL")
+    int selectCountByProperty(@Param("property") String property, @Param("value") Object value);
+
 }

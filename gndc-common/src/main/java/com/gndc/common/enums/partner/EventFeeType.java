@@ -20,7 +20,7 @@ public enum EventFeeType {
         }
     }
 
-    private byte code;
+    public byte code;
     private String name;
 
     EventFeeType(byte code, String name) {

@@ -1,9 +1,8 @@
 package com.gndc.core.controller.admin.sys;
 
-import com.gndc.core.api.admin.AORoleAddModifyRequest;
+import com.gndc.core.api.admin.sys.AORoleAddModifyRequest;
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.service.sys.RoleService;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

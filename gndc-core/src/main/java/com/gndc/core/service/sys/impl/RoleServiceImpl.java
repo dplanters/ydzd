@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
-import com.gndc.core.api.admin.AORoleAddModifyRequest;
+import com.gndc.core.api.admin.sys.AORoleAddModifyRequest;
 import com.gndc.core.mapper.simple.RoleMapper;
 import com.gndc.core.mapper.simple.RoleRightMapper;
 import com.gndc.core.model.Role;

@@ -1,6 +1,10 @@
 package com.gndc.common.service;
 
+import com.gndc.common.mybatis.CustomSelectProvider;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.SelectProvider;
 import tk.mybatis.mapper.additional.aggregation.AggregateCondition;
+import tk.mybatis.mapper.provider.base.BaseSelectProvider;
 
 import java.util.List;
 
@@ -184,6 +188,34 @@ public interface BaseService<T, PK> {
      */
     T selectOneByProperty(String property, Object value);
 
+    /**
+     * 根据实体中的属性值进行查询，查询条件使用等号
+     *
+     * @param property 查询属性
+     * @param value 属性值
+     * @return
+     */
+    List<T> selectByProperty(String property, Object value);
+
+    /**
+     * 根据主键字段查询总数，方法参数必须包含完整的主键属性，查询条件使用等号
+     *
+     * @param property 查询属性
+     * @param value 属性值
+     * @return
+     */
+    boolean existsWithProperty(String property, Object value);
+
+
+    /**
+     * 根据实体中的属性查询总数，查询条件使用等号
+     *
+     * @param property 查询属性
+     * @param value 属性值
+     * @return
+     */
+    int selectCountByProperty(String property, Object value);
+
 
     /**
      * 根据example和aggregateCondition进行聚合查询
@@ -202,4 +234,12 @@ public interface BaseService<T, PK> {
      * @return
      */
     List<T> selectByIdList(List<PK> idList);
+
+    /**
+     * 根据Example条件进行查询一条结果
+     *
+     * @param example
+     * @return
+     */
+    T selectOneByExample(Object example);
 }

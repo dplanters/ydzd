@@ -38,8 +38,6 @@ public class Admin extends BaseEntity {
 
     private Integer loginCount;
 
-    private Integer supperId;
-
     private Date lastLoginTime;
 
     private String lastLoginIp;

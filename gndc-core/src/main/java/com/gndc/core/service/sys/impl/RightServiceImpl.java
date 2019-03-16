@@ -24,6 +24,9 @@ public class RightServiceImpl extends BaseServiceImpl<Right, Integer> implements
 
     @Override
     public List<Right> rightsTree(Byte rightLevel, Byte platform, Integer superId, List<Integer> rightIds) {
+        if (superId.equals(0)) {
+
+        }
         Weekend<Right> weekend = Weekend.of(Right.class);
         weekend.orderBy("rightOrder");
         if (rightIds != null && rightIds.size() > 0) {

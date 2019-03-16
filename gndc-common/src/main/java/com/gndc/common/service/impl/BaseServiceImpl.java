@@ -135,6 +135,21 @@ public class BaseServiceImpl<T, PK> implements BaseService<T, PK> {
     }
 
     @Override
+    public List<T> selectByProperty(String property, Object value) {
+        return myMapper.selectByProperty(property, value);
+    }
+
+    @Override
+    public boolean existsWithProperty(String property, Object value) {
+        return myMapper.existsWithProperty(property, value);
+    }
+
+    @Override
+    public int selectCountByProperty(String property, Object value) {
+        return myMapper.selectCountByProperty(property, value);
+    }
+
+    @Override
     public List<T> selectAggregationByExample(Object example, AggregateCondition aggregateCondition) {
         return myMapper.selectAggregationByExample(example, aggregateCondition);
     }
@@ -142,6 +157,11 @@ public class BaseServiceImpl<T, PK> implements BaseService<T, PK> {
     @Override
     public List<T> selectByIdList(List<PK> idList) {
         return myMapper.selectByIdList(idList);
+    }
+
+    @Override
+    public T selectOneByExample(Object example) {
+        return myMapper.selectOneByExample(example);
     }
 
 }
