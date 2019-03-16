@@ -17,6 +17,9 @@ import com.gndc.core.model.SystemOption;
 import com.gndc.core.service.product.ProductService;
 import com.gndc.core.service.sys.SystemOptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.weekend.Weekend;
@@ -27,7 +30,7 @@ import java.util.*;
  * 客户端产品相关
  */
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/app/product")
 public class PProductController {
 
     private static final String borrowAmount = "borrowAmount";
@@ -39,21 +42,32 @@ public class PProductController {
 
     /**
      * 首页精选爆款
+     *
      * @param commonRequest
      * @return
      */
-    @RequestMapping("/hot/productList")
-    public ResponseMessage<List<PHotProductResponse>> hotProductList(CommonRequest commonRequest) {
+    @PostMapping("/hot/productList")
+    public ResponseMessage<List<PHotProductResponse>> hotProductList(@Validated @RequestBody CommonRequest commonRequest) {
         ResponseMessage<List<PHotProductResponse>> response = new ResponseMessage<>();
         PageInfo page = commonRequest.getHeader().getPage();
         PageHelper.startPage(page.getPageNum(), page.getPageSize());
         List<PHotProductResponse> pHotProductList = productService.selectPHotProductList();
+        if(pHotProductList != null && pHotProductList.size() > 0){
+            for (PHotProductResponse temp : pHotProductList) {
+                //图片地址，先写死
+                temp.setLogoUrl("http://gndc.chbitech.com/" + temp.getLogoUrl());
+            }
+        }
+        PageInfo<PHotProductResponse> pageInfo = new PageInfo<>(pHotProductList);
         response.setData(pHotProductList);
+        pageInfo.setList(null);
+        response.setPage(pageInfo);
         return response;
     }
 
     /**
      * 找贷款搜索配置项
+     *
      * @return
      */
     @RequestMapping("/find/options")
@@ -66,7 +80,7 @@ public class PProductController {
         Weekend<SystemOption> weekend = Weekend.of(SystemOption.class);
         weekend.selectProperties("optionKey", "optionValue");
         weekend.weekendCriteria()
-                .andEqualTo(SystemOption::getOptionGroup,SystemOptionEnum.SEARCH_CRITERIA.getCode());
+                .andEqualTo(SystemOption::getOptionGroup, SystemOptionEnum.SEARCH_CRITERIA.getCode());
         List<SystemOption> systemOptions = systemOptionService.selectByExample(weekend);
 
         Iterator it = systemOptions.iterator();
@@ -118,11 +132,12 @@ public class PProductController {
 
     /**
      * 找贷款产品列表
+     *
      * @param findProductRequest
      * @return
      */
     @RequestMapping("/find/productList")
-    public ResponseMessage<List<PFindProductResponse>> findProductList(PFindProductRequest findProductRequest) {
+    public ResponseMessage<List<PFindProductResponse>> findProductList(@Validated @RequestBody PFindProductRequest findProductRequest) {
         ResponseMessage<List<PFindProductResponse>> response = new ResponseMessage<>();
         PageInfo page = findProductRequest.getHeader().getPage();
         PageHelper.startPage(page.getPageNum(), page.getPageSize());
@@ -162,6 +177,10 @@ public class PProductController {
                 }
             }
         }
+
+        PageInfo<PFindProductResponse> pageInfo = new PageInfo<>(pFindProductList);
+        pageInfo.setList(null);
+        response.setPage(pageInfo);
         response.setData(pFindProductList);
         return response;
     }
