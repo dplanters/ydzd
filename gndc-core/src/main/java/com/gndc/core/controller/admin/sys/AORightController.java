@@ -1,6 +1,7 @@
 package com.gndc.core.controller.admin.sys;
 
 import com.gndc.core.api.admin.sys.AORightAddModifyRequest;
+import com.gndc.core.api.admin.sys.AORightTreeRequest;
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.mappers.RightMapping;
 import com.gndc.core.model.Right;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/sys/right")
@@ -28,8 +31,26 @@ public class AORightController {
         ResponseMessage<Integer> response = new ResponseMessage<>();
         Right right = RightMapping.INSTANCE.convert(request);
 
+        Right superRight = rightService.selectOneByProperty("superId", request.getSuperId());
+        Byte rightLevel = superRight.getRightLevel();
+        if (request.getParallel()) {
+            right.setRightLevel(rightLevel);
+        } else {
+            rightLevel++;
+            right.setRightLevel(rightLevel);
+        }
+
         rightService.insertSelective(right);
         response.setData(right.getId());
         return response;
     }
+
+    @PostMapping("/rightTree")
+    public ResponseMessage<Right> addModifyRole(@Validated @RequestBody AORightTreeRequest request) {
+        ResponseMessage<Right> response = new ResponseMessage<>();
+        List<Right> rights = rightService.rightsTree((byte)1, request.getPlatform(), 0, rightService.rightIds());
+        response.setData(rights.get(0));
+        return response;
+    }
+
 }

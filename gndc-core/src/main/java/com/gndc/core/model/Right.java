@@ -30,7 +30,7 @@ public class Right extends BaseEntity {
 
     private Byte platform;
 
-    private Integer supperId;
+    private Integer superId;
 
     private Byte rightType;
 

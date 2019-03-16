@@ -1,17 +1,17 @@
-package com.gndc.core.controller.admin.account;
+package com.gndc.core.controller.partner.account;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.gndc.common.enums.right.RightPlatformEnum;
-import com.gndc.common.exception.HjException;
-import com.gndc.core.api.common.ResponseMessage;
-import com.gndc.common.enums.ResultCode;
 import com.gndc.common.constant.Constant;
+import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.admin.AdminType;
 import com.gndc.common.enums.common.DelType;
+import com.gndc.common.enums.right.RightPlatformEnum;
+import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.Utils;
-import com.gndc.core.api.admin.account.AOLoginRequest;
-import com.gndc.core.api.admin.account.AOLoginResponse;
+import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.core.api.partner.account.APLoginRequest;
+import com.gndc.core.api.partner.account.APLoginResponse;
 import com.gndc.core.model.Admin;
 import com.gndc.core.model.Right;
 import com.gndc.core.model.Role;
@@ -36,10 +36,10 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/admin/account")
-public class AOAccountController {
+@RequestMapping("/partner/account")
+public class APAccountController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AOAccountController.class);
+    private static final Logger logger = LoggerFactory.getLogger(APAccountController.class);
 
     @Autowired
     private AdminService adminService;
@@ -60,10 +60,10 @@ public class AOAccountController {
     private RedisTemplate<String, Serializable> redisTemplate;
 
     @PostMapping("/login")
-    public ResponseMessage<AOLoginResponse> login(@Validated @RequestBody AOLoginRequest request) {
-        ResponseMessage<AOLoginResponse> response = new ResponseMessage<>();
+    public ResponseMessage<APLoginResponse> login(@Validated @RequestBody APLoginRequest request) {
+        ResponseMessage<APLoginResponse> response = new ResponseMessage<>();
 
-        AOLoginResponse aoLoginResponse = new AOLoginResponse();
+        APLoginResponse apLoginResponse = new APLoginResponse();
 
         //业务校验
         String loginName = request.getLoginName();
@@ -94,42 +94,30 @@ public class AOAccountController {
         //更新登录信息
         adminService.updateByPrimaryKeySelective(admin);
         //分配session
-        String sessionId = Constant.ADMIN_LOGIN_PREFIX + Utils.getSessionId();
+        String sessionId = Constant.PARTNER_LOGIN_PREFIX + Utils.getSessionId();
         //获取权限树
         Byte level = admin.getLevel();
         AdminType adminType = AdminType.fetch(level);
         List<Right> rights = null;
         List<Integer> rightIds = null;
         switch (adminType) {
-            case SUPER_ADMIN:
-                //获取所有权限id集合
-                rightIds = rightService.rightIds();
-                rights = rightService.rightsTree((byte)1, RightPlatformEnum.OPERATOR.getCode(), 0, rightIds);
-                admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getRights());
-                break;
-            case ORDINARY_ADMIN:
+            case PARTNER_ADMIN:
                 Role role = roleService.selectByPrimaryKey(admin.getRoleId());
                 rightIds = roleRightService.getRightIds(role.getId());
                 rights = rightService.rightsTree((byte)1, RightPlatformEnum.OPERATOR.getCode(), 0, rightIds);
                 admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getRights());
                 break;
-            case PARTNER_ADMIN:
-                String template = "{} 管理员账号，不允许登录";
-                String msg = StrUtil.format(template, loginName);
-                logger.warn(msg);
-                throw new HjException(ResultCode.ERROR, msg);
             default:
-                template = "无效的账号类型";
-                msg = StrUtil.format(template, loginName);
+                String msg = StrUtil.format("无效的账号类型 : {}", adminType);
                 logger.warn(msg);
                 throw new HjException(ResultCode.ERROR, msg);
         }
-        aoLoginResponse.setAdmin(admin);
-        aoLoginResponse.setSessionId(sessionId);
+        apLoginResponse.setAdmin(admin);
+        apLoginResponse.setSessionId(sessionId);
         //缓存半小时
-        redisTemplate.opsForValue().set(Constant.ADMIN_LOGIN_PREFIX + sessionId, aoLoginResponse, 30, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(Constant.ADMIN_LOGIN_PREFIX + sessionId, apLoginResponse, 30, TimeUnit.MINUTES);
 
-        response.setData(aoLoginResponse);
+        response.setData(apLoginResponse);
         return response;
     }
 }

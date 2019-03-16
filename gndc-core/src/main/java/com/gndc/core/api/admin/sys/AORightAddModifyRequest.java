@@ -49,7 +49,7 @@ public class AORightAddModifyRequest extends RequestMessage {
     @NotNull
     @NotBlank
     @Min(0)
-    private String supperId;
+    private String superId;
 
     /**
      * 平台
@@ -86,13 +86,6 @@ public class AORightAddModifyRequest extends RequestMessage {
     @Min(0)
     @Max(1)
     private Byte requireAuth;
-
-    /**
-     * 图标
-     */
-    @NotNull
-    @Min(1)
-    private Integer rightLevel;
 
     /**
      * 是否平级菜单

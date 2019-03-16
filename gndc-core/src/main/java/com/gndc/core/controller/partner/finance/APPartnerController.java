@@ -17,9 +17,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/partner/finance")
-public class APAccountController {
+public class APPartnerController {
 
-    private static final Logger logger = LoggerFactory.getLogger(APAccountController.class);
+    private static final Logger logger = LoggerFactory.getLogger(APPartnerController.class);
 
     @Autowired
     private PartnerService partnerService;

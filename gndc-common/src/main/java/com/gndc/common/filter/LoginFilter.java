@@ -40,7 +40,6 @@ public class LoginFilter extends OncePerRequestFilter {
             //TODO 公共接口 先放行登录接口
 
         } else {
-            //TODO 公共接口放行
             String sessionId = jsonBody.getJSONObject("header").getString("sessionId");
             RedisTemplate<String, Serializable> redisTemplate = (RedisTemplate<String, Serializable>) BeanFactoryUtil.getBean("redisTemplate");
 
