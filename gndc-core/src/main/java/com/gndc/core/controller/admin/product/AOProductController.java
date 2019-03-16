@@ -69,7 +69,7 @@ public class AOProductController {
         return response;
     }
 
-    @PostMapping("/aoProductAddModify")
+    @PostMapping("/productAddModify")
     public ResponseMessage<Integer> productAddModify(@Validated @RequestBody AOProductAddModifyRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
 

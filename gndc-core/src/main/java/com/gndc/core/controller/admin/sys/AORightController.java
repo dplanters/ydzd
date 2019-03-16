@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/sys/right")
+@RequestMapping("/admin/sys/right")
 public class AORightController {
 
     private static final Logger logger = LoggerFactory.getLogger(AORightController.class);

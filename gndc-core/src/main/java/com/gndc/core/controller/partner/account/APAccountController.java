@@ -115,7 +115,7 @@ public class APAccountController {
         apLoginResponse.setAdmin(admin);
         apLoginResponse.setSessionId(sessionId);
         //缓存半小时
-        redisTemplate.opsForValue().set(Constant.ADMIN_LOGIN_PREFIX + sessionId, apLoginResponse, 30, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(sessionId, apLoginResponse, 30, TimeUnit.MINUTES);
 
         response.setData(apLoginResponse);
         return response;

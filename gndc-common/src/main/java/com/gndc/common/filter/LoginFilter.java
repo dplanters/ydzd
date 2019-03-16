@@ -1,5 +1,7 @@
 package com.gndc.common.filter;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.http.BodyCacheHttpServletRequestWrapper;
 import com.gndc.common.http.CustomBodyResponseWrapper;
@@ -40,7 +42,10 @@ public class LoginFilter extends OncePerRequestFilter {
             //TODO 公共接口 先放行登录接口
 
         } else {
-            String sessionId = jsonBody.getJSONObject("header").getString("sessionId");
+            String sessionId = request.getHeader("sessionId");
+            if (ObjectUtil.isNull(sessionId)) {
+                sessionId = jsonBody.getJSONObject("header").getString("sessionId");
+            }
             RedisTemplate<String, Serializable> redisTemplate = (RedisTemplate<String, Serializable>) BeanFactoryUtil.getBean("redisTemplate");
 
             JSONObject responseJson = new JSONObject().fluentPut("success", false);
