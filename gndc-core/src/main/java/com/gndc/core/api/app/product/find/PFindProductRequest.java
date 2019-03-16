@@ -10,11 +10,6 @@ public class PFindProductRequest extends RequestMessage {
 
 
     private static final long serialVersionUID = 4252234378456355619L;
-
-    private Byte sort;
-    // 状态
-    private Byte status;
-
     //金额区间开始
     private int amountStart;
     //金额区间结束

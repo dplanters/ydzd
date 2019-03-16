@@ -6,6 +6,8 @@ import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.model.SystemOption;
 import com.gndc.core.service.sys.SystemOptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.weekend.Weekend;
@@ -16,7 +18,7 @@ import java.util.List;
  * 平台相关
  */
 @RestController
-@RequestMapping("/platform")
+@RequestMapping("/app/platform")
 public class PPlatformController {
 
     @Autowired
@@ -29,7 +31,7 @@ public class PPlatformController {
      * @return
      */
     @RequestMapping("/baseInfo")
-    public ResponseMessage<SystemOption> baseInfo(PPlatformBaseInfoRequest platformBaseInfoRequest) {
+    public ResponseMessage<SystemOption> baseInfo(@Validated @RequestBody PPlatformBaseInfoRequest platformBaseInfoRequest) {
         ResponseMessage<SystemOption> response = new ResponseMessage<>();
         SystemOption systemOption = new SystemOption();
         String infoType = platformBaseInfoRequest.getInfoType();
@@ -40,7 +42,7 @@ public class PPlatformController {
         weekend.weekendCriteria()
                 .andEqualTo(SystemOption::getOptionKey, infoType);
         List<SystemOption> systemOptions = systemOptionService.selectByExample(weekend);
-        if(systemOptions != null && systemOptions.size() > 0){
+        if (systemOptions != null && systemOptions.size() > 0) {
             systemOption = systemOptions.get(0);
         }
         response.setData(systemOption);
