@@ -24,26 +24,13 @@ public class RightServiceImpl extends BaseServiceImpl<Right, Integer> implements
 
     @Override
     public List<Right> rightsTree(Byte rightLevel, Byte platform, Integer superId, List<Integer> rightIds) {
-        if (superId.equals(0)) {
-
-        }
         Weekend<Right> weekend = Weekend.of(Right.class);
         weekend.orderBy("rightOrder");
-        if (rightIds != null && rightIds.size() > 0) {
-            weekend.weekendCriteria()
-                    .andIn(Right::getId, rightIds);
-        }
-        if (superId.equals(0)) {
-            weekend.weekendCriteria()
-                    .andEqualTo(Right::getPlatform, platform)
-                    .andEqualTo(Right::getSupperId, superId);
-                    //第一层判断id在权限列表中就行
-
-        } else {
-            weekend.weekendCriteria()
-                    .andEqualTo(Right::getPlatform, platform)
-                    .andEqualTo(Right::getSupperId, superId);
-        }
+        rightIds.add(0);
+        weekend.weekendCriteria()
+                .andEqualTo(Right::getPlatform, platform)
+                .andEqualTo(Right::getSupperId, superId)
+                .andIn(Right::getId, rightIds);
         List<Right> rights = rightMapper.selectByExample(weekend);
         if (rights != null && rights.size() > 0) {
             rightLevel++;

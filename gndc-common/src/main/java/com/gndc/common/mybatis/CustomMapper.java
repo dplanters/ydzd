@@ -2,6 +2,7 @@ package com.gndc.common.mybatis;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
+import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.provider.base.BaseSelectProvider;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  * @author jingkaihui
  * @date 2019/2/2
  */
+@RegisterMapper
 public interface CustomMapper<T> {
 
     /**
@@ -50,7 +52,7 @@ public interface CustomMapper<T> {
      * @param value 属性值
      * @return
      */
-    @SelectProvider(type = BaseSelectProvider.class, method = "dynamicSQL")
+    @SelectProvider(type = CustomSelectProvider.class, method = "dynamicSQL")
     int selectCountByProperty(@Param("property") String property, @Param("value") Object value);
 
 }
