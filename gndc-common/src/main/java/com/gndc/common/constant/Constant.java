@@ -61,36 +61,6 @@ public class Constant {
     // 越南NganLuong还款超时时间 单位分钟
     public static int NGANLUONG_REPAY_OVERTIME = 1440;
 
-    /**
-     * 运营管理员登录前缀
-     */
-    public static final String ADMIN_LOGIN_PREFIX = "admin_";
-
-    /**
-     * 商户管理员登录前缀
-     */
-    public static final String PARTNER_LOGIN_PREFIX = "partner_";
-
-    /**
-     * APP用户登录前缀
-     */
-    public static final String USER_LOGIN_PREFIX = "user_";
-
-    /**
-     * redis中存所有角色的key
-     */
-    public static final String ALL_ROLE = "all_role";
-
-    /**
-     * redis中存所有权限的key
-     */
-    public static final String ALL_RIGHT = "all_right";
-
-    /**
-     * redis中存所有角色权限的key
-     */
-    public static final String ALL_ROLE_RIGHT = "all_role_right";
-
     @Value("${COUNTRY}")
     public void setCountry(String country) {
         Constant.COUNTRY = country;

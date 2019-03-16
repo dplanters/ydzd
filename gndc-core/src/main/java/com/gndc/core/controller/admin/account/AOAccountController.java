@@ -2,16 +2,16 @@ package com.gndc.core.controller.admin.account;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.gndc.common.enums.right.RightPlatformEnum;
-import com.gndc.common.exception.HjException;
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.constant.Constant;
 import com.gndc.common.enums.admin.AdminType;
 import com.gndc.common.enums.common.DelType;
+import com.gndc.common.enums.right.RightPlatformEnum;
+import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.Utils;
 import com.gndc.core.api.admin.account.AOLoginRequest;
 import com.gndc.core.api.admin.account.AOLoginResponse;
+import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.model.Admin;
 import com.gndc.core.model.Right;
 import com.gndc.core.model.Role;
@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/admin/account")
@@ -94,7 +93,7 @@ public class AOAccountController {
         //更新登录信息
         adminService.updateByPrimaryKeySelective(admin);
         //分配session
-        String sessionId = Constant.ADMIN_LOGIN_PREFIX + Utils.getSessionId();
+        String sessionId = CacheConstant.KEY_ADMIN_LOGIN_PREFIX + Utils.getSessionId();
         //获取权限树
         Byte level = admin.getLevel();
         AdminType adminType = AdminType.fetch(level);
@@ -127,7 +126,7 @@ public class AOAccountController {
         aoLoginResponse.setAdmin(admin);
         aoLoginResponse.setSessionId(sessionId);
         //缓存半小时
-        redisTemplate.opsForValue().set(sessionId, aoLoginResponse, 30, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(sessionId, aoLoginResponse, CacheConstant.EXPIRE_ADMIN_LOGIN);
 
         response.setData(aoLoginResponse);
         return response;

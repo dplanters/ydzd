@@ -2,7 +2,7 @@ package com.gndc.core.controller.partner.account;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.gndc.common.constant.Constant;
+import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.admin.AdminType;
 import com.gndc.common.enums.common.DelType;
@@ -94,7 +94,7 @@ public class APAccountController {
         //更新登录信息
         adminService.updateByPrimaryKeySelective(admin);
         //分配session
-        String sessionId = Constant.PARTNER_LOGIN_PREFIX + Utils.getSessionId();
+        String sessionId = CacheConstant.KEY_PARTNER_LOGIN_PREFIX + Utils.getSessionId();
         //获取权限树
         Byte level = admin.getLevel();
         AdminType adminType = AdminType.fetch(level);
@@ -115,7 +115,7 @@ public class APAccountController {
         apLoginResponse.setAdmin(admin);
         apLoginResponse.setSessionId(sessionId);
         //缓存半小时
-        redisTemplate.opsForValue().set(sessionId, apLoginResponse, 30, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(sessionId, apLoginResponse, CacheConstant.EXPIRE_PARTNER_LOGIN);
 
         response.setData(apLoginResponse);
         return response;
