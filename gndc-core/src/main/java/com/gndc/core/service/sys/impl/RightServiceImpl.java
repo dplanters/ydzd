@@ -22,6 +22,14 @@ public class RightServiceImpl extends BaseServiceImpl<Right, Integer> implements
     @Autowired
     private RightMapper rightMapper;
 
+    /**
+     * 获取权限树
+     * @param rightLevel 权限层级，默认为1
+     * @param platform
+     * @param superId 父节点id
+     * @param rightIds 权限id集合
+     * @return
+     */
     @Override
     public List<Right> rightsTree(Byte rightLevel, Byte platform, Integer superId, List<Integer> rightIds) {
         if (CollUtil.isEmpty(rightIds)) {
@@ -46,7 +54,7 @@ public class RightServiceImpl extends BaseServiceImpl<Right, Integer> implements
             rightLevel++;
             for (Right right : rights) {
                 List<Right> rightList = rightsTree(rightLevel, platform, right.getId(), rightIds);
-                right.setRights(rightList);
+                right.setChildren(rightList);
             }
             return rights;
         } else {

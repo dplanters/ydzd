@@ -49,14 +49,13 @@ public class LoginFilter extends OncePerRequestFilter {
             RedisTemplate<String, Serializable> redisTemplate = (RedisTemplate<String, Serializable>) BeanFactoryUtil.getBean("redisTemplate");
 
             JSONObject responseJson = new JSONObject().fluentPut("success", false);
-            if (sessionId == null) {
-                sessionId = "";
+            if (StrUtil.isEmpty(sessionId)) {
                 logger.warn("用户未登录");
                 responseJson.fluentPut("code", "-110").fluentPut("msg", "用户未登录");
                 responseContent = responseJson.toJSONString();
             } else {
                 Serializable admin = redisTemplate.opsForValue().get(sessionId);
-                if (admin == null) {
+                if (ObjectUtil.isNull(admin)) {
                     logger.warn("session已失效");
                     responseJson.fluentPut("code", "-120").fluentPut("msg", "session已失效");
                     responseContent = responseJson.toJSONString();

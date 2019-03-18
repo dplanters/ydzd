@@ -105,7 +105,7 @@ public class APAccountController {
                 Role role = roleService.selectByPrimaryKey(admin.getRoleId());
                 rightIds = roleRightService.getRightIds(role.getId());
                 rights = rightService.rightsTree((byte)1, RightPlatformEnum.OPERATOR.getCode(), 0, rightIds);
-                admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getRights());
+                admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
                 break;
             default:
                 String msg = StrUtil.format("无效的账号类型 : {}", adminType);
@@ -115,7 +115,7 @@ public class APAccountController {
         apLoginResponse.setAdmin(admin);
         apLoginResponse.setSessionId(sessionId);
         //缓存半小时
-        redisTemplate.opsForValue().set(sessionId, apLoginResponse, CacheConstant.EXPIRE_PARTNER_LOGIN);
+        redisTemplate.opsForValue().set(sessionId, apLoginResponse, CacheConstant.EXPIRE_PARTNER_LOGIN, TimeUnit.SECONDS);
 
         response.setData(apLoginResponse);
         return response;

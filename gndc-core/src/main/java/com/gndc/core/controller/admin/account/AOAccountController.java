@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/admin/account")
@@ -104,13 +105,13 @@ public class AOAccountController {
                 //获取所有权限id集合
                 rightIds = rightService.rightIds();
                 rights = rightService.rightsTree((byte)1, RightPlatformEnum.OPERATOR.getCode(), 0, rightIds);
-                admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getRights());
+                admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
                 break;
             case ORDINARY_ADMIN:
                 Role role = roleService.selectByPrimaryKey(admin.getRoleId());
                 rightIds = roleRightService.getRightIds(role.getId());
                 rights = rightService.rightsTree((byte)1, RightPlatformEnum.OPERATOR.getCode(), 0, rightIds);
-                admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getRights());
+                admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
                 break;
             case PARTNER_ADMIN:
                 String template = "{} 管理员账号，不允许登录";
@@ -126,7 +127,7 @@ public class AOAccountController {
         aoLoginResponse.setAdmin(admin);
         aoLoginResponse.setSessionId(sessionId);
         //缓存半小时
-        redisTemplate.opsForValue().set(sessionId, aoLoginResponse, CacheConstant.EXPIRE_ADMIN_LOGIN);
+        redisTemplate.opsForValue().set(sessionId, aoLoginResponse, CacheConstant.EXPIRE_ADMIN_LOGIN, TimeUnit.SECONDS);
 
         response.setData(aoLoginResponse);
         return response;

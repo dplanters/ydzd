@@ -48,6 +48,6 @@ public class Right extends BaseEntity {
     private Byte rightLevel;
 
     @Transient
-    private List<Right> rights;
+    private List<Right> children;
 
 }
