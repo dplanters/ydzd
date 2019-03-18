@@ -63,7 +63,7 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
     private UserMapper userMapper;
 
     @Override
-    @RequestMapping(value = "/feeStatisticTable")
+    @PostMapping(value = "/feeStatisticTable")
     public ResponseMessage<JSONArray> feeStatisticTable(String requestStr) {
         logger.info(String.format("请求:%s", requestStr));
         FeeStatisticTableRequest request = JsonUtil.getObject(requestStr, FeeStatisticTableRequest.class);

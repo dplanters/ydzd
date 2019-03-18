@@ -17,7 +17,6 @@ public class Right extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @LogicDelete(notDeletedValue = 1, isDeletedValue = -1)
     private Byte rightStatus;
 
     private String rightName;

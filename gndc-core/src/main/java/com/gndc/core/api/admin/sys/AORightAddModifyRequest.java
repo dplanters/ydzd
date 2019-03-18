@@ -33,14 +33,12 @@ public class AORightAddModifyRequest extends RequestMessage {
     /**
      * 权限路径
      */
-    @NotNull
-    @NotBlank
     private String rightPath;
 
     /**
      * 前端页面
      */
-    @NotNull
+    @NotBlank
     private String component;
 
     /**
@@ -68,7 +66,6 @@ public class AORightAddModifyRequest extends RequestMessage {
     /**
      * 顺序
      */
-    @NotNull
     @Min(1)
     private String rightOrder;
 
@@ -82,8 +79,6 @@ public class AORightAddModifyRequest extends RequestMessage {
     /**
      * 图标
      */
-    @NotNull
-    @NotBlank
     private String rightPic;
 
     /**
@@ -105,6 +100,5 @@ public class AORightAddModifyRequest extends RequestMessage {
     /**
      * 备注
      */
-    @NotBlank
     private String remark;
 }

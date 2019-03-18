@@ -20,6 +20,11 @@ public enum ResultCode {
 
     SYSTEM_BUSY(1000101, "系统繁忙", "系统繁忙", "系统繁忙", "系统繁忙"),
     SESSION_EXPIRE(1000102, "Session 过期", "Session 过期", "Session 过期", "Session 过期"),
+
+    RIGHT_IS_USING(1100201, "权限在使用", "权限在使用", "权限在使用", "权限在使用"),
+
+    RIGHT_HAS_CHILDREN(1100202, "权限存在子权限", "权限存在子权限", "权限存在子权限", "权限存在子权限"),
+
     ERROR(1, "失败", "Gagal", "Không thành công", "Failed"),
     // 失败
     // 失败

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,7 @@ public class APPartnerController {
     @Autowired
     private PartnerAccountLogService partnerAccountLogService;
 
-    @RequestMapping(value = "/account/getPartnerInfo")
+    @PostMapping(value = "/account/getPartnerInfo")
     public ResponseMessage<APPartnerInfoResponse> getPartner(@Validated @RequestBody APPartnerInfoRequest request) {
         ResponseMessage<APPartnerInfoResponse> response = new ResponseMessage<>();
 
@@ -38,7 +39,7 @@ public class APPartnerController {
         return response;
     }
 
-    @RequestMapping(value = "/account/recharge")
+    @PostMapping(value = "/account/recharge")
     public ResponseMessage<Boolean> recharge(@Validated @RequestBody APRechargeRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
 
@@ -49,7 +50,7 @@ public class APPartnerController {
 
     }
 
-    @RequestMapping(value = "/account/withdraw")
+    @PostMapping(value = "/account/withdraw")
     public ResponseMessage<Boolean> withdraw(@Validated @RequestBody APWithdrawRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
 
@@ -59,7 +60,7 @@ public class APPartnerController {
         return response;
     }
 
-    @RequestMapping(value = "/account/rechargeList")
+    @PostMapping(value = "/account/rechargeList")
     public ResponseMessage<List<?>> rechargeList(@Validated @RequestBody APRechargeListRequest request) {
         ResponseMessage<List<?>> response = new ResponseMessage<>();
 
@@ -71,7 +72,7 @@ public class APPartnerController {
         return response;
     }
 
-    @RequestMapping(value = "/account/withdrawList")
+    @PostMapping(value = "/account/withdrawList")
     public ResponseMessage<List<?>> withdrawList(@Validated @RequestBody APWithdrawListRequest request) {
         ResponseMessage<List<?>> response = new ResponseMessage<>();
 

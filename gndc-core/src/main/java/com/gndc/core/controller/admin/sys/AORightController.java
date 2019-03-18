@@ -1,12 +1,18 @@
 package com.gndc.core.controller.admin.sys;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.gndc.common.enums.ResultCode;
+import com.gndc.common.exception.HjException;
 import com.gndc.core.api.admin.sys.AORightAddModifyRequest;
+import com.gndc.core.api.admin.sys.AORightDeleteRequest;
+import com.gndc.core.api.admin.sys.AORightDetailRequest;
 import com.gndc.core.api.admin.sys.AORightTreeRequest;
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.mappers.RightMapping;
 import com.gndc.core.model.Right;
 import com.gndc.core.service.sys.RightService;
+import com.gndc.core.service.sys.RoleRightService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.Id;
 import java.util.List;
 
 @RestController
@@ -28,6 +33,9 @@ public class AORightController {
     @Autowired
     private RightService rightService;
 
+    @Autowired
+    private RoleRightService roleRightService;
+
     @PostMapping("/addModifyRight")
     public ResponseMessage<Integer> addModifyRole(@Validated @RequestBody AORightAddModifyRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
@@ -35,7 +43,7 @@ public class AORightController {
         if (ObjectUtil.isNull(request.getId())) {
             rightService.insertSelective(right);
         } else {
-            rightService.updateByPrimaryKey(right);
+            rightService.updateByPrimaryKeySelective(right);
         }
         response.setData(right.getId());
         return response;
@@ -49,4 +57,36 @@ public class AORightController {
         return response;
     }
 
+    @PostMapping("/detail")
+    public ResponseMessage<Right> detail(@Validated @RequestBody AORightDetailRequest request) {
+        ResponseMessage<Right> resposne = new ResponseMessage<>();
+        Right right = rightService.selectByPrimaryKey(request.getId());
+        resposne.setData(right);
+        return resposne;
+    }
+
+    @PostMapping("/delete")
+    public ResponseMessage<Boolean> delete(@Validated @RequestBody AORightDeleteRequest request) {
+        ResponseMessage<Boolean> resposne = new ResponseMessage<>();
+        Integer id = request.getId();
+        int rightIdCount = roleRightService.selectCountByProperty("rightId", id);
+
+        if (rightIdCount > 0) {
+            String msg = StrUtil.format("权限编号 {} 在使用，请先取消相关角色授权后再进行删除！");
+            logger.warn(msg);
+            throw new HjException(ResultCode.RIGHT_IS_USING, msg);
+        }
+
+        int superIdCount = rightService.selectCountByProperty("superId", request.getId());
+
+        if (superIdCount> 0) {
+            String msg = StrUtil.format("权限编号 {} 存在子权限，请先删除子权限后后再进行删除！");
+            logger.warn(msg);
+            throw new HjException(ResultCode.RIGHT_IS_USING, msg);
+        }
+
+        boolean success = rightService.deleteByPrimaryKey(id);
+        resposne.setData(success);
+        return resposne;
+    }
 }

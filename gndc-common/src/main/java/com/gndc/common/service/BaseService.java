@@ -40,7 +40,7 @@ public interface BaseService<T, PK> {
      * @param key
      * @return
      */
-    int deleteByPrimaryKey(Object key);
+    boolean deleteByPrimaryKey(Object key);
 
     /**
      * 根据主键更新实体全部字段，null值会被更新

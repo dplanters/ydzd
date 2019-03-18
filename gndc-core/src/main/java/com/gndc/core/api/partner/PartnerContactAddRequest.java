@@ -1,11 +1,10 @@
 package com.gndc.core.api.partner;
 
 import com.gndc.core.api.common.RequestMessage;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Email;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 /**

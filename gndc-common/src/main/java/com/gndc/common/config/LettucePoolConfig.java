@@ -1,6 +1,6 @@
 package com.gndc.common.config;
 
-import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
+import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +19,15 @@ public class LettucePoolConfig {
     public RedisTemplate<String, Serializable> getStringRedisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
 
         RedisTemplate<String, Serializable> template = new RedisTemplate<>();
+
         template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new FastJsonRedisSerializer<>(Serializable.class));
+        template.setValueSerializer(new GenericFastJsonRedisSerializer());
+
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(new GenericFastJsonRedisSerializer());
+
+        template.setStringSerializer(new StringRedisSerializer());
+
         template.setConnectionFactory(lettuceConnectionFactory);
         return template;
     }

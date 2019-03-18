@@ -26,8 +26,8 @@ public class ExceptionHandling implements ProblemHandling {
 
         Problem problem = entity.getBody();
 
-        Integer code = ResultCode.ERROR.getCode();
-        String msg = ResultCode.ERROR.getI18NContent();
+        Integer code = ResultCode.SYSTEM_BUSY.getCode();
+        String msg = ResultCode.SYSTEM_BUSY.getI18NContent();
 
         ProblemBuilder builder = Problem.builder()
                 .withType(problem.getType())

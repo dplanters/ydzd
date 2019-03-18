@@ -39,8 +39,8 @@ public class BaseServiceImpl<T, PK> implements BaseService<T, PK> {
     }
 
     @Override
-    public int deleteByPrimaryKey(Object key) {
-        return myMapper.deleteByPrimaryKey(key);
+    public boolean deleteByPrimaryKey(Object key) {
+        return myMapper.deleteByPrimaryKey(key) == 1;
     }
 
     @Override

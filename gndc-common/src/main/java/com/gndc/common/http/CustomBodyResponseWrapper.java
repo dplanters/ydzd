@@ -198,7 +198,7 @@ public class CustomBodyResponseWrapper extends HttpServletResponseWrapper {
             HttpServletResponse rawResponse = (HttpServletResponse) getResponse();
             rawResponse.setHeader("Access-Control-Allow-Origin", "*");
             rawResponse.setHeader("Access-Control-Allow-Credentials","true");
-            rawResponse.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS,DELETE,PUT");
+//            rawResponse.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS,DELETE,PUT");
             rawResponse.setHeader("Access-Control-Max-Age", "3600");
             rawResponse.setHeader("Access-Control-Allow-Headers", "*");
             rawResponse.setHeader("Content-type", request.getContentType());

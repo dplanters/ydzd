@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +29,7 @@ public class APCommonController {
     @Autowired
     private SystemOptionService systemOptionService;
 
-    @RequestMapping(value = "/getAllPartner")
+    @PostMapping(value = "/getAllPartner")
     public ResponseMessage<List<Partner>> getAllPartner(@Validated @RequestBody APAllPartnerRequest request) {
         ResponseMessage<List<Partner>> response = new ResponseMessage<>();
 
@@ -38,7 +39,7 @@ public class APCommonController {
         return response;
     }
 
-    @RequestMapping(value = "/payeeList")
+    @PostMapping(value = "/payeeList")
     public ResponseMessage<List<String>> payeeList(@Validated @RequestBody APPayeeListRequest request) {
         ResponseMessage<List<String>> response = new ResponseMessage<>();
 
