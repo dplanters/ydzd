@@ -7,6 +7,7 @@ import com.gndc.core.model.SystemOption;
 import com.gndc.core.service.sys.SystemOptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +16,7 @@ import tk.mybatis.mapper.weekend.Weekend;
 import java.util.List;
 
 /**
- * 平台相关
+ * 客户端平台相关
  */
 @RestController
 @RequestMapping("/app/platform")
@@ -30,7 +31,7 @@ public class PPlatformController {
      * @param platformBaseInfoRequest
      * @return
      */
-    @RequestMapping("/baseInfo")
+    @PostMapping("/baseInfo")
     public ResponseMessage<SystemOption> baseInfo(@Validated @RequestBody PPlatformBaseInfoRequest platformBaseInfoRequest) {
         ResponseMessage<SystemOption> response = new ResponseMessage<>();
         SystemOption systemOption = new SystemOption();

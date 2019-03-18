@@ -70,7 +70,7 @@ public class PProductController {
      *
      * @return
      */
-    @RequestMapping("/find/options")
+    @PostMapping("/find/options")
     public ResponseMessage<Map<String, Object>> findProductOptions() {
         ResponseMessage<Map<String, Object>> response = new ResponseMessage<>();
         Map<String, String> optionMap = null;
@@ -136,7 +136,7 @@ public class PProductController {
      * @param findProductRequest
      * @return
      */
-    @RequestMapping("/find/productList")
+    @PostMapping("/find/productList")
     public ResponseMessage<List<PFindProductResponse>> findProductList(@Validated @RequestBody PFindProductRequest findProductRequest) {
         ResponseMessage<List<PFindProductResponse>> response = new ResponseMessage<>();
         PageInfo page = findProductRequest.getHeader().getPage();
