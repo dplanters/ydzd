@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 客户端banner轮播图
+ * 客户端banner轮播图，广告
  */
 @RestController
 @RequestMapping("/app/ad")
@@ -69,7 +69,7 @@ public class PAdvertisementController {
      * @param advertisementRequest
      * @return
      */
-    @RequestMapping("/openingPopupAdvertisement")
+    @PostMapping("/openingPopupAdvertisement")
     public ResponseMessage<List<Advertis>> openingPopupAdvertisement(@Validated @RequestBody POpeningPopupAdvertisementRequest advertisementRequest) {
         ResponseMessage<List<Advertis>> response = new ResponseMessage<>();
         Weekend<Advertis> weekend = Weekend.of(Advertis.class);

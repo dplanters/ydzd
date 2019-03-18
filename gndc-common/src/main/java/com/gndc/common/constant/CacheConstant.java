@@ -33,9 +33,9 @@ public class CacheConstant {
     public static final String KEY_USER_LOGIN_PREFIX = "user_";
 
     /**
-     * APP用户登录过期时间
+     * APP用户登录过期时间-90天
      */
-    public static final Long EXPIRE_USER_LOGIN = 30 * 60L;
+    public static final Long EXPIRE_USER_LOGIN = 90 * 24 * 60 * 60L;
 
     /**
      * redis中存所有角色的key
@@ -51,4 +51,34 @@ public class CacheConstant {
      * redis中存所有角色权限的key
      */
     public static final String KEY_ALL_ROLE_RIGHT = "all_role_right";
+
+    /**
+     * APP用户10分钟短信验证前缀
+     */
+    public static final String KEY_USER_SMS_10_PREFIX = "10m_";
+
+    /**
+     * APP用户10分钟短信验证过期时间-10分钟
+     */
+    public static final Long EXPIRE_USER_SMS_10 = 10 * 60L;
+
+    /**
+     * APP用户1小时短信验证前缀
+     */
+    public static final String KEY_USER_SMS_24H_PREFIX = "24h_";
+
+    /**
+     * APP用户1小时短信验证过期时间-1小时
+     */
+    public static final Long EXPIRE_USER_SMS_24H = 24 * 60 * 60L;
+
+    /**
+     * APP用户短信内容前缀
+     */
+    public static final String KEY_USER_SMS_15M_PREFIX = "15m_";
+
+    /**
+     * APP用户短信内容前缀过期时间15分钟
+     */
+    public static final Long EXPIRE_USER_SMS_15M = 15 * 60L;
 }

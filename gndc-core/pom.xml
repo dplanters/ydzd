@@ -36,6 +36,11 @@
             <artifactId>gndc-common</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.gndc</groupId>
+            <artifactId>gndc-third</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
         <dependency>
             <groupId>org.zalando</groupId>
