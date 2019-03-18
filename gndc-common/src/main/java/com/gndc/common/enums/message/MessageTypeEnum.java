@@ -6,28 +6,36 @@
  * 版权说明：本软件属浙江盘石信息技术股份有限公司所有，在未获浙江盘石信息技术股份有限公司正式授权情况下，
  *          任何企业和个人，不能获取、阅读、安装、传播本软件涉及的任何受知识产权保护的内容。   
  ***************************************************************************/
-package com.gndc.common.enums.common;
+package com.gndc.common.enums.message;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author <a href="litianwei8504@adpanshi.com">litianwei</a>
+ * 消息结果类型
+ *
+ * @author <a href="jiangxin8116@adpanshi.com">jiangxin8116</a>
  * @version V1.0.1
- * @Description 状态枚举
- * @date 2018年8月8日 上午9:58:40
+ * @Description
+ * @date 2018年1月25日 上午9:58:40
  */
-public enum StatusType {
+public enum MessageTypeEnum {
 
-    NORMAL((byte) 1, "正常"),
+    SYSTEM((byte) 1, "系统通知"),
 
-    DISABLED((byte) -1, "禁用");
+    ORDER((byte) 2, "订单通知"),
 
-    private static final Map<Byte, StatusType> map;
+    IN_OR_OUT((byte) 3, "收支通知"),
+
+    ORDER_RETURN((byte) 4, "资料退回"),
+
+    USERCOUPON_REMINDER((byte) 5, "优惠卷到期提醒");
+
+    private static final Map<Byte, MessageTypeEnum> map;
 
     static {
         map = new HashMap<>();
-        for (StatusType as : values()) {
+        for (MessageTypeEnum as : values()) {
             map.put(as.code, as);
         }
     }
@@ -35,7 +43,7 @@ public enum StatusType {
     private byte code;
     private String name;
 
-    StatusType(byte code, String name) {
+    MessageTypeEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -46,7 +54,7 @@ public enum StatusType {
      * @param code
      * @return
      */
-    public static StatusType fetch(byte code) {
+    public static MessageTypeEnum fetch(byte code) {
         return map.get(code);
     }
 
@@ -57,7 +65,7 @@ public enum StatusType {
      * @return
      */
     public static String fetchName(byte code) {
-        StatusType as = map.get(code);
+        MessageTypeEnum as = map.get(code);
         return as != null ? as.name : null;
     }
 

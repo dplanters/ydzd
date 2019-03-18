@@ -12,58 +12,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author <a href="biankongbin8418@adpanshi.com">biankongbin</a>
+ * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
  * @version V1.0.1
- * @Description
- * @date 2018年5月15日 下午3:18:06
+ * @Description 登录设备
+ * @date 2018年1月24日 下午4:50:02
  */
-public enum TextLength {
+public enum UserDeviceEnum {
+    WECAT((byte) 2, "微信"),
 
-    SEVEN(7, 7),
+    PC((byte) 3, "PC"),
 
-    TEN(10, 10),
+    ANDROID((byte) 4, "android"),
 
-    TWENTY(20, 20),
+    IOS((byte) 5, "ios");
 
-    THIRTY(30, 30),
-
-    FORTY(40, 40),
-
-    FIFTY(50, 50),
-
-    SIXTY(60, 60),
-
-    SEVENTY(70, 70),
-
-    EIGHTY(80, 80),
-
-    NINETY(90, 90),
-
-    ONE_HUNDRE(100, 100),
-
-    TWO_HUNDRE(200, 200),
-
-    THIRTY_HUNDRE(300, 300),
-
-    TWO_HUNDRED_FIFTY_FIVE(255, 255),
-
-    FORTY_HUNDRE(400, 400);
-
-    private static final Map<Integer, TextLength> map;
+    private static final Map<Byte, UserDeviceEnum> map;
 
     static {
         map = new HashMap<>();
-        for (TextLength as : values()) {
+        for (UserDeviceEnum as : values()) {
             map.put(as.code, as);
         }
     }
 
-    private int code;
-    private int number;
+    private byte code;
+    private String name;
 
-    TextLength(int code, int number) {
+    UserDeviceEnum(byte code, String name) {
         this.code = code;
-        this.number = number;
+        this.name = name;
     }
 
     /**
@@ -72,7 +49,7 @@ public enum TextLength {
      * @param code
      * @return
      */
-    public static TextLength fetch(int code) {
+    public static UserDeviceEnum fetch(byte code) {
         return map.get(code);
     }
 
@@ -82,13 +59,12 @@ public enum TextLength {
      * @param code
      * @return
      */
-
-    public static int fetchLength(int code) {
-        TextLength as = map.get(code);
-        return as != null ? as.number : null;
+    public static String fetchName(byte code) {
+        UserDeviceEnum as = map.get(code);
+        return as != null ? as.name : null;
     }
 
-    public int getCode() {
+    public byte getCode() {
         return code;
     }
 
@@ -96,12 +72,11 @@ public enum TextLength {
         this.code = code;
     }
 
-    public int getNumber() {
-        return number;
+    public String getName() {
+        return name;
     }
 
-    public void setName(int number) {
-        this.number = number;
+    public void setName(String name) {
+        this.name = name;
     }
-
 }

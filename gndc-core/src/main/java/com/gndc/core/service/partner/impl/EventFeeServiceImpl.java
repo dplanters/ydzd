@@ -4,11 +4,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.common.StatusType;
-import com.gndc.common.enums.partner.EventFeeStatus;
-import com.gndc.common.enums.partner.EventFeeType;
-import com.gndc.common.enums.product.CoopeMode;
-import com.gndc.common.enums.user.UserEventsType;
+import com.gndc.common.enums.partner.EventFeeStatusEnum;
+import com.gndc.common.enums.partner.EventFeeTypeEnum;
+import com.gndc.common.enums.product.ProductCoopeModeEnum;
+import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.common.utils.DateUtil;
@@ -75,31 +74,31 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
             LocalDate now = LocalDate.now();
 
             //h5总数 已结算的数量
-            long h5Count = eventFeeMapper.selectCountByDate(EventFeeType.H5.getCode(), admin.getPartnerId(),
-                    EventFeeStatus.COMPLETE.getCode(), StatusType.NORMAL.getCode(), now.getYear(), request.getMonth());
+            long h5Count = eventFeeMapper.selectCountByDate(EventFeeTypeEnum.H5.getCode(), admin.getPartnerId(),
+                    EventFeeStatusEnum.COMPLETE.getCode(), StatusType.NORMAL.getCode(), now.getYear(), request.getMonth());
             //h5总数 已结算+未结算
-            long h5CountTotal = eventFeeMapper.selectCountByDate(EventFeeType.H5.getCode(), admin.getPartnerId(),
+            long h5CountTotal = eventFeeMapper.selectCountByDate(EventFeeTypeEnum.H5.getCode(), admin.getPartnerId(),
                     null, StatusType.NORMAL.getCode(), now.getYear(), request.getMonth());
 
             //api总数 已结算的数量
-            long apiCount = eventFeeMapper.selectCountByDate(EventFeeType.API.getCode(), admin.getPartnerId(),
-                    EventFeeStatus.COMPLETE.getCode(), StatusType.NORMAL.getCode(), now.getYear(), request.getMonth());
+            long apiCount = eventFeeMapper.selectCountByDate(EventFeeTypeEnum.API.getCode(), admin.getPartnerId(),
+                    EventFeeStatusEnum.COMPLETE.getCode(), StatusType.NORMAL.getCode(), now.getYear(), request.getMonth());
 
             //api总数 已结算+未结算
-            long apiCountTotal = eventFeeMapper.selectCountByDate(EventFeeType.API.getCode(), admin.getPartnerId(),
+            long apiCountTotal = eventFeeMapper.selectCountByDate(EventFeeTypeEnum.API.getCode(), admin.getPartnerId(),
                     null, StatusType.NORMAL.getCode(), now.getYear(), request.getMonth());
 
             //h5 已结算金额
-            BigDecimal h5Sum = eventFeeMapper.selectSum(EventFeeType.H5.getCode(), admin.getPartnerId(),
-                    EventFeeStatus.COMPLETE.getCode(), StatusType.NORMAL.getCode(), now.getYear(),
+            BigDecimal h5Sum = eventFeeMapper.selectSum(EventFeeTypeEnum.H5.getCode(), admin.getPartnerId(),
+                    EventFeeStatusEnum.COMPLETE.getCode(), StatusType.NORMAL.getCode(), now.getYear(),
                     request.getMonth());
             if (h5Sum == null) {
                 h5Sum = new BigDecimal(0);
             }
 
             //api 已结算金额
-            BigDecimal apiSum = eventFeeMapper.selectSum(EventFeeType.API.getCode(), admin.getPartnerId(),
-                    EventFeeStatus.COMPLETE.getCode(), StatusType.NORMAL.getCode(), now.getYear(),
+            BigDecimal apiSum = eventFeeMapper.selectSum(EventFeeTypeEnum.API.getCode(), admin.getPartnerId(),
+                    EventFeeStatusEnum.COMPLETE.getCode(), StatusType.NORMAL.getCode(), now.getYear(),
                     request.getMonth());
 
             if (apiSum == null) {
@@ -171,9 +170,9 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
 
             Integer partnerId = request.getAdmin().getPartnerId();
 
-            List<Integer> productIds = eventFeeMapper.selectProductIds(partnerId, EventFeeType.H5.getCode(),
-                    CoopeMode.CPA.getCode(), UserEventsType.PRODUCT_CLICK.getCode(),
-                    EventFeeStatus.COMPLETE.getCode(), StatusType.NORMAL.getCode());
+            List<Integer> productIds = eventFeeMapper.selectProductIds(partnerId, EventFeeTypeEnum.H5.getCode(),
+                    ProductCoopeModeEnum.CPA.getCode(), UserEventsTypeEnum.PRODUCT_CLICK.getCode(),
+                    EventFeeStatusEnum.COMPLETE.getCode(), StatusType.NORMAL.getCode());
 
             JSONArray data = new JSONArray();
             for (int i = 0; i < productIds.size(); i++) {
@@ -181,17 +180,17 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
                 //当前时段UV数（半小时）
                 Integer productId = productIds.get(i);
                 long currentPeriodCount = eventFeeMapper.countByPeriod(partnerId, productId,
-                        EventFeeType.H5.getCode(),
-                        CoopeMode.CPA.getCode(), UserEventsType.PRODUCT_CLICK.getCode(),
-                        EventFeeStatus.COMPLETE.getCode(), StatusType.NORMAL.getCode(),
+                        EventFeeTypeEnum.H5.getCode(),
+                        ProductCoopeModeEnum.CPA.getCode(), UserEventsTypeEnum.PRODUCT_CLICK.getCode(),
+                        EventFeeStatusEnum.COMPLETE.getCode(), StatusType.NORMAL.getCode(),
                         currentStartDateTime.format(dtf)
                         , currentEndDateTime.format(dtf));
 
                 //昨天同时段UV数（半小时）
                 long yesterSamePeriodCount = eventFeeMapper.countByPeriod(partnerId, productId,
-                        EventFeeType.H5.getCode(),
-                        CoopeMode.CPA.getCode(), UserEventsType.PRODUCT_CLICK.getCode(),
-                        EventFeeStatus.COMPLETE.getCode(), StatusType.NORMAL.getCode(),
+                        EventFeeTypeEnum.H5.getCode(),
+                        ProductCoopeModeEnum.CPA.getCode(), UserEventsTypeEnum.PRODUCT_CLICK.getCode(),
+                        EventFeeStatusEnum.COMPLETE.getCode(), StatusType.NORMAL.getCode(),
                         yesterStartDateTime.format(dtf)
                         , yesterEndDateTime.format(dtf));
 
@@ -257,18 +256,18 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
             weekend.weekendCriteria()
                     .andEqualTo(EventFee::getPartnerId, partnerId)
                     .andEqualTo(EventFee::getProductId, productId)
-                    .andEqualTo(EventFee::getFeeType, EventFeeType.H5.getCode())
-                    .andEqualTo(EventFee::getCoopeMode, CoopeMode.CPC.getCode())
-                    .andEqualTo(EventFee::getEventType, UserEventsType.PRODUCT_CLICK.getCode())
-                    .andEqualTo(EventFee::getFeeStatus, EventFeeStatus.COMPLETE.getCode())
+                    .andEqualTo(EventFee::getFeeType, EventFeeTypeEnum.H5.getCode())
+                    .andEqualTo(EventFee::getCoopeMode, ProductCoopeModeEnum.CPC.getCode())
+                    .andEqualTo(EventFee::getEventType, UserEventsTypeEnum.PRODUCT_CLICK.getCode())
+                    .andEqualTo(EventFee::getFeeStatus, EventFeeStatusEnum.COMPLETE.getCode())
                     .andEqualTo(EventFee::getStatus, StatusType.NORMAL.getCode())
                     .andGreaterThanOrEqualTo(EventFee::getCreateTime, request.getStartDate())
                     .andLessThanOrEqualTo(EventFee::getCreateTime, request.getEndDate());
             //一个产品的统计项
             List<APDataAnalysisTableRow> rows = eventFeeMapper.apDataAnalysis(partnerId, productId,
-                    EventFeeType.H5.getCode(),
-                    CoopeMode.CPC.getCode(), UserEventsType.PRODUCT_CLICK.getCode(),
-                    EventFeeStatus.COMPLETE.getCode(), StatusType.NORMAL.getCode(),
+                    EventFeeTypeEnum.H5.getCode(),
+                    ProductCoopeModeEnum.CPC.getCode(), UserEventsTypeEnum.PRODUCT_CLICK.getCode(),
+                    EventFeeStatusEnum.COMPLETE.getCode(), StatusType.NORMAL.getCode(),
                     request.getStartDate(), request.getEndDate(), page);
 
             PageInfo<APDataAnalysisTableRow> pageInfo = new PageInfo<>(rows);
@@ -304,7 +303,7 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
 
             //一个产品的统计项
             List<APFinanceExpenseTableRow> rows = eventFeeMapper.selectEventFeeList(request.getAdmin().getPartnerId(),
-                    productId, null, null, null, EventFeeStatus.COMPLETE.getCode(), StatusType.NORMAL.getCode(),
+                    productId, null, null, null, EventFeeStatusEnum.COMPLETE.getCode(), StatusType.NORMAL.getCode(),
                     request.getStartDate(), request.getEndDate(), page);
 
             for (int i = 0; i < rows.size(); i++) {

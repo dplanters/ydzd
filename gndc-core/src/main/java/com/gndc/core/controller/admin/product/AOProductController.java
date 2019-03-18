@@ -2,8 +2,8 @@ package com.gndc.core.controller.admin.product;
 
 import com.github.pagehelper.PageInfo;
 import com.gndc.core.api.common.ResponseMessage;
-import com.gndc.common.enums.common.DelType;
-import com.gndc.common.enums.product.ProductStatus;
+import com.gndc.common.enums.common.DelEnum;
+import com.gndc.common.enums.product.ProductStatusEnum;
 import com.gndc.core.api.admin.product.*;
 import com.gndc.core.model.Product;
 import com.gndc.core.service.product.ProductService;
@@ -53,8 +53,8 @@ public class AOProductController {
         Weekend<Product> weekend = Weekend.of(Product.class);
         weekend.selectProperties("id", "name");
         weekend.weekendCriteria()
-                .andEqualTo(Product::getIsDel, DelType.NORMAL.getCode())
-                .andEqualTo(Product::getStatus, ProductStatus.ON_LINE.getCode());
+                .andEqualTo(Product::getIsDel, DelEnum.NORMAL.getCode())
+                .andEqualTo(Product::getStatus, ProductStatusEnum.ON_LINE.getCode());
 
         Integer partnerId = request.getPartnerId();
         if (partnerId != null) {

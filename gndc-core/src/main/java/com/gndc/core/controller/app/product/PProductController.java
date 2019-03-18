@@ -1,7 +1,7 @@
 package com.gndc.core.controller.app.product;
 
-import com.gndc.common.enums.product.ProductPeriodUnit;
-import com.gndc.common.enums.user.UserEventsType;
+import com.gndc.common.enums.product.ProductDataPeriodUnitEnum;
+import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.core.api.app.product.find.PFindProductResponse;
 import com.gndc.core.api.app.product.find.PProductStaticUV;
 import com.gndc.core.api.common.ResponseMessage;
@@ -145,9 +145,9 @@ public class PProductController {
         if (pFindProductList != null && pFindProductList.size() > 0) {
             List<Integer> productIds = new ArrayList<>();
             List<Byte> eventTypes = new ArrayList<>();
-            eventTypes.add(UserEventsType.BANNER_CLICK.getCode());
-            eventTypes.add(UserEventsType.RECOMMEND_CLICK.getCode());
-            eventTypes.add(UserEventsType.PRODUCT_CLICK.getCode());
+            eventTypes.add(UserEventsTypeEnum.BANNER_CLICK.getCode());
+            eventTypes.add(UserEventsTypeEnum.RECOMMEND_CLICK.getCode());
+            eventTypes.add(UserEventsTypeEnum.PRODUCT_CLICK.getCode());
             for (PFindProductResponse temp : pFindProductList) {
                 productIds.add(temp.getProductId());
             }
@@ -171,9 +171,9 @@ public class PProductController {
                 Integer minBorrowPeriod = temp.getMinBorrowPeriod();
                 Integer maxBorrowPeriod = temp.getMaxBorrowPeriod();
                 if (minBorrowPeriod == maxBorrowPeriod) {
-                    temp.setPeriod(minBorrowPeriod + "个" + ProductPeriodUnit.fetchName(temp.getBorrowPeriodUnit()));
+                    temp.setPeriod(minBorrowPeriod + "个" + ProductDataPeriodUnitEnum.fetchName(temp.getBorrowPeriodUnit()));
                 } else {
-                    temp.setPeriod(minBorrowPeriod + "-" + maxBorrowPeriod + "个" + ProductPeriodUnit.fetchName(temp.getBorrowPeriodUnit()));
+                    temp.setPeriod(minBorrowPeriod + "-" + maxBorrowPeriod + "个" + ProductDataPeriodUnitEnum.fetchName(temp.getBorrowPeriodUnit()));
                 }
             }
         }

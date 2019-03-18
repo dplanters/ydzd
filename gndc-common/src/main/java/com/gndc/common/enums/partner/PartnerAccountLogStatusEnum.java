@@ -1,32 +1,31 @@
-package com.gndc.common.enums.product;
+package com.gndc.common.enums.partner;
 
 import java.util.HashMap;
 import java.util.Map;
 
+public enum PartnerAccountLogStatusEnum {
 
-public enum ProductStatus {
-    ALL((byte) 0, "全部状态"),
+    RECHARGE_PROCESS((byte) 1, "充值中"),
 
-    NOT_ON_LINE((byte) 1, "未上线"),
+    RECHARGE_FINISH((byte) 2, "充值成功"),
 
-    ON_LINE((byte) 2, "上线"),
+    WITHDRAW_PROCESS((byte) 3, "提现中"),
 
-    OFF_LINE((byte) -1, "已下线"),
-    ;
+    WITHDRAW_FINISH((byte) 4, "提现成功");
 
-    private static final Map<Byte, ProductStatus> map;
+    private static final Map<Byte, PartnerAccountLogStatusEnum> map;
 
     static {
         map = new HashMap<>();
-        for (ProductStatus as : values()) {
-            map.put(as.code, as);
+        for (PartnerAccountLogStatusEnum palt : values()) {
+            map.put(palt.code, palt);
         }
     }
 
     private byte code;
     private String name;
 
-    ProductStatus(byte code, String name) {
+    PartnerAccountLogStatusEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -37,7 +36,7 @@ public enum ProductStatus {
      * @param code
      * @return
      */
-    public static ProductStatus fetch(byte code) {
+    public static PartnerAccountLogStatusEnum fetch(byte code) {
         return map.get(code);
     }
 
@@ -48,8 +47,8 @@ public enum ProductStatus {
      * @return
      */
     public static String fetchName(byte code) {
-        ProductStatus as = map.get(code);
-        return as != null ? as.name : null;
+        PartnerAccountLogStatusEnum palt = map.get(code);
+        return palt != null ? palt.name : null;
     }
 
     public byte getCode() {
@@ -67,5 +66,4 @@ public enum ProductStatus {
     public void setName(String name) {
         this.name = name;
     }
-
 }

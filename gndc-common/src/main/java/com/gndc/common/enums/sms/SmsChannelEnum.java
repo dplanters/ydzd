@@ -11,7 +11,7 @@ import java.util.Map;
  * @Description
  * @date 2018年3月19日 下午2:01:56
  */
-public enum SmsChannel {
+public enum SmsChannelEnum {
 
     UNKNOWN("unkwon", "未知"),
 
@@ -21,11 +21,11 @@ public enum SmsChannel {
 
     NIUXIN("niuxin", "niuxin");
 
-    private static final Map<String, SmsChannel> map;
+    private static final Map<String, SmsChannelEnum> map;
 
     static {
         map = new HashMap<>();
-        for (SmsChannel as : values()) {
+        for (SmsChannelEnum as : values()) {
             map.put(as.code, as);
         }
     }
@@ -33,7 +33,7 @@ public enum SmsChannel {
     private String code;
     private String name;
 
-    SmsChannel(String code, String name) {
+    SmsChannelEnum(String code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -44,7 +44,7 @@ public enum SmsChannel {
      * @param code
      * @return
      */
-    public static SmsChannel fetch(String code) {
+    public static SmsChannelEnum fetch(String code) {
         return map.get(code);
     }
 
@@ -55,7 +55,7 @@ public enum SmsChannel {
      * @return
      */
     public static String fetchName(String code) {
-        SmsChannel sc = map.get(code);
+        SmsChannelEnum sc = map.get(code);
         return sc != null ? sc.name : null;
     }
 

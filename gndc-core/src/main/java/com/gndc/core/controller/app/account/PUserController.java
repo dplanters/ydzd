@@ -1,7 +1,7 @@
 package com.gndc.core.controller.app.account;
 
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.feedback.FeedbackStatusType;
+import com.gndc.common.enums.feedback.FeedbackStatusTypeEnum;
 import com.gndc.common.utils.DateUtil;
 import com.gndc.common.utils.JsonUtil;
 import com.gndc.core.api.app.user.feedback.PFeedBackEditRequest;
@@ -55,7 +55,7 @@ public class PUserController {
         feedback.setUserPhone(feedBackEditRequest.getPhone());
         feedback.setContent(feedBackEditRequest.getContent().replaceAll("[\ud800\udc00-\udbff\udfff\ud800-\udfff]", ""));
         feedback.setCreateTime(now);
-        feedback.setStatus(FeedbackStatusType.SUBMIT.getCode());
+        feedback.setStatus(FeedbackStatusTypeEnum.SUBMIT.getCode());
         feedback.setPictureUrl(feedBackEditRequest.getFeedbackPictureUrl());
         int ret = feedbackService.insertSelective(feedback);
         CommonResponse commonResponse = new CommonResponse();

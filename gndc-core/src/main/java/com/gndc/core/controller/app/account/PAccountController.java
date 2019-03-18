@@ -3,8 +3,8 @@ package com.gndc.core.controller.app.account;
 import com.gndc.common.exception.HjException;
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.common.LoginDeviceType;
-import com.gndc.common.enums.user.UserEventsType;
+import com.gndc.common.enums.common.UserDeviceEnum;
+import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.common.utils.*;
 import com.gndc.core.api.app.user.account.PUserLoginRequest;
 import com.gndc.core.api.app.user.account.PUserLoginResponse;
@@ -82,7 +82,7 @@ public class PAccountController {
         byte deviceType = Byte.parseByte(request.getHeader().getDeviceType());
 
 
-        if ((deviceType == LoginDeviceType.ANDROID.getCode() || deviceType == LoginDeviceType.IOS.getCode())) {
+        if ((deviceType == UserDeviceEnum.ANDROID.getCode() || deviceType == UserDeviceEnum.IOS.getCode())) {
             if (StringUtils.isBlank(imei)) {
                 response.createError(ResultCode.IMEI_TOKEN_ISNULL);
                 logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
@@ -126,7 +126,7 @@ public class PAccountController {
         userEvents.setUserId(userinfo.getId());
         userEvents.setEventTime(now);
         userEvents.setIpAddress(request.getHeader().getIp());
-        userEvents.setEventType(UserEventsType.LOGIN.getCode());
+        userEvents.setEventType(UserEventsTypeEnum.LOGIN.getCode());
         userEvents.setRemark("密码登录");
         userEventService.insertSelective(userEvents);
 

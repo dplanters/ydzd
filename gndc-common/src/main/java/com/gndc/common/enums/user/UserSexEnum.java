@@ -6,59 +6,37 @@
  * 版权说明：本软件属浙江盘石信息技术股份有限公司所有，在未获浙江盘石信息技术股份有限公司正式授权情况下，
  *          任何企业和个人，不能获取、阅读、安装、传播本软件涉及的任何受知识产权保护的内容。   
  ***************************************************************************/
-package com.gndc.common.enums.common;
-
-import java.util.HashMap;
-import java.util.Map;
+package com.gndc.common.enums.user;
 
 /**
  * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
  * @version V1.0.1
- * @Description 短信用户类型
- * @date 2018年1月24日 下午4:52:41
+ * @Description 用户性别
+ * @date 2018年1月24日 下午4:53:29
  */
-public enum SmsUserType {
+public enum UserSexEnum {
 
-    USER((byte) 1, "用户"),
+    SECRET((byte) 3, "保密"),
 
-    SELLER((byte) 2, "商家");
+    MAN((byte) 1, "男"),
 
-    private static final Map<Byte, SmsUserType> map;
-
-    static {
-        map = new HashMap<>();
-        for (SmsUserType as : values()) {
-            map.put(as.code, as);
-        }
-    }
+    WO_MAN((byte) 2, "女");
 
     private byte code;
     private String name;
 
-    SmsUserType(byte code, String name) {
+    UserSexEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
 
-    /**
-     * 根据编码获取状态
-     *
-     * @param code
-     * @return
-     */
-    public static SmsUserType fetch(byte code) {
-        return map.get(code);
-    }
-
-    /**
-     * 根据编码获取名称
-     *
-     * @param code
-     * @return
-     */
-    public static String fetchName(byte code) {
-        SmsUserType as = map.get(code);
-        return as != null ? as.name : null;
+    public static String getName(byte code) {
+        for (UserSexEnum userSexType : UserSexEnum.values()) {
+            if (userSexType.code == code) {
+                return userSexType.name;
+            }
+        }
+        return null;
     }
 
     public byte getCode() {

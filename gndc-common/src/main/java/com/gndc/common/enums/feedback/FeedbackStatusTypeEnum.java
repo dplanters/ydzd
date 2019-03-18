@@ -6,7 +6,7 @@
  * 版权说明：本软件属浙江盘石信息技术股份有限公司所有，在未获浙江盘石信息技术股份有限公司正式授权情况下，
  *          任何企业和个人，不能获取、阅读、安装、传播本软件涉及的任何受知识产权保护的内容。   
  ***************************************************************************/
-package com.gndc.common.enums.common;
+package com.gndc.common.enums.feedback;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,23 +14,23 @@ import java.util.Map;
 /**
  * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
  * @version V1.0.1
- * @Description 登录设备
- * @date 2018年1月24日 下午4:50:02
+ * @Description 状态枚举
+ * @date 2018年1月25日 上午9:58:40
  */
-public enum LoginDeviceType {
-    WECAT((byte) 2, "微信"),
+public enum FeedbackStatusTypeEnum {
 
-    PC((byte) 3, "PC"),
+    SUBMIT((byte) -1, "未处理"),
 
-    ANDROID((byte) 4, "android"),
+    READ((byte) 1, "已回复"),
 
-    IOS((byte) 5, "ios");
+    REPLY((byte) 2, "已处理"),
+    ;
 
-    private static final Map<Byte, LoginDeviceType> map;
+    private static final Map<Byte, FeedbackStatusTypeEnum> map;
 
     static {
         map = new HashMap<>();
-        for (LoginDeviceType as : values()) {
+        for (FeedbackStatusTypeEnum as : values()) {
             map.put(as.code, as);
         }
     }
@@ -38,7 +38,7 @@ public enum LoginDeviceType {
     private byte code;
     private String name;
 
-    LoginDeviceType(byte code, String name) {
+    FeedbackStatusTypeEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -49,7 +49,7 @@ public enum LoginDeviceType {
      * @param code
      * @return
      */
-    public static LoginDeviceType fetch(byte code) {
+    public static FeedbackStatusTypeEnum fetch(byte code) {
         return map.get(code);
     }
 
@@ -60,7 +60,7 @@ public enum LoginDeviceType {
      * @return
      */
     public static String fetchName(byte code) {
-        LoginDeviceType as = map.get(code);
+        FeedbackStatusTypeEnum as = map.get(code);
         return as != null ? as.name : null;
     }
 
@@ -79,4 +79,5 @@ public enum LoginDeviceType {
     public void setName(String name) {
         this.name = name;
     }
+
 }

@@ -11,12 +11,6 @@ package com.gndc.common.enums.admin;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
- * @version V1.0.1
- * @Description 管理员类型枚举
- * @date 2018年1月25日 上午9:58:10
- */
 public enum AdminLevelEnum {
 
     SUPER_ADMIN((byte) 1, "超级管理员"),

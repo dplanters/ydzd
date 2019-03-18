@@ -1,35 +1,29 @@
-package com.gndc.common.enums.product;
+package com.gndc.common.enums.partner;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum ProductPeriodUnit {
+public enum EventFeeTypeEnum {
 
-    /**
-     * 日
-     */
-    day((byte) 1, "日"),
+    H5((byte) 1, "H5"),
 
-    /**
-     * 月
-     */
-    month((byte) 2, "月"),
+    API((byte) 2, "API"),
 
     ;
 
-    private static final Map<Byte, ProductPeriodUnit> map;
+    private static final Map<Byte, EventFeeTypeEnum> map;
 
     static {
         map = new HashMap<>();
-        for (ProductPeriodUnit palt : values()) {
+        for (EventFeeTypeEnum palt : values()) {
             map.put(palt.code, palt);
         }
     }
 
-    private byte code;
+    public byte code;
     private String name;
 
-    ProductPeriodUnit(byte code, String name) {
+    EventFeeTypeEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -40,7 +34,7 @@ public enum ProductPeriodUnit {
      * @param code
      * @return
      */
-    public static ProductPeriodUnit fetch(byte code) {
+    public static EventFeeTypeEnum fetch(byte code) {
         return map.get(code);
     }
 
@@ -51,7 +45,7 @@ public enum ProductPeriodUnit {
      * @return
      */
     public static String fetchName(byte code) {
-        ProductPeriodUnit palt = map.get(code);
+        EventFeeTypeEnum palt = map.get(code);
         return palt != null ? palt.name : null;
     }
 

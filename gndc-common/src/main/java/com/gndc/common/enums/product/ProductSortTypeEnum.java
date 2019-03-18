@@ -1,15 +1,15 @@
 package com.gndc.common.enums.product;
 
-public enum ProductCollectStatus {
-    COLLECT((byte) 1, "收藏"),
-    CANCEL_COLLECT((byte) -1, "取消收藏");
+public enum ProductSortTypeEnum {
+    FIXED((byte) -1, "固定排序"),
+    NOT_FIXED((byte) 1, "不固定排序");
 
     private byte code;
 
     private String name;
 
 
-    ProductCollectStatus(byte code, String name) {
+    ProductSortTypeEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -29,6 +29,4 @@ public enum ProductCollectStatus {
     public void setName(String name) {
         this.name = name;
     }
-
-
 }

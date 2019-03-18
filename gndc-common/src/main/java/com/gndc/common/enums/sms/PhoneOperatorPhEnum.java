@@ -19,7 +19,7 @@ import java.util.Map;
  * @Description
  * @date 2018年7月26日 上午10:31:46
  */
-public enum PhoneOperatorPh {
+public enum PhoneOperatorPhEnum {
 
     SMART("S", "smart"),
 
@@ -27,11 +27,11 @@ public enum PhoneOperatorPh {
 
     OTHER("X", "unkonw");
 
-    private static final Map<String, PhoneOperatorPh> map;
+    private static final Map<String, PhoneOperatorPhEnum> map;
 
     static {
         map = new HashMap<>();
-        for (PhoneOperatorPh as : values()) {
+        for (PhoneOperatorPhEnum as : values()) {
             map.put(as.code, as);
         }
     }
@@ -39,7 +39,7 @@ public enum PhoneOperatorPh {
     private String code;
     private String name;
 
-    PhoneOperatorPh(String code, String name) {
+    PhoneOperatorPhEnum(String code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -50,7 +50,7 @@ public enum PhoneOperatorPh {
      * @param code
      * @return
      */
-    public static PhoneOperatorPh fetch(String code) {
+    public static PhoneOperatorPhEnum fetch(String code) {
         return map.get(code);
     }
 
@@ -61,7 +61,7 @@ public enum PhoneOperatorPh {
      * @return
      */
     public static String fetchName(String code) {
-        PhoneOperatorPh sc = map.get(code);
+        PhoneOperatorPhEnum sc = map.get(code);
         return sc != null ? sc.name : null;
     }
 

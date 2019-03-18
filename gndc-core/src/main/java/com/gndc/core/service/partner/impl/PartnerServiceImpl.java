@@ -1,7 +1,7 @@
 package com.gndc.core.service.partner.impl;
 
-import com.gndc.common.enums.partner.PartnerAccountLogStatus;
-import com.gndc.common.enums.partner.PartnerAccountLogType;
+import com.gndc.common.enums.partner.PartnerAccountLogStatusEnum;
+import com.gndc.common.enums.partner.PartnerAccountLogTypeEnum;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.partner.finance.account.APPartnerInfoRequest;
 import com.gndc.core.api.partner.finance.account.APPartnerInfoResponse;
@@ -40,7 +40,7 @@ public class PartnerServiceImpl extends BaseServiceImpl<Partner, Integer> implem
 
         //充值中金额
         BigDecimal processingRechargeAmount = partnerAccountLogMapper.sumAmount(partnerId,
-                PartnerAccountLogType.RECHARGET.getCode(), PartnerAccountLogStatus.RECHARGE_PROCESS.getCode());
+                PartnerAccountLogTypeEnum.RECHARGET.getCode(), PartnerAccountLogStatusEnum.RECHARGE_PROCESS.getCode());
 
         if (processingRechargeAmount == null) {
             processingRechargeAmount = new BigDecimal(0);
@@ -48,7 +48,7 @@ public class PartnerServiceImpl extends BaseServiceImpl<Partner, Integer> implem
 
         //提现中金额
         BigDecimal processingWithdrawAmount = partnerAccountLogMapper.sumAmount(partnerId,
-                PartnerAccountLogType.WITHDRAW.getCode(), PartnerAccountLogStatus.WITHDRAW_PROCESS.getCode());
+                PartnerAccountLogTypeEnum.WITHDRAW.getCode(), PartnerAccountLogStatusEnum.WITHDRAW_PROCESS.getCode());
 
         if (processingWithdrawAmount == null) {
             processingWithdrawAmount = new BigDecimal(0);

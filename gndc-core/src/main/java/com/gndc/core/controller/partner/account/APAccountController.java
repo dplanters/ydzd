@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.admin.AdminLevelEnum;
-import com.gndc.common.enums.common.DelType;
+import com.gndc.common.enums.common.DelEnum;
 import com.gndc.common.enums.right.RightPlatformEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.Utils;
@@ -77,7 +77,7 @@ public class APAccountController {
             throw new HjException(ResultCode.USER_NOT_EXISTS, msg);
         }
 
-        if (admin.getStatus().equals(DelType.IS_DEL.getCode())) {
+        if (admin.getStatus().equals(DelEnum.IS_DEL.getCode())) {
             String template = "用户名 {} 已停用";
             String msg = StrUtil.format(template, loginName);
             logger.warn(msg);

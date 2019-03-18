@@ -1,8 +1,8 @@
 package com.gndc.core.controller.app.ad;
 
 import com.gndc.core.api.common.ResponseMessage;
-import com.gndc.common.enums.common.DelType;
-import com.gndc.common.enums.product.ProductStatus;
+import com.gndc.common.enums.common.DelEnum;
+import com.gndc.common.enums.product.ProductStatusEnum;
 import com.gndc.core.api.app.ad.PBannerListRequest;
 import com.gndc.core.api.app.ad.POpeningPopupAdvertisementRequest;
 import com.gndc.core.model.Advertis;
@@ -48,8 +48,8 @@ public class PAdvertisementController {
         weekend.weekendCriteria()
                 .andLessThanOrEqualTo(Banner::getBeginTime, currTime)
                 .andGreaterThanOrEqualTo(Banner::getEndTime, currTime)
-                .andEqualTo(Banner::getStatus, ProductStatus.ON_LINE.getCode())
-                .andEqualTo(Banner::getIsDel, DelType.NORMAL.getCode());
+                .andEqualTo(Banner::getStatus, ProductStatusEnum.ON_LINE.getCode())
+                .andEqualTo(Banner::getIsDel, DelEnum.NORMAL.getCode());
         weekend.setOrderByClause("position");
 
         List<Banner> banners = bannerService.selectByExample(weekend);
@@ -76,8 +76,8 @@ public class PAdvertisementController {
         weekend.selectProperties("link", "imgUrl", "productId");
         weekend.setOrderByClause("id desc");
         weekend.weekendCriteria()
-                .andEqualTo(Advertis::getIsDel, DelType.NORMAL.getCode())
-                .andEqualTo(Advertis::getStatus, ProductStatus.ON_LINE.getCode());
+                .andEqualTo(Advertis::getIsDel, DelEnum.NORMAL.getCode())
+                .andEqualTo(Advertis::getStatus, ProductStatusEnum.ON_LINE.getCode());
         List<Advertis> adverts = advertsService.selectByExample(weekend);
         response.setData(adverts);
         return response;

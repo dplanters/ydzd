@@ -1,23 +1,27 @@
-package com.gndc.common.enums.partner;
+package com.gndc.common.enums.product;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum PartnerAccountLogStatus {
+public enum ProductDataPeriodUnitEnum {
 
-    RECHARGE_PROCESS((byte) 1, "充值中"),
+    /**
+     * 日
+     */
+    day((byte) 1, "日"),
 
-    RECHARGE_FINISH((byte) 2, "充值成功"),
+    /**
+     * 月
+     */
+    month((byte) 2, "月"),
 
-    WITHDRAW_PROCESS((byte) 3, "提现中"),
+    ;
 
-    WITHDRAW_FINISH((byte) 4, "提现成功");
-
-    private static final Map<Byte, PartnerAccountLogStatus> map;
+    private static final Map<Byte, ProductDataPeriodUnitEnum> map;
 
     static {
         map = new HashMap<>();
-        for (PartnerAccountLogStatus palt : values()) {
+        for (ProductDataPeriodUnitEnum palt : values()) {
             map.put(palt.code, palt);
         }
     }
@@ -25,7 +29,7 @@ public enum PartnerAccountLogStatus {
     private byte code;
     private String name;
 
-    PartnerAccountLogStatus(byte code, String name) {
+    ProductDataPeriodUnitEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -36,7 +40,7 @@ public enum PartnerAccountLogStatus {
      * @param code
      * @return
      */
-    public static PartnerAccountLogStatus fetch(byte code) {
+    public static ProductDataPeriodUnitEnum fetch(byte code) {
         return map.get(code);
     }
 
@@ -47,7 +51,7 @@ public enum PartnerAccountLogStatus {
      * @return
      */
     public static String fetchName(byte code) {
-        PartnerAccountLogStatus palt = map.get(code);
+        ProductDataPeriodUnitEnum palt = map.get(code);
         return palt != null ? palt.name : null;
     }
 

@@ -6,7 +6,7 @@ package com.gndc.common.enums.user;
  * @Description
  * @date 2018年7月4日 上午11:26:45
  */
-public enum UserEventsType {
+public enum UserEventsTypeEnum {
 
     BANNER_CLICK((byte) 1, "BANNER_CLICK"), // banner类表点击点击
 
@@ -28,13 +28,13 @@ public enum UserEventsType {
     private byte code;
     private String name;
 
-    UserEventsType(byte code, String name) {
+    UserEventsTypeEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
 
-    public static UserEventsType fetch(byte code) {
-        for (UserEventsType userEventsType : UserEventsType.values()) {
+    public static UserEventsTypeEnum fetch(byte code) {
+        for (UserEventsTypeEnum userEventsType : UserEventsTypeEnum.values()) {
             if (userEventsType.code == code) {
                 return userEventsType;
             }
@@ -43,7 +43,7 @@ public enum UserEventsType {
     }
 
     public static String getName(byte code) {
-        for (UserEventsType userSexType : UserEventsType.values()) {
+        for (UserEventsTypeEnum userSexType : UserEventsTypeEnum.values()) {
             if (userSexType.code == code) {
                 return userSexType.name;
             }

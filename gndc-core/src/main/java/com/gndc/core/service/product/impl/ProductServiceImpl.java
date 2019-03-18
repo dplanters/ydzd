@@ -3,9 +3,9 @@ package com.gndc.core.service.product.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.common.DelType;
-import com.gndc.common.enums.product.ProductDataType;
-import com.gndc.common.enums.product.ProductStatus;
+import com.gndc.common.enums.common.DelEnum;
+import com.gndc.common.enums.product.ProductDataTypeEnum;
+import com.gndc.common.enums.product.ProductStatusEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.admin.product.*;
@@ -63,7 +63,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
         Weekend<Product> weekend = Weekend.of(Product.class);
         weekend.weekendCriteria()
                 .andEqualTo(Product::getPartnerId, partnerId)
-                .andEqualTo(Product::getIsDel, DelType.NORMAL.getCode());
+                .andEqualTo(Product::getIsDel, DelEnum.NORMAL.getCode());
 
         List<Product> products = productMapper.selectByExample(weekend);
 
@@ -99,7 +99,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             productMapper.insertSelective(product);
 
             productData.setProductId(product.getId());
-            productData.setDataType(ProductDataType.AMOUNT.getCode());
+            productData.setDataType(ProductDataTypeEnum.AMOUNT.getCode());
             productDataMapper.insertSelective(productData);
         } else {
             //修改
@@ -108,7 +108,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             Weekend<ProductData> weekend = Weekend.of(ProductData.class);
             weekend.weekendCriteria()
                     .andEqualTo(ProductData::getProductId, request.getId())
-                    .andEqualTo(ProductData::getDataType, ProductDataType.AMOUNT.getCode());
+                    .andEqualTo(ProductData::getDataType, ProductDataTypeEnum.AMOUNT.getCode());
             productDataMapper.updateByExampleSelective(productData, weekend);
         }
 
@@ -127,7 +127,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
         Weekend<ProductData> weekend = Weekend.of(ProductData.class);
         weekend.weekendCriteria()
                 .andEqualTo(ProductData::getProductId, product.getId())
-                .andEqualTo(ProductData::getDataType, ProductDataType.AMOUNT.getCode());
+                .andEqualTo(ProductData::getDataType, ProductDataTypeEnum.AMOUNT.getCode());
         ProductData productData = productDataMapper.selectOneByExample(weekend);
 
         AOProductDetailResponse aoProductDetailResponse = AOProductDetailResponseMapper.INSTANCE.convert(product, productData);
@@ -144,11 +144,11 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             throw new HjException(ResultCode.PRODUCT_NOT_EXIST);
         }
         Byte upperAndLowerLine = request.getUpperAndLowerLine();
-        if (upperAndLowerLine.equals(ProductStatus.ON_LINE.getCode())) {
-            product.setStatus(ProductStatus.ON_LINE.getCode());
+        if (upperAndLowerLine.equals(ProductStatusEnum.ON_LINE.getCode())) {
+            product.setStatus(ProductStatusEnum.ON_LINE.getCode());
             product.setOnlineTime(new Date());
         } else {
-            product.setStatus(ProductStatus.OFF_LINE.getCode());
+            product.setStatus(ProductStatusEnum.OFF_LINE.getCode());
             product.setOfflineTime(new Date());
         }
         boolean affected = productMapper.updateByPrimaryKey(product) == 1;
@@ -166,11 +166,11 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             throw new HjException(ResultCode.PRODUCT_NOT_EXIST);
         }
 
-        if (product.getStatus().equals(ProductStatus.ON_LINE.getCode())) {
+        if (product.getStatus().equals(ProductStatusEnum.ON_LINE.getCode())) {
             logger.warn("产品编号{}在线不允许删除", request.getId());
             throw new HjException(ResultCode.PRODUCT_ONLINE);
         }
-        product.setIsDel(DelType.IS_DEL.getCode());
+        product.setIsDel(DelEnum.IS_DEL.getCode());
 
         Weekend<ProductData> weekend = Weekend.of(ProductData.class);
         weekend.weekendCriteria()
@@ -203,7 +203,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
         ProductHot productHot4Edit = ProductHotMapping.INSTANCE.convert(request);
 
         Product product = productMapper.selectByPrimaryKey(request.getProductId());
-        if (product == null || !product.getStatus().equals(ProductStatus.ON_LINE.getCode())) {
+        if (product == null || !product.getStatus().equals(ProductStatusEnum.ON_LINE.getCode())) {
             logger.warn("产品未上线");
             throw new HjException(ResultCode.PRODUCTS_NOT_ONLINE);
         }
@@ -220,23 +220,23 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             //修改
             ProductHot productHot = productHotTemps.get(0);
 
-            if (productHot4Edit.getStatus().equals(ProductStatus.ON_LINE.getCode())
-                    && productHot.getStatus().equals(ProductStatus.ON_LINE.getCode())) {
+            if (productHot4Edit.getStatus().equals(ProductStatusEnum.ON_LINE.getCode())
+                    && productHot.getStatus().equals(ProductStatusEnum.ON_LINE.getCode())) {
                 logger.warn("产品在线");
                 throw new HjException(ResultCode.PRODUCTS_HOT_IS_ONLINE);
             }
 
             productHot4Edit.setId(productHot.getId());
-            if (productHot4Edit.getStatus().equals(ProductStatus.OFF_LINE.getCode())) {
+            if (productHot4Edit.getStatus().equals(ProductStatusEnum.OFF_LINE.getCode())) {
                 productHot4Edit.setOfflineTime(new Date());
             }
             productHotMapper.updateByPrimaryKeySelective(productHot4Edit);
         } else {
             //新增
-            if (productHot4Edit.getStatus().equals(ProductStatus.ON_LINE.getCode())) {
+            if (productHot4Edit.getStatus().equals(ProductStatusEnum.ON_LINE.getCode())) {
                 productHot4Edit.setOnlineTime(new Date());
             }
-            if (productHot4Edit.getStatus().equals(ProductStatus.OFF_LINE.getCode())) {
+            if (productHot4Edit.getStatus().equals(ProductStatusEnum.OFF_LINE.getCode())) {
                 productHot4Edit.setOfflineTime(new Date());
             }
             productHotMapper.insertSelective(productHot4Edit);

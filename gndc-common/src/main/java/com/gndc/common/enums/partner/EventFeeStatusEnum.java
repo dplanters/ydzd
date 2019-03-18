@@ -3,17 +3,25 @@ package com.gndc.common.enums.partner;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum PartnerAccountLogType {
+public enum EventFeeStatusEnum {
 
-    RECHARGET((byte) 1, "充值"),
+    /**
+     * 未结算
+     */
+    UNCOMPLETE((byte) 0, "未结算"),
 
-    WITHDRAW((byte) 2, "提现");
+    /**
+     * 已结算
+     */
+    COMPLETE((byte) 1, "已结算"),
 
-    private static final Map<Byte, PartnerAccountLogType> map;
+    ;
+
+    private static final Map<Byte, EventFeeStatusEnum> map;
 
     static {
         map = new HashMap<>();
-        for (PartnerAccountLogType palt : values()) {
+        for (EventFeeStatusEnum palt : values()) {
             map.put(palt.code, palt);
         }
     }
@@ -21,7 +29,7 @@ public enum PartnerAccountLogType {
     private byte code;
     private String name;
 
-    PartnerAccountLogType(byte code, String name) {
+    EventFeeStatusEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -32,7 +40,7 @@ public enum PartnerAccountLogType {
      * @param code
      * @return
      */
-    public static PartnerAccountLogType fetch(byte code) {
+    public static EventFeeStatusEnum fetch(byte code) {
         return map.get(code);
     }
 
@@ -43,7 +51,7 @@ public enum PartnerAccountLogType {
      * @return
      */
     public static String fetchName(byte code) {
-        PartnerAccountLogType palt = map.get(code);
+        EventFeeStatusEnum palt = map.get(code);
         return palt != null ? palt.name : null;
     }
 

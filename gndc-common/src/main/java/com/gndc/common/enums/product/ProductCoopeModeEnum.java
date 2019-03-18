@@ -1,32 +1,29 @@
-package com.gndc.common.enums.common;
+package com.gndc.common.enums.product;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
-public enum Status {
-    ALL((byte) 0, "全部状态"),
-
-    NOT_ON_LINE((byte) 1, "未上线"),
-
-    ON_LINE((byte) 2, "上线"),
-
-    OFF_LINE((byte) -1, "已下线"),
+public enum ProductCoopeModeEnum {
+    CPI((byte) 1, "CPI"),
+    CPA((byte) 2, "CPA"),
+    CPL((byte) 3, "CPL"),
+    CPS((byte) 4, "CPS"),
+    CPC((byte) 5, "CPC"),
     ;
-
-    private static final Map<Byte, Status> map;
+    private static final Map<Byte, ProductCoopeModeEnum> map;
 
     static {
         map = new HashMap<>();
-        for (Status as : values()) {
+        for (ProductCoopeModeEnum as : values()) {
             map.put(as.code, as);
         }
     }
 
-    private byte code;
+    private Byte code;
     private String name;
 
-    Status(byte code, String name) {
+    ProductCoopeModeEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -37,7 +34,7 @@ public enum Status {
      * @param code
      * @return
      */
-    public static Status fetch(byte code) {
+    public static ProductCoopeModeEnum fetch(byte code) {
         return map.get(code);
     }
 
@@ -48,7 +45,7 @@ public enum Status {
      * @return
      */
     public static String fetchName(byte code) {
-        Status as = map.get(code);
+        ProductCoopeModeEnum as = map.get(code);
         return as != null ? as.name : null;
     }
 

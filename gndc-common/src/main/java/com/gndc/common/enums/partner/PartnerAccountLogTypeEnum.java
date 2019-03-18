@@ -1,29 +1,27 @@
-package com.gndc.common.enums.product;
+package com.gndc.common.enums.partner;
 
 import java.util.HashMap;
 import java.util.Map;
 
+public enum PartnerAccountLogTypeEnum {
 
-public enum CoopeMode {
-    CPI((byte) 1, "CPI"),
-    CPA((byte) 2, "CPA"),
-    CPL((byte) 3, "CPL"),
-    CPS((byte) 4, "CPS"),
-    CPC((byte) 5, "CPC"),
-    ;
-    private static final Map<Byte, CoopeMode> map;
+    RECHARGET((byte) 1, "充值"),
+
+    WITHDRAW((byte) 2, "提现");
+
+    private static final Map<Byte, PartnerAccountLogTypeEnum> map;
 
     static {
         map = new HashMap<>();
-        for (CoopeMode as : values()) {
-            map.put(as.code, as);
+        for (PartnerAccountLogTypeEnum palt : values()) {
+            map.put(palt.code, palt);
         }
     }
 
-    private Byte code;
+    private byte code;
     private String name;
 
-    CoopeMode(byte code, String name) {
+    PartnerAccountLogTypeEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -34,7 +32,7 @@ public enum CoopeMode {
      * @param code
      * @return
      */
-    public static CoopeMode fetch(byte code) {
+    public static PartnerAccountLogTypeEnum fetch(byte code) {
         return map.get(code);
     }
 
@@ -45,8 +43,8 @@ public enum CoopeMode {
      * @return
      */
     public static String fetchName(byte code) {
-        CoopeMode as = map.get(code);
-        return as != null ? as.name : null;
+        PartnerAccountLogTypeEnum palt = map.get(code);
+        return palt != null ? palt.name : null;
     }
 
     public byte getCode() {
@@ -64,5 +62,4 @@ public enum CoopeMode {
     public void setName(String name) {
         this.name = name;
     }
-
 }

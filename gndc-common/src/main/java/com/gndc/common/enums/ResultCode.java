@@ -9,7 +9,7 @@
 package com.gndc.common.enums;
 
 import com.gndc.common.constant.Constant;
-import com.gndc.common.enums.common.CountryType;
+import com.gndc.common.enums.common.CountryTypeEnum;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -674,11 +674,11 @@ public enum ResultCode {
      */
     public String getI18NContent() {
 
-        if (Constant.COUNTRY.equals(CountryType.INDONESIA.getCode())) {
+        if (Constant.COUNTRY.equals(CountryTypeEnum.INDONESIA.getCode())) {
             return IDContent;
-        } else if (Constant.COUNTRY.equals(CountryType.VIETNAM.getCode())) {
+        } else if (Constant.COUNTRY.equals(CountryTypeEnum.VIETNAM.getCode())) {
             return VNContent;
-        } else if (Constant.COUNTRY.equals(CountryType.PHILIPPINES.getCode())) {
+        } else if (Constant.COUNTRY.equals(CountryTypeEnum.PHILIPPINES.getCode())) {
             return PHContent;
         }
         return CNContent;

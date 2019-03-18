@@ -1,29 +1,31 @@
-package com.gndc.common.enums.partner;
+package com.gndc.common.enums.product;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum EventFeeType {
 
-    H5((byte) 1, "H5"),
+public enum ProductStatusEnum {
 
-    API((byte) 2, "API"),
+    NOT_ON_LINE((byte) 1, "未上线"),
 
+    ON_LINE((byte) 2, "上线"),
+
+    OFF_LINE((byte) -1, "已下线"),
     ;
 
-    private static final Map<Byte, EventFeeType> map;
+    private static final Map<Byte, ProductStatusEnum> map;
 
     static {
         map = new HashMap<>();
-        for (EventFeeType palt : values()) {
-            map.put(palt.code, palt);
+        for (ProductStatusEnum as : values()) {
+            map.put(as.code, as);
         }
     }
 
-    public byte code;
+    private byte code;
     private String name;
 
-    EventFeeType(byte code, String name) {
+    ProductStatusEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -34,7 +36,7 @@ public enum EventFeeType {
      * @param code
      * @return
      */
-    public static EventFeeType fetch(byte code) {
+    public static ProductStatusEnum fetch(byte code) {
         return map.get(code);
     }
 
@@ -45,8 +47,8 @@ public enum EventFeeType {
      * @return
      */
     public static String fetchName(byte code) {
-        EventFeeType palt = map.get(code);
-        return palt != null ? palt.name : null;
+        ProductStatusEnum as = map.get(code);
+        return as != null ? as.name : null;
     }
 
     public byte getCode() {
@@ -64,4 +66,5 @@ public enum EventFeeType {
     public void setName(String name) {
         this.name = name;
     }
+
 }

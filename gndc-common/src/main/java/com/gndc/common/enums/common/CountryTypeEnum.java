@@ -6,44 +6,40 @@
  * 版权说明：本软件属浙江盘石信息技术股份有限公司所有，在未获浙江盘石信息技术股份有限公司正式授权情况下，
  *          任何企业和个人，不能获取、阅读、安装、传播本软件涉及的任何受知识产权保护的内容。   
  ***************************************************************************/
-package com.gndc.common.enums.message;
+package com.gndc.common.enums.common;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 消息结果类型
+ * 国家类型
  *
- * @author <a href="jiangxin8116@adpanshi.com">jiangxin8116</a>
+ * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
  * @version V1.0.1
  * @Description
- * @date 2018年1月25日 上午9:58:40
+ * @date 2018年5月7日 下午6:22:14
  */
-public enum MessageType {
+public enum CountryTypeEnum {
 
-    SYSTEM((byte) 1, "系统通知"),
+    INDONESIA("ID", "印度尼西亚"),
 
-    ORDER((byte) 2, "订单通知"),
+    VIETNAM("VN", "越南"),
 
-    IN_OR_OUT((byte) 3, "收支通知"),
+    PHILIPPINES("PH", "菲律宾");
 
-    ORDER_RETURN((byte) 4, "资料退回"),
-
-    USERCOUPON_REMINDER((byte) 5, "优惠卷到期提醒");
-
-    private static final Map<Byte, MessageType> map;
+    private static final Map<String, CountryTypeEnum> map;
 
     static {
         map = new HashMap<>();
-        for (MessageType as : values()) {
+        for (CountryTypeEnum as : values()) {
             map.put(as.code, as);
         }
     }
 
-    private byte code;
+    private String code;
     private String name;
 
-    MessageType(byte code, String name) {
+    CountryTypeEnum(String code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -54,7 +50,7 @@ public enum MessageType {
      * @param code
      * @return
      */
-    public static MessageType fetch(byte code) {
+    public static CountryTypeEnum fetch(String code) {
         return map.get(code);
     }
 
@@ -65,15 +61,15 @@ public enum MessageType {
      * @return
      */
     public static String fetchName(byte code) {
-        MessageType as = map.get(code);
+        CountryTypeEnum as = map.get(code);
         return as != null ? as.name : null;
     }
 
-    public byte getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(byte code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
@@ -84,5 +80,4 @@ public enum MessageType {
     public void setName(String name) {
         this.name = name;
     }
-
 }

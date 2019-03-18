@@ -14,7 +14,7 @@ package com.gndc.common.enums.user;
  * @Description 用户认证
  * @date 2018年1月24日 下午4:53:29
  */
-public enum UserAuthType {
+public enum UserAuthTypeEnum {
 
     AUTH((byte) 1, "认证"),
 
@@ -23,13 +23,13 @@ public enum UserAuthType {
     private byte code;
     private String name;
 
-    UserAuthType(byte code, String name) {
+    UserAuthTypeEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
 
     public static String getName(byte code) {
-        for (UserAuthType userSexType : UserAuthType.values()) {
+        for (UserAuthTypeEnum userSexType : UserAuthTypeEnum.values()) {
             if (userSexType.code == code) {
                 return userSexType.name;
             }

@@ -1,6 +1,6 @@
 package com.gndc.common.enums.product;
 
-public enum ProductDataType {
+public enum ProductDataTypeEnum {
     AMOUNT((byte) 1, "借款数据"),
     QUESTION((byte) 2, "常见问题");
 
@@ -9,7 +9,7 @@ public enum ProductDataType {
     private String name;
 
 
-    ProductDataType(byte code, String name) {
+    ProductDataTypeEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }

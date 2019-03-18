@@ -2,8 +2,8 @@ package com.gndc.core.service.partner.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.gndc.common.enums.partner.PartnerAccountLogStatus;
-import com.gndc.common.enums.partner.PartnerAccountLogType;
+import com.gndc.common.enums.partner.PartnerAccountLogStatusEnum;
+import com.gndc.common.enums.partner.PartnerAccountLogTypeEnum;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.partner.finance.account.APRechargeListRequest;
 import com.gndc.core.api.partner.finance.account.APRechargeRequest;
@@ -42,8 +42,8 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
         partnerAccountLog.setUpdateTime(now);
 
         partnerAccountLog.setPartnerId(request.getAdmin().getPartnerId());
-        partnerAccountLog.setType(PartnerAccountLogType.RECHARGET.getCode());
-        partnerAccountLog.setPayStatus(PartnerAccountLogStatus.RECHARGE_PROCESS.getCode());
+        partnerAccountLog.setType(PartnerAccountLogTypeEnum.RECHARGET.getCode());
+        partnerAccountLog.setPayStatus(PartnerAccountLogStatusEnum.RECHARGE_PROCESS.getCode());
         partnerAccountLog.setPayDate(request.getPayDate());
         int affected = partnerAccountLogMapper.insertSelective(partnerAccountLog);
 
@@ -63,8 +63,8 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
 
         partnerAccountLog.setPartnerId(request.getAdmin().getPartnerId());
 
-        partnerAccountLog.setType(PartnerAccountLogType.WITHDRAW.getCode());
-        partnerAccountLog.setPayStatus(PartnerAccountLogStatus.WITHDRAW_PROCESS.getCode());
+        partnerAccountLog.setType(PartnerAccountLogTypeEnum.WITHDRAW.getCode());
+        partnerAccountLog.setPayStatus(PartnerAccountLogStatusEnum.WITHDRAW_PROCESS.getCode());
 
         int affected = partnerAccountLogMapper.insertSelective(partnerAccountLog);
 
@@ -79,7 +79,7 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
         Integer partnerId = request.getAdmin().getPartnerId();
         weekend.weekendCriteria()
                 .andEqualTo(PartnerAccountLog::getPartnerId, partnerId)
-                .andEqualTo(PartnerAccountLog::getType, PartnerAccountLogType.RECHARGET.getCode());
+                .andEqualTo(PartnerAccountLog::getType, PartnerAccountLogTypeEnum.RECHARGET.getCode());
 
         PageHelper.startPage(page.getPageNum(), page.getPageSize());
         List<PartnerAccountLog> rechargeList = partnerAccountLogMapper.selectByExample(weekend);
@@ -95,7 +95,7 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
         Integer partnerId = request.getAdmin().getPartnerId();
         weekend.weekendCriteria()
                 .andEqualTo(PartnerAccountLog::getPartnerId, partnerId)
-                .andEqualTo(PartnerAccountLog::getType, PartnerAccountLogType.WITHDRAW.getCode());
+                .andEqualTo(PartnerAccountLog::getType, PartnerAccountLogTypeEnum.WITHDRAW.getCode());
 
         PageHelper.startPage(page.getPageNum(), page.getPageSize());
         List<PartnerAccountLog> withdrawCashList = partnerAccountLogMapper.selectByExample(weekend);
