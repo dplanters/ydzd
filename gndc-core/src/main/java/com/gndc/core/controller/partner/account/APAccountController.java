@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.admin.AdminType;
+import com.gndc.common.enums.admin.AdminLevelEnum;
 import com.gndc.common.enums.common.DelType;
 import com.gndc.common.enums.right.RightPlatformEnum;
 import com.gndc.common.exception.HjException;
@@ -97,10 +97,10 @@ public class APAccountController {
         String sessionId = CacheConstant.KEY_PARTNER_LOGIN_PREFIX + Utils.getSessionId();
         //获取权限树
         Byte level = admin.getLevel();
-        AdminType adminType = AdminType.fetch(level);
+        AdminLevelEnum adminLevelEnum = AdminLevelEnum.fetch(level);
         List<Right> rights = null;
         List<Integer> rightIds = null;
-        switch (adminType) {
+        switch (adminLevelEnum) {
             case PARTNER_ADMIN:
                 Role role = roleService.selectByPrimaryKey(admin.getRoleId());
                 rightIds = roleRightService.getRightIds(role.getId());
@@ -108,7 +108,7 @@ public class APAccountController {
                 admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
                 break;
             default:
-                String msg = StrUtil.format("无效的账号类型 : {}", adminType);
+                String msg = StrUtil.format("无效的账号类型 : {}", adminLevelEnum);
                 logger.warn(msg);
                 throw new HjException(ResultCode.ERROR, msg);
         }

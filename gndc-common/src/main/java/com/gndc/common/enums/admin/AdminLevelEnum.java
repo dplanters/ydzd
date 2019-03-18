@@ -1,37 +1,35 @@
 /**************************************************************************
- * Copyright©2004-2016 浙江盘石信息技术股份有限公司
+ * Copyright (c) 2013-2023  浙江盘石信息技术股份有限公司
  * All rights reserved.
  *
  * 项目名称：互金网络平台
  * 版权说明：本软件属浙江盘石信息技术股份有限公司所有，在未获浙江盘石信息技术股份有限公司正式授权情况下，
  *          任何企业和个人，不能获取、阅读、安装、传播本软件涉及的任何受知识产权保护的内容。   
  ***************************************************************************/
-package com.gndc.common.enums.advertis;
+package com.gndc.common.enums.admin;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author <a href="litianwei8504@adpanshi.com">litianwei</a>
+ * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
  * @version V1.0.1
- * @Description 广告上线限制枚举
- * @date 2018年8月16日 下午2:44:17
+ * @Description 管理员类型枚举
+ * @date 2018年1月25日 上午9:58:10
  */
-public enum AdvertisUpperlimit {
+public enum AdminLevelEnum {
 
-    POP_UPS((byte) 1, "弹窗广告"),
+    SUPER_ADMIN((byte) 1, "超级管理员"),
 
-    OPEN_SCREEN((byte) 2, "开屏广告"),
+    ORDINARY_ADMIN((byte) 2, "普通管理员"),
 
-    BANNER((byte) 4, "banner"),
+    PARTNER_ADMIN((byte) 3, "商户管理员");
 
-    ;
-
-    private static final Map<Byte, AdvertisUpperlimit> map;
+    private static final Map<Byte, AdminLevelEnum> map;
 
     static {
         map = new HashMap<>();
-        for (AdvertisUpperlimit as : values()) {
+        for (AdminLevelEnum as : values()) {
             map.put(as.code, as);
         }
     }
@@ -39,7 +37,7 @@ public enum AdvertisUpperlimit {
     private byte code;
     private String name;
 
-    AdvertisUpperlimit(byte code, String name) {
+    AdminLevelEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -50,7 +48,7 @@ public enum AdvertisUpperlimit {
      * @param code
      * @return
      */
-    public static AdvertisUpperlimit fetch(byte code) {
+    public static AdminLevelEnum fetch(byte code) {
         return map.get(code);
     }
 
@@ -61,7 +59,7 @@ public enum AdvertisUpperlimit {
      * @return
      */
     public static String fetchName(byte code) {
-        AdvertisUpperlimit as = map.get(code);
+        AdminLevelEnum as = map.get(code);
         return as != null ? as.name : null;
     }
 
@@ -80,4 +78,5 @@ public enum AdvertisUpperlimit {
     public void setName(String name) {
         this.name = name;
     }
+
 }

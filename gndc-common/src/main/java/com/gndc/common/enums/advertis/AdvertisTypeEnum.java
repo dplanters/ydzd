@@ -1,35 +1,37 @@
 /**************************************************************************
- * Copyright (c) 2013-2023  浙江盘石信息技术股份有限公司
+ * Copyright©2004-2016 浙江盘石信息技术股份有限公司
  * All rights reserved.
  *
  * 项目名称：互金网络平台
  * 版权说明：本软件属浙江盘石信息技术股份有限公司所有，在未获浙江盘石信息技术股份有限公司正式授权情况下，
  *          任何企业和个人，不能获取、阅读、安装、传播本软件涉及的任何受知识产权保护的内容。   
  ***************************************************************************/
-package com.gndc.common.enums.admin;
+package com.gndc.common.enums.advertis;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
+ * @author <a href="biankongbin8418@adpanshi.com">biankongbin</a>
  * @version V1.0.1
- * @Description 管理员类型枚举
- * @date 2018年1月25日 上午9:58:10
+ * @Description 广告类型枚举
+ * @date 2018年5月17日 上午10:20:12
  */
-public enum AdminType {
+public enum AdvertisTypeEnum {
 
-    SUPER_ADMIN((byte) 1, "超级管理员"),
+    POP_UPS((byte) 1, "弹窗广告"),
 
-    ORDINARY_ADMIN((byte) 2, "普通管理员"),
+    OPEN_SCREEN((byte) 2, "开屏广告"),
 
-    PARTNER_ADMIN((byte) 3, "商户管理员");
+    COERCION((byte) 3, "浮窗广告"),
 
-    private static final Map<Byte, AdminType> map;
+    ;
+
+    private static final Map<Byte, AdvertisTypeEnum> map;
 
     static {
         map = new HashMap<>();
-        for (AdminType as : values()) {
+        for (AdvertisTypeEnum as : values()) {
             map.put(as.code, as);
         }
     }
@@ -37,7 +39,7 @@ public enum AdminType {
     private byte code;
     private String name;
 
-    AdminType(byte code, String name) {
+    AdvertisTypeEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -48,7 +50,7 @@ public enum AdminType {
      * @param code
      * @return
      */
-    public static AdminType fetch(byte code) {
+    public static AdvertisTypeEnum fetch(byte code) {
         return map.get(code);
     }
 
@@ -59,7 +61,7 @@ public enum AdminType {
      * @return
      */
     public static String fetchName(byte code) {
-        AdminType as = map.get(code);
+        AdvertisTypeEnum as = map.get(code);
         return as != null ? as.name : null;
     }
 

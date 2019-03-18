@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.admin.AdminType;
+import com.gndc.common.enums.admin.AdminLevelEnum;
 import com.gndc.common.enums.common.DelType;
 import com.gndc.common.enums.right.RightPlatformEnum;
 import com.gndc.common.exception.HjException;
@@ -97,10 +97,10 @@ public class AOAccountController {
         String sessionId = CacheConstant.KEY_ADMIN_LOGIN_PREFIX + Utils.getSessionId();
         //获取权限树
         Byte level = admin.getLevel();
-        AdminType adminType = AdminType.fetch(level);
+        AdminLevelEnum adminLevelEnum = AdminLevelEnum.fetch(level);
         List<Right> rights = null;
         List<Integer> rightIds = null;
-        switch (adminType) {
+        switch (adminLevelEnum) {
             case SUPER_ADMIN:
                 //获取所有权限id集合
                 rightIds = rightService.rightIds();

@@ -4,7 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.admin.AdminType;
+import com.gndc.common.enums.admin.AdminLevelEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.PasswordUtil;
 import com.gndc.common.utils.PwdUtil;
@@ -64,7 +64,7 @@ public class AOAdminController {
         admin.setPasswordSign(passwordSign);
         admin.setOperateSign(operateSign);
         admin.setPassword(md5Password);
-        if (AdminType.PARTNER_ADMIN.getCode() == request.getLevel()) {
+        if (AdminLevelEnum.PARTNER_ADMIN.getCode() == request.getLevel()) {
             Partner partner = new Partner();
             partner.setName(request.getPartnerName());
 

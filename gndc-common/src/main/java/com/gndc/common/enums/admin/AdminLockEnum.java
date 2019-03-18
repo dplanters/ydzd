@@ -6,32 +6,28 @@
  * 版权说明：本软件属浙江盘石信息技术股份有限公司所有，在未获浙江盘石信息技术股份有限公司正式授权情况下，
  *          任何企业和个人，不能获取、阅读、安装、传播本软件涉及的任何受知识产权保护的内容。   
  ***************************************************************************/
-package com.gndc.common.enums.advertis;
+package com.gndc.common.enums.admin;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author <a href="biankongbin8418@adpanshi.com">biankongbin</a>
+ * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
  * @version V1.0.1
- * @Description 广告类型枚举
- * @date 2018年5月17日 上午10:20:12
+ * @Description 管理员是否允许登录枚举
+ * @date 2018年1月25日 上午9:58:40
  */
-public enum AdvertisType {
+public enum AdminLockEnum {
 
-    POP_UPS((byte) 1, "弹窗广告"),
+    OK((byte) 1, "正常"),
 
-    OPEN_SCREEN((byte) 2, "开屏广告"),
+    LOCK((byte) -1, "停用");
 
-    COERCION((byte) 3, "浮窗广告"),
-
-    ;
-
-    private static final Map<Byte, AdvertisType> map;
+    private static final Map<Byte, AdminLockEnum> map;
 
     static {
         map = new HashMap<>();
-        for (AdvertisType as : values()) {
+        for (AdminLockEnum as : values()) {
             map.put(as.code, as);
         }
     }
@@ -39,7 +35,7 @@ public enum AdvertisType {
     private byte code;
     private String name;
 
-    AdvertisType(byte code, String name) {
+    AdminLockEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -50,7 +46,7 @@ public enum AdvertisType {
      * @param code
      * @return
      */
-    public static AdvertisType fetch(byte code) {
+    public static AdminLockEnum fetch(byte code) {
         return map.get(code);
     }
 
@@ -61,7 +57,7 @@ public enum AdvertisType {
      * @return
      */
     public static String fetchName(byte code) {
-        AdvertisType as = map.get(code);
+        AdminLockEnum as = map.get(code);
         return as != null ? as.name : null;
     }
 

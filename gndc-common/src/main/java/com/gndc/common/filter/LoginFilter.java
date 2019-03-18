@@ -3,6 +3,7 @@ package com.gndc.common.filter;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.http.BodyCacheHttpServletRequestWrapper;
 import com.gndc.common.http.CustomBodyResponseWrapper;
 import com.gndc.common.utils.BeanFactoryUtil;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.Charset;
+import java.util.concurrent.TimeUnit;
 
 public class LoginFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(LoginFilter.class);
@@ -59,6 +61,19 @@ public class LoginFilter extends OncePerRequestFilter {
                     logger.warn("session已失效");
                     responseJson.fluentPut("code", "-120").fluentPut("msg", "session已失效");
                     responseContent = responseJson.toJSONString();
+                } else {
+                    Long expire = 0L;
+                    if (sessionId.startsWith(CacheConstant.KEY_ADMIN_LOGIN_PREFIX)) {
+                        expire = CacheConstant.EXPIRE_ADMIN_LOGIN;
+                    } else if (sessionId.startsWith(CacheConstant.KEY_PARTNER_LOGIN_PREFIX)) {
+                        expire = CacheConstant.EXPIRE_PARTNER_LOGIN;
+                    } else if (sessionId.startsWith(CacheConstant.KEY_USER_LOGIN_PREFIX)) {
+                        expire = CacheConstant.EXPIRE_USER_LOGIN;
+                    } else {
+                        logger.warn("无效的sessionId");
+                        responseJson.fluentPut("code", "-130").fluentPut("msg", "无效的sessionId");
+                    }
+                    redisTemplate.opsForValue().set(sessionId, admin, expire, TimeUnit.SECONDS);
                 }
             }
         }
