@@ -14,17 +14,17 @@ import java.util.Map;
 /**
  * 短信类型
  */
-public enum SMSType {
+public enum SMSTypeEnum {
 
     REGISTER((byte) 1, "注册短信"),
 
     FORGET_PWD((byte) 2, "忘记密码短信");
 
-    private static final Map<Byte, SMSType> map;
+    private static final Map<Byte, SMSTypeEnum> map;
 
     static {
         map = new HashMap<>();
-        for (SMSType as : values()) {
+        for (SMSTypeEnum as : values()) {
             map.put(as.code, as);
         }
     }
@@ -32,7 +32,7 @@ public enum SMSType {
     private byte code;
     private String name;
 
-    SMSType(byte code, String name) {
+    SMSTypeEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -43,7 +43,7 @@ public enum SMSType {
      * @param code
      * @return
      */
-    public static SMSType fetch(byte code) {
+    public static SMSTypeEnum fetch(byte code) {
         return map.get(code);
     }
 
@@ -54,7 +54,7 @@ public enum SMSType {
      * @return
      */
     public static String fetchName(byte code) {
-        SMSType as = map.get(code);
+        SMSTypeEnum as = map.get(code);
         return as != null ? as.name : null;
     }
 

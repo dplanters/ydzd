@@ -3,7 +3,7 @@ package com.gndc.core.controller.app.platform;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.constant.Constant;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.message.SMSType;
+import com.gndc.common.enums.message.SMSTypeEnum;
 import com.gndc.common.enums.sms.SmsChannelEnum;
 import com.gndc.common.enums.sms.SmsTemplateType;
 import com.gndc.common.exception.HjException;
@@ -16,8 +16,6 @@ import com.gndc.core.api.app.platform.Sms24HourCount;
 import com.gndc.core.api.common.CommonResponse;
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.model.User;
-import com.gndc.core.service.platform.ISms10MinuteCountCacheService;
-import com.gndc.core.service.platform.ISms24HourCountCacheService;
 import com.gndc.core.service.sms.SmsLogService;
 import com.gndc.core.service.user.UserService;
 import org.slf4j.Logger;
@@ -29,8 +27,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.Serializable;
 
 /**
  * 客户端发短信相关
@@ -52,12 +48,6 @@ public class PSmsController {
     private RedisTemplate<String, String> redisTemplate;
 
     @Autowired
-    private ISms10MinuteCountCacheService sms10MinuteCountCacheService;
-
-    @Autowired
-    private ISms24HourCountCacheService sms24HourCountCacheService;
-
-    @Autowired
     private SmsLogService smsLogService;
 
 
@@ -75,7 +65,7 @@ public class PSmsController {
         Byte type = sendSmsRequest.getType();
         String key = "";
         SmsTemplateType smsTemplateType = null;
-        if (SMSType.FORGET_PWD.getCode() == type) {
+        if (SMSTypeEnum.FORGET_PWD.getCode() == type) {
             // 查询手机号是否注册
             User user = userService.selectOneByProperty("phone", phone);
             if (user == null) {
@@ -84,7 +74,7 @@ public class PSmsController {
             }
             key = P_SMS_USER_FORGET_PWD + phone;
             smsTemplateType = SmsTemplateType.USER_FORGET_PWD;
-        } else if (SMSType.REGISTER.getCode() == type) {
+        } else if (SMSTypeEnum.REGISTER.getCode() == type) {
             key = P_SMS_USER_LOGIN + phone;
             smsTemplateType = SmsTemplateType.USER_LOGIN;
         }
