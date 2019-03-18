@@ -4,6 +4,8 @@ import com.gndc.common.enums.sms.SmsTemplateType;
 import com.gndc.common.service.BaseService;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
 import com.gndc.core.api.app.platform.Sms24HourCount;
+import com.gndc.core.api.app.platform.SmsInfo;
+import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.model.SmsLog;
 
 public interface SmsLogService extends BaseService<SmsLog, Integer> {
@@ -23,4 +25,8 @@ public interface SmsLogService extends BaseService<SmsLog, Integer> {
      * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
      */
     void sendValCodeSms(String channel, String phone, SmsTemplateType smsTemplateType, int valCode, int userId, String key, Sms10MinuteCount sms10MinuteCount, Sms24HourCount sms24HourCount) throws InterruptedException;
+
+    boolean validateSmsCount(Sms10MinuteCount sms10MinuteCount, Sms24HourCount sms24HourCount, ResponseMessage<?> response);
+
+    boolean validateSms(SmsInfo sms, Sms10MinuteCount sms10MinuteCount, String key, String valCode, ResponseMessage<?> response);
 }

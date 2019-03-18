@@ -1,6 +1,8 @@
 package com.gndc.core.service.sms.impl;
 
 import com.gndc.common.constant.CacheConstant;
+import com.gndc.common.constant.Constant;
+import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.sms.SmsChannelEnum;
 import com.gndc.common.enums.sms.SmsTemplateType;
 import com.gndc.common.service.impl.BaseServiceImpl;
@@ -9,6 +11,7 @@ import com.gndc.common.utils.JsonUtil;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
 import com.gndc.core.api.app.platform.Sms24HourCount;
 import com.gndc.core.api.app.platform.SmsInfo;
+import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.model.SmsLog;
 import com.gndc.core.service.sms.SmsLogService;
 import com.gndc.third.sms.chuanglan.ChuangLanSmsService;
@@ -178,5 +181,77 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
             }
 
         }
+    }
+
+    /**
+     * 发送验证码时校验是否条数超限
+     *
+     * @param sms10MinuteCount
+     * @param response
+     * @return
+     * @Description
+     * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
+     */
+    public boolean validateSmsCount(Sms10MinuteCount sms10MinuteCount, Sms24HourCount sms24HourCount,
+                                     ResponseMessage<?> response) {
+
+        if (sms10MinuteCount == null) {
+            sms10MinuteCount = new Sms10MinuteCount();
+        }
+
+        if (sms10MinuteCount.getFailCount() >= Constant.SMS_FAIL_COUNT_LIMIT) {
+            response.createError(ResultCode.AUTH_FAIL_COUNT);
+            return false;
+        }
+
+        if (sms10MinuteCount.getCount() >= Constant.SMS_COUNT_LIMIT_TEN_MINTUE) {
+            response.createError(ResultCode.AUTH_COUNT_TEN_LIMIT);
+            return false;
+        }
+
+        if (sms24HourCount == null) {
+            sms24HourCount = new Sms24HourCount();
+        }
+        if (sms24HourCount.getCount() >= Constant.SMS_COUNT_LIMIT_24_HOUR) {
+            response.createError(ResultCode.AUTH_COUNT_24_HOUR);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 校验短信是否正确
+     *
+     * @param sms
+     * @param sms10MinuteCount
+     * @param key
+     * @param valCode
+     * @param response
+     * @return
+     * @Description
+     * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
+     */
+    public boolean validateSms(SmsInfo sms, Sms10MinuteCount sms10MinuteCount, String key, String valCode,
+                                ResponseMessage<?> response) {
+        if (sms == null) {
+            response.createError(ResultCode.AUTH_INVALID);
+            return false;
+        }
+
+        if (sms10MinuteCount == null) {
+            return false;
+        }
+
+        if (!valCode.equals(sms.getValCode())) {
+            sms10MinuteCount.setFailCount(sms10MinuteCount.getFailCount() + 1);
+            String JsonText10M = JsonUtil.toJSONString(sms10MinuteCount);
+            redisTemplate.opsForValue().set(CacheConstant.KEY_USER_SMS_10_PREFIX + key, JsonText10M, CacheConstant.EXPIRE_USER_SMS_10, TimeUnit.SECONDS);
+
+            response.createError(ResultCode.AUTH_ERROR);
+            return false;
+        }
+
+        return true;
     }
 }

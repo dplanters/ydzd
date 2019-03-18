@@ -8,16 +8,21 @@
  ***************************************************************************/
 package com.gndc.core.api.app.platform;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 
 /**
- * 验证码短信，需要用ehache缓存
+ * 验证码短信，需要用缓存
  *
  * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
  * @version V1.0.1
  * @Description
  * @date 2017年10月19日 下午6:18:39
  */
+@Getter
+@Setter
 public class SmsInfo implements Serializable {
 
     /**
@@ -36,37 +41,5 @@ public class SmsInfo implements Serializable {
      * 失败次数
      */
     private Integer failCount = 0;
-
-    public SmsInfo() {
-    }
-
-    public String getValCode() {
-        return valCode;
-    }
-
-    public void setValCode(String valCode) {
-        this.valCode = valCode;
-    }
-
-    public Integer getCount() {
-        return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
-    }
-
-    public Integer getFailCount() {
-        return failCount;
-    }
-
-    public void setFailCount(Integer failCount) {
-        this.failCount = failCount;
-    }
-
-    @Override
-    public String toString() {
-        return "SmsInfo [authCode=" + valCode + ", count=" + count + ", failCount=" + failCount + "]";
-    }
 
 }

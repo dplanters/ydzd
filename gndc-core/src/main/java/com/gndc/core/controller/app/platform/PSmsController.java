@@ -87,7 +87,7 @@ public class PSmsController {
 
 
 
-        if (!validateSmsCount(sms10MinuteCount, sms24HourCount, response)) {
+        if (!smsLogService.validateSmsCount(sms10MinuteCount, sms24HourCount, response)) {
             logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
             return response;
         }
@@ -103,44 +103,5 @@ public class PSmsController {
         return response;
     }
 
-    /**
-     * 发送验证码时校验是否条数超限
-     *
-     * @param sms10MinuteCount
-     * @param response
-     * @return
-     * @Description
-     * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
-     */
-    private boolean validateSmsCount(Sms10MinuteCount sms10MinuteCount, Sms24HourCount sms24HourCount,
-                                     ResponseMessage<?> response) {
-
-        if (sms10MinuteCount == null) {
-            sms10MinuteCount = new Sms10MinuteCount();
-        }
-
-        if (sms10MinuteCount.getFailCount() >= Constant.SMS_FAIL_COUNT_LIMIT) {
-            response.createError(ResultCode.AUTH_FAIL_COUNT);
-            // logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return false;
-        }
-
-        if (sms10MinuteCount.getCount() >= Constant.SMS_COUNT_LIMIT_TEN_MINTUE) {
-            response.createError(ResultCode.AUTH_COUNT_TEN_LIMIT);
-            // logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return false;
-        }
-
-        if (sms24HourCount == null) {
-            sms24HourCount = new Sms24HourCount();
-        }
-        if (sms24HourCount.getCount() >= Constant.SMS_COUNT_LIMIT_24_HOUR) {
-            response.createError(ResultCode.AUTH_COUNT_24_HOUR);
-            // logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return false;
-        }
-
-        return true;
-    }
 
 }

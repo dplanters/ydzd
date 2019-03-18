@@ -8,32 +8,45 @@
  ***************************************************************************/
 package com.gndc.core.api.app.user.account;
 
+import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
-import java.io.Serializable;
-
-/**
- * 用户登录响应
- */
 @Getter
 @Setter
-public class PUserLoginResponse implements Serializable {
+public class PUserPwdLoginRequest extends RequestMessage {
 
-    private static final long serialVersionUID = 1L;
     /**
      * 手机号
      */
+    @NonNull
     private String phone;
 
     /**
-     * session
+     * 密码登录
      */
-    private String sessionId;
-
+    @NonNull
+    private String password;
     /**
-     * 是否有密码1：有；0：没有
+     * 设备token
      */
-    private Integer hasPassword;
+    private String imei;
+    /**
+     * 终端类型
+     */
+    private String termType;
+    /**
+     * 推广渠道
+     */
+    private String regChannel;
+    /**
+     * APP名
+     */
+    private String appName;
+    /**
+     * APP包名
+     */
+    private String appPackage;
 
 }

@@ -14,7 +14,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PUserLoginRequest extends RequestMessage {
+public class PUserValCodeLoginRequest extends RequestMessage {
 
     /**
      * 手机号
@@ -26,10 +26,6 @@ public class PUserLoginRequest extends RequestMessage {
      */
     private String valCode;
 
-    /**
-     * 密码登录
-     */
-    private String password;
     /**
      * 设备token
      */
