@@ -49,7 +49,7 @@ public interface CustomMapper<T> {
      * 根据实体中的属性查询总数，查询条件使用等号
      *
      * @param property 查询属性
-     * @param value 属性值
+     * @param value    属性值
      * @return
      */
     @SelectProvider(type = CustomSelectProvider.class, method = "dynamicSQL")
