@@ -26,30 +26,6 @@ import java.util.Date;
 @Getter
 @Setter
 public class Header implements Serializable {
-    /**
-     * 请求
-     */
-    public final static int REQUEST = 0;
-    /**
-     * 应答
-     */
-    public final static int RESPONSE = 1;
-    /**
-     * 游客
-     */
-    public final static String GUEST = "guest";
-    /**
-     * @Fields serialVersionUID:
-     */
-    private static final long serialVersionUID = 1L;
-    /**
-     * 功能号，必填
-     */
-    private String action;
-    /**
-     * 区分请求/应答类型，必填
-     */
-    private Integer msgType;
 
     /**
      * 设备类型，必填 web, wx, ios, android
@@ -102,49 +78,5 @@ public class Header implements Serializable {
      * 分页信息
      */
     private PageInfo page;
-
-    /**
-     * 错误号，0：成功，非0：失败
-     */
-    private int code;
-    /**
-     * 错误信息
-     */
-    private String msg;
-
-    /**
-     * 错误信息扩展
-     */
-    private Object msgExt;
-
-    public Header() {
-        this.code = ResultCode.OK.getCode();
-        this.sendingTime = getDateTime();
-        this.clientVersion = "1.0.01";
-    }
-
-    /**
-     * 日期格式："yyyy-MM-dd HH:mm:ss"
-     *
-     * @return
-     */
-    public static String getDateTime() {
-        return DateUtil.timeToString(new Date(), DateUtil.FORMAT_11);
-    }
-
-    public void create(Header header) {
-        if (header != null) {
-            this.action = header.action;
-            // this.userId = header.userId;
-            this.sessionId = header.sessionId;
-            if (header.page != null && this.page == null) {
-                this.page = header.page;
-                // this.page = new Page();
-                // this.page.setIndex(header.page.getIndex());
-                // this.page.setSize(header.page.getSize());
-            }
-        }
-    }
-
 
 }
