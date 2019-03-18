@@ -1,5 +1,6 @@
 package com.gndc.core.controller.admin.sys;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.gndc.core.api.admin.sys.AORightAddModifyRequest;
 import com.gndc.core.api.admin.sys.AORightTreeRequest;
 import com.gndc.core.api.common.ResponseMessage;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.Id;
 import java.util.List;
 
 @RestController
@@ -30,17 +32,11 @@ public class AORightController {
     public ResponseMessage<Integer> addModifyRole(@Validated @RequestBody AORightAddModifyRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
         Right right = RightMapping.INSTANCE.convert(request);
-
-        Right superRight = rightService.selectOneByProperty("superId", request.getSuperId());
-        Byte rightLevel = superRight.getRightLevel();
-        if (request.getParallel()) {
-            right.setRightLevel(rightLevel);
+        if (ObjectUtil.isNull(request.getId())) {
+            rightService.insertSelective(right);
         } else {
-            rightLevel++;
-            right.setRightLevel(rightLevel);
+            rightService.updateByPrimaryKey(right);
         }
-
-        rightService.insertSelective(right);
         response.setData(right.getId());
         return response;
     }

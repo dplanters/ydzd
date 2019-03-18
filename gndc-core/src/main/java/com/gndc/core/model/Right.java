@@ -47,6 +47,10 @@ public class Right extends BaseEntity {
 
     private Byte rightLevel;
 
+    private Byte rightVisible;
+
+    private String remark;
+
     @Transient
     private List<Right> children;
 

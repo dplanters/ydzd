@@ -14,24 +14,14 @@ import com.gndc.common.enums.common.CountryTypeEnum;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @Description 返回码枚举
- * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
- * @date 2018年1月25日 上午9:50:55
- * @version V1.0.1
- */
-
-/**
- * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
- * @version V1.0.1
- * @Description
- * @date 2018年1月27日 下午3:47:49
- */
 public enum ResultCode {
     // 成功
     OK(0, "成功", "Berhasil", "Thành công", "Success"),
+
+    SYSTEM_BUSY(1000101, "系统繁忙", "系统繁忙", "系统繁忙", "系统繁忙"),
+    SESSION_EXPIRE(1000102, "Session 过期", "Session 过期", "Session 过期", "Session 过期"),
+    ERROR(1, "失败", "Gagal", "Không thành công", "Failed"),
     // 失败
-    ERROR(-1, "失败", "Gagal", "Không thành công", "Failed"),
     // 失败
     SERVICE_ERROR(-2, "无法连接服务", "Tidak dapat terhubung ke layanan", "Không thể kết nối với dịch vụ",
             "Unable to connect to service"),
@@ -557,13 +547,13 @@ public enum ResultCode {
     }
 
     // 成员变量
-    private int code; // 编码
+    private Integer code; // 编码
     private String CNContent;// 中文版本
     private String IDContent;// 印尼内容
     private String VNContent;// 越南内容
     private String PHContent;// 菲率宾内容
 
-    private ResultCode(int code, String CNContent, String IDContent, String VNContent, String PHContent) {
+    private ResultCode(Integer code, String CNContent, String IDContent, String VNContent, String PHContent) {
         this.code = code;
         this.CNContent = CNContent;
         this.IDContent = IDContent;
@@ -625,7 +615,7 @@ public enum ResultCode {
         return as != null ? as.PHContent : null;
     }
 
-    public int getCode() {
+    public Integer getCode() {
         return code;
     }
 

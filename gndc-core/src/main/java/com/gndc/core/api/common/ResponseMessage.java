@@ -27,13 +27,13 @@ public class ResponseMessage<T> implements Serializable {
     /**
      * 响应码,0为成功
      */
-    private Integer code = 0;
+    private Integer code = ResultCode.OK.getCode();
     /**
      * 提交或返回数据
      */
     private T data;
 
-    private String msg = "请求成功";
+    private String msg = ResultCode.OK.getI18NContent();
 
     private PageInfo page;
 

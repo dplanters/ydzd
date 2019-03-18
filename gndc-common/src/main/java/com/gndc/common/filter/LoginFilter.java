@@ -53,13 +53,13 @@ public class LoginFilter extends OncePerRequestFilter {
             JSONObject responseJson = new JSONObject().fluentPut("success", false);
             if (StrUtil.isEmpty(sessionId)) {
                 logger.warn("用户未登录");
-                responseJson.fluentPut("code", "-110").fluentPut("msg", "用户未登录");
+                responseJson.fluentPut("code", -110).fluentPut("msg", "用户未登录");
                 responseContent = responseJson.toJSONString();
             } else {
                 Serializable admin = redisTemplate.opsForValue().get(sessionId);
                 if (ObjectUtil.isNull(admin)) {
                     logger.warn("session已失效");
-                    responseJson.fluentPut("code", "-120").fluentPut("msg", "session已失效");
+                    responseJson.fluentPut("code", -120).fluentPut("msg", "session已失效");
                     responseContent = responseJson.toJSONString();
                 } else {
                     Long expire = 0L;
@@ -71,7 +71,7 @@ public class LoginFilter extends OncePerRequestFilter {
                         expire = CacheConstant.EXPIRE_USER_LOGIN;
                     } else {
                         logger.warn("无效的sessionId");
-                        responseJson.fluentPut("code", "-130").fluentPut("msg", "无效的sessionId");
+                        responseJson.fluentPut("code", -130).fluentPut("msg", "无效的sessionId");
                     }
                     redisTemplate.opsForValue().set(sessionId, admin, expire, TimeUnit.SECONDS);
                 }

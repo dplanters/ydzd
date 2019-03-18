@@ -36,7 +36,10 @@ spring:
       connectionProperties:
         - druid.stat.mergeSql=true
         - druid.stat.slowSqlMillis=5000
-      filters: stat,wall,slf4j
+      filters:
+        - stat
+        - wall
+        - slf4j
       maxActive: 20
       testOnReturn: false
       validationQuery: SELECT 1 FROM dual

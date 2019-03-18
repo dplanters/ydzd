@@ -73,6 +73,13 @@ public class AORightAddModifyRequest extends RequestMessage {
     private String rightOrder;
 
     /**
+     * 权限层级
+     */
+    @NotNull
+    @Min(1)
+    private Byte rightLevel;
+
+    /**
      * 图标
      */
     @NotNull
@@ -88,10 +95,16 @@ public class AORightAddModifyRequest extends RequestMessage {
     private Byte requireAuth;
 
     /**
-     * 是否平级菜单
+     *权限是否可见
      */
     @NotNull
     @Min(0)
     @Max(1)
-    private Boolean parallel;
+    private Byte rightVisible;
+
+    /**
+     * 备注
+     */
+    @NotBlank
+    private String remark;
 }
