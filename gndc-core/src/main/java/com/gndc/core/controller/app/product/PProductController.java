@@ -52,7 +52,7 @@ public class PProductController {
         PageInfo page = commonRequest.getHeader().getPage();
         PageHelper.startPage(page.getPageNum(), page.getPageSize());
         List<PHotProductResponse> pHotProductList = productService.selectPHotProductList();
-        if(pHotProductList != null && pHotProductList.size() > 0){
+        if (pHotProductList != null && pHotProductList.size() > 0) {
             for (PHotProductResponse temp : pHotProductList) {
                 //图片地址，先写死
                 temp.setLogoUrl("http://gndc.chbitech.com/" + temp.getLogoUrl());
@@ -78,13 +78,12 @@ public class PProductController {
 
         // 查找系统配置
         Weekend<SystemOption> weekend = Weekend.of(SystemOption.class);
-        weekend.selectProperties("optionKey", "optionValue");
+        weekend.selectProperties("optionKey", "optionValue", "remark");
         weekend.weekendCriteria()
                 .andEqualTo(SystemOption::getOptionGroup, SystemOptionEnum.SEARCH_CRITERIA.getCode());
         List<SystemOption> systemOptions = systemOptionService.selectByExample(weekend);
 
         Iterator it = systemOptions.iterator();
-
         while (it.hasNext()) {
             SystemOption temp = (SystemOption) it.next();
             if (borrowAmount.equals(temp.getOptionKey())) {
