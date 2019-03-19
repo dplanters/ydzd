@@ -8,6 +8,7 @@ import com.gndc.core.api.partner.APDataAnalysisTableResponse;
 import com.gndc.core.api.statistics.AOPartnerCostStatisticResponse;
 import com.gndc.core.model.EventFee;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -56,4 +57,12 @@ public interface EventFeeService extends BaseService<EventFee, Long> {
      * @return
      */
     ResponseMessage<List<AOPartnerCostStatisticResponse>> aoPartnerCostStatisticTable(String requestStr);
+
+    /**
+     * 费用结算
+     * @param eventFeeId
+     * @param partnerId
+     * @param fee
+     */
+    void completeFee(Long eventFeeId, Integer partnerId, BigDecimal fee) throws InterruptedException;
 }

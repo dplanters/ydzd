@@ -16,9 +16,20 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+/**
+ * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
+ * @version V1.0.1
+ * @Description 忘记密码请求
+ * @date 2018年1月24日 下午2:40:15
+ */
 @Getter
 @Setter
-public class PUserValCodeLoginRequest extends RequestMessage {
+public class PUserForgetPasswordRequest extends RequestMessage {
+
+    /**
+     * @Fields serialVersionUID:
+     */
+    private static final long serialVersionUID = -370299782421019753L;
 
     /**
      * 手机号
@@ -29,31 +40,23 @@ public class PUserValCodeLoginRequest extends RequestMessage {
     private String phone;
 
     /**
-     * 验证码登录
+     * 密码
+     */
+    @NotNull
+    @NotBlank
+    private String password;
+
+    /**
+     * 确认密码
+     */
+    @NotNull
+    @NotBlank
+    private String confirmPassword;
+    /**
+     * 验证码
      */
     @NotNull
     @NotBlank
     private String valCode;
-
-    /**
-     * 设备token
-     */
-    private String imei;
-    /**
-     * 终端类型
-     */
-    private String termType;
-    /**
-     * 推广渠道
-     */
-    private String regChannel;
-    /**
-     * APP名
-     */
-    private String appName;
-    /**
-     * APP包名
-     */
-    private String appPackage;
 
 }
