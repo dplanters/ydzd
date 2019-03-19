@@ -14,7 +14,8 @@ public interface RightService extends BaseService<Right, Integer> {
     List<Right> rightsTree(Byte rightLevel, Byte platform, Integer superId, List<Integer> rightIds);
 
     /**
-     * 获取所有的权限id
+     * 获取平台对应的权限树获取所有的权限id
      */
-    List<Integer> rightIds();
+    List<Integer> rightIds(Byte platform);
+
 }

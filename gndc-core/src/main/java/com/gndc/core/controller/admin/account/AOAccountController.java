@@ -103,7 +103,7 @@ public class AOAccountController {
         switch (adminLevelEnum) {
             case SUPER_ADMIN:
                 //获取所有权限id集合
-                rightIds = rightService.rightIds();
+                rightIds = rightService.rightIds(RightPlatformEnum.OPERATOR.getCode());
                 rights = rightService.rightsTree((byte)1, RightPlatformEnum.OPERATOR.getCode(), 0, rightIds);
                 admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
                 break;

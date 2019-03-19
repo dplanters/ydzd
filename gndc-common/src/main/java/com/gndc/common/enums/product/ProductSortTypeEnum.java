@@ -1,5 +1,8 @@
 package com.gndc.common.enums.product;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum ProductSortTypeEnum {
     FIXED((byte) -1, "固定排序"),
     NOT_FIXED((byte) 1, "不固定排序");

@@ -11,8 +11,9 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class AORightAddModifyRequest extends RequestMessage {
+public class AORightModifyRequest extends RequestMessage {
 
+    @NotNull
     @Min(1)
     private Integer id;
 

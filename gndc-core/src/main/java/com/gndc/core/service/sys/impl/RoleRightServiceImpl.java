@@ -24,10 +24,7 @@ public class RoleRightServiceImpl extends BaseServiceImpl<RoleRight, Integer> im
 
     @Override
     public List<Integer> getRightIds(Integer roleId) {
-        RoleRight roleRight = new RoleRight();
-        roleRight.setRoleId(roleId);
-
-        List<RoleRight> roleRights = roleRightMapper.select(roleRight);
+        List<RoleRight> roleRights = roleRightMapper.selectByProperty("roleId", roleId);
         List<Integer> rightIds = new ArrayList<>(roleRights.size());
         roleRights.forEach(r -> {
             rightIds.add(r.getRightId());

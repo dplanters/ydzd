@@ -30,7 +30,9 @@ public class LoginCheckFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return request.getMethod().equals(HttpMethod.OPTIONS.name());
+        Object requireAuth = RequestContextHolder.getRequestAttributes().getAttribute("requireAuth", RequestAttributes.SCOPE_REQUEST);
+        //预检请求和不需要授权的请求不拦截
+        return request.getMethod().equals(HttpMethod.OPTIONS.name()) || requireAuth.equals(false);
     }
 
     @Override
@@ -65,8 +67,6 @@ public class LoginCheckFilter extends OncePerRequestFilter {
 
                 if (sessionId.startsWith(CacheConstant.KEY_ADMIN_LOGIN_PREFIX)) {
                     expire = CacheConstant.EXPIRE_ADMIN_LOGIN;
-                    String[] attributeNames =
-                            requestAttributes.getAttributeNames(RequestAttributes.SCOPE_REQUEST);
                     requestAttributes.setAttribute(CacheConstant.KEY_ADMIN_LOGIN_PREFIX,   admin,
                             RequestAttributes.SCOPE_SESSION);
                 } else if (sessionId.startsWith(CacheConstant.KEY_PARTNER_LOGIN_PREFIX)) {

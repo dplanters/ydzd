@@ -4,7 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
-import com.gndc.core.api.admin.sys.AORoleAddModifyRequest;
+import com.gndc.core.api.admin.sys.AORoleAddRequest;
+import com.gndc.core.api.admin.sys.AORoleModifyRequest;
 import com.gndc.core.mapper.simple.RoleMapper;
 import com.gndc.core.mapper.simple.RoleRightMapper;
 import com.gndc.core.model.Role;
@@ -34,7 +35,45 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer> implements R
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Integer addRole(AORoleAddModifyRequest request) {
+    public Integer addRole(AORoleAddRequest request) {
+        String roleName = request.getRoleName();
+
+        int affectedRow = 0;
+        int affectedRows = 0;
+        Role role = new Role();
+        List<Integer> rightIds = request.getRightIds();
+        List<RoleRight> roleRights = new ArrayList<>(rightIds.size());
+        //新增
+        Role originalRole = roleMapper.selectOneByProperty("roleName", roleName);
+
+        if (originalRole != null) {
+            String msg = StrUtil.format("{} 已经存在", roleName);
+            logger.warn(msg);
+            throw new HjException(ResultCode.ROLENAME_EXISTS, msg);
+        }
+
+        role.setRoleName(roleName);
+        role.setCreateAdminId(1);
+        role.setUpdateAdminId(1);
+        affectedRow = roleMapper.insertSelective(role);
+
+        for (Integer rightId : rightIds) {
+            RoleRight roleRight = new RoleRight();
+            roleRight.setRoleId(role.getId());
+            roleRight.setRightId(rightId);
+            roleRight.setUpdateAdminId(1);
+            Date now = new Date();
+            roleRight.setCreateTime(now);
+            roleRight.setUpdateTime(now);
+            roleRights.add(roleRight);
+        }
+        affectedRows = roleRightMapper.insertList(roleRights);
+        return role.getId();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Integer modifyRole(AORoleModifyRequest request) {
         String roleName = request.getRoleName();
 
         Integer id = request.getId();
@@ -43,57 +82,29 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer> implements R
         Role role = new Role();
         List<Integer> rightIds = request.getRightIds();
         List<RoleRight> roleRights = new ArrayList<>(rightIds.size());
-        if (id == null) {
-            //新增
-            Role originalRole = roleMapper.selectOneByProperty("roleName", roleName);
-
-            if (originalRole != null) {
-                String msg = StrUtil.format("{} 已经存在", roleName);
-                logger.warn(msg);
-                throw new HjException(ResultCode.ROLENAME_EXISTS, msg);
-            }
-
-            role.setRoleName(roleName);
-            role.setCreateAdminId(1);
-            role.setUpdateAdminId(1);
-            affectedRow = roleMapper.insertSelective(role);
-
-            for (Integer rightId : rightIds) {
-                RoleRight roleRight = new RoleRight();
-                roleRight.setRoleId(role.getId());
-                roleRight.setRightId(rightId);
-                roleRight.setUpdateAdminId(1);
-                Date now = new Date();
-                roleRight.setCreateTime(now);
-                roleRight.setUpdateTime(now);
-                roleRights.add(roleRight);
-            }
-            affectedRows = roleRightMapper.insertList(roleRights);
-        } else {
             //修改
-            role.setId(id);
-            role.setRoleName(request.getRoleName());
+        role.setId(id);
+        role.setRoleName(roleName);
 
-            affectedRow = roleMapper.updateByPrimaryKeySelective(role);
+        affectedRow = roleMapper.updateByPrimaryKeySelective(role);
 
-            //删除旧的权限
-            Weekend<RoleRight> weekend = Weekend.of(RoleRight.class);
-            weekend.weekendCriteria()
-                    .andEqualTo(RoleRight::getRoleId, id);
-            roleRightMapper.deleteByExample(weekend);
+        //删除旧的权限
+        Weekend<RoleRight> weekend = Weekend.of(RoleRight.class);
+        weekend.weekendCriteria()
+                .andEqualTo(RoleRight::getRoleId, id);
+        roleRightMapper.deleteByExample(weekend);
 
-            for (Integer rightId : rightIds) {
-                RoleRight roleRight = new RoleRight();
-                roleRight.setRoleId(role.getId());
-                roleRight.setRightId(rightId);
-                roleRight.setUpdateAdminId(1);
-                Date now = new Date();
-                roleRight.setCreateTime(now);
-                roleRight.setUpdateTime(now);
-                roleRights.add(roleRight);
-            }
-            affectedRows = roleRightMapper.insertList(roleRights);
+        for (Integer rightId : rightIds) {
+            RoleRight roleRight = new RoleRight();
+            roleRight.setRoleId(role.getId());
+            roleRight.setRightId(rightId);
+            roleRight.setUpdateAdminId(1);
+            Date now = new Date();
+            roleRight.setCreateTime(now);
+            roleRight.setUpdateTime(now);
+            roleRights.add(roleRight);
         }
+        affectedRows = roleRightMapper.insertList(roleRights);
         return role.getId();
     }
 }

@@ -11,7 +11,6 @@ package com.gndc.core.api.admin.sys;
 import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.CreditCardNumber;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -21,23 +20,6 @@ import java.util.List;
 
 @Getter
 @Setter
-public class AORoleAddModifyRequest extends RequestMessage {
-
-    @Min(1)
-    private Integer id;
-
-    /**
-     * 角色名
-     */
-    @NotNull
-    @NotBlank
-    private String roleName;
-
-    /**
-     * 权限Ids
-     */
-    @NotNull
-    @NotEmpty
-    private List<Integer> rightIds;
+public class AORoleListRequest extends RequestMessage {
 
 }

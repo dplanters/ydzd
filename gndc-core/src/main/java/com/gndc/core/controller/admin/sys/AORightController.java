@@ -1,13 +1,9 @@
 package com.gndc.core.controller.admin.sys;
 
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.exception.HjException;
-import com.gndc.core.api.admin.sys.AORightAddModifyRequest;
-import com.gndc.core.api.admin.sys.AORightDeleteRequest;
-import com.gndc.core.api.admin.sys.AORightDetailRequest;
-import com.gndc.core.api.admin.sys.AORightTreeRequest;
+import com.gndc.core.api.admin.sys.*;
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.mappers.RightMapping;
 import com.gndc.core.model.Right;
@@ -36,23 +32,29 @@ public class AORightController {
     @Autowired
     private RoleRightService roleRightService;
 
-    @PostMapping("/addModifyRight")
-    public ResponseMessage<Integer> addModifyRole(@Validated @RequestBody AORightAddModifyRequest request) {
+    @PostMapping("/addRight")
+    public ResponseMessage<Integer> addRight(@Validated @RequestBody AORightAddRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
         Right right = RightMapping.INSTANCE.convert(request);
-        if (ObjectUtil.isNull(request.getId())) {
-            rightService.insertSelective(right);
-        } else {
-            rightService.updateByPrimaryKeySelective(right);
-        }
+        rightService.insertSelective(right);
+        response.setData(right.getId());
+        return response;
+    }
+
+    @PostMapping("/modifyRight")
+    public ResponseMessage<Integer> modifyRight(@Validated @RequestBody AORightModifyRequest request) {
+        ResponseMessage<Integer> response = new ResponseMessage<>();
+        Right right = RightMapping.INSTANCE.convert(request);
+        rightService.updateByPrimaryKeySelective(right);
         response.setData(right.getId());
         return response;
     }
 
     @PostMapping("/rightTree")
-    public ResponseMessage<Right> addModifyRole(@Validated @RequestBody AORightTreeRequest request) {
+    public ResponseMessage<Right> rightTree(@Validated @RequestBody AORightTreeRequest request) {
         ResponseMessage<Right> response = new ResponseMessage<>();
-        List<Right> rights = rightService.rightsTree((byte)1, request.getPlatform(), 0, rightService.rightIds());
+        List<Right> rights = rightService.rightsTree((byte)1, request.getPlatform(), 0,
+                rightService.rightIds(request.getPlatform()));
         response.setData(rights.get(0));
         return response;
     }
