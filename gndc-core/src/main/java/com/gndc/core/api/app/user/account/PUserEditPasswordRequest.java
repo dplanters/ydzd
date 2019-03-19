@@ -8,52 +8,39 @@
  ***************************************************************************/
 package com.gndc.core.api.app.user.account;
 
+
 import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
+/**
+ * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
+ * @version V1.0.1
+ * @Description 设置密码/修改密码
+ * @date 2018年1月24日 下午2:40:15
+ */
 @Getter
 @Setter
-public class PUserValCodeLoginRequest extends RequestMessage {
-
+public class PUserEditPasswordRequest extends RequestMessage {
     /**
-     * 手机号
+     * @Fields serialVersionUID:
+     */
+    private static final long serialVersionUID = -370299782421019753L;
+    /**
+     * 原密码
+     */
+    private String password;
+    /**
+     * 新密码
      */
     @NotNull
     @NotBlank
-    @Pattern(regexp = "^((13[0-9])|(15[^4])|(18[0,2,3,5-9])|(17[0-8])|(147))\\d{8}$")
-    private String phone;
-
+    private String newPassword;
     /**
-     * 验证码登录
+     * 确认密码
      */
-    @NotNull
-    @NotBlank
-    private String valCode;
-
-    /**
-     * 设备token
-     */
-    private String imei;
-    /**
-     * 终端类型
-     */
-    private String termType;
-    /**
-     * 推广渠道
-     */
-    private String regChannel;
-    /**
-     * APP名
-     */
-    private String appName;
-    /**
-     * APP包名
-     */
-    private String appPackage;
-
+    private String confirmPassword;
 }

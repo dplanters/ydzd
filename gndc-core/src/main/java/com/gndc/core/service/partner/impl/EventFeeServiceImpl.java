@@ -26,12 +26,13 @@ import com.gndc.core.mapper.simple.UserEventMapper;
 import com.gndc.core.mapper.simple.UserMapper;
 import com.gndc.core.model.*;
 import com.gndc.core.service.partner.EventFeeService;
+import com.gndc.core.service.partner.PartnerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.zalando.problem.StatusType;
 import tk.mybatis.mapper.weekend.Weekend;
 
 import javax.annotation.Resource;
@@ -41,6 +42,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author jingkaihui
@@ -50,6 +54,15 @@ import java.util.List;
 public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> implements EventFeeService {
 
     private static final Logger logger = LoggerFactory.getLogger(EventFeeServiceImpl.class);
+
+    /**
+     * 并发线程数。
+     */
+    private static final int CONCURRENCE = 2;
+
+    @Autowired
+    private PartnerService partnerService;
+
     @Resource
     private EventFeeMapper eventFeeMapper;
 
@@ -350,6 +363,60 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
             response.createError(ResultCode.ERROR);
             logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
             return response;
+        }
+    }
+
+    @Override
+    public void completeFee(Long eventFeeId, Integer partnerId, BigDecimal fee) throws InterruptedException {
+        ExecutorService pool = Executors.newFixedThreadPool(CONCURRENCE);
+        pool.execute(new CompleteThread(eventFeeId, partnerId, fee));
+        pool.shutdown();
+        while (!pool.isTerminated()) {
+            pool.awaitTermination(5, TimeUnit.SECONDS);
+        }
+    }
+
+    class CompleteThread extends Thread {
+        private Long eventFeeId;
+        private Integer partnerId;
+        private BigDecimal fee;
+
+        CompleteThread(Long eventFeeId, Integer partnerId, BigDecimal fee) {
+            this.eventFeeId = eventFeeId;
+            this.partnerId = partnerId;
+            this.fee = fee;
+        }
+
+        public void run() {
+            Partner partner = partnerService.selectByPrimaryKey(partnerId);
+            Partner partnerTemp = new Partner();
+            partnerTemp.setId(partnerId);
+            //账户余额
+            BigDecimal accountBalance = partner.getAccountBalance();
+            //授信额度
+            BigDecimal authAmount = partner.getAuthAmount();
+            //已用授信额度
+            BigDecimal authBalanceUsed = partner.getAuthBalanceUsed();
+            //剩余授信额度
+            BigDecimal surplusAuthAmount = authAmount.subtract(accountBalance);
+            BigDecimal zero = BigDecimal.valueOf(0);
+            //账户余额大于扣减的费用
+            if (accountBalance.compareTo(fee) >= 0) {
+                //扣减账户余额
+                BigDecimal result = accountBalance.subtract(fee);
+                partnerTemp.setAccountBalance(result);
+            } else if (accountBalance.compareTo(fee) < 0 && surplusAuthAmount.compareTo(fee) >= 0) {
+                //增加已用授信额度
+                BigDecimal result = authBalanceUsed.add(fee);
+                partnerTemp.setAuthBalanceUsed(result);
+            } else {
+                return;
+            }
+            partnerService.updateByPrimaryKeySelective(partnerTemp);
+            EventFee eventFee = new EventFee();
+            eventFee.setId(eventFeeId);
+            eventFee.setFeeStatus(EventFeeStatusEnum.COMPLETE.getCode());
+            updateByPrimaryKeySelective(eventFee);
         }
     }
 }

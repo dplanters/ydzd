@@ -57,11 +57,6 @@ public class PSmsController {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
 
         String phone = sendSmsRequest.getPhone();
-
-        if (!PhoneUtil.checkPhone(phone)) {
-            throw new HjException(ResultCode.PHONE_WRONG);
-        }
-
         Byte type = sendSmsRequest.getType();
         String key = "";
         SmsTemplateType smsTemplateType = null;

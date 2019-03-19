@@ -13,17 +13,20 @@ import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
-public class UserEventRequest extends RequestMessage {
+public class PUserEventRequest extends RequestMessage {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * 事件类型 1热推点击；2列表点击；3点击下载；4收藏；5取消收藏；6用户打开app
      */
-    private byte type;
+    @NotNull
+    private Byte type;
 
-    private int productId;
+    private Integer productId;
 
 }

@@ -13,6 +13,9 @@ import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 /**
  * 客户端意见反馈请求
  */
@@ -23,10 +26,16 @@ public class PFeedBackEditRequest extends RequestMessage {
     private static final long serialVersionUID = 1L;
 
     // 内容
+    @NotNull
+    @NotBlank
     private String content;
     // 联系方式
+    @NotNull
+    @NotBlank
     private String phone;
     // 图片URL
+    @NotNull
+    @NotBlank
     private String feedbackPictureUrl;
 
 }

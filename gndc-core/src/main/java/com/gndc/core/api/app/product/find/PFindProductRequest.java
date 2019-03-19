@@ -4,6 +4,8 @@ import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 public class PFindProductRequest extends RequestMessage {
@@ -11,9 +13,11 @@ public class PFindProductRequest extends RequestMessage {
 
     private static final long serialVersionUID = 4252234378456355619L;
     //金额区间开始
-    private int amountStart;
+    @NotNull
+    private Integer amountStart;
     //金额区间结束
-    private int amountEnd;
+    @NotNull
+    private Integer amountEnd;
     //搜索条件
     private String optionKey;
 

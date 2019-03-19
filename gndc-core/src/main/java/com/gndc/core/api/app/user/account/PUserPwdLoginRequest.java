@@ -10,8 +10,11 @@ package com.gndc.core.api.app.user.account;
 
 import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
@@ -20,13 +23,16 @@ public class PUserPwdLoginRequest extends RequestMessage {
     /**
      * 手机号
      */
-    @NonNull
+    @NotNull
+    @NotBlank
+    @Pattern(regexp = "^((13[0-9])|(15[^4])|(18[0,2,3,5-9])|(17[0-8])|(147))\\d{8}$")
     private String phone;
 
     /**
      * 密码登录
      */
-    @NonNull
+    @NotNull
+    @NotBlank
     private String password;
     /**
      * 设备token

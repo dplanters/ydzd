@@ -5,5 +5,5 @@ import com.gndc.common.mybatis.MyMapper;
 import com.gndc.core.model.User;
 
 public interface UserMapper extends MyMapper<User, Integer> {
-
+    int updatePassword(User user);
 }
