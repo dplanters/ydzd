@@ -1,9 +1,14 @@
 package com.gndc.core.controller.app.platform;
 
-import com.gndc.common.enums.system.SystemOptionEnum;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.gndc.common.enums.common.DelEnum;
 import com.gndc.core.api.app.platform.PPlatformBaseInfoRequest;
+import com.gndc.core.api.common.CommonRequest;
 import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.core.model.CommonQuestion;
 import com.gndc.core.model.SystemOption;
+import com.gndc.core.service.platform.CommonQuestionService;
 import com.gndc.core.service.sys.SystemOptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +29,9 @@ public class PPlatformController {
 
     @Autowired
     private SystemOptionService systemOptionService;
+
+    @Autowired
+    private CommonQuestionService commonQuestionService;
 
     /**
      * 微信公众号、客服电话、微信客服获取
@@ -47,6 +55,35 @@ public class PPlatformController {
             systemOption = systemOptions.get(0);
         }
         response.setData(systemOption);
+        return response;
+    }
+
+    /**
+     * 常见问题
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/commonQuestion")
+    public ResponseMessage<List<CommonQuestion>> commonQuestion(@Validated @RequestBody CommonRequest request) {
+        ResponseMessage<List<CommonQuestion>> response = new ResponseMessage<>();
+
+        PageInfo page = request.getHeader().getPage();
+        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+
+        CommonQuestion question = new CommonQuestion();
+
+        Weekend<CommonQuestion> weekend = Weekend.of(CommonQuestion.class);
+        weekend.selectProperties("title", "answer");
+        weekend.weekendCriteria()
+                .andEqualTo(CommonQuestion::getStatus, DelEnum.NORMAL.getCode());
+        List<CommonQuestion> commonQuestions = commonQuestionService.selectByExample(weekend);
+
+        PageInfo<CommonQuestion> pageInfo = new PageInfo<>(commonQuestions);
+
+        pageInfo.setList(null);
+        response.setPage(pageInfo);
+        response.setData(commonQuestions);
         return response;
     }
 }
