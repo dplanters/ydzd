@@ -43,7 +43,7 @@ public class CustomSelectProvider extends MapperTemplate {
                 sql.append(" and ");
                 sql.append(" value != '' ");
             }
-            sql.append(" and '").append(column.getProperty());
+            sql.append(" and property == '").append(column.getProperty());
             sql.append("'\">\n");
             sql.append(column.getColumn() + " = #{value,javaType=" + column.getJavaType().getSimpleName() + "}\n");
             sql.append("</if>\n");
@@ -77,7 +77,7 @@ public class CustomSelectProvider extends MapperTemplate {
                 sql.append(" and ");
                 sql.append(" value != '' ");
             }
-            sql.append(" and 'property == ").append(column.getProperty());
+            sql.append(" and property == '").append(column.getProperty());
             sql.append("'\">\n");
             sql.append(column.getColumn() + " = #{value,javaType=" + column.getJavaType().getSimpleName() + "}\n");
             sql.append("</if>\n");
@@ -110,7 +110,7 @@ public class CustomSelectProvider extends MapperTemplate {
                 sql.append(" and ");
                 sql.append(" value != '' ");
             }
-            sql.append(" and '").append(column.getProperty());
+            sql.append(" and property == '").append(column.getProperty());
             sql.append("'\">\n");
             sql.append(column.getColumn() + " = #{value,javaType=" + column.getJavaType().getSimpleName() + "}\n");
             sql.append("</if>\n");
@@ -143,7 +143,7 @@ public class CustomSelectProvider extends MapperTemplate {
                 sql.append(" and ");
                 sql.append(" value != '' ");
             }
-            sql.append(" and '").append(column.getProperty());
+            sql.append(" and property == '").append(column.getProperty());
             sql.append("'\">\n");
             sql.append(column.getColumn() + " = #{value,javaType=" + column.getJavaType().getSimpleName() + "}\n");
             sql.append("</if>\n");

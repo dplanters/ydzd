@@ -39,7 +39,7 @@ public class LoginCheckFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         BodyCacheHttpServletRequestWrapper bodyCacheHttpServletRequestWrapper = new BodyCacheHttpServletRequestWrapper(request);
-        CustomBodyResponseWrapper customBodyResponseWrapper = new CustomBodyResponseWrapper(request, response);
+        CustomBodyResponseWrapper customBodyResponseWrapper = new CustomBodyResponseWrapper(response);
         filterChain.doFilter(bodyCacheHttpServletRequestWrapper, customBodyResponseWrapper);
 
         String bodyString = bodyCacheHttpServletRequestWrapper.getBodyString();

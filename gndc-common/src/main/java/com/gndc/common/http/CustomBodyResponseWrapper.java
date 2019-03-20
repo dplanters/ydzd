@@ -2,6 +2,8 @@ package com.gndc.common.http;
 
 import lombok.Getter;
 import org.springframework.lang.Nullable;
+import org.springframework.security.web.header.HeaderWriter;
+import org.springframework.util.Assert;
 import org.springframework.util.FastByteArrayOutputStream;
 import org.springframework.web.util.WebUtils;
 
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.*;
+import java.util.List;
 
 @Getter
 public class CustomBodyResponseWrapper extends HttpServletResponseWrapper {
@@ -35,9 +38,8 @@ public class CustomBodyResponseWrapper extends HttpServletResponseWrapper {
      * Create a new CustomBodyResponseWrapper for the given servlet response.
      * @param response the original servlet response
      */
-    public CustomBodyResponseWrapper(HttpServletRequest request, HttpServletResponse response) {
+    public CustomBodyResponseWrapper(HttpServletResponse response) {
         super(response);
-        this.request = request;
     }
 
 
@@ -198,10 +200,10 @@ public class CustomBodyResponseWrapper extends HttpServletResponseWrapper {
             HttpServletResponse rawResponse = (HttpServletResponse) getResponse();
             rawResponse.setHeader("Access-Control-Allow-Origin", "*");
             rawResponse.setHeader("Access-Control-Allow-Credentials","true");
-//            rawResponse.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS,DELETE,PUT");
+            rawResponse.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS,DELETE,PUT");
             rawResponse.setHeader("Access-Control-Max-Age", "3600");
             rawResponse.setHeader("Access-Control-Allow-Headers", "*");
-            rawResponse.setHeader("Content-type", request.getContentType());
+//            rawResponse.setHeader("Content-type", request.getContentType());
             if ((complete || this.contentLength != null) && !rawResponse.isCommitted()) {
                 rawResponse.setContentLength(complete ? this.content.size() : this.contentLength);
                 this.contentLength = null;
