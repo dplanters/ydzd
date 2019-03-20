@@ -2,8 +2,6 @@ package com.gndc.common.http;
 
 import lombok.Getter;
 import org.springframework.lang.Nullable;
-import org.springframework.security.web.header.HeaderWriter;
-import org.springframework.util.Assert;
 import org.springframework.util.FastByteArrayOutputStream;
 import org.springframework.web.util.WebUtils;
 
@@ -13,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.*;
-import java.util.List;
 
 @Getter
 public class CustomBodyResponseWrapper extends HttpServletResponseWrapper {

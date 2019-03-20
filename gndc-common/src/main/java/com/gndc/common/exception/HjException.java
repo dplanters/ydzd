@@ -12,44 +12,23 @@ package com.gndc.common.exception;
 import com.gndc.common.enums.ResultCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.zalando.problem.AbstractThrowableProblem;
-import org.zalando.problem.Status;
-
-import javax.annotation.Nullable;
-import java.net.URI;
 
 @Getter
 @Setter
-public class HjException extends AbstractThrowableProblem implements ProblemMarker {
+public class HjException extends RuntimeException implements ProblemMarker {
 
     private ResultCode result;
 
     private String template;
 
     public HjException(ResultCode result) {
-        super(null, "HjException", Status.BAD_REQUEST, result.getI18NContent());
-        this.result = result;
-    }
-
-    public HjException(ResultCode result, boolean isRecord) {
-        this(null, "HjException", result.getI18NContent(), isRecord);
+        super(result.getI18NContent());
         this.result = result;
     }
 
     public HjException(ResultCode result, String template) {
-        super(null, "HjException", Status.BAD_REQUEST, template);
         this.result = result;
         this.template = template;
-    }
-
-    public HjException(ResultCode result, String template, boolean isRecord) {
-        this(null, "HjException", template, isRecord);
-        this.result = result;
-        this.template = template;
-    }
-
-    private HjException(@Nullable URI type, @Nullable String title, @Nullable String detail, boolean isRecord) {
-        super(type, title, isRecord ? Status.INTERNAL_SERVER_ERROR : Status.BAD_REQUEST, detail);
     }
 
     @Override
