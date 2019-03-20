@@ -59,6 +59,11 @@ public class APAccountController {
     @Autowired
     private RedisTemplate<String, Serializable> redisTemplate;
 
+    /**
+     * 登录模块
+     * @param request
+     * @return
+     */
     @PostMapping("/login")
     public ResponseMessage<APLoginResponse> login(@Validated @RequestBody APLoginRequest request) {
         ResponseMessage<APLoginResponse> response = new ResponseMessage<>();

@@ -3,12 +3,15 @@ package com.gndc.core.mapper.simple;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.mybatis.MyMapper;
 import com.gndc.core.api.finance.APFinanceExpenseTableRow;
-import com.gndc.core.api.partner.APDataAnalysisTableRow;
+import com.gndc.core.api.partner.dataAnalysis.APDataAnalysisListResponse;
+import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Request;
+import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Response;
 import com.gndc.core.api.statistics.AOPartnerCostStatisticResponse;
 import com.gndc.core.model.EventFee;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 public interface EventFeeMapper extends MyMapper<EventFee, Long> {
@@ -34,26 +37,24 @@ public interface EventFeeMapper extends MyMapper<EventFee, Long> {
                          @Param("year") int year,
                          @Param("month") int month);
 
-    long countByPeriod(@Param("partnerId") int partnerId,
-                       @Param("productId") Integer productId,
+    long countByPeriod(@Param("productId") Integer productId,
                        @Param("feeType") Byte feeType,
                        @Param("coopeMode") Byte coopeMode,
                        @Param("eventType") Byte eventType,
                        @Param("feeStatus") Byte feeStatus,
                        @Param("status") Byte status,
-                       @Param("startDate") String startDate,
-                       @Param("endDate") String endDate);
+                       @Param("startDate") Date startDate,
+                       @Param("endDate") Date endDate);
 
-    List<APDataAnalysisTableRow> apDataAnalysis(@Param("partnerId") int partnerId,
-                                                @Param("productId") Integer productId,
-                                                @Param("feeType") Byte feeType,
-                                                @Param("coopeMode") Byte coopeMode,
-                                                @Param("eventType") Byte eventType,
-                                                @Param("feeStatus") Byte feeStatus,
-                                                @Param("status") Byte status,
-                                                @Param("startDate") String startDate,
-                                                @Param("endDate") String endDate,
-                                                @Param("page") PageInfo page);
+    List<APDataAnalysisListResponse> apDataAnalysis(@Param("partnerId") Integer partnerId,
+                                                    @Param("productId") Integer productId,
+                                                    @Param("feeType") Byte feeType,
+                                                    @Param("coopeMode") Byte coopeMode,
+                                                    @Param("eventType") Byte eventType,
+                                                    @Param("feeStatus") Byte feeStatus,
+                                                    @Param("status") Byte status,
+                                                    @Param("startDate") String startDate,
+                                                    @Param("endDate") String endDate);
 
     long apDataAnalysisCount(@Param("partnerId") int partnerId,
                              @Param("productId") Integer productId,
@@ -90,4 +91,6 @@ public interface EventFeeMapper extends MyMapper<EventFee, Long> {
                                                            @Param("page") PageInfo page);
 
     long selectPartnerCostCount(@Param("partnerId") Integer partnerId);
+
+    List<APFinanceSettlement4H5Response> settlementList4H5(@Param("option") APFinanceSettlement4H5Request request);
 }

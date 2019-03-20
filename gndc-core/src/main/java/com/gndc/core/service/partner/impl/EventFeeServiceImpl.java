@@ -7,17 +7,17 @@ import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.DelEnum;
 import com.gndc.common.enums.partner.EventFeeStatusEnum;
 import com.gndc.common.enums.partner.EventFeeTypeEnum;
-import com.gndc.common.enums.product.ProductCoopeModeEnum;
-import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
-import com.gndc.common.utils.DateUtil;
 import com.gndc.common.utils.JsonUtil;
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.api.finance.APFinanceExpenseTableRequest;
 import com.gndc.core.api.finance.APFinanceExpenseTableResponse;
 import com.gndc.core.api.finance.APFinanceExpenseTableRow;
 import com.gndc.core.api.partner.*;
+import com.gndc.core.api.partner.dataAnalysis.APDataAnalysisListResponse;
+import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Request;
+import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Response;
 import com.gndc.core.api.statistics.AOPartnerCostStatisticRequest;
 import com.gndc.core.api.statistics.AOPartnerCostStatisticResponse;
 import com.gndc.core.mapper.simple.EventFeeMapper;
@@ -41,6 +41,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -160,144 +161,9 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
     }
 
     @Override
-    @PostMapping("/statisticUV")
-    public ResponseMessage<JSONArray> statisticUV(String requestStr) {
-        StatisticUVRequest request = JsonUtil.getObject(requestStr, StatisticUVRequest.class);
-        ResponseMessage<JSONArray> response = new ResponseMessage<>();
-        try {
-
-
-            LocalDateTime now = LocalDateTime.now();
-            int minute = now.getMinute();
-
-            int startMinute = minute >= 30 ? 30 : 0;
-
-            int endMinute = minute >= 30 ? 59 : 29;
-
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DateUtil.FORMAT_2);
-
-            LocalDateTime currentStartDateTime = LocalDateTime.of(now.getYear(), now.getMonthValue(),
-                    now.getDayOfMonth(), now.getHour(), startMinute, 0);
-            LocalDateTime currentEndDateTime = LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(),
-                    now.getHour(), endMinute, 59);
-            LocalDateTime yesterStartDateTime = currentStartDateTime.minus(1, ChronoUnit.DAYS);
-            LocalDateTime yesterEndDateTime = currentEndDateTime.minus(1, ChronoUnit.DAYS);
-
-            Integer partnerId = request.getAdmin().getPartnerId();
-
-            List<Integer> productIds = eventFeeMapper.selectProductIds(partnerId, EventFeeTypeEnum.H5.getCode(),
-                    ProductCoopeModeEnum.CPA.getCode(), UserEventsTypeEnum.PRODUCT_CLICK.getCode(),
-                    EventFeeStatusEnum.COMPLETE.getCode(), DelEnum.NORMAL.getCode());
-
-            JSONArray data = new JSONArray();
-            for (int i = 0; i < productIds.size(); i++) {
-
-                //当前时段UV数（半小时）
-                Integer productId = productIds.get(i);
-                long currentPeriodCount = eventFeeMapper.countByPeriod(partnerId, productId,
-                        EventFeeTypeEnum.H5.getCode(),
-                        ProductCoopeModeEnum.CPA.getCode(), UserEventsTypeEnum.PRODUCT_CLICK.getCode(),
-                        EventFeeStatusEnum.COMPLETE.getCode(), DelEnum.NORMAL.getCode(),
-                        currentStartDateTime.format(dtf)
-                        , currentEndDateTime.format(dtf));
-
-                //昨天同时段UV数（半小时）
-                long yesterSamePeriodCount = eventFeeMapper.countByPeriod(partnerId, productId,
-                        EventFeeTypeEnum.H5.getCode(),
-                        ProductCoopeModeEnum.CPA.getCode(), UserEventsTypeEnum.PRODUCT_CLICK.getCode(),
-                        EventFeeStatusEnum.COMPLETE.getCode(), DelEnum.NORMAL.getCode(),
-                        yesterStartDateTime.format(dtf)
-                        , yesterEndDateTime.format(dtf));
-
-
-                long diff = currentPeriodCount - yesterSamePeriodCount;
-
-                StringBuffer tendency;
-                if (diff >= 0) {
-                    String rate = "0.00";
-                    if (yesterSamePeriodCount != 0) {
-                        rate = String.format("%.2f", diff / (1.0 * yesterSamePeriodCount));
-                    }
-                    tendency = new StringBuffer("+").append(rate).append("%");
-                } else {
-                    String rate = "0.00";
-                    if (yesterSamePeriodCount != 0) {
-                        rate = String.format("%.2f", diff / (1.0 * yesterSamePeriodCount));
-                    }
-                    tendency = new StringBuffer(rate).append("%");
-                }
-
-                Product product = productMapper.selectByPrimaryKey(productId);
-
-                JSONObject item = new JSONObject();
-                item
-                        .fluentPut("name", product.getName())
-                        .fluentPut("item", "UV量")
-                        .fluentPut("currentPeriodCount", currentPeriodCount)
-                        .fluentPut("yesterSamePeriodCount", yesterSamePeriodCount)
-                        .fluentPut("tendency", tendency);
-
-                data.add(item);
-            }
-
-            response.setData(data);
-            return response;
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            response.createError(ResultCode.ERROR);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return response;
-        }
-    }
-
-    @Override
-    @PostMapping("/apDataAnalysis")
-    public ResponseMessage<APDataAnalysisTableResponse> apDataAnalysis(String requestStr) {
-        APDataAnalysisRequest request = JsonUtil.getObject(requestStr, APDataAnalysisRequest.class);
-        ResponseMessage<APDataAnalysisTableResponse> response = new ResponseMessage<>();
-        try {
-            PageInfo page = request.getHeader().getPage();
-
-            Integer partnerId = request.getAdmin().getPartnerId();
-
-            APDataAnalysisTableResponse apDataAnalysisTableResponse = new APDataAnalysisTableResponse();
-
-            Integer productId = request.getId();
-            Product product = productMapper.selectByPrimaryKey(productId);
-
-            apDataAnalysisTableResponse.setProductName(product.getName());
-
-            Weekend<EventFee> weekend = Weekend.of(EventFee.class);
-            weekend.weekendCriteria()
-                    .andEqualTo(EventFee::getPartnerId, partnerId)
-                    .andEqualTo(EventFee::getProductId, productId)
-                    .andEqualTo(EventFee::getFeeType, EventFeeTypeEnum.H5.getCode())
-                    .andEqualTo(EventFee::getCoopeMode, ProductCoopeModeEnum.CPC.getCode())
-                    .andEqualTo(EventFee::getEventType, UserEventsTypeEnum.PRODUCT_CLICK.getCode())
-                    .andEqualTo(EventFee::getFeeStatus, EventFeeStatusEnum.COMPLETE.getCode())
-                    .andEqualTo(EventFee::getStatus, DelEnum.NORMAL.getCode())
-                    .andGreaterThanOrEqualTo(EventFee::getCreateTime, request.getStartDate())
-                    .andLessThanOrEqualTo(EventFee::getCreateTime, request.getEndDate());
-            //一个产品的统计项
-            List<APDataAnalysisTableRow> rows = eventFeeMapper.apDataAnalysis(partnerId, productId,
-                    EventFeeTypeEnum.H5.getCode(),
-                    ProductCoopeModeEnum.CPC.getCode(), UserEventsTypeEnum.PRODUCT_CLICK.getCode(),
-                    EventFeeStatusEnum.COMPLETE.getCode(), DelEnum.NORMAL.getCode(),
-                    request.getStartDate(), request.getEndDate(), page);
-
-            PageInfo<APDataAnalysisTableRow> pageInfo = new PageInfo<>(rows);
-
-            apDataAnalysisTableResponse.setRows(rows);
-            response.setPage(pageInfo);
-            response.setData(apDataAnalysisTableResponse);
-
-            return response;
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            response.createError(ResultCode.ERROR);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return response;
-        }
+    public List<APDataAnalysisListResponse> dataAnalysis(Integer partnerId, Integer productId, Byte feeType, Byte coopeMode, Byte eventType, Byte feeStatus,
+                                                                    Byte status, String startDate, String endDate) {
+        return eventFeeMapper.apDataAnalysis(partnerId, productId, feeType, coopeMode, eventType, feeStatus, status, startDate, endDate);
     }
 
     @Override
@@ -374,6 +240,16 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
         while (!pool.isTerminated()) {
             pool.awaitTermination(5, TimeUnit.SECONDS);
         }
+    }
+
+    @Override
+    public List<APFinanceSettlement4H5Response> settlementList4H5(APFinanceSettlement4H5Request request) {
+        return eventFeeMapper.settlementList4H5(request);
+    }
+
+    @Override
+    public long countByPeriod(Integer productId, Byte feeType, Byte coopeMode, Byte eventType, Byte feeStatus, Byte status, Date startDate, Date endDate) {
+        return eventFeeMapper.countByPeriod(productId, feeType, coopeMode, eventType, feeStatus, status, startDate, endDate);
     }
 
     class CompleteThread extends Thread {
