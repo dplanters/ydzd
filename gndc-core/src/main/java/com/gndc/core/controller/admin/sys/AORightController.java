@@ -74,15 +74,15 @@ public class AORightController {
         int rightIdCount = roleRightService.selectCountByProperty("rightId", id);
 
         if (rightIdCount > 0) {
-            String msg = StrUtil.format("权限编号 {} 在使用，请先取消相关角色授权后再进行删除！");
+            String msg = StrUtil.format("权限编号 {} 在使用，请先取消相关角色授权后再进行删除！", id);
             logger.warn(msg);
             throw new HjException(ResultCode.RIGHT_IS_USING, msg);
         }
 
-        int superIdCount = rightService.selectCountByProperty("superId", request.getId());
+        int superIdCount = rightService.selectCountByProperty("superId", id);
 
         if (superIdCount> 0) {
-            String msg = StrUtil.format("权限编号 {} 存在子权限，请先删除子权限后后再进行删除！");
+            String msg = StrUtil.format("权限编号 {} 存在子权限，请先删除子权限后后再进行删除！", id);
             logger.warn(msg);
             throw new HjException(ResultCode.RIGHT_IS_USING, msg);
         }

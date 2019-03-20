@@ -13,17 +13,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Getter
 @Setter
-public class AORoleListRequest extends RequestMessage {
+public class AORoleNameListRequest extends RequestMessage {
     /**
      * 平台
      */
+    @NotNull
     @Min(1)
     private Byte platform;
 }

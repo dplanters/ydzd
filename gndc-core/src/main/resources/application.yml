@@ -6,7 +6,7 @@ mapper:
   identity: MYSQL
   mappers:
     - com.gndc.common.mybatis.MyMapper
-  not-empty: false
+  not-empty: true
   safe-delete: true
   safe-update: true
   seq-format: true

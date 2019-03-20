@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tk.mybatis.mapper.weekend.Weekend;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,10 @@ public class AORoleController {
     @PostMapping("/deleteRole")
     public ResponseMessage<Boolean> deleteRole(@Validated @RequestBody AORoleDeleteRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
+        Weekend<Role> weekend = Weekend.of(Role.class);
+        weekend.weekendCriteria()
+                .andEqualTo("roleId", request.getId());
+        roleRightService.deleteByExample(weekend);
         roleService.deleteByPrimaryKey(request.getId());
         response.setData(true);
         return response;
@@ -126,11 +131,24 @@ public class AORoleController {
 
         PageInfo page = request.getHeader().getPage();
         PageHelper.startPage(page.getPageNum(), page.getPageSize());
-        List<Role> roles = roleService.selectAll();
+        List<Role> roles = roleService.selectByProperty("platform", request.getPlatform());
 
         PageInfo<Role> pageInfo = new PageInfo<>(roles);
         pageInfo.setList(null);
         response.setPage(pageInfo);
+        response.setData(roles);
+        return response;
+    }
+
+    @PostMapping("/roleNameList")
+    public ResponseMessage<List<Role>> roleList(@Validated @RequestBody AORoleNameListRequest request) {
+        ResponseMessage<List<Role>> response = new ResponseMessage<>();
+        Weekend<Role> weekend = Weekend.of(Role.class);
+        weekend.selectProperties("id", "roleName");
+        weekend.weekendCriteria()
+                .andEqualTo(Role::getPlatform, request.getPlatform());
+        List<Role> roles = roleService.selectByExample(weekend);
+
         response.setData(roles);
         return response;
     }

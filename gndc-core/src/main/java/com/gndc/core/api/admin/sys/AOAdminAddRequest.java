@@ -48,7 +48,7 @@ public class AOAdminAddRequest extends RequestMessage {
 
     @NotNull
     @Min(1)
-    private Integer level;
+    private Byte platform;
 
     private Integer partnerId;
 

@@ -3,6 +3,7 @@ package com.gndc.common.filter;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.PropertyPreFilter;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.http.BodyCacheHttpServletRequestWrapper;
@@ -84,7 +85,23 @@ public class LoginCheckFilter extends OncePerRequestFilter {
                 redisTemplate.opsForValue().set(sessionId, admin, expire, TimeUnit.SECONDS);
             }
         }
+        String contentType = customBodyResponseWrapper.getContentType();
+        if (contentType != null && contentType.contains("problem")) {
+            responseJson = JSONObject.parseObject(responseContent);
+            JSONObject parameter = responseJson.getJSONObject("parameters");
+            if (ObjectUtil.isNotNull(parameter)) {
+                responseJson.fluentRemove("parameters")
+                    .fluentPutAll(parameter.getInnerMap());
+            }
 
+            responseContent = JSONObject.toJSONString(responseJson, (PropertyPreFilter) (serializer, object, name) -> {
+                boolean apply = true;
+                if ("stackTrace".equals(name) || "suppressed".equals(name)) {
+                    apply = false;
+                }
+                return apply;
+            });
+        }
         if (!customBodyResponseWrapper.isCommitted()) {
             customBodyResponseWrapper.reset();
         }

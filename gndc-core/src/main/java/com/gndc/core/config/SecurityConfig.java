@@ -25,8 +25,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers("/**").permitAll();
 
-        http.addFilterBefore(new OpenSourceFilter(), WebAsyncManagerIntegrationFilter.class);
-        http.addFilterAfter(new LoginCheckFilter(), OpenSourceFilter.class);
+//        http.addFilterBefore(new OpenSourceFilter(), WebAsyncManagerIntegrationFilter.class);
+//        http.addFilterAfter(new LoginCheckFilter(), WebAsyncManagerIntegrationFilter.class);
 
         http.exceptionHandling()
                 .authenticationEntryPoint(problemSupport)

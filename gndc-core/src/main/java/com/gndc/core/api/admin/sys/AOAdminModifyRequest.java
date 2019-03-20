@@ -45,12 +45,12 @@ public class AOAdminModifyRequest extends RequestMessage {
     private String loginName;
 
     @NotNull
-    @NotBlank
-    private String password;
+    @Min(1)
+    private Byte platform;
 
     @NotNull
-    @Min(1)
-    private Integer level;
+    @NotBlank
+    private String password;
 
     private Integer partnerId;
 

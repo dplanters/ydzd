@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.admin.AdminLevelEnum;
+import com.gndc.common.enums.right.RightPlatformEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.PasswordUtil;
 import com.gndc.common.utils.PwdUtil;
@@ -69,7 +70,8 @@ public class AOAdminController {
         admin.setPasswordSign(passwordSign);
         admin.setOperateSign(operateSign);
         admin.setPassword(md5Password);
-        if (AdminLevelEnum.PARTNER_ADMIN.getCode() == request.getLevel()) {
+        if (RightPlatformEnum.PARTNER.getCode().equals(request.getPlatform())) {
+            //商户后台
             Partner partner = new Partner();
             partner.setName(request.getPartnerName());
 
@@ -105,7 +107,7 @@ public class AOAdminController {
         admin.setPasswordSign(passwordSign);
         admin.setOperateSign(operateSign);
         admin.setPassword(md5Password);
-        if (AdminLevelEnum.PARTNER_ADMIN.getCode() == request.getLevel()) {
+        if (RightPlatformEnum.PARTNER.getCode().equals(request.getPlatform())) {
             Partner partner = new Partner();
             partner.setName(request.getPartnerName());
 

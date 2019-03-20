@@ -51,7 +51,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer> implements R
             logger.warn(msg);
             throw new HjException(ResultCode.ROLENAME_EXISTS, msg);
         }
-
+        role.setPlatform(request.getPlatform());
         role.setRoleName(roleName);
         role.setCreateAdminId(1);
         role.setUpdateAdminId(1);

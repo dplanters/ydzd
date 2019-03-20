@@ -11,17 +11,17 @@ public enum RightPlatformEnum {
     /**
      * 运营
      */
-    OPERATOR((byte) 1, "运营"),
+    OPERATOR((byte) 2, "运营"),
 
     /**
      * 商户
      */
-    PARTNER((byte) 2, "商户"),
+    PARTNER((byte) 3, "商户"),
 
     /**
      * App
      */
-    APP((byte) 3, "APP");
+    APP((byte) 4, "APP");
 
     private Byte code;
     private String name;

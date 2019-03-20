@@ -6,6 +6,7 @@ import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
+import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.Set;
 
@@ -36,7 +37,14 @@ public class CustomSelectProvider extends MapperTemplate {
         //获取全部列
         Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
         for (EntityColumn column : columnSet) {
-            sql.append("<if test=\"property == '" + column.getProperty() + "'\">\n");
+            sql.append("<if test=\"");
+            sql.append("value != null");
+            if (isNotEmpty() && column.getJavaType().equals(String.class)) {
+                sql.append(" and ");
+                sql.append(" value != '' ");
+            }
+            sql.append(" and '").append(column.getProperty());
+            sql.append("'\">\n");
             sql.append(column.getColumn() + " = #{value,javaType=" + column.getJavaType().getSimpleName() + "}\n");
             sql.append("</if>\n");
         }
@@ -63,7 +71,14 @@ public class CustomSelectProvider extends MapperTemplate {
         //获取全部列
         Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
         for (EntityColumn column : columnSet) {
-            sql.append("<if test=\"property == '" + column.getProperty() + "'\">\n");
+            sql.append("<if test=\"");
+            sql.append("value != null");
+            if (isNotEmpty() && column.getJavaType().equals(String.class)) {
+                sql.append(" and ");
+                sql.append(" value != '' ");
+            }
+            sql.append(" and 'property == ").append(column.getProperty());
+            sql.append("'\">\n");
             sql.append(column.getColumn() + " = #{value,javaType=" + column.getJavaType().getSimpleName() + "}\n");
             sql.append("</if>\n");
         }
@@ -89,7 +104,14 @@ public class CustomSelectProvider extends MapperTemplate {
         //获取全部列
         Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
         for (EntityColumn column : columnSet) {
-            sql.append("<if test=\"property == '" + column.getProperty() + "'\">\n");
+            sql.append("<if test=\"");
+            sql.append("value != null");
+            if (isNotEmpty() && column.getJavaType().equals(String.class)) {
+                sql.append(" and ");
+                sql.append(" value != '' ");
+            }
+            sql.append(" and '").append(column.getProperty());
+            sql.append("'\">\n");
             sql.append(column.getColumn() + " = #{value,javaType=" + column.getJavaType().getSimpleName() + "}\n");
             sql.append("</if>\n");
         }
@@ -115,7 +137,14 @@ public class CustomSelectProvider extends MapperTemplate {
         //获取全部列
         Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
         for (EntityColumn column : columnSet) {
-            sql.append("<if test=\"property == '" + column.getProperty() + "'\">\n");
+            sql.append("<if test=\"");
+            sql.append("value != null");
+            if (isNotEmpty() && column.getJavaType().equals(String.class)) {
+                sql.append(" and ");
+                sql.append(" value != '' ");
+            }
+            sql.append(" and '").append(column.getProperty());
+            sql.append("'\">\n");
             sql.append(column.getColumn() + " = #{value,javaType=" + column.getJavaType().getSimpleName() + "}\n");
             sql.append("</if>\n");
         }

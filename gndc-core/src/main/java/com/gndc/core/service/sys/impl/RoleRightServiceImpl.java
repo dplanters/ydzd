@@ -1,5 +1,6 @@
 package com.gndc.core.service.sys.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.mapper.simple.RoleMapper;
 import com.gndc.core.mapper.simple.RoleRightMapper;
@@ -24,12 +25,13 @@ public class RoleRightServiceImpl extends BaseServiceImpl<RoleRight, Integer> im
 
     @Override
     public List<Integer> getRightIds(Integer roleId) {
-        List<RoleRight> roleRights = roleRightMapper.selectByProperty("roleId", roleId);
-        List<Integer> rightIds = new ArrayList<>(roleRights.size());
-        roleRights.forEach(r -> {
-            rightIds.add(r.getRightId());
-        });
-
+        List<Integer> rightIds = new ArrayList<>();
+        if (ObjectUtil.isNotNull(roleId)) {
+            List<RoleRight> roleRights = roleRightMapper.selectByProperty("roleId", roleId);
+            roleRights.forEach(r -> {
+                rightIds.add(r.getRightId());
+            });
+        }
         return rightIds;
     }
 }

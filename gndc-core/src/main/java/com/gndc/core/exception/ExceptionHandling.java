@@ -43,7 +43,8 @@ public class ExceptionHandling implements ProblemHandling {
             builder.with("violations", ((ConstraintViolationProblem) problem).getViolations());
         } else if (problem instanceof DefaultProblem){
             builder.withCause(((DefaultProblem) problem).getCause())
-                    .withInstance(problem.getInstance());
+                    .withInstance(problem.getInstance())
+                    .with("msg", problem.getDetail());
         } else if (problem instanceof ProblemMarker) {
             builder.with("code", ((ProblemMarker) problem).getCode())
                     .with("msg", ((ProblemMarker) problem).getMsg());
