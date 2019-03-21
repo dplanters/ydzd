@@ -31,6 +31,11 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
             return true;
         }
         Object requireAuth = RequestContextHolder.getRequestAttributes().getAttribute("requireAuth", RequestAttributes.SCOPE_REQUEST);
+        Object noHandler = RequestContextHolder.getRequestAttributes().getAttribute("noHandler",
+                RequestAttributes.SCOPE_REQUEST);
+        if (noHandler.equals(true)) {
+            throw new HjException(ResultCode.ERROR, "404");
+        }
         if (requireAuth.equals(false)) {
             return true;
         }

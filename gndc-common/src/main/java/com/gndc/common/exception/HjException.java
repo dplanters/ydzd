@@ -15,30 +15,31 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class HjException extends RuntimeException implements ProblemMarker {
+public class HjException extends RuntimeException {
 
     private ResultCode result;
 
-    private String template;
+    private Integer code;
+
+    private String msg;
 
     public HjException(ResultCode result) {
         super(result.getI18NContent());
         this.result = result;
     }
 
-    public HjException(ResultCode result, String template) {
+    public HjException(ResultCode result, String msg) {
+        super(result.getI18NContent());
         this.result = result;
-        this.template = template;
+        this.msg = msg;
     }
 
-    @Override
     public Integer getCode() {
         return result.getCode();
     }
 
-    @Override
     public String getMsg() {
-        return null == template ? result.getI18NContent() : template;
+        return null == msg ? result.getI18NContent() : msg;
     }
 
 }

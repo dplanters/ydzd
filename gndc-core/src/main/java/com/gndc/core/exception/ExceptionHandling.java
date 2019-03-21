@@ -1,17 +1,18 @@
 package com.gndc.core.exception;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.exception.ProblemMarker;
+import com.gndc.common.exception.HjException;
 import com.gndc.core.api.common.ResponseMessage;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 @ControllerAdvice
 public class ExceptionHandling {
@@ -22,21 +23,20 @@ public class ExceptionHandling {
         //处理异常
         ResponseMessage<Object> response = new ResponseMessage<>();
         response.setSuccess(false);
-        Integer code = ResultCode.ERROR.getCode();
-        String msg = ResultCode.ERROR.getI18NContent();
-        if (e instanceof ConstraintViolationException) {
-            Set<ConstraintViolation<?>> constraintViolations = ((ConstraintViolationException) e).getConstraintViolations();
-            Iterator<ConstraintViolation<?>> it = constraintViolations.iterator();
-            JSONObject jsonObject = new JSONObject();
-            while (it.hasNext()) {
-                ConstraintViolation<?> next = it.next();
-                jsonObject.fluentPut(next.getPropertyPath().toString(), next.getMessage());
+        Integer code = ResultCode.SYSTEM_BUSY.getCode();
+        String msg = ResultCode.SYSTEM_BUSY.getI18NContent();
+        if (e instanceof MethodArgumentNotValidException) {
+            List<ObjectError> allErrors = ((MethodArgumentNotValidException) e).getBindingResult().getAllErrors();
+            JSONArray jsonArray = new JSONArray();
+            for (ObjectError error : allErrors) {
+                String field = ((FieldError) error).getField();
+                String defaultMessage = error.getDefaultMessage();
+                jsonArray.fluentAdd(new JSONObject().fluentPut(field, defaultMessage));
             }
-            msg = jsonObject.toJSONString();
         }
-        if (e instanceof ProblemMarker) {
-            code = ((ProblemMarker) e).getCode();
-            msg = ((ProblemMarker) e).getMsg();
+        if (e instanceof HjException) {
+            code = ((HjException) e).getCode();
+            msg = ((HjException) e).getMsg();
         }
         response.setCode(code);
         response.setMsg(msg);

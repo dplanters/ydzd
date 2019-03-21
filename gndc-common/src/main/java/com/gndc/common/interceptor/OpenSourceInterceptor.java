@@ -29,6 +29,7 @@ public class OpenSourceInterceptor extends WebContentInterceptor {
                 (RedisTemplate<String, Serializable>) BeanFactoryUtil.getBean(
                         "redisTemplate");
         boolean requireAuth = true;
+        boolean noHandler = true;
         HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
         Map<Object, Object> entries = hashOperations.entries(CacheConstant.KEY_ALL_RIGHT);
         for (Map.Entry<Object, Object> entry : entries.entrySet()) {
@@ -38,10 +39,13 @@ public class OpenSourceInterceptor extends WebContentInterceptor {
             //对当前请求路径和权限表进行匹配
             if (rightUrl.equals(servletPath) && new Byte((byte)0).equals(jsonObject.getByte("requireAuth"))) {
                 requireAuth = false;
+                noHandler = false;
             }
         }
         //对不需要授权的请求添加requireAuth标志
         RequestContextHolder.getRequestAttributes().setAttribute("requireAuth", requireAuth,
+                RequestAttributes.SCOPE_REQUEST);
+        RequestContextHolder.getRequestAttributes().setAttribute("noHandler", noHandler,
                 RequestAttributes.SCOPE_REQUEST);
         return true;
     }
