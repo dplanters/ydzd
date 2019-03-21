@@ -179,53 +179,6 @@
         </trim>
     </select>
 
-    <resultMap id="selectEventFeeListResultMap" type="com.gndc.core.api.finance.APFinanceExpenseTableRow">
-        <id column="id" jdbcType="BIGINT" property="id" />
-        <result column="event_id" jdbcType="INTEGER" property="eventId" />
-        <result column="fee" jdbcType="DECIMAL" property="fee" />
-        <result column="fee_status" jdbcType="TINYINT" property="feeStatus" />
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    </resultMap>
-
-    <select id="selectEventFeeList" resultMap="selectEventFeeListResultMap">
-        select
-        *
-        from dc_event_fee
-        where
-        <trim prefix="(" prefixOverrides="and" suffix=")">
-            <if test="partnerId != null and partnerId != ''">
-                and partner_id = #{partnerId,jdbcType=INTEGER}
-            </if>
-            <if test="productId != null and productId != ''">
-                and product_id = #{productId,jdbcType=INTEGER}
-            </if>
-            <if test="feeType != null and feeType != ''">
-                and fee_type = #{feeType,jdbcType=TINYINT}
-            </if>
-            <if test="coopeMode != null and coopeMode != ''">
-                and coope_mode = #{coopeMode,jdbcType=TINYINT}
-            </if>
-            <if test="eventType != null and eventType != ''">
-                and event_type = #{eventType,jdbcType=TINYINT}
-            </if>
-            <if test="feeStatus != null and feeStatus != ''">
-                and fee_status = #{feeStatus,jdbcType=TINYINT}
-            </if>
-            <if test="status != null and status != ''">
-                and status = #{status,jdbcType=TINYINT}
-            </if>
-            <if test="startDate != null and startDate != ''">
-                and date(create_time) &gt;= str_to_date(#{startDate}, '%Y-%m-%d %H:%i:%s')
-            </if>
-            <if test="endDate != null and endDate != ''">
-                and date(create_time) &lt;= str_to_date(#{endDate},'%Y-%m-%d %H:%i:%s')
-            </if>
-        </trim>
-        order by create_time desc
-        LIMIT
-        #{page.startRowNum, jdbcType=INTEGER}, #{page.size, jdbcType=INTEGER}
-    </select>
-
     <select id="selectEventFeeListCount" resultType="java.lang.Long">
         select
         count(*)

@@ -2,7 +2,6 @@ package com.gndc.core.mapper.simple;
 
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.mybatis.MyMapper;
-import com.gndc.core.api.finance.APFinanceExpenseTableRow;
 import com.gndc.core.api.partner.dataAnalysis.APDataAnalysisListResponse;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Request;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Response;
@@ -65,17 +64,6 @@ public interface EventFeeMapper extends MyMapper<EventFee, Long> {
                              @Param("status") Byte status,
                              @Param("startDate") String startDate,
                              @Param("endDate") String endDate);
-
-    List<APFinanceExpenseTableRow> selectEventFeeList(@Param("partnerId") Integer partnerId,
-                                                      @Param("productId") Integer productId,
-                                                      @Param("feeType") Byte feeType,
-                                                      @Param("coopeMode") Byte coopeMode,
-                                                      @Param("eventType") Byte eventType,
-                                                      @Param("feeStatus") Byte feeStatus,
-                                                      @Param("status") Byte status,
-                                                      @Param("startDate") String startDate,
-                                                      @Param("endDate") String endDate,
-                                                      @Param("page") PageInfo page);
 
     long selectEventFeeListCount(@Param("partnerId") Integer partnerId,
                                  @Param("productId") Integer productId,
