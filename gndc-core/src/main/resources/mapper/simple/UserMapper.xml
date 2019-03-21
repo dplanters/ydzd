@@ -8,4 +8,27 @@
             password_sign = #{passwordSign}
             where id = #{id}
     </update>
+
+    <select id="selectUserEventsDetail" resultType="com.gndc.core.api.admin.user.AOUserDetailResponse">
+        select due.create_time eventTime,due.event_type eventType,dp.name
+        from dc_user_events due
+        left join dc_product dp on due.product_id = dp.id
+        where event_type in (1,2,8)
+        <if test="query.eventDateBegin != null and query.eventDateBegin != ''
+                    and query.eventDateEnd != null and query.eventDateEnd != ''">
+            and create_time <![CDATA[>=]]> #{query.eventDateBegin}
+            and create_time <![CDATA[<=]]> #{query.eventDateEnd}
+        </if>
+        <if test="query.eventDateBegin != null and query.eventDateBegin != ''
+                    and (query.eventDateEnd == null or query.eventDateEnd == '')">
+            and create_time <![CDATA[>=]]> #{query.eventDateBegin}
+        </if>
+        <if test="(query.eventDateBegin == null or query.eventDateBegin == '')
+                    and query.eventDateEnd != null and query.eventDateEnd != ''">
+            and create_time <![CDATA[<=]]> #{query.eventDateEnd}
+        </if>
+        <if test="query.userId != null and query.userId != ''">
+            and due.user_id = #{query.userId}
+        </if>
+    </select>
 </mapper>

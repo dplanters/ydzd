@@ -17,18 +17,16 @@ public class APFinanceExpenseTableRequest extends RequestMessage {
      */
     private Integer id;
 
-    @NotNull
+    @NotNull(message ="参数不为空")
     private Integer productId;
 
     /**
      * 开始时间
      */
-    @NotNull
     private String startDate;
 
     /**
      * 结束时间
      */
-    @NotNull
     private String endDate;
 }
