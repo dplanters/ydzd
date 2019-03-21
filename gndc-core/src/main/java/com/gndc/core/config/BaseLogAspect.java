@@ -22,7 +22,7 @@ public class BaseLogAspect {
 	private JSONObject jsonObject = new JSONObject();
 
 	// 申明一个切点 里面是 execution表达式
-	@Pointcut("execution(public * com.gndc.core.controller.admin.*.*.*(..))")
+	@Pointcut("execution(public * com.gndc.core.controller.*.*.*.*(..))")
 	private void controllerAspect() {
 	}
 
