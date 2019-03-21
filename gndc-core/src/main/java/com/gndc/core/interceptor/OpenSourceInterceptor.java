@@ -1,4 +1,4 @@
-package com.gndc.common.interceptor;
+package com.gndc.core.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.constant.CacheConstant;

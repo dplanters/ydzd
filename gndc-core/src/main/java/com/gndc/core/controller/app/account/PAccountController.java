@@ -5,8 +5,6 @@ import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.UserDeviceEnum;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.common.enums.user.UserStatusEnum;
-import com.gndc.common.exception.HjException;
-import com.gndc.common.model.BaseEntity;
 import com.gndc.common.utils.*;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
 import com.gndc.core.api.app.platform.SmsInfo;
@@ -22,19 +20,15 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tk.mybatis.mapper.weekend.Weekend;
 
+import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -59,7 +53,10 @@ public class PAccountController {
     private SmsLogService smsLogService;
 
     @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate<String, String> stringRedisTemplate;
+
+    @Autowired
+    private RedisTemplate<String, Serializable> redisTemplate;
 
     /**
      * 密码登录
@@ -174,8 +171,8 @@ public class PAccountController {
 
         String key = P_SMS_USER_LOGIN + phone;
 
-        String sms10MinuteCountStr = redisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_10_PREFIX + key);
-        String smsInfoStr = redisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_15M_PREFIX + key);
+        String sms10MinuteCountStr = stringRedisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_10_PREFIX + key);
+        String smsInfoStr = stringRedisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_15M_PREFIX + key);
 
         Sms10MinuteCount sms10MinuteCount = JsonUtil.getObject(sms10MinuteCountStr, Sms10MinuteCount.class);
         SmsInfo smsInfo = JsonUtil.getObject(smsInfoStr, SmsInfo.class);
@@ -245,8 +242,8 @@ public class PAccountController {
         String sessionId = Utils.getSessionId();
         User userInfo = new User();
         userInfo.setId(userId);
-        String JsonTextUserInfo = JsonUtil.toJSONString(userInfo);
-        redisTemplate.opsForValue().set(CacheConstant.KEY_USER_LOGIN_PREFIX + sessionId, JsonTextUserInfo, CacheConstant.EXPIRE_USER_LOGIN, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(CacheConstant.KEY_USER_LOGIN_PREFIX + sessionId, userInfo,
+                CacheConstant.EXPIRE_USER_LOGIN, TimeUnit.SECONDS);
 
         // 打开app统计
         userEventService.statisticsUserOpenApp(userId, ip);
@@ -263,7 +260,7 @@ public class PAccountController {
     public ResponseMessage<CommonResponse> editPassword(@Validated @RequestBody PUserEditPasswordRequest request) {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
         String sessionId = request.getHeader().getSessionId();
-        String userInfoStr = redisTemplate.opsForValue().get(CacheConstant.KEY_USER_LOGIN_PREFIX + sessionId);
+        String userInfoStr = stringRedisTemplate.opsForValue().get(CacheConstant.KEY_USER_LOGIN_PREFIX + sessionId);
         User user = JsonUtil.getObject(userInfoStr, User.class);
         if (user == null) {
             response.createError(ResultCode.SESSIONID_ISNULL);
@@ -350,8 +347,8 @@ public class PAccountController {
 
         String key = P_SMS_USER_FORGET_PWD + phone;
 
-        String sms10MinuteCountStr = redisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_10_PREFIX + key);
-        String smsInfoStr = redisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_15M_PREFIX + key);
+        String sms10MinuteCountStr = stringRedisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_10_PREFIX + key);
+        String smsInfoStr = stringRedisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_15M_PREFIX + key);
 
         Sms10MinuteCount sms10MinuteCount = JsonUtil.getObject(sms10MinuteCountStr, Sms10MinuteCount.class);
         SmsInfo smsInfo = JsonUtil.getObject(smsInfoStr, SmsInfo.class);

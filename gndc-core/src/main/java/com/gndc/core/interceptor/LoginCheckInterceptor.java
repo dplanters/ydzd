@@ -1,13 +1,11 @@
-package com.gndc.common.interceptor;
+package com.gndc.core.interceptor;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.BeanFactoryUtil;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -19,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -72,7 +69,9 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
                 } else {
                     logger.warn("无效的sessionId");
                 }
+                //session保活
                 redisTemplate.opsForValue().set(sessionId, admin, expire, TimeUnit.SECONDS);
+                RequestContextHolder.getRequestAttributes().setAttribute("sessionId", sessionId, RequestAttributes.SCOPE_REQUEST);
             }
         }
         return true;
