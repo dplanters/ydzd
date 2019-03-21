@@ -34,7 +34,9 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
         Object noHandler = RequestContextHolder.getRequestAttributes().getAttribute("noHandler",
                 RequestAttributes.SCOPE_REQUEST);
         if (noHandler.equals(true)) {
-            throw new HjException(ResultCode.ERROR, "404");
+            String msg = StrUtil.format("{} 不存在", request.getServletPath());
+            logger.warn(msg);
+            throw new HjException(ResultCode.ERROR, msg);
         }
         if (requireAuth.equals(false)) {
             return true;

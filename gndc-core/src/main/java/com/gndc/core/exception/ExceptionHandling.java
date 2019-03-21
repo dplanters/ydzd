@@ -8,16 +8,14 @@ import com.gndc.core.api.common.ResponseMessage;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class ExceptionHandling {
 
-    @ResponseBody
     @ExceptionHandler
     public ResponseMessage handler(Throwable e) {
         //处理异常

@@ -13,7 +13,8 @@ import tk.mybatis.spring.annotation.MapperScan;
 @MapperScan(basePackages = "com.gndc.core.mapper")
 @SpringBootApplication(scanBasePackages = {
         "com.gndc.core", "com.gndc.common.config", "com.gndc.common.utils",
-        "com.gndc.third", "com.gndc.common.interceptor"})
+        "com.gndc.third", "com.gndc.common.interceptor",
+        "com.gndc.common.advice"})
 public class CoreApplication {
 
 

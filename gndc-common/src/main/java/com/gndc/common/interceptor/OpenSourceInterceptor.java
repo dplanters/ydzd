@@ -36,10 +36,12 @@ public class OpenSourceInterceptor extends WebContentInterceptor {
             JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(entry.getValue()));
             String rightUrl = jsonObject.getString("rightUrl");
             String servletPath = request.getServletPath();
+            if (rightUrl.equals(servletPath)) {
+                noHandler = false;
+            }
             //对当前请求路径和权限表进行匹配
             if (rightUrl.equals(servletPath) && new Byte((byte)0).equals(jsonObject.getByte("requireAuth"))) {
                 requireAuth = false;
-                noHandler = false;
             }
         }
         //对不需要授权的请求添加requireAuth标志
