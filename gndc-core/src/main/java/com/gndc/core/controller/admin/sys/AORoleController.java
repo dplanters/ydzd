@@ -4,17 +4,20 @@ import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.right.RightPlatformEnum;
 import com.gndc.core.api.admin.sys.*;
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.model.Right;
 import com.gndc.core.model.Role;
+import com.gndc.core.model.RoleRight;
 import com.gndc.core.service.sys.RightService;
 import com.gndc.core.service.sys.RoleRightService;
 import com.gndc.core.service.sys.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +25,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.weekend.Weekend;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +45,9 @@ public class AORoleController {
 
     @Autowired
     private RoleRightService roleRightService;
+
+    @Autowired
+    private RedisTemplate<String, Serializable> redisTemplate;
 
     @PostMapping("/addRole")
     public ResponseMessage<Integer> addModifyRole(@Validated @RequestBody AORoleAddRequest request) {
@@ -59,11 +68,23 @@ public class AORoleController {
     @PostMapping("/deleteRole")
     public ResponseMessage<Boolean> deleteRole(@Validated @RequestBody AORoleDeleteRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
-        Weekend<Role> weekend = Weekend.of(Role.class);
+        Integer id = request.getId();
+        List<RoleRight> roleRights = roleRightService.selectByProperty("roleId", id);
+
+        List<String> roleRightIds = new ArrayList<>(roleRights.size());
+
+        roleRights.forEach(roleRight -> {
+            roleRightIds.add(String.valueOf(roleRight.getId()));
+        });
+
+        Weekend<RoleRight> weekend = Weekend.of(RoleRight.class);
         weekend.weekendCriteria()
-                .andEqualTo("roleId", request.getId());
+                .andEqualTo("roleId", id);
         roleRightService.deleteByExample(weekend);
-        roleService.deleteByPrimaryKey(request.getId());
+        redisTemplate.opsForHash().delete(CacheConstant.KEY_ALL_ROLE_RIGHT, roleRightIds);
+
+        roleService.deleteByPrimaryKey(id);
+        redisTemplate.opsForHash().delete(CacheConstant.KEY_ALL_ROLE, String.valueOf(id));
         response.setData(true);
         return response;
     }

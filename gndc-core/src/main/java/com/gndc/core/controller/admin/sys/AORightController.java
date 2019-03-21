@@ -1,6 +1,7 @@
 package com.gndc.core.controller.admin.sys;
 
 import cn.hutool.core.util.StrUtil;
+import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.exception.HjException;
 import com.gndc.core.api.admin.sys.*;
@@ -12,12 +13,14 @@ import com.gndc.core.service.sys.RoleRightService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.Serializable;
 import java.util.List;
 
 @RestController
@@ -32,11 +35,15 @@ public class AORightController {
     @Autowired
     private RoleRightService roleRightService;
 
+    @Autowired
+    private RedisTemplate<String, Serializable> redisTemplate;
+
     @PostMapping("/addRight")
     public ResponseMessage<Integer> addRight(@Validated @RequestBody AORightAddRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
         Right right = RightMapping.INSTANCE.convert(request);
         rightService.insertSelective(right);
+        redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, String.valueOf(right.getId()), right);
         response.setData(right.getId());
         return response;
     }
@@ -46,6 +53,7 @@ public class AORightController {
         ResponseMessage<Integer> response = new ResponseMessage<>();
         Right right = RightMapping.INSTANCE.convert(request);
         rightService.updateByPrimaryKeySelective(right);
+        redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, String.valueOf(right.getId()), right);
         response.setData(right.getId());
         return response;
     }
@@ -88,6 +96,7 @@ public class AORightController {
         }
 
         boolean success = rightService.deleteByPrimaryKey(id);
+        redisTemplate.opsForHash().delete(CacheConstant.KEY_ALL_RIGHT, String.valueOf(id));
         resposne.setData(success);
         return resposne;
     }
