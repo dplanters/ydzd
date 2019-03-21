@@ -1,4 +1,4 @@
-package com.gndc.core.config;
+package com.gndc.core.aspect;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +14,13 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
+/**
+ *
+ */
 @Aspect
-// 申明是个spring管理的bean
 @Component
 @Slf4j
-public class BaseLogAspect {
+public class InvokeRecordAspect {
 	private JSONObject jsonObject = new JSONObject();
 
 	// 申明一个切点 里面是 execution表达式
@@ -38,7 +40,7 @@ public class BaseLogAspect {
 			log.info("请求地址:" + request.getRequestURL().toString());
 			log.info("请求方式:" + request.getMethod());
 			log.info("请求类方法:" + joinPoint.getSignature());
-			log.info("请求类方法参数:" + Arrays.toString(joinPoint.getArgs()));
+			log.info("请求类方法参数:" + JSONObject.toJSONString(joinPoint.getArgs(), true));
 		} catch (Exception e) {
 			log.error("###LogAspectServiceApi.class methodBefore() ### ERROR:", e);
 		}
@@ -50,7 +52,7 @@ public class BaseLogAspect {
 	public void methodAfterReturing(Object o) {
 		log.info("--------------返回内容----------------");
 		try {
-			log.info("Response内容:" + jsonObject.toJSONString(o));
+			log.info("Response内容:" + JSONObject.toJSONString(o, true));
 		} catch (Exception e) {
 			log.error("###LogAspectServiceApi.class methodAfterReturing() ### ERROR:", e);
 		}
