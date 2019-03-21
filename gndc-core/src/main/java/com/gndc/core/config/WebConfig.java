@@ -1,7 +1,7 @@
 package com.gndc.core.config;
 
-import com.gndc.common.interceptor.LoginCheckInterceptor;
-import com.gndc.common.interceptor.OpenSourceInterceptor;
+import com.gndc.core.interceptor.LoginCheckInterceptor;
+import com.gndc.core.interceptor.OpenSourceInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
