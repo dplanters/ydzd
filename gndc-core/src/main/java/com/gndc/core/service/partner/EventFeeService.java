@@ -3,7 +3,6 @@ package com.gndc.core.service.partner;
 import com.alibaba.fastjson.JSONArray;
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.common.service.BaseService;
-import com.gndc.core.api.finance.APFinanceExpenseTableResponse;
 import com.gndc.core.api.partner.dataAnalysis.APDataAnalysisListResponse;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Request;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Response;
@@ -34,14 +33,6 @@ public interface EventFeeService extends BaseService<EventFee, Long> {
      */
     List<APDataAnalysisListResponse> dataAnalysis(Integer partnerId, Integer productId, Byte feeType, Byte coopeMode, Byte eventType, Byte feeStatus,
                                                              Byte status, String startDate, String endDate);
-
-    /**
-     * 商户后台-财务结算-费用表格
-     *
-     * @param requestStr
-     * @return
-     */
-    ResponseMessage<APFinanceExpenseTableResponse> apFinanceExpenseTable(String requestStr);
 
     /**
      * 运营后台-费用管理-机构费用列表

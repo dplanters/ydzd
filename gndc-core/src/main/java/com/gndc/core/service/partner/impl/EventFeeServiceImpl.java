@@ -11,9 +11,6 @@ import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.common.utils.JsonUtil;
 import com.gndc.core.api.common.ResponseMessage;
-import com.gndc.core.api.finance.APFinanceExpenseTableRequest;
-import com.gndc.core.api.finance.APFinanceExpenseTableResponse;
-import com.gndc.core.api.finance.APFinanceExpenseTableRow;
 import com.gndc.core.api.partner.*;
 import com.gndc.core.api.partner.dataAnalysis.APDataAnalysisListResponse;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Request;
@@ -164,47 +161,6 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
     public List<APDataAnalysisListResponse> dataAnalysis(Integer partnerId, Integer productId, Byte feeType, Byte coopeMode, Byte eventType, Byte feeStatus,
                                                                     Byte status, String startDate, String endDate) {
         return eventFeeMapper.apDataAnalysis(partnerId, productId, feeType, coopeMode, eventType, feeStatus, status, startDate, endDate);
-    }
-
-    @Override
-    @PostMapping(value = "/apFinanceExpenseTable")
-    public ResponseMessage<APFinanceExpenseTableResponse> apFinanceExpenseTable(String requestStr) {
-        APFinanceExpenseTableRequest request = JsonUtil.getObject(requestStr, APFinanceExpenseTableRequest.class);
-        ResponseMessage<APFinanceExpenseTableResponse> response = new ResponseMessage<>();
-        try {
-            PageInfo page = request.getHeader().getPage();
-
-
-            Integer productId = request.getProductId();
-            Product product = productMapper.selectByPrimaryKey(productId);
-
-            APFinanceExpenseTableResponse apFinanceExpenseTableResponse = new APFinanceExpenseTableResponse();
-
-            apFinanceExpenseTableResponse.setProductName(product.getName());
-
-            //一个产品的统计项
-            List<APFinanceExpenseTableRow> rows = eventFeeMapper.selectEventFeeList(request.getAdmin().getPartnerId(),
-                    productId, null, null, null, EventFeeStatusEnum.COMPLETE.getCode(), DelEnum.NORMAL.getCode(),
-                    request.getStartDate(), request.getEndDate(), page);
-
-            for (int i = 0; i < rows.size(); i++) {
-                Integer eventId = rows.get(i).getEventId();
-                UserEvent userEvent = userEventMapper.selectByPrimaryKey(eventId);
-                User user = userMapper.selectByPrimaryKey(userEvent.getUserId());
-                rows.get(i).setPhone(user.getPhone());
-            }
-
-            apFinanceExpenseTableResponse.setRows(rows);
-
-            response.setData(apFinanceExpenseTableResponse);
-            response.setPage(page);
-            return response;
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            response.createError(ResultCode.ERROR);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return response;
-        }
     }
 
     @Override
