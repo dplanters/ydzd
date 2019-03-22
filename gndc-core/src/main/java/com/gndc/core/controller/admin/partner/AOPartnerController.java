@@ -8,7 +8,9 @@ import com.gndc.core.service.partner.PartnerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +26,7 @@ public class AOPartnerController {
     private PartnerService partnerService;
 
     @PostMapping("/addPartner")
-    public ResponseMessage<Integer> addPartner(AOPartnerAddRequest request) {
+    public ResponseMessage<Integer> addPartner(@Validated @RequestBody AOPartnerAddRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
         Partner partner = PartnerMapping.INSTANCE.convert(request);
         partnerService.insertSelective(partner);
@@ -33,7 +35,7 @@ public class AOPartnerController {
     }
 
     @PostMapping("/modifyPartner")
-    public ResponseMessage<Integer> modifyPartner(AOPartnerModifyRequest request) {
+    public ResponseMessage<Integer> modifyPartner(@Validated @RequestBody AOPartnerModifyRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
         Partner partner = PartnerMapping.INSTANCE.convert(request);
         partnerService.updateByPrimaryKeySelective(partner);
@@ -42,7 +44,7 @@ public class AOPartnerController {
     }
 
     @PostMapping("/deletePartner")
-    public ResponseMessage<Boolean> deletePartner(AOPartnerDeleteRequest request) {
+    public ResponseMessage<Boolean> deletePartner(@Validated @RequestBody AOPartnerDeleteRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
         partnerService.deleteByPrimaryKey(request.getId());
         response.setData(true);
@@ -50,7 +52,7 @@ public class AOPartnerController {
     }
 
     @PostMapping("/detailPartner")
-    public ResponseMessage<Partner> detailPartner(AOPartnerDetailRequest request) {
+    public ResponseMessage<Partner> detailPartner(@Validated @RequestBody AOPartnerDetailRequest request) {
         ResponseMessage<Partner> response = new ResponseMessage<>();
         Partner partner = partnerService.selectByPrimaryKey(request.getId());
         response.setData(partner);
@@ -58,7 +60,7 @@ public class AOPartnerController {
     }
 
     @PostMapping("/partnerList")
-    public ResponseMessage<List<Partner>> partnerList(AOPartnerListRequest request) {
+    public ResponseMessage<List<Partner>> partnerList(@Validated @RequestBody AOPartnerListRequest request) {
         ResponseMessage<List<Partner>> response = new ResponseMessage<>();
         List<Partner> partners = partnerService.selectAll();
         response.setData(partners);

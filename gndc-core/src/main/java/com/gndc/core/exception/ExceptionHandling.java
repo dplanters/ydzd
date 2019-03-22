@@ -31,6 +31,7 @@ public class ExceptionHandling {
                 String defaultMessage = error.getDefaultMessage();
                 jsonArray.fluentAdd(new JSONObject().fluentPut(field, defaultMessage));
             }
+            msg = jsonArray.toJSONString();
         }
         if (e instanceof HjException) {
             code = ((HjException) e).getCode();

@@ -59,7 +59,6 @@ public class AOProductController {
         Integer partnerId = request.getPartnerId();
         if (partnerId != null) {
             weekend.weekendCriteria().andEqualTo(Product::getPartnerId, partnerId);
-            weekend.and();
         }
 
         List<Product> products = productService.selectByExample(weekend);

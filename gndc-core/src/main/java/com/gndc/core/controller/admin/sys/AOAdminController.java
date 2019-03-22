@@ -70,6 +70,7 @@ public class AOAdminController {
         admin.setPasswordSign(passwordSign);
         admin.setOperateSign(operateSign);
         admin.setPassword(md5Password);
+        admin.setCreateAdminId(request.getAdmin().getId());
         if (RightPlatformEnum.PARTNER.getCode().equals(request.getPlatform())) {
             //商户后台
             Partner partner = new Partner();
@@ -107,6 +108,7 @@ public class AOAdminController {
         admin.setPasswordSign(passwordSign);
         admin.setOperateSign(operateSign);
         admin.setPassword(md5Password);
+        admin.setUpdateAdminId(request.getAdmin().getId());
         if (RightPlatformEnum.PARTNER.getCode().equals(request.getPlatform())) {
             Partner partner = new Partner();
             partner.setName(request.getPartnerName());

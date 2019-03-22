@@ -34,7 +34,7 @@ public class InvokeRecordAspect {
 		ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder
 				.getRequestAttributes();
 		HttpServletRequest request = requestAttributes.getRequest();
-		log.info("===============请求内容===============");
+		log.info("===============请求内容开始===============");
 		try {
 			// 打印请求内容
 			log.info("请求地址:" + request.getRequestURL().toString());
@@ -44,18 +44,18 @@ public class InvokeRecordAspect {
 		} catch (Exception e) {
 			log.error("###LogAspectServiceApi.class methodBefore() ### ERROR:", e);
 		}
-		log.info("===============请求内容===============");
+		log.info("===============请求内容结束===============");
 	}
 
 	// 在方法执行完结后打印返回内容
 	@AfterReturning(returning = "o", pointcut = "controllerAspect()")
 	public void methodAfterReturing(Object o) {
-		log.info("--------------返回内容----------------");
+		log.info("--------------返回内容开始----------------");
 		try {
 			log.info("Response内容:" + JSONObject.toJSONString(o, true));
 		} catch (Exception e) {
 			log.error("###LogAspectServiceApi.class methodAfterReturing() ### ERROR:", e);
 		}
-		log.info("--------------返回内容----------------");
+		log.info("--------------返回内容结束----------------");
 	}
 }

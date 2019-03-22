@@ -137,7 +137,6 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     }
 
     @Override
-    @PostMapping("/admin/product/aoProductUpperAndLowerLine")
     public Boolean productUpperAndLowerLine(AOUpperAndLowerLineRequest request) {
         Product product = productMapper.selectByPrimaryKey(request.getId());
         if (product == null) {
@@ -158,7 +157,6 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     }
 
     @Override
-    @PostMapping("/admin/product/productDelete")
     public Boolean productDelete(AOProductDeleteRequest request) {
         Integer id = request.getId();
         Product product = productMapper.selectByPrimaryKey(id);

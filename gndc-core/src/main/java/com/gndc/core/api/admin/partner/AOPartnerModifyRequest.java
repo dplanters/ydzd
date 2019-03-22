@@ -26,13 +26,6 @@ public class AOPartnerModifyRequest extends RequestMessage {
     private String name;
 
     /**
-     * 账户余额
-     */
-    @NotNull
-    @Digits(integer = 10, fraction = 2)
-    private BigDecimal accountBalance;
-
-    /**
      * 授信额度
      */
     @Digits(integer = 10, fraction = 2)
