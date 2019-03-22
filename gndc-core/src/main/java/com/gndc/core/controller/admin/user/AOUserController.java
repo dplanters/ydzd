@@ -55,7 +55,7 @@ public class AOUserController {
             criteria.andLessThan(User::getRegTime,request.getRegDateEnd());
         }
         List<User> users = userService.selectByExample(weekend);
-        PageInfo<User> pageInfo = new PageInfo<>();
+        PageInfo<User> pageInfo = new PageInfo<>(users);
         response.setData(users);
         pageInfo.setList(null);
         response.setPage(pageInfo);
