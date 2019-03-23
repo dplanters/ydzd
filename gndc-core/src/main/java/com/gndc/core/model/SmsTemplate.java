@@ -1,17 +1,11 @@
 package com.gndc.core.model;
 
-import com.gndc.common.model.BaseEntity;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.*;
 
 @Table(name = "dc_sms_template")
-public class SmsTemplate extends BaseEntity {
-    /**
-     *
-     */
+public class SmsTemplate implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -19,10 +13,11 @@ public class SmsTemplate extends BaseEntity {
     /**
      * 签名ID
      */
+    @Column(name = "sign_id")
     private Integer signId;
 
     /**
-     * 类型 0-未定义 1-验证码 2-营销类 3-提醒类
+     * 类型 0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
      */
     private Byte type;
 
@@ -32,9 +27,21 @@ public class SmsTemplate extends BaseEntity {
     private String content;
 
     /**
-     *
+     * 状态 1正常 -1删除
      */
     private Byte status;
+
+    @Column(name = "create_time")
+    private Date createTime;
+
+    @Column(name = "update_time")
+    private Date updateTime;
+
+    /**
+     * 创建者id
+     */
+    @Column(name = "create_admin_id")
+    private Integer createAdminId;
 
     /**
      * @return id
@@ -51,16 +58,16 @@ public class SmsTemplate extends BaseEntity {
     }
 
     /**
-     * 签名ID
+     * 获取签名ID
      *
-     * @return sign_id 签名ID
+     * @return sign_id - 签名ID
      */
     public Integer getSignId() {
         return signId;
     }
 
     /**
-     * 签名ID
+     * 设置签名ID
      *
      * @param signId 签名ID
      */
@@ -69,34 +76,34 @@ public class SmsTemplate extends BaseEntity {
     }
 
     /**
-     * 类型 0-未定义 1-验证码 2-营销类 3-提醒类
+     * 获取类型 0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
      *
-     * @return type 类型 0-未定义 1-验证码 2-营销类 3-提醒类
+     * @return type - 类型 0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
      */
     public Byte getType() {
         return type;
     }
 
     /**
-     * 类型 0-未定义 1-验证码 2-营销类 3-提醒类
+     * 设置类型 0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
      *
-     * @param type 类型 0-未定义 1-验证码 2-营销类 3-提醒类
+     * @param type 类型 0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
      */
     public void setType(Byte type) {
         this.type = type;
     }
 
     /**
-     * 短信模板内容
+     * 获取短信模板内容
      *
-     * @return content 短信模板内容
+     * @return content - 短信模板内容
      */
     public String getContent() {
         return content;
     }
 
     /**
-     * 短信模板内容
+     * 设置短信模板内容
      *
      * @param content 短信模板内容
      */
@@ -105,75 +112,66 @@ public class SmsTemplate extends BaseEntity {
     }
 
     /**
-     * @return status
+     * 获取状态 1正常 -1删除
+     *
+     * @return status - 状态 1正常 -1删除
      */
     public Byte getStatus() {
         return status;
     }
 
     /**
-     * @param status
+     * 设置状态 1正常 -1删除
+     *
+     * @param status 状态 1正常 -1删除
      */
     public void setStatus(Byte status) {
         this.status = status;
     }
 
     /**
-     * @mbggenerated 2019-03-02
+     * @return create_time
      */
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        SmsTemplate other = (SmsTemplate) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-                && (this.getSignId() == null ? other.getSignId() == null : this.getSignId().equals(other.getSignId()))
-                && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
-                && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
-                && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-                && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-                && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()));
+    public Date getCreateTime() {
+        return createTime;
     }
 
     /**
-     * @mbggenerated 2019-03-02
+     * @param createTime
      */
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getSignId() == null) ? 0 : getSignId().hashCode());
-        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
-        result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
-        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
-        return result;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     /**
-     * @mbggenerated 2019-03-02
+     * @return update_time
      */
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", signId=").append(signId);
-        sb.append(", type=").append(type);
-        sb.append(", content=").append(content);
-        sb.append(", status=").append(status);
-        sb.append("]");
-        return sb.toString();
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * @param updateTime
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    /**
+     * 获取创建者id
+     *
+     * @return create_admin_id - 创建者id
+     */
+    public Integer getCreateAdminId() {
+        return createAdminId;
+    }
+
+    /**
+     * 设置创建者id
+     *
+     * @param createAdminId 创建者id
+     */
+    public void setCreateAdminId(Integer createAdminId) {
+        this.createAdminId = createAdminId;
     }
 }
