@@ -1,4 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.gndc.core.mapper.simple.SmsTemplateMapper" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gndc.core.mapper.simple.SmsTemplateMapper">
+    <select id="selectTemplateWithAdminList" resultType="com.gndc.core.api.admin.sms.AOSmsTemplateListResponse">
+        select dst.id,dst.type,dst.content,dst.create_time as createTime,da.name
+        from dc_sms_template dst
+        left join dc_admin da on da.id = dst.create_admin_id
+        where dst.status = 1
+        <if test="options.type">
+           and dst.type = #{options.type}
+        </if>
+        <if test="options.createTimeStart != ''">
+           and dst.create_time <![CDATA[>=]]> #{options.createTimeStart}
+        </if>
+        <if test="options.createTimeEnd != ''">
+            and dst.create_time <![CDATA[<=]]> #{options.createTimeEnd}
+        </if>
+        order by dst.create_time
+    </select>
 </mapper>

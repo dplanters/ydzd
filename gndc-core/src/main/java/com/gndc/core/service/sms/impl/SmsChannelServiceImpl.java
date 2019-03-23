@@ -6,7 +6,7 @@ import com.gndc.core.service.sms.SmsSignService;
 import org.springframework.stereotype.Service;
 
 /**
- * 短信签名
+ * 短信渠道
  */
 @Service
 public class SmsChannelServiceImpl extends BaseServiceImpl<SmsSign, Integer> implements SmsSignService {

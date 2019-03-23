@@ -31,5 +31,5 @@ public class AOSmsSignEditRequest extends RequestMessage {
     /**
      * 状态id状态 1正常 -1删除
      */
-    private String status;
+    private Byte status;
 }

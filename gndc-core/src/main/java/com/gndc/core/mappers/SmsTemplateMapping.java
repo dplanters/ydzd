@@ -13,7 +13,8 @@ public interface SmsTemplateMapping {
     SmsTemplateMapping INSTANCE = Mappers.getMapper(SmsTemplateMapping.class);
 
     @Mappings({
-            @Mapping(target = "id", source = "templateId")
+            @Mapping(target = "id", source = "templateId"),
+            @Mapping(target = "createAdminId", source = "admin.id")
     })
     SmsTemplate convert(AOSmsTemplateEditRequest request);
 }
