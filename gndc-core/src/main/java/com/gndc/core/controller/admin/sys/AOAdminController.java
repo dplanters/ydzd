@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
+import com.gndc.common.enums.common.DelEnum;
 import com.gndc.common.enums.right.RightPlatformEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.PasswordUtil;
@@ -132,7 +133,10 @@ public class AOAdminController {
     @PostMapping("/deleteAdmin")
     public ResponseMessage<Boolean> deleteAdmin(@Validated @RequestBody AOAdminDeleteRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
-        adminService.deleteByPrimaryKey(request.getId());
+        Admin admin = new Admin();
+        admin.setId(request.getId());
+        admin.setStatus(DelEnum.IS_DEL.getCode());
+        adminService.updateByPrimaryKeySelective(admin);
         response.setData(true);
         return response;
     }

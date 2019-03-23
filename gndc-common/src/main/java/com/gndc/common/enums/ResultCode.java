@@ -14,16 +14,41 @@ import com.gndc.common.enums.common.CountryTypeEnum;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 返回码枚举类
+ * 说明
+ * 0为成功
+ * 响应码为1+5+2
+ * 第一位为异常级别：1：系统级别；2：业务级别
+ * 中间五位为业务编号如：00002为登录相关业务
+ * 最后2两位为具体业务下具体的异常码
+ * 组合起来如10000102位session过期异常
+ */
 public enum ResultCode {
     // 成功
     OK(0, "成功", "Berhasil", "Thành công", "Success"),
 
+    /**
+     * 00001为通用业务
+     */
     SYSTEM_BUSY(1000101, "系统繁忙", "系统繁忙", "系统繁忙", "系统繁忙"),
-    SESSION_EXPIRE(1000102, "Session 过期", "Session 过期", "Session 过期", "Session 过期"),
 
-    RIGHT_IS_USING(1100201, "权限在使用", "权限在使用", "权限在使用", "权限在使用"),
+    NOT_FOUND(1000102, "资源不存在", "资源不存在", "资源不存在", "资源不存在"),
 
-    RIGHT_HAS_CHILDREN(1100202, "权限存在子权限", "权限存在子权限", "权限存在子权限", "权限存在子权限"),
+    NO_SESSION(1000201, "缺少sessionId", "缺少sessionId", "缺少sessionId", "缺少sessionId"),
+
+    SESSION_EXPIRE(1000202, "SessionId已过期", "SessionId已过期", "SessionId已过期", "SessionId已过期"),
+
+    INVALID_SESSION(1000203, "无效的sessionId", "无效的sessionId", "无效的sessionId", "无效的sessionId"),
+
+    RIGHT_IS_USING(1000301, "权限在使用", "权限在使用", "权限在使用", "权限在使用"),
+
+    RIGHT_HAS_CHILDREN(1000302, "权限存在子权限", "权限存在子权限", "权限存在子权限", "权限存在子权限"),
+
+    NO_RIGHT(1000303, "没有权限", "没有权限", "没有权限", "没有权限"),
+
+    ROLE_HAS_NORMAL_ADMIN(1000401, "角色下存在正常用户,请先删除相关用户", "角色下存在正常用户,请先删除相关用户", "角色下存在正常用户,请先删除相关用户", "角色下存在正常用户," +
+            "请先删除相关用户"),
 
     ERROR(1, "失败", "Gagal", "Không thành công", "Failed"),
     // 失败

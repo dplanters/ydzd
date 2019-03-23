@@ -3,6 +3,7 @@ package com.gndc.core.interceptor;
 import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.utils.BeanFactoryUtil;
+import com.gndc.core.model.Right;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
@@ -30,17 +31,15 @@ public class OpenSourceInterceptor extends WebContentInterceptor {
                         "redisTemplate");
         boolean requireAuth = true;
         boolean noHandler = true;
-        HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
-        Map<Object, Object> entries = hashOperations.entries(CacheConstant.KEY_ALL_RIGHT);
-        for (Map.Entry<Object, Object> entry : entries.entrySet()) {
-            JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(entry.getValue()));
-            String rightUrl = jsonObject.getString("rightUrl");
+        Map<Integer, Right> entries = redisTemplate.opsForHash().entries(CacheConstant.KEY_ALL_RIGHT);
+        for (Map.Entry<Integer, Right> entry : entries.entrySet()) {
+            String rightUrl = entry.getValue().getRightUrl();
             String servletPath = request.getServletPath();
             if (rightUrl.equals(servletPath)) {
                 noHandler = false;
             }
             //对当前请求路径和权限表进行匹配
-            if (rightUrl.equals(servletPath) && new Byte((byte)0).equals(jsonObject.getByte("requireAuth"))) {
+            if (rightUrl.equals(servletPath) && new Byte((byte)0).equals(entry.getValue().getRequireAuth())) {
                 requireAuth = false;
             }
         }

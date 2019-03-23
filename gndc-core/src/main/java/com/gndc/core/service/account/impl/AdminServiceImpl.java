@@ -3,6 +3,7 @@ package com.gndc.core.service.account.impl;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gndc.common.enums.admin.AdminLevelEnum;
+import com.gndc.common.enums.common.DelEnum;
 import com.gndc.common.enums.right.RightPlatformEnum;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.admin.sys.AOAdminListRequest;
@@ -41,6 +42,7 @@ public class AdminServiceImpl extends BaseServiceImpl<Admin, Integer> implements
             weekendCriteria.andEqualTo(Admin::getLevel, AdminLevelEnum.PARTNER_ADMIN.getCode());
         }
         weekendCriteria
+                .andEqualTo(Admin::getStatus, DelEnum.IS_DEL.getCode())
                 .andEqualTo(Admin::getName, StrUtil.isEmpty(request.getName()) ? null : request.getName())
                 .andEqualTo(Admin::getLoginName, StrUtil.isEmpty(request.getLoginName()) ? null : request.getLoginName())
                 .andEqualTo(Admin::getPhone, StrUtil.isEmpty(request.getPhone()) ? null : request.getPhone())

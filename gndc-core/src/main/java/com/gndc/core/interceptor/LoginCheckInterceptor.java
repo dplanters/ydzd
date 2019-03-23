@@ -1,5 +1,6 @@
 package com.gndc.core.interceptor;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.CacheConstant;
@@ -7,6 +8,7 @@ import com.gndc.common.enums.ResultCode;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.BeanFactoryUtil;
 import com.gndc.core.model.Admin;
+import com.gndc.core.model.Right;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -17,7 +19,7 @@ import org.springframework.web.servlet.mvc.WebContentInterceptor;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.Serializable;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -44,8 +46,8 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
                 (RedisTemplate) BeanFactoryUtil.getBean("redisTemplate");
 
         if (StrUtil.isEmpty(sessionId)) {
-            logger.warn("用户未登录");
-            throw new HjException(ResultCode.USER_NOT_LOGIN, "用户未登录");
+            logger.warn(ResultCode.NO_SESSION);
+            throw new HjException(ResultCode.NO_SESSION);
         } else {
             Admin admin = (Admin) redisTemplate.opsForValue().get(sessionId);
             if (ObjectUtil.isNull(admin)) {
@@ -69,12 +71,30 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
                             RequestAttributes.SCOPE_REQUEST);
                 } else {
                     logger.warn("无效的sessionId");
+                    throw new HjException(ResultCode.INVALID_SESSION);
                 }
                 //session保活
                 redisTemplate.opsForValue().set(sessionId, admin, expire, TimeUnit.SECONDS);
                 RequestContextHolder.getRequestAttributes().setAttribute("sessionId", sessionId, RequestAttributes.SCOPE_REQUEST);
+                if (!hasRight(admin.getRights(), request.getServletPath())) {
+                    logger.warn(ResultCode.NO_RIGHT.getI18NContent());
+                    throw new HjException(ResultCode.NO_RIGHT);
+                }
             }
         }
         return true;
+    }
+
+    private boolean hasRight(List<Right> rights, String servletPath) {
+        if (CollUtil.isNotEmpty(rights)) {
+            for (Right right : rights) {
+                //如果自己用户的权限中有和当前请求可以匹配，则拥有权限
+                if (right.getRightUrl().equals(servletPath)) {
+                    return true;
+                }
+                return hasRight(right.getChildren(), servletPath);
+            }
+        }
+        return false;
     }
 }

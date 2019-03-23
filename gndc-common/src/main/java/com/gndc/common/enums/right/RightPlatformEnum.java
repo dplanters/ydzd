@@ -9,6 +9,11 @@ import java.util.Map;
 public enum RightPlatformEnum {
 
     /**
+     * 公共
+     */
+    COMMON((byte) 1, "公共"),
+
+    /**
      * 运营
      */
     OPERATOR((byte) 2, "运营"),

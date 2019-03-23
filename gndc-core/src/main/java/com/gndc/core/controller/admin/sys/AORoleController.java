@@ -1,16 +1,23 @@
 package com.gndc.core.controller.admin.sys;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.constant.CacheConstant;
+import com.gndc.common.enums.ResultCode;
+import com.gndc.common.enums.common.DelEnum;
 import com.gndc.common.enums.right.RightPlatformEnum;
+import com.gndc.common.exception.HjException;
 import com.gndc.core.api.admin.sys.*;
 import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.core.model.Admin;
 import com.gndc.core.model.Right;
 import com.gndc.core.model.Role;
 import com.gndc.core.model.RoleRight;
+import com.gndc.core.service.account.AdminService;
 import com.gndc.core.service.sys.RightService;
 import com.gndc.core.service.sys.RoleRightService;
 import com.gndc.core.service.sys.RoleService;
@@ -45,6 +52,9 @@ public class AORoleController {
 
     @Autowired
     private RoleRightService roleRightService;
+    
+    @Autowired
+    private AdminService adminService;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -69,6 +79,19 @@ public class AORoleController {
     public ResponseMessage<Boolean> deleteRole(@Validated @RequestBody AORoleDeleteRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
         Integer id = request.getId();
+
+        Weekend<Admin> adminWeekend = Weekend.of(Admin.class);
+        adminWeekend.weekendCriteria()
+                .andEqualTo(Admin::getStatus, DelEnum.NORMAL.getCode())
+                .andEqualTo(Admin::getRoleId, ObjectUtil.defaultIfNull(request.getId(), null));
+        //正常用户数量
+        int normalAdminCount = adminService.selectCountByExample(adminWeekend);
+        if (normalAdminCount > 0) {
+            String msg = StrUtil.format("角色编号 {} 存在正常用户，请先删除相关用户", request.getId());
+            logger.warn(msg);
+            throw new HjException(ResultCode.ROLE_HAS_NORMAL_ADMIN, msg);
+        }
+
         List<RoleRight> roleRights = roleRightService.selectByProperty("roleId", id);
 
         List<Integer> roleRightIds = new ArrayList<>(roleRights.size());
