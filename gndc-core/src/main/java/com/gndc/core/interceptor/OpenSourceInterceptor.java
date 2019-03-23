@@ -25,8 +25,8 @@ public class OpenSourceInterceptor extends WebContentInterceptor {
         if (request.getMethod().equals(HttpMethod.OPTIONS.name())) {
             return true;
         }
-        RedisTemplate<String, Serializable> redisTemplate =
-                (RedisTemplate<String, Serializable>) BeanFactoryUtil.getBean(
+        RedisTemplate redisTemplate =
+                (RedisTemplate) BeanFactoryUtil.getBean(
                         "redisTemplate");
         boolean requireAuth = true;
         boolean noHandler = true;

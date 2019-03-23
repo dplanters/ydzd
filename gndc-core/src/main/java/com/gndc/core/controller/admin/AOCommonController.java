@@ -32,7 +32,7 @@ public class AOCommonController {
     private SystemOptionService systemOptionService;
 
     @Autowired
-    private RedisTemplate<String, Serializable> redisTemplate;
+    private RedisTemplate redisTemplate;
 
     @RequestMapping(value = "/getAllPartner")
     public ResponseMessage<List<Partner>> getAllPartner(@Validated @RequestBody APAllPartnerRequest request) {

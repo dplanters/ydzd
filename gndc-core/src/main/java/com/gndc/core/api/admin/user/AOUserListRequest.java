@@ -22,7 +22,7 @@ public class AOUserListRequest extends RequestMessage {
     /**
      * 用户ID
      */
-    private int userId;
+    private int id;
 
     /**
      * 手机号码
@@ -74,31 +74,4 @@ public class AOUserListRequest extends RequestMessage {
      */
     private String appName;
 
-    /**
-     * @return appName
-     */
-    public String getAppName() {
-        return appName;
-    }
-
-    /**
-     * @param appName 要设置的 appName
-     */
-    public void setAppName(String appName) {
-        this.appName = appName;
-    }
-
-    /**
-     * @return status
-     */
-    public byte getStatus() {
-        return status;
-    }
-
-    /**
-     * @param status 要设置的 status
-     */
-    public void setStatus(byte status) {
-        this.status = status;
-    }
 }

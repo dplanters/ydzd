@@ -6,6 +6,7 @@ import com.gndc.common.utils.BeanFactoryUtil;
 import com.gndc.core.api.admin.account.AOLoginResponse;
 import com.gndc.core.api.common.RequestMessage;
 import com.gndc.core.api.partner.account.APLoginResponse;
+import com.gndc.core.model.Admin;
 import com.gndc.core.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,10 +43,10 @@ public class LoginInfoHolderAdvice extends RequestBodyAdviceAdapter {
         if (ObjectUtil.isNotNull(originalSessionId)) {
             String sessionId = (String) originalSessionId;
             if (sessionId.startsWith(CacheConstant.KEY_ADMIN_LOGIN_PREFIX)) {
-                ((RequestMessage) body).setAdmin(((AOLoginResponse) redisTemplate.opsForValue().get(sessionId)).getAdmin());
+                ((RequestMessage) body).setAdmin(((Admin) redisTemplate.opsForValue().get(sessionId)));
             }
             if (sessionId.startsWith(CacheConstant.KEY_PARTNER_LOGIN_PREFIX)) {
-                ((RequestMessage) body).setAdmin(((APLoginResponse) redisTemplate.opsForValue().get(sessionId)).getAdmin());
+                ((RequestMessage) body).setAdmin(((Admin) redisTemplate.opsForValue().get(sessionId)));
             }
             if (sessionId.startsWith(CacheConstant.KEY_USER_LOGIN_PREFIX)) {
                 ((RequestMessage) body).setUser(((User) redisTemplate.opsForValue().get(sessionId)));

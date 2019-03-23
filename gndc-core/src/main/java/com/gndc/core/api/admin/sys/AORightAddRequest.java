@@ -35,7 +35,6 @@ public class AORightAddRequest extends RequestMessage {
     /**
      * 前端页面
      */
-    @NotBlank
     private String component;
 
     /**

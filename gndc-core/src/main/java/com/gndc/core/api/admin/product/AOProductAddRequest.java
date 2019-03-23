@@ -4,19 +4,12 @@ import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class AOProductAddModifyRequest extends RequestMessage {
-
-    /**
-     * 产品id
-     */
-    @Min(1)
-    private Integer id;
+public class AOProductAddRequest extends RequestMessage {
 
     /**
      * 商户id
@@ -71,6 +64,6 @@ public class AOProductAddModifyRequest extends RequestMessage {
     /**
      * 产品附加信息
      */
-    private AOProductDataModifyRequest extra;
+    private AOProductDataRequest extra;
 
 }

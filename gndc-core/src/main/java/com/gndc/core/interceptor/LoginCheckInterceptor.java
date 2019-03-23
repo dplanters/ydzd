@@ -6,6 +6,7 @@ import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.BeanFactoryUtil;
+import com.gndc.core.model.Admin;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -39,14 +40,14 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
             return true;
         }
         String sessionId = request.getHeader("sessionId");
-        RedisTemplate<String, Serializable> redisTemplate =
-                (RedisTemplate<String, Serializable>) BeanFactoryUtil.getBean("redisTemplate");
+        RedisTemplate redisTemplate =
+                (RedisTemplate) BeanFactoryUtil.getBean("redisTemplate");
 
         if (StrUtil.isEmpty(sessionId)) {
             logger.warn("用户未登录");
             throw new HjException(ResultCode.USER_NOT_LOGIN, "用户未登录");
         } else {
-            Serializable admin = redisTemplate.opsForValue().get(sessionId);
+            Admin admin = (Admin) redisTemplate.opsForValue().get(sessionId);
             if (ObjectUtil.isNull(admin)) {
                 logger.warn("session已失效");
                 throw new HjException(ResultCode.SESSION_EXPIRE);

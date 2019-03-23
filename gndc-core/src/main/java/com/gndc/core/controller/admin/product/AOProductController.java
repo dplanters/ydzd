@@ -5,6 +5,7 @@ import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.common.enums.common.DelEnum;
 import com.gndc.common.enums.product.ProductStatusEnum;
 import com.gndc.core.api.admin.product.*;
+import com.gndc.core.model.Admin;
 import com.gndc.core.model.Product;
 import com.gndc.core.service.product.ProductService;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ public class AOProductController {
     private ProductService productService;
 
     @Autowired
-    private RedisTemplate<String, Serializable> redisTemplate;
+    private RedisTemplate redisTemplate;
 
     @PostMapping("/productList")
     public ResponseMessage<List<AOProductListResponse>> productList(@Validated @RequestBody AOProductListRequest request) {
@@ -68,11 +69,21 @@ public class AOProductController {
         return response;
     }
 
-    @PostMapping("/productAddModify")
-    public ResponseMessage<Integer> productAddModify(@Validated @RequestBody AOProductAddModifyRequest request) {
+    @PostMapping("/addProduct")
+    public ResponseMessage<Integer> addProduct(@Validated @RequestBody AOProductAddRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
 
-        Integer id = productService.productAddModify(request);
+        Integer id = productService.addProduct(request);
+
+        response.setData(id);
+        return response;
+    }
+
+    @PostMapping("/modifyProduct")
+    public ResponseMessage<Integer> modifyProduct(@Validated @RequestBody AOProductModifyRequest request) {
+        ResponseMessage<Integer> response = new ResponseMessage<>();
+
+        Integer id = productService.modifyProduct(request);
 
         response.setData(id);
         return response;

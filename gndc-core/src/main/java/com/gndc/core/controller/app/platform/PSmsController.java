@@ -45,7 +45,7 @@ public class PSmsController {
     private UserService userService;
 
     @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate redisTemplate;
 
     @Autowired
     private SmsLogService smsLogService;
@@ -74,8 +74,8 @@ public class PSmsController {
             smsTemplateType = SmsTemplateType.USER_LOGIN;
         }
 
-        String sms10MinuteCountStr = redisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_10_PREFIX + key);
-        String sms24HourCountStr = redisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_24H_PREFIX + key);
+        String sms10MinuteCountStr = (String) redisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_10_PREFIX + key);
+        String sms24HourCountStr = (String) redisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_24H_PREFIX + key);
 
         Sms10MinuteCount sms10MinuteCount = JsonUtil.getObject(sms10MinuteCountStr, Sms10MinuteCount.class);
         Sms24HourCount sms24HourCount = JsonUtil.getObject(sms24HourCountStr, Sms24HourCount.class);

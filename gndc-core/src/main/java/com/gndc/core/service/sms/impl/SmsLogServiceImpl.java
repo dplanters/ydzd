@@ -47,7 +47,7 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
     private ChuangLanSmsService chuangLanSmsService;
 
     @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate redisTemplate;
 
     @Autowired
     private SmsLogService smsLogService;

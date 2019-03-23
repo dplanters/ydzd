@@ -36,14 +36,14 @@ public class AORightController {
     private RoleRightService roleRightService;
 
     @Autowired
-    private RedisTemplate<String, Serializable> redisTemplate;
+    private RedisTemplate redisTemplate;
 
     @PostMapping("/addRight")
     public ResponseMessage<Integer> addRight(@Validated @RequestBody AORightAddRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
         Right right = RightMapping.INSTANCE.convert(request);
         rightService.insertSelective(right);
-        redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, String.valueOf(right.getId()), right);
+        redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, right.getId(), right);
         response.setData(right.getId());
         return response;
     }
@@ -53,7 +53,7 @@ public class AORightController {
         ResponseMessage<Integer> response = new ResponseMessage<>();
         Right right = RightMapping.INSTANCE.convert(request);
         rightService.updateByPrimaryKeySelective(right);
-        redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, String.valueOf(right.getId()), right);
+        redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, right.getId(), right);
         response.setData(right.getId());
         return response;
     }
@@ -96,7 +96,7 @@ public class AORightController {
         }
 
         boolean success = rightService.deleteByPrimaryKey(id);
-        redisTemplate.opsForHash().delete(CacheConstant.KEY_ALL_RIGHT, String.valueOf(id));
+        redisTemplate.opsForHash().delete(CacheConstant.KEY_ALL_RIGHT, id);
         resposne.setData(success);
         return resposne;
     }

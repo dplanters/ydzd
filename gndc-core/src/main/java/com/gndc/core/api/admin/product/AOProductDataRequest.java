@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class AOProductDataModifyRequest implements Serializable {
+public class AOProductDataRequest implements Serializable {
 
     /**
      * 日利率

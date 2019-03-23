@@ -47,7 +47,7 @@ public class AORoleController {
     private RoleRightService roleRightService;
 
     @Autowired
-    private RedisTemplate<String, Serializable> redisTemplate;
+    private RedisTemplate redisTemplate;
 
     @PostMapping("/addRole")
     public ResponseMessage<Integer> addModifyRole(@Validated @RequestBody AORoleAddRequest request) {
@@ -71,10 +71,10 @@ public class AORoleController {
         Integer id = request.getId();
         List<RoleRight> roleRights = roleRightService.selectByProperty("roleId", id);
 
-        List<String> roleRightIds = new ArrayList<>(roleRights.size());
+        List<Integer> roleRightIds = new ArrayList<>(roleRights.size());
 
         roleRights.forEach(roleRight -> {
-            roleRightIds.add(String.valueOf(roleRight.getId()));
+            roleRightIds.add(roleRight.getId());
         });
 
         Weekend<RoleRight> weekend = Weekend.of(RoleRight.class);
@@ -84,7 +84,7 @@ public class AORoleController {
         redisTemplate.opsForHash().delete(CacheConstant.KEY_ALL_ROLE_RIGHT, roleRightIds);
 
         roleService.deleteByPrimaryKey(id);
-        redisTemplate.opsForHash().delete(CacheConstant.KEY_ALL_ROLE, String.valueOf(id));
+        redisTemplate.opsForHash().delete(CacheConstant.KEY_ALL_ROLE, id);
         response.setData(true);
         return response;
     }

@@ -25,7 +25,7 @@ public class CacheDataServiceImpl implements CacheDataService {
     private static final Logger logger = LoggerFactory.getLogger(CacheDataServiceImpl.class);
 
     @Autowired
-    private RedisTemplate<String, Serializable> redisTemplate;
+    private RedisTemplate redisTemplate;
 
     @Autowired
     private RightMapper rightMapper;
@@ -41,17 +41,17 @@ public class CacheDataServiceImpl implements CacheDataService {
         //加载所有角色
         List<Role> roles = roleMapper.selectByExample(null);
         for (Role role : roles) {
-            redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE, String.valueOf(role.getId()), role);
+            redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE, role.getId(), role);
         }
         //加载所有权限
         List<Right> rights = rightMapper.selectByExample(null);
         for (Right right : rights) {
-            redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, String.valueOf(right.getId()), right);
+            redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, right.getId(), right);
         }
         //加载所有角色权限
         List<RoleRight> roleRights = roleRightMapper.selectByExample(null);
         for (RoleRight roleRight : roleRights) {
-            redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE_RIGHT, String.valueOf(roleRight.getId()), roleRight);
+            redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE_RIGHT, roleRight.getId(), roleRight);
         }
     }
 

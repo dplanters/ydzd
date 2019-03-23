@@ -1,5 +1,6 @@
 package com.gndc.core.controller.admin.user;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.core.api.admin.user.AOUserDetailResponse;
@@ -32,19 +33,17 @@ public class AOUserController {
      * 用户管理-用户列表
      *
      */
-    @PostMapping("searchUserList")
+    @PostMapping("/userList")
     public ResponseMessage<List<User>> searchUserList(@Validated @RequestBody AOUserListRequest request) {
 
         ResponseMessage<List<User>> response = new ResponseMessage<List<User>>();
         PageInfo page = request.getHeader().getPage();
         PageHelper.startPage(page.getPageNum(), page.getPageSize());
-        Admin admin = request.getAdmin();
-
         // 用户是否有权限
         Weekend<User> weekend = Weekend.of(User.class);
         weekend.selectProperties("id","phone","regChannel","regTime","lastLoginTime");
         WeekendCriteria<User, Object> criteria = weekend.weekendCriteria();
-        criteria.andEqualTo(User::getId,request.getUserId());
+        criteria.andEqualTo(User::getId, ObjectUtil.defaultIfNull(request.getId(), null));
         if(StringUtils.isNotBlank(request.getPhone())){
             criteria.andEqualTo(User::getPhone,request.getPhone());
         }
@@ -65,7 +64,7 @@ public class AOUserController {
     /**
      * 用户管理-用户详情(用户行为)
      */
-    @RequestMapping("aoUserEventDetailRequest")
+    @RequestMapping("/userEventDetailRequest")
     public ResponseMessage<List<AOUserDetailResponse>> aoUserEventDetailRequest(@Validated @RequestBody AOUserListRequest request) {
 
         ResponseMessage<List<AOUserDetailResponse>> response = new ResponseMessage<List<AOUserDetailResponse>>();

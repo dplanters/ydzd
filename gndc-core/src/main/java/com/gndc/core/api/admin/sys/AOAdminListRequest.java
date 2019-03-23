@@ -12,8 +12,39 @@ import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 public class AOAdminListRequest extends RequestMessage {
 
+    /**
+     * 平台
+     */
+    private Byte platform;
+
+    /**
+     * 登录名
+     */
+    private String loginName;
+
+    /**
+     * 姓名
+     */
+    private String name;
+
+    /**
+     * 手机号
+     */
+    private String phone;
+
+    /**
+     * 开始时间
+     */
+    private Date startDate;
+
+    /**
+     * 结束时间
+     */
+    private Date endDate;
 }

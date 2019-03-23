@@ -10,6 +10,7 @@ import com.gndc.core.api.app.product.hot.PHotProductResponse;
 import com.gndc.core.api.partner.product.APProductListRequest;
 import com.gndc.core.api.partner.product.APProductListResponse;
 import com.gndc.core.model.Product;
+
 import java.util.List;
 
 public interface ProductService extends BaseService<Product, Integer> {
@@ -30,7 +31,13 @@ public interface ProductService extends BaseService<Product, Integer> {
      * 运营后台-产品管理-产品添加
      * @return
      */
-    Integer productAddModify(AOProductAddModifyRequest request);
+    Integer addProduct(AOProductAddRequest request);
+
+    /**
+     * 运营后台-产品管理-产品修改
+     * @return
+     */
+    Integer modifyProduct(AOProductModifyRequest request);
 
     /**
      * 运营后台-产品管理-获取产品详情

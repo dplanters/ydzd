@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.exception.HjException;
 import com.gndc.core.api.common.ResponseMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,12 +13,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
-
+@Slf4j
 @RestControllerAdvice
 public class ExceptionHandling {
 
     @ExceptionHandler
     public ResponseMessage handler(Throwable e) {
+        log.error(e.getMessage(), e);
         //处理异常
         ResponseMessage<Object> response = new ResponseMessage<>();
         response.setSuccess(false);
@@ -32,6 +34,7 @@ public class ExceptionHandling {
                 jsonArray.fluentAdd(new JSONObject().fluentPut(field, defaultMessage));
             }
             msg = jsonArray.toJSONString();
+            log.warn("参数校验异常", jsonArray.toJSONString());
         }
         if (e instanceof HjException) {
             code = ((HjException) e).getCode();

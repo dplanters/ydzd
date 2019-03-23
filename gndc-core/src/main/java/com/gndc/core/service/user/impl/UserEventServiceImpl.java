@@ -22,7 +22,7 @@ import java.util.List;
 public class UserEventServiceImpl extends BaseServiceImpl<UserEvent, Integer> implements UserEventService {
 
     @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate redisTemplate;
 
     @Autowired
     private UserEventMapper userEventMapper;

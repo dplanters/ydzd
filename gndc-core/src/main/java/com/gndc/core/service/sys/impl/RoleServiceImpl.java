@@ -37,7 +37,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer> implements R
     private RoleRightMapper roleRightMapper;
 
     @Autowired
-    private RedisTemplate<String, Serializable> redisTemplate;
+    private RedisTemplate redisTemplate;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -60,7 +60,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer> implements R
         role.setCreateAdminId(request.getAdmin().getId());
         role.setUpdateAdminId(request.getAdmin().getId());
         roleMapper.insertSelective(role);
-        redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE, String.valueOf(role.getId()), role);
+        redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE, role.getId(), role);
 
         for (Integer rightId : rightIds) {
             RoleRight roleRight = new RoleRight();
@@ -74,7 +74,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer> implements R
         }
         roleRightMapper.insertList(roleRights);
         for (RoleRight roleRight : roleRights) {
-            redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE_RIGHT, String.valueOf(roleRight.getId()), roleRight);
+            redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE_RIGHT, roleRight.getId(), roleRight);
         }
         return role.getId();
     }
@@ -93,7 +93,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer> implements R
 
         roleMapper.updateByPrimaryKeySelective(role);
 
-        redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE, String.valueOf(role.getId()), role);
+        redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE, role.getId(), role);
 
         List<RoleRight> oldRoleRights = roleRightMapper.selectByProperty("roleId", id);
 
@@ -124,7 +124,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer> implements R
         }
         roleRightMapper.insertList(newRoleRights);
         for (RoleRight roleRight : newRoleRights) {
-            redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE_RIGHT, String.valueOf(roleRight.getId()), roleRight);
+            redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE_RIGHT, roleRight.getId(), roleRight);
         }
         return role.getId();
     }

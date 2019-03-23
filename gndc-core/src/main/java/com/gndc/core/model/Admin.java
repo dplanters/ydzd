@@ -54,7 +54,6 @@ public class Admin extends BaseEntity {
 
     private Integer roleId;
 
-    @LogicDelete(notDeletedValue = 1, isDeletedValue = -1)
     private Byte status;
 
     private Integer createAdminId;

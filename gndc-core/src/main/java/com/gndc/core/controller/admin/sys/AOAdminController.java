@@ -5,14 +5,15 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.admin.AdminLevelEnum;
 import com.gndc.common.enums.right.RightPlatformEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.PasswordUtil;
 import com.gndc.common.utils.PwdUtil;
 import com.gndc.core.api.admin.sys.*;
 import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.core.mappers.AOAdminListResponseMapping;
 import com.gndc.core.mappers.AdminMapping;
 import com.gndc.core.model.Admin;
 import com.gndc.core.model.Partner;
@@ -23,12 +24,15 @@ import com.gndc.core.service.sys.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -46,6 +50,9 @@ public class AOAdminController {
 
     @Autowired
     private PartnerService partnerService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @PostMapping("/addAdmin")
     public ResponseMessage<Integer> addAdmin(@Validated @RequestBody AOAdminAddRequest request) {
@@ -131,14 +138,23 @@ public class AOAdminController {
     }
 
     @PostMapping("/adminList")
-    public ResponseMessage<List<Admin>> adminList(@Validated @RequestBody AOAdminListRequest request) {
-        ResponseMessage<List<Admin>> response = new ResponseMessage<>();
+    public ResponseMessage<List<AOAdminListResponse>> adminList(@Validated @RequestBody AOAdminListRequest request) {
+        ResponseMessage<List<AOAdminListResponse>> response = new ResponseMessage<>();
         PageInfo page = request.getHeader().getPage();
         PageHelper.startPage(page.getPageNum(), page.getPageSize());
-        List<Admin> admins = adminService.selectAll();
+        List<Admin> admins = adminService.adminList(request);
+
+        List<AOAdminListResponse> adminList = new ArrayList<>(admins.size());
+        admins.forEach(admin -> {
+            AOAdminListResponse aoAdmin = AOAdminListResponseMapping.INSTANCE.convert(admin);
+            Role role = ((Role) redisTemplate.opsForHash().get(CacheConstant.KEY_ALL_ROLE,
+                    aoAdmin.getRoleId()));
+            aoAdmin.setRoleName(role.getRoleName());
+            adminList.add(aoAdmin);
+        });
         PageInfo<Admin> pageInfo = new PageInfo<>(admins);
         pageInfo.setList(null);
-        response.setData(admins);
+        response.setData(adminList);
         response.setPage(pageInfo);
         return response;
     }

@@ -57,7 +57,7 @@ public class AOAccountController {
     private AccountService accountService;
 
     @Autowired
-    private RedisTemplate<String, Serializable> redisTemplate;
+    private RedisTemplate redisTemplate;
 
     @PostMapping("/login")
     public ResponseMessage<AOLoginResponse> login(@Validated @RequestBody AOLoginRequest request) {
@@ -127,7 +127,7 @@ public class AOAccountController {
         aoLoginResponse.setAdmin(admin);
         aoLoginResponse.setSessionId(sessionId);
         //缓存半小时
-        redisTemplate.opsForValue().set(sessionId, aoLoginResponse, CacheConstant.EXPIRE_ADMIN_LOGIN, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(sessionId, admin, CacheConstant.EXPIRE_ADMIN_LOGIN, TimeUnit.SECONDS);
 
         response.setData(aoLoginResponse);
         return response;

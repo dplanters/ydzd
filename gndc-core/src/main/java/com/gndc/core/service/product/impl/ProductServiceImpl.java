@@ -28,11 +28,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import tk.mybatis.mapper.weekend.Weekend;
 
@@ -55,7 +53,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     private ProductHotMapper productHotMapper;
 
     @Autowired
-    private RedisTemplate<String, Serializable> redisTemplate;
+    private RedisTemplate redisTemplate;
 
     @Override
     public List<APProductListResponse> productList(@Validated @RequestBody APProductListRequest request) {
@@ -90,28 +88,33 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Integer productAddModify(AOProductAddModifyRequest request) {
-        AOProductDataModifyRequest aoProductDataRequest = request.getExtra();
+    public Integer addProduct(AOProductAddRequest request) {
+        AOProductDataRequest aoProductDataRequest = request.getExtra();
 
         Product product = ProductMapping.INSTANCE.convert(request);
         ProductData productData = ProductDataMapping.INSTANCE.convert(aoProductDataRequest);
-        if (request.getId() == null) {
-            //新增
-            productMapper.insertSelective(product);
+        //新增
+        productMapper.insertSelective(product);
+        productData.setProductId(product.getId());
+        productData.setDataType(ProductDataTypeEnum.AMOUNT.getCode());
+        productDataMapper.insertSelective(productData);
 
-            productData.setProductId(product.getId());
-            productData.setDataType(ProductDataTypeEnum.AMOUNT.getCode());
-            productDataMapper.insertSelective(productData);
-        } else {
-            //修改
-            productMapper.updateByPrimaryKeySelective(product);
+        return product.getId();
+    }
 
-            Weekend<ProductData> weekend = Weekend.of(ProductData.class);
-            weekend.weekendCriteria()
-                    .andEqualTo(ProductData::getProductId, request.getId())
-                    .andEqualTo(ProductData::getDataType, ProductDataTypeEnum.AMOUNT.getCode());
-            productDataMapper.updateByExampleSelective(productData, weekend);
-        }
+    @Override
+    public Integer modifyProduct(AOProductModifyRequest request) {
+        AOProductDataRequest aoProductDataRequest = request.getExtra();
+
+        Product product = ProductMapping.INSTANCE.convert(request);
+        ProductData productData = ProductDataMapping.INSTANCE.convert(aoProductDataRequest);
+        productMapper.updateByPrimaryKeySelective(product);
+
+        Weekend<ProductData> weekend = Weekend.of(ProductData.class);
+        weekend.weekendCriteria()
+                .andEqualTo(ProductData::getProductId, request.getId())
+                .andEqualTo(ProductData::getDataType, ProductDataTypeEnum.AMOUNT.getCode());
+        productDataMapper.updateByExampleSelective(productData, weekend);
 
         return product.getId();
     }

@@ -1,6 +1,7 @@
 package com.gndc.core.mappers;
 
-import com.gndc.core.api.admin.product.AOProductAddModifyRequest;
+import com.gndc.core.api.admin.product.AOProductAddRequest;
+import com.gndc.core.api.admin.product.AOProductModifyRequest;
 import com.gndc.core.model.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,5 +17,11 @@ public interface ProductMapping {
             @Mapping(target = "androidLink", source = "productLink"),
             @Mapping(target = "iosLink", source = "productLink")
     })
-    Product convert(AOProductAddModifyRequest aoProductAddRequest);
+    Product convert(AOProductAddRequest request);
+
+    @Mappings({
+            @Mapping(target = "androidLink", source = "productLink"),
+            @Mapping(target = "iosLink", source = "productLink")
+    })
+    Product convert(AOProductModifyRequest request);
 }

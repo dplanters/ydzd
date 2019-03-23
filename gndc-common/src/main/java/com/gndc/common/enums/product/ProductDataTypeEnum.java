@@ -4,21 +4,21 @@ public enum ProductDataTypeEnum {
     AMOUNT((byte) 1, "借款数据"),
     QUESTION((byte) 2, "常见问题");
 
-    private byte code;
+    private Byte code;
 
     private String name;
 
 
-    ProductDataTypeEnum(byte code, String name) {
+    ProductDataTypeEnum(Byte code, String name) {
         this.code = code;
         this.name = name;
     }
 
-    public byte getCode() {
+    public Byte getCode() {
         return code;
     }
 
-    public void setCode(byte code) {
+    public void setCode(Byte code) {
         this.code = code;
     }
 

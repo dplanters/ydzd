@@ -57,7 +57,7 @@ public class APAccountController {
     private AccountService accountService;
 
     @Autowired
-    private RedisTemplate<String, Serializable> redisTemplate;
+    private RedisTemplate redisTemplate;
 
     /**
      * 登录模块
@@ -120,7 +120,7 @@ public class APAccountController {
         apLoginResponse.setAdmin(admin);
         apLoginResponse.setSessionId(sessionId);
         //缓存半小时
-        redisTemplate.opsForValue().set(sessionId, apLoginResponse, CacheConstant.EXPIRE_PARTNER_LOGIN, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(sessionId, admin, CacheConstant.EXPIRE_PARTNER_LOGIN, TimeUnit.SECONDS);
 
         response.setData(apLoginResponse);
         return response;
