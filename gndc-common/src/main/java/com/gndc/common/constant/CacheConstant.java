@@ -8,6 +8,11 @@ public class CacheConstant {
     public static final Long NO_EXPIRE = -1L;
 
     /**
+     * 运营管理员登录命名空间
+     */
+    public static final String NAMESPACE_ADMIN_LOGIN = "admin:";
+
+    /**
      * 运营管理员登录前缀
      */
     public static final String KEY_ADMIN_LOGIN_PREFIX = "admin_";
@@ -18,6 +23,11 @@ public class CacheConstant {
     public static final Long EXPIRE_ADMIN_LOGIN = 30 * 60L;
 
     /**
+     * 商户管理员登录命名空间
+     */
+    public static final String NAMESPACE_PARTNER_LOGIN = "partner:";
+
+    /**
      * 商户管理员登录前缀
      */
     public static final String KEY_PARTNER_LOGIN_PREFIX = "partner_";
@@ -26,6 +36,11 @@ public class CacheConstant {
      * 商户管理员登录过期时间
      */
     public static final Long EXPIRE_PARTNER_LOGIN = 30 * 60L;
+
+    /**
+     * APP用户登录命名空间
+     */
+    public static final String NAMESPACE_USER_LOGIN = "user:";
 
     /**
      * APP用户登录前缀

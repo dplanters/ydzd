@@ -93,7 +93,13 @@ public class AOAccountController {
         //更新登录信息
         adminService.updateByPrimaryKeySelective(admin);
         //分配session
-        String sessionId = CacheConstant.KEY_ADMIN_LOGIN_PREFIX + Utils.getSessionId();
+        String sessionId = Utils.getSessionId();
+        //不是运营账号不允许登录
+        if (!PlatformEnum.OPERATOR.getCode().equals(admin.getPlatform())) {
+            logger.warn("{} 不允许登录运营平台", admin.getPlatform());
+            throw new HjException(ResultCode.NOT_ALLOW_LOGIN);
+        }
+
         //获取权限树
         Byte superAdmin = admin.getSuperAdmin();
         AdminSuperAdminEnum superAdminEnum = AdminSuperAdminEnum.fetch(superAdmin);
@@ -123,7 +129,7 @@ public class AOAccountController {
         aoLoginResponse.setAdmin(admin);
         aoLoginResponse.setSessionId(sessionId);
         //缓存半小时
-        redisTemplate.opsForValue().set(sessionId, admin, CacheConstant.EXPIRE_ADMIN_LOGIN, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(CacheConstant.NAMESPACE_ADMIN_LOGIN + sessionId, admin, CacheConstant.EXPIRE_ADMIN_LOGIN, TimeUnit.SECONDS);
 
         response.setData(aoLoginResponse);
         return response;

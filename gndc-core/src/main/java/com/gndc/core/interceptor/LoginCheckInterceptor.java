@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -55,40 +54,60 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
             throw new HjException(ResultCode.NO_SESSION);
         } else {
             Admin admin = null;
+            Admin partner = null;
             User user = null;
-            if (sessionId.startsWith(CacheConstant.KEY_ADMIN_LOGIN_PREFIX) || sessionId.startsWith(CacheConstant.KEY_PARTNER_LOGIN_PREFIX)) {
-                admin = (Admin) redisTemplate.opsForValue().get(sessionId);
-            }
-            if (sessionId.startsWith(CacheConstant.KEY_USER_LOGIN_PREFIX)) {
-                user = (User) redisTemplate.opsForValue().get(sessionId);
+
+            Object o =
+                    redisTemplate.opsForValue().get(CacheConstant.NAMESPACE_ADMIN_LOGIN + sessionId);
+            if (ObjectUtil.isNotNull(o)) {
+                admin = (Admin) o;
             }
 
-            if (ObjectUtil.isNull(admin) && ObjectUtil.isNull(user)) {
+            Object o2 =
+                    redisTemplate.opsForValue().get(CacheConstant.NAMESPACE_PARTNER_LOGIN + sessionId);
+            if (ObjectUtil.isNotNull(o2)) {
+                partner = (Admin) o2;
+            }
+
+            Object o3 =
+                    redisTemplate.opsForValue().get(CacheConstant.NAMESPACE_USER_LOGIN + sessionId);
+            if (ObjectUtil.isNotNull(o3)) {
+                user = (User) o3;
+            }
+
+            if (ObjectUtil.isNull(admin) && ObjectUtil.isNull(partner) && ObjectUtil.isNull(user)) {
                 String msg = StrUtil.format("session : {} 已失效", sessionId);
                 logger.warn(msg);
-                throw new HjException(ResultCode.SESSION_EXPIRE);
+                throw new HjException(ResultCode.SESSION_EXPIRED);
             } else {
                 Long expire = 0L;
                 RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
 
-                if (sessionId.startsWith(CacheConstant.KEY_ADMIN_LOGIN_PREFIX)) {
+                if (ObjectUtil.isNotNull(admin)) {
                     expire = CacheConstant.EXPIRE_ADMIN_LOGIN;
-                    requestAttributes.setAttribute(CacheConstant.KEY_ADMIN_LOGIN_PREFIX,   admin,
+                    requestAttributes.setAttribute(CacheConstant.NAMESPACE_ADMIN_LOGIN, admin,
                             RequestAttributes.SCOPE_SESSION);
-                } else if (sessionId.startsWith(CacheConstant.KEY_PARTNER_LOGIN_PREFIX)) {
+                    //session保活
+                    redisTemplate.opsForValue().set(CacheConstant.NAMESPACE_ADMIN_LOGIN + sessionId, admin, expire,
+                            TimeUnit.SECONDS);
+                } else if (ObjectUtil.isNotNull(partner)) {
                     expire = CacheConstant.EXPIRE_PARTNER_LOGIN;
-                    requestAttributes.setAttribute(CacheConstant.KEY_PARTNER_LOGIN_PREFIX, admin,
+                    requestAttributes.setAttribute(CacheConstant.NAMESPACE_PARTNER_LOGIN, admin,
                             RequestAttributes.SCOPE_REQUEST);
-                } else if (sessionId.startsWith(CacheConstant.KEY_USER_LOGIN_PREFIX)) {
+                    //session保活
+                    redisTemplate.opsForValue().set(CacheConstant.NAMESPACE_PARTNER_LOGIN + sessionId, partner, expire,
+                            TimeUnit.SECONDS);
+                } else if (ObjectUtil.isNotNull(user)) {
                     expire = CacheConstant.EXPIRE_USER_LOGIN;
-                    requestAttributes.setAttribute(CacheConstant.KEY_USER_LOGIN_PREFIX, admin,
+                    requestAttributes.setAttribute(CacheConstant.NAMESPACE_USER_LOGIN, admin,
                             RequestAttributes.SCOPE_REQUEST);
+                    //session保活
+                    redisTemplate.opsForValue().set(CacheConstant.NAMESPACE_USER_LOGIN + sessionId, user, expire,
+                            TimeUnit.SECONDS);
                 } else {
                     logger.warn("无效的sessionId");
                     throw new HjException(ResultCode.INVALID_SESSION);
                 }
-                //session保活
-                redisTemplate.opsForValue().set(sessionId, admin, expire, TimeUnit.SECONDS);
                 RequestContextHolder.getRequestAttributes().setAttribute("sessionId", sessionId, RequestAttributes.SCOPE_REQUEST);
                 if (ObjectUtil.isNotNull(user)) {
                     //App用户放行,不校验权限
@@ -99,8 +118,8 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
                 //权限校验
                 hasRight(admin.getRights(), request.getServletPath(), hasRight);
                 if (!hasRight.contains(true)) {
-                    logger.warn(ResultCode.NO_RIGHT.getI18NContent());
-                    throw new HjException(ResultCode.NO_RIGHT);
+                    logger.warn(ResultCode.NO_PERMISSION.getI18NContent());
+                    throw new HjException(ResultCode.NO_PERMISSION);
                 }
             }
         }

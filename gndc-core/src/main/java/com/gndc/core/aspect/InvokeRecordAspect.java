@@ -38,7 +38,7 @@ public class InvokeRecordAspect {
             log.info("请求地址:" + request.getRequestURL().toString());
             log.info("请求方式:" + request.getMethod());
             log.info("请求类方法:" + joinPoint.getSignature());
-            log.info("请求类方法参数:" + JSONObject.toJSONString(joinPoint.getArgs(), true));
+            log.info("请求类方法参数:" + JSONObject.toJSONString(joinPoint.getArgs()));
         } catch (Exception e) {
             log.error("###LogAspectServiceApi.class methodBefore() ### ERROR:", e);
         }
@@ -50,7 +50,7 @@ public class InvokeRecordAspect {
     public void methodAfterReturning(Object o) {
         log.info("--------------返回内容----------------");
         try {
-            log.info("Response内容:" + JSONObject.toJSONString(o, true));
+            log.info("Response内容:" + JSONObject.toJSONString(o));
         } catch (Exception e) {
             log.error("###LogAspectServiceApi.class methodAfterReturning() ### ERROR:", e);
         }

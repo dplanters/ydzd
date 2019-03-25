@@ -28,4 +28,12 @@ public class AOAdminListResponse implements Serializable {
 
     private Byte platform;
 
+    private Byte superAdmin;
+
+    private Date createTime;
+
+    private Integer partnerId;
+
+    private String partnerName;
+
 }

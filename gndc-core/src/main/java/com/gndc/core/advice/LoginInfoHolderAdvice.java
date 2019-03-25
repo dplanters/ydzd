@@ -42,14 +42,35 @@ public class LoginInfoHolderAdvice extends RequestBodyAdviceAdapter {
                 RequestAttributes.SCOPE_REQUEST);
         if (ObjectUtil.isNotNull(originalSessionId)) {
             String sessionId = (String) originalSessionId;
-            if (sessionId.startsWith(CacheConstant.KEY_ADMIN_LOGIN_PREFIX)) {
-                ((RequestMessage) body).setAdmin(((Admin) redisTemplate.opsForValue().get(sessionId)));
+            Admin admin = null;
+            Admin partner = null;
+            User user = null;
+            Object o =
+                    redisTemplate.opsForValue().get(CacheConstant.NAMESPACE_ADMIN_LOGIN + sessionId);
+            if (ObjectUtil.isNotNull(o)) {
+                admin = (Admin) o;
             }
-            if (sessionId.startsWith(CacheConstant.KEY_PARTNER_LOGIN_PREFIX)) {
-                ((RequestMessage) body).setAdmin(((Admin) redisTemplate.opsForValue().get(sessionId)));
+
+            Object o2 =
+                    redisTemplate.opsForValue().get(CacheConstant.NAMESPACE_PARTNER_LOGIN + sessionId);
+            if (ObjectUtil.isNotNull(o2)) {
+                partner = (Admin) o2;
             }
-            if (sessionId.startsWith(CacheConstant.KEY_USER_LOGIN_PREFIX)) {
-                ((RequestMessage) body).setUser(((User) redisTemplate.opsForValue().get(sessionId)));
+
+            Object o3 =
+                    redisTemplate.opsForValue().get(CacheConstant.NAMESPACE_USER_LOGIN + sessionId);
+            if (ObjectUtil.isNotNull(o3)) {
+                user = (User) o3;
+            }
+
+            if (ObjectUtil.isNotNull(admin)) {
+                ((RequestMessage) body).setAdmin(admin);
+            }
+            if (ObjectUtil.isNotNull(partner)) {
+                ((RequestMessage) body).setAdmin(partner);
+            }
+            if (ObjectUtil.isNotNull(user)) {
+                ((RequestMessage) body).setUser(user);
             }
         }
         return body;

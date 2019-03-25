@@ -60,7 +60,7 @@ public class LoginCheckFilter extends OncePerRequestFilter {
             Serializable admin = redisTemplate.opsForValue().get(sessionId);
             if (ObjectUtil.isNull(admin)) {
                 logger.warn("session已失效");
-                responseJson.fluentPut("code", ResultCode.SESSION_EXPIRE.getCode()).fluentPut("msg", "session已失效");
+                responseJson.fluentPut("code", ResultCode.SESSION_EXPIRED.getCode()).fluentPut("msg", "session已失效");
                 responseContent = responseJson.toJSONString();
             } else {
                 Long expire = 0L;

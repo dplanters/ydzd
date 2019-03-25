@@ -238,7 +238,7 @@ public class PAccountController {
         String sessionId = Utils.getSessionId();
         User userInfo = new User();
         userInfo.setId(userId);
-        redisTemplate.opsForValue().set(CacheConstant.KEY_USER_LOGIN_PREFIX + sessionId, userInfo,
+        redisTemplate.opsForValue().set(CacheConstant.NAMESPACE_USER_LOGIN + sessionId, userInfo,
                 CacheConstant.EXPIRE_USER_LOGIN, TimeUnit.SECONDS);
 
         // 打开app统计

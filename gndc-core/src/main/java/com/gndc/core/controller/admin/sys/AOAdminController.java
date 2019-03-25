@@ -153,7 +153,10 @@ public class AOAdminController {
             Role role = ((Role) redisTemplate.opsForHash().get(CacheConstant.KEY_ALL_ROLE,
                     aoAdmin.getRoleId()));
             aoAdmin.setRoleName(ObjectUtil.isNotNull(role) ? role.getRoleName() : null);
-
+            if (PlatformEnum.PARTNER.getCode().equals(admin.getPlatform())) {
+                Partner partner = partnerService.selectByPrimaryKey(admin.getPartnerId());
+                aoAdmin.setPartnerName(partner.getName());
+            }
             adminList.add(aoAdmin);
         });
         PageInfo<Admin> pageInfo = new PageInfo<>(admins);

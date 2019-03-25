@@ -97,28 +97,24 @@ public class APAccountController {
         //更新登录信息
         adminService.updateByPrimaryKeySelective(admin);
         //分配session
-        String sessionId = CacheConstant.KEY_PARTNER_LOGIN_PREFIX + Utils.getSessionId();
+        String sessionId = Utils.getSessionId();
         //获取权限树
-        Byte platform = admin.getPlatform();
-        PlatformEnum rightPlatformEnum = PlatformEnum.fetch(platform);
         List<Right> rights = null;
         List<Integer> rightIds = null;
-        switch (rightPlatformEnum) {
-            case OPERATOR:
-                Role role = roleService.selectByPrimaryKey(admin.getRoleId());
-                rightIds = roleRightService.getRightIds(role.getId());
-                rights = rightService.rightsTree((byte)1, PlatformEnum.OPERATOR.getCode(), 0, rightIds);
-                admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
-                break;
-            default:
-                String msg = StrUtil.format("无效的账号类型 : {}", platform);
-                logger.warn(msg);
-                throw new HjException(ResultCode.ERROR, msg);
+        //不是商户账号不允许登录
+        if (!PlatformEnum.PARTNER.getCode().equals(admin.getPlatform())) {
+            logger.warn("{} 不允许登录商户平台", admin.getPlatform());
+            throw new HjException(ResultCode.NOT_ALLOW_LOGIN);
+        } else {
+            Role role = roleService.selectByPrimaryKey(admin.getRoleId());
+            rightIds = roleRightService.getRightIds(role.getId());
+            rights = rightService.rightsTree((byte)1, PlatformEnum.OPERATOR.getCode(), 0, rightIds);
+            admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
         }
         apLoginResponse.setAdmin(admin);
         apLoginResponse.setSessionId(sessionId);
         //缓存半小时
-        redisTemplate.opsForValue().set(sessionId, admin, CacheConstant.EXPIRE_PARTNER_LOGIN, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(CacheConstant.NAMESPACE_PARTNER_LOGIN + sessionId, admin, CacheConstant.EXPIRE_PARTNER_LOGIN, TimeUnit.SECONDS);
 
         response.setData(apLoginResponse);
         return response;
