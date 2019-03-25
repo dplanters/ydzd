@@ -4,9 +4,8 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.admin.AdminLevelEnum;
 import com.gndc.common.enums.common.DelEnum;
-import com.gndc.common.enums.right.RightPlatformEnum;
+import com.gndc.common.enums.common.PlatformEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.Utils;
 import com.gndc.core.api.common.ResponseMessage;
@@ -100,19 +99,19 @@ public class APAccountController {
         //分配session
         String sessionId = CacheConstant.KEY_PARTNER_LOGIN_PREFIX + Utils.getSessionId();
         //获取权限树
-        Byte level = admin.getLevel();
-        AdminLevelEnum adminLevelEnum = AdminLevelEnum.fetch(level);
+        Byte platform = admin.getPlatform();
+        PlatformEnum rightPlatformEnum = PlatformEnum.fetch(platform);
         List<Right> rights = null;
         List<Integer> rightIds = null;
-        switch (adminLevelEnum) {
-            case PARTNER_ADMIN:
+        switch (rightPlatformEnum) {
+            case OPERATOR:
                 Role role = roleService.selectByPrimaryKey(admin.getRoleId());
                 rightIds = roleRightService.getRightIds(role.getId());
-                rights = rightService.rightsTree((byte)1, RightPlatformEnum.OPERATOR.getCode(), 0, rightIds);
+                rights = rightService.rightsTree((byte)1, PlatformEnum.OPERATOR.getCode(), 0, rightIds);
                 admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
                 break;
             default:
-                String msg = StrUtil.format("无效的账号类型 : {}", adminLevelEnum);
+                String msg = StrUtil.format("无效的账号类型 : {}", platform);
                 logger.warn(msg);
                 throw new HjException(ResultCode.ERROR, msg);
         }

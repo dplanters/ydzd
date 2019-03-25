@@ -48,7 +48,9 @@ public class Admin extends BaseEntity {
 
     private String phone;
 
-    private Byte level;
+    private Byte platform;
+
+    private Byte superAdmin;
 
     private Integer partnerId;
 

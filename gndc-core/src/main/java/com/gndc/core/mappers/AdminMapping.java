@@ -14,12 +14,12 @@ public interface AdminMapping {
     AdminMapping INSTANCE = Mappers.getMapper(AdminMapping.class);
 
     @Mappings({
-            @Mapping(target = "level", source = "platform")
+            @Mapping(target = "platform", source = "platform")
     })
     Admin convert(AOAdminAddRequest request);
 
     @Mappings({
-            @Mapping(target = "level", source = "platform")
+            @Mapping(target = "platform", source = "platform")
     })
     Admin convert(AOAdminModifyRequest request);
 }

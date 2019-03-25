@@ -26,4 +26,6 @@ public class AOAdminListResponse implements Serializable {
 
     private Integer createAdminId;
 
+    private Byte platform;
+
 }

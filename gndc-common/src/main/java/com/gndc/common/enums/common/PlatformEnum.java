@@ -1,17 +1,15 @@
-package com.gndc.common.enums.right;
+package com.gndc.common.enums.common;
 
 import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 平台类型
+ */
 @Getter
-public enum RightPlatformEnum {
-
-    /**
-     * 公共
-     */
-    COMMON((byte) 1, "公共"),
+public enum PlatformEnum {
 
     /**
      * 运营
@@ -26,27 +24,34 @@ public enum RightPlatformEnum {
     /**
      * App
      */
-    APP((byte) 4, "APP");
+    APP((byte) 4, "APP"),
+
+    /**
+     * 公共
+     */
+    COMMON((byte) 5, "公共"),
+
+    ;
 
     private Byte code;
     private String name;
 
-    private static final Map<Byte, RightPlatformEnum> map;
+    private static final Map<Byte, PlatformEnum> map;
 
     static {
         map = new HashMap<>();
-        for (RightPlatformEnum as : values()) {
+        for (PlatformEnum as : values()) {
             map.put(as.code, as);
         }
     }
 
-    RightPlatformEnum(Byte code, String name) {
+    PlatformEnum(Byte code, String name) {
         this.code = code;
         this.name = name;
     }
 
     public static String getName(Byte code) {
-        for (RightPlatformEnum userSexType : RightPlatformEnum.values()) {
+        for (PlatformEnum userSexType : PlatformEnum.values()) {
             if (userSexType.code.equals(code)) {
                 return userSexType.name;
             }
@@ -60,7 +65,7 @@ public enum RightPlatformEnum {
      * @param code
      * @return
      */
-    public static RightPlatformEnum fetch(Byte code) {
+    public static PlatformEnum fetch(Byte code) {
         return map.get(code);
     }
 
@@ -71,7 +76,7 @@ public enum RightPlatformEnum {
      * @return
      */
     public static String fetchName(Byte code) {
-        RightPlatformEnum as = map.get(code);
+        PlatformEnum as = map.get(code);
         return as != null ? as.name : null;
     }
 

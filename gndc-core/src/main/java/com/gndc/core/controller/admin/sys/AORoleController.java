@@ -9,7 +9,7 @@ import com.github.pagehelper.PageInfo;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.DelEnum;
-import com.gndc.common.enums.right.RightPlatformEnum;
+import com.gndc.common.enums.common.PlatformEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.core.api.admin.sys.*;
 import com.gndc.core.api.common.ResponseMessage;
@@ -32,9 +32,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.weekend.Weekend;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,7 +116,7 @@ public class AORoleController {
 
         List<Integer> rightIds = roleRightService.getRightIds(request.getId());
 
-        RightPlatformEnum fetch = RightPlatformEnum.fetch(request.getPlatform());
+        PlatformEnum fetch = PlatformEnum.fetch(request.getPlatform());
 
         //自己拥有的权限树
         List<Right> ownRights = rightService.rightsTree((byte)1, fetch.getCode(), 0,
@@ -162,7 +159,7 @@ public class AORoleController {
                 List<JSONObject> convert = convertOwn(right.getChildren());
                 rightsTree.add(new JSONObject()
                         .fluentPut("id", right.getId())
-                        .fluentPut("level", right.getRightLevel())
+                        .fluentPut("platform", right.getRightLevel())
                         .fluentPut("children", convert));
             }
             return rightsTree;

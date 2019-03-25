@@ -4,9 +4,9 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.admin.AdminLevelEnum;
+import com.gndc.common.enums.admin.AdminSuperAdminEnum;
 import com.gndc.common.enums.common.DelEnum;
-import com.gndc.common.enums.right.RightPlatformEnum;
+import com.gndc.common.enums.common.PlatformEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.Utils;
 import com.gndc.core.api.admin.account.AOLoginRequest;
@@ -95,31 +95,28 @@ public class AOAccountController {
         //分配session
         String sessionId = CacheConstant.KEY_ADMIN_LOGIN_PREFIX + Utils.getSessionId();
         //获取权限树
-        Byte level = admin.getLevel();
-        AdminLevelEnum adminLevelEnum = AdminLevelEnum.fetch(level);
+        Byte superAdmin = admin.getSuperAdmin();
+        AdminSuperAdminEnum superAdminEnum = AdminSuperAdminEnum.fetch(superAdmin);
+
         List<Right> rights = null;
         List<Integer> rightIds = null;
-        switch (adminLevelEnum) {
+
+        switch (superAdminEnum) {
             case SUPER_ADMIN:
                 //获取所有权限id集合
-                rightIds = rightService.rightIds(RightPlatformEnum.OPERATOR.getCode());
-                rights = rightService.rightsTree((byte)1, RightPlatformEnum.OPERATOR.getCode(), 0, rightIds);
+                rightIds = rightService.rightIds(PlatformEnum.OPERATOR.getCode());
+                rights = rightService.rightsTree((byte)1, PlatformEnum.OPERATOR.getCode(), 0, rightIds);
                 admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
                 break;
             case ORDINARY_ADMIN:
                 Role role = roleService.selectByPrimaryKey(admin.getRoleId());
                 rightIds = roleRightService.getRightIds(role.getId());
-                rights = rightService.rightsTree((byte)1, RightPlatformEnum.OPERATOR.getCode(), 0, rightIds);
+                rights = rightService.rightsTree((byte)1, PlatformEnum.OPERATOR.getCode(), 0, rightIds);
                 admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
                 break;
-            case PARTNER_ADMIN:
-                String template = "{} 管理员账号，不允许登录";
-                String msg = StrUtil.format(template, loginName);
-                logger.warn(msg);
-                throw new HjException(ResultCode.ERROR, msg);
             default:
-                template = "无效的账号类型";
-                msg = StrUtil.format(template, loginName);
+                String template = "无效的账号类型";
+                String msg = StrUtil.format(template, loginName);
                 logger.warn(msg);
                 throw new HjException(ResultCode.ERROR, msg);
         }

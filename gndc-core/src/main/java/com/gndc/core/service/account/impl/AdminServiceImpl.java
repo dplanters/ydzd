@@ -2,9 +2,7 @@ package com.gndc.core.service.account.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.gndc.common.enums.admin.AdminLevelEnum;
 import com.gndc.common.enums.common.DelEnum;
-import com.gndc.common.enums.right.RightPlatformEnum;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.admin.sys.AOAdminListRequest;
 import com.gndc.core.mapper.simple.AdminMapper;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.weekend.Weekend;
 import tk.mybatis.mapper.weekend.WeekendCriteria;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -34,15 +31,9 @@ public class AdminServiceImpl extends BaseServiceImpl<Admin, Integer> implements
     public List<Admin> adminList(AOAdminListRequest request) {
         Weekend<Admin> weekend = Weekend.of(Admin.class);
         WeekendCriteria<Admin, Object> weekendCriteria = weekend.weekendCriteria();
-        if (RightPlatformEnum.OPERATOR.getCode().equals(request.getPlatform())) {
-            weekendCriteria.andIn(Admin::getLevel,
-                    Arrays.asList(AdminLevelEnum.SUPER_ADMIN.getCode(), AdminLevelEnum.ORDINARY_ADMIN.getCode()));
-        }
-        if (RightPlatformEnum.PARTNER.getCode().equals(request.getPlatform())) {
-            weekendCriteria.andEqualTo(Admin::getLevel, AdminLevelEnum.PARTNER_ADMIN.getCode());
-        }
         weekendCriteria
-                .andEqualTo(Admin::getStatus, DelEnum.IS_DEL.getCode())
+                .andEqualTo(Admin::getStatus, DelEnum.NORMAL.getCode())
+                .andEqualTo(Admin::getPlatform, ObjectUtil.defaultIfNull(request.getPlatform(), null))
                 .andEqualTo(Admin::getName, StrUtil.isEmpty(request.getName()) ? null : request.getName())
                 .andEqualTo(Admin::getLoginName, StrUtil.isEmpty(request.getLoginName()) ? null : request.getLoginName())
                 .andEqualTo(Admin::getPhone, StrUtil.isEmpty(request.getPhone()) ? null : request.getPhone())

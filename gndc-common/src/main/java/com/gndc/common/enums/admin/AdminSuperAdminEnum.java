@@ -11,19 +11,17 @@ package com.gndc.common.enums.admin;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum AdminLevelEnum {
+public enum AdminSuperAdminEnum {
 
     SUPER_ADMIN((byte) 1, "超级管理员"),
 
-    ORDINARY_ADMIN((byte) 2, "普通管理员"),
+    ORDINARY_ADMIN((byte) 0, "普通管理员");
 
-    PARTNER_ADMIN((byte) 3, "商户管理员");
-
-    private static final Map<Byte, AdminLevelEnum> map;
+    private static final Map<Byte, AdminSuperAdminEnum> map;
 
     static {
         map = new HashMap<>();
-        for (AdminLevelEnum as : values()) {
+        for (AdminSuperAdminEnum as : values()) {
             map.put(as.code, as);
         }
     }
@@ -31,7 +29,7 @@ public enum AdminLevelEnum {
     private byte code;
     private String name;
 
-    AdminLevelEnum(byte code, String name) {
+    AdminSuperAdminEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -42,7 +40,7 @@ public enum AdminLevelEnum {
      * @param code
      * @return
      */
-    public static AdminLevelEnum fetch(byte code) {
+    public static AdminSuperAdminEnum fetch(byte code) {
         return map.get(code);
     }
 
@@ -53,7 +51,7 @@ public enum AdminLevelEnum {
      * @return
      */
     public static String fetchName(byte code) {
-        AdminLevelEnum as = map.get(code);
+        AdminSuperAdminEnum as = map.get(code);
         return as != null ? as.name : null;
     }
 
