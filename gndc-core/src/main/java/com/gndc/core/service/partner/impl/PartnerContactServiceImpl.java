@@ -29,7 +29,7 @@ public class PartnerContactServiceImpl extends BaseServiceImpl<PartnerContact, I
 
         BeanUtils.copyProperties(request, partnerContact);
 
-        partnerContact.setPartnerId(request.getAdmin().getPartnerId());
+        partnerContact.setPartnerId(request.getApAdmin().getPartnerId());
         int affected = partnerContactMapper.insertSelective(partnerContact);
         return affected == 1;
     }

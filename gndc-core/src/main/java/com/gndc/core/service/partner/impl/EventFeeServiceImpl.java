@@ -12,6 +12,7 @@ import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.common.utils.JsonUtil;
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.api.partner.*;
+import com.gndc.core.api.partner.account.APLoginAdminInfo;
 import com.gndc.core.api.partner.dataAnalysis.APDataAnalysisListResponse;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Request;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Response;
@@ -77,7 +78,7 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
         try {
 
 
-            Admin admin = request.getAdmin();
+            APLoginAdminInfo admin = request.getApAdmin();
 
             LocalDate now = LocalDate.now();
 

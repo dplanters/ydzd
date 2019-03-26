@@ -3,8 +3,10 @@ package com.gndc.core.advice;
 import cn.hutool.core.util.ObjectUtil;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.utils.BeanFactoryUtil;
+import com.gndc.core.api.admin.account.AOLoginAdminInfo;
 import com.gndc.core.api.admin.account.AOLoginResponse;
 import com.gndc.core.api.common.RequestMessage;
+import com.gndc.core.api.partner.account.APLoginAdminInfo;
 import com.gndc.core.api.partner.account.APLoginResponse;
 import com.gndc.core.model.Admin;
 import com.gndc.core.model.User;
@@ -42,19 +44,19 @@ public class LoginInfoHolderAdvice extends RequestBodyAdviceAdapter {
                 RequestAttributes.SCOPE_REQUEST);
         if (ObjectUtil.isNotNull(originalSessionId)) {
             String sessionId = (String) originalSessionId;
-            Admin admin = null;
-            Admin partner = null;
+            AOLoginAdminInfo admin = null;
+            APLoginAdminInfo partner = null;
             User user = null;
             Object o =
                     redisTemplate.opsForValue().get(CacheConstant.NAMESPACE_ADMIN_LOGIN + sessionId);
             if (ObjectUtil.isNotNull(o)) {
-                admin = (Admin) o;
+                admin = (AOLoginAdminInfo) o;
             }
 
             Object o2 =
                     redisTemplate.opsForValue().get(CacheConstant.NAMESPACE_PARTNER_LOGIN + sessionId);
             if (ObjectUtil.isNotNull(o2)) {
-                partner = (Admin) o2;
+                partner = (APLoginAdminInfo) o2;
             }
 
             Object o3 =
@@ -64,10 +66,10 @@ public class LoginInfoHolderAdvice extends RequestBodyAdviceAdapter {
             }
 
             if (ObjectUtil.isNotNull(admin)) {
-                ((RequestMessage) body).setAdmin(admin);
+                ((RequestMessage) body).setAoAdmin(admin);
             }
             if (ObjectUtil.isNotNull(partner)) {
-                ((RequestMessage) body).setAdmin(partner);
+                ((RequestMessage) body).setApAdmin(partner);
             }
             if (ObjectUtil.isNotNull(user)) {
                 ((RequestMessage) body).setUser(user);

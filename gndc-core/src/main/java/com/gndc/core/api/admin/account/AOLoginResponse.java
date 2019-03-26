@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 public class AOLoginResponse implements Serializable {
 
-    private Admin admin;
+    private AOLoginAdminInfo admin;
 
     private String sessionId;
 }

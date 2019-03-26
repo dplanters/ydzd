@@ -1,6 +1,9 @@
 package com.gndc.core.aspect;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.JSONSerializer;
+import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -38,7 +41,12 @@ public class InvokeRecordAspect {
             log.info("请求地址:" + request.getRequestURL().toString());
             log.info("请求方式:" + request.getMethod());
             log.info("请求类方法:" + joinPoint.getSignature());
-            log.info("请求类方法参数:" + JSONObject.toJSONString(joinPoint.getArgs()));
+            log.info("请求类方法参数:" + JSONObject.toJSONString(joinPoint.getArgs(), new SimplePropertyPreFilter() {
+                @Override
+                public boolean apply(JSONSerializer serializer, Object object, String name) {
+                    return !StrUtil.containsAnyIgnoreCase(name, "rights");
+                }
+            }));
         } catch (Exception e) {
             log.error("###LogAspectServiceApi.class methodBefore() ### ERROR:", e);
         }

@@ -6,6 +6,8 @@ import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.BeanFactoryUtil;
+import com.gndc.core.api.admin.account.AOLoginAdminInfo;
+import com.gndc.core.api.partner.account.APLoginAdminInfo;
 import com.gndc.core.model.Admin;
 import com.gndc.core.model.Right;
 import com.gndc.core.model.User;
@@ -53,20 +55,20 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
             logger.warn(ResultCode.NO_SESSION);
             throw new HjException(ResultCode.NO_SESSION);
         } else {
-            Admin admin = null;
-            Admin partner = null;
+            AOLoginAdminInfo admin = null;
+            APLoginAdminInfo partner = null;
             User user = null;
 
             Object o =
                     redisTemplate.opsForValue().get(CacheConstant.NAMESPACE_ADMIN_LOGIN + sessionId);
             if (ObjectUtil.isNotNull(o)) {
-                admin = (Admin) o;
+                admin = (AOLoginAdminInfo) o;
             }
 
             Object o2 =
                     redisTemplate.opsForValue().get(CacheConstant.NAMESPACE_PARTNER_LOGIN + sessionId);
             if (ObjectUtil.isNotNull(o2)) {
-                partner = (Admin) o2;
+                partner = (APLoginAdminInfo) o2;
             }
 
             Object o3 =

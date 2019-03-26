@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Setter
 public class APLoginResponse implements Serializable {
 
-    private Admin admin;
+    private APLoginAdminInfo admin;
 
     private String sessionId;
 }

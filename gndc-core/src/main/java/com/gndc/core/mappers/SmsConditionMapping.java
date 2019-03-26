@@ -15,13 +15,13 @@ public interface SmsConditionMapping {
     @Mappings({
             @Mapping(target = "id", source = "conditionId"),
             @Mapping(target = "condition", expression = "java(com.alibaba.fastjson.JSONObject.toJSONString(request.getSmsConditionContent(), false))"),
-            @Mapping(target = "createAdminId", source = "admin.id")
+            @Mapping(target = "createAdminId", source = "aoAdmin.id")
     })
     SmsCondition convert(AOSmsConditionUpdateRequest request);
 
     @Mappings({
             @Mapping(target = "condition", expression = "java(com.alibaba.fastjson.JSONObject.toJSONString(request.getSmsConditionContent(), false))"),
-            @Mapping(target = "createAdminId", source = "admin.id")
+            @Mapping(target = "createAdminId", source = "aoAdmin.id")
     })
     SmsCondition convert(AOSmsConditionAddRequest request);
 }

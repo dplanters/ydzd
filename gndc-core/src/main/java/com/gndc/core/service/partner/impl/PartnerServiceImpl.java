@@ -31,7 +31,7 @@ public class PartnerServiceImpl extends BaseServiceImpl<Partner, Integer> implem
     @Override
     public APPartnerInfoResponse getPartner(APPartnerInfoRequest request) {
 
-        Integer partnerId = request.getAdmin().getPartnerId();
+        Integer partnerId = request.getApAdmin().getPartnerId();
         Partner partner = partnerMapper.selectByPrimaryKey(partnerId);
 
         APPartnerInfoResponse partnerInfo = new APPartnerInfoResponse();

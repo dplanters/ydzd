@@ -15,12 +15,12 @@ public interface SmsTemplateMapping {
 
     @Mappings({
             @Mapping(target = "id", source = "templateId"),
-            @Mapping(target = "createAdminId", source = "admin.id")
+            @Mapping(target = "createAdminId", source = "aoAdmin.id")
     })
     SmsTemplate convert(AOSmsTemplateUpdateRequest request);
 
     @Mappings({
-            @Mapping(target = "createAdminId", source = "admin.id")
+            @Mapping(target = "createAdminId", source = "aoAdmin.id")
     })
     SmsTemplate convert(AOSmsTemplateAddRequest request);
 }

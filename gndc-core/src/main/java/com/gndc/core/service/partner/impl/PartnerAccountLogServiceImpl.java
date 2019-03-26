@@ -41,7 +41,7 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
         partnerAccountLog.setCreateTime(now);
         partnerAccountLog.setUpdateTime(now);
 
-        partnerAccountLog.setPartnerId(request.getAdmin().getPartnerId());
+        partnerAccountLog.setPartnerId(request.getApAdmin().getPartnerId());
         partnerAccountLog.setType(PartnerAccountLogTypeEnum.RECHARGET.getCode());
         partnerAccountLog.setPayStatus(PartnerAccountLogStatusEnum.RECHARGE_PROCESS.getCode());
         partnerAccountLog.setPayDate(request.getPayDate());
@@ -61,7 +61,7 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
         partnerAccountLog.setCreateTime(now);
         partnerAccountLog.setUpdateTime(now);
 
-        partnerAccountLog.setPartnerId(request.getAdmin().getPartnerId());
+        partnerAccountLog.setPartnerId(request.getApAdmin().getPartnerId());
 
         partnerAccountLog.setType(PartnerAccountLogTypeEnum.WITHDRAW.getCode());
         partnerAccountLog.setPayStatus(PartnerAccountLogStatusEnum.WITHDRAW_PROCESS.getCode());
@@ -76,7 +76,7 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
         PageInfo page = request.getHeader().getPage();
 
         Weekend<PartnerAccountLog> weekend = Weekend.of(PartnerAccountLog.class);
-        Integer partnerId = request.getAdmin().getPartnerId();
+        Integer partnerId = request.getApAdmin().getPartnerId();
         weekend.weekendCriteria()
                 .andEqualTo(PartnerAccountLog::getPartnerId, partnerId)
                 .andEqualTo(PartnerAccountLog::getType, PartnerAccountLogTypeEnum.RECHARGET.getCode());
@@ -92,7 +92,7 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
         PageInfo page = request.getHeader().getPage();
 
         Weekend<PartnerAccountLog> weekend = Weekend.of(PartnerAccountLog.class);
-        Integer partnerId = request.getAdmin().getPartnerId();
+        Integer partnerId = request.getApAdmin().getPartnerId();
         weekend.weekendCriteria()
                 .andEqualTo(PartnerAccountLog::getPartnerId, partnerId)
                 .andEqualTo(PartnerAccountLog::getType, PartnerAccountLogTypeEnum.WITHDRAW.getCode());

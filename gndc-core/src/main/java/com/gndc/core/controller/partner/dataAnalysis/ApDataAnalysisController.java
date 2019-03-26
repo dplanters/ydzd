@@ -37,7 +37,7 @@ public class ApDataAnalysisController {
         ResponseMessage<List<APDataAnalysisListResponse>> response = new ResponseMessage<>();
         PageInfo page = request.getHeader().getPage();
         PageHelper.startPage(page.getPageNum(), page.getPageSize());
-        Integer partnerId = request.getAdmin().getPartnerId();
+        Integer partnerId = request.getApAdmin().getPartnerId();
         Integer productId = request.getProductId();
         //一个产品的统计项
         List<APDataAnalysisListResponse> dataAnalysisListResponses = eventFeeService.dataAnalysis(partnerId, productId,

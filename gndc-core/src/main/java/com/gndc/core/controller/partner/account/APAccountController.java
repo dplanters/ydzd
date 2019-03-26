@@ -9,8 +9,10 @@ import com.gndc.common.enums.common.PlatformEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.Utils;
 import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.core.api.partner.account.APLoginAdminInfo;
 import com.gndc.core.api.partner.account.APLoginRequest;
 import com.gndc.core.api.partner.account.APLoginResponse;
+import com.gndc.core.mappers.APLoginAdminInfoMapping;
 import com.gndc.core.model.Admin;
 import com.gndc.core.model.Right;
 import com.gndc.core.model.Role;
@@ -111,10 +113,12 @@ public class APAccountController {
             rights = rightService.rightsTree((byte)1, PlatformEnum.OPERATOR.getCode(), 0, rightIds);
             admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
         }
-        apLoginResponse.setAdmin(admin);
+        APLoginAdminInfo adminInfo = APLoginAdminInfoMapping.INSTANCE.convert(admin);
+        apLoginResponse.setAdmin(adminInfo);
         apLoginResponse.setSessionId(sessionId);
         //缓存半小时
-        redisTemplate.opsForValue().set(CacheConstant.NAMESPACE_PARTNER_LOGIN + sessionId, admin, CacheConstant.EXPIRE_PARTNER_LOGIN, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(CacheConstant.NAMESPACE_PARTNER_LOGIN + sessionId, adminInfo,
+                CacheConstant.EXPIRE_PARTNER_LOGIN, TimeUnit.SECONDS);
 
         response.setData(apLoginResponse);
         return response;

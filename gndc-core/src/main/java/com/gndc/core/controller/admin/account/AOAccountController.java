@@ -9,9 +9,11 @@ import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.common.PlatformEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.Utils;
+import com.gndc.core.api.admin.account.AOLoginAdminInfo;
 import com.gndc.core.api.admin.account.AOLoginRequest;
 import com.gndc.core.api.admin.account.AOLoginResponse;
 import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.core.mappers.AOLoginAdminInfoMapping;
 import com.gndc.core.model.Admin;
 import com.gndc.core.model.Right;
 import com.gndc.core.model.Role;
@@ -131,10 +133,12 @@ public class AOAccountController {
                 logger.warn(msg);
                 throw new HjException(ResultCode.ERROR, msg);
         }
-        aoLoginResponse.setAdmin(admin);
+        AOLoginAdminInfo adminInfo = AOLoginAdminInfoMapping.INSTANCE.convert(admin);
+        aoLoginResponse.setAdmin(adminInfo);
         aoLoginResponse.setSessionId(sessionId);
         //缓存半小时
-        redisTemplate.opsForValue().set(CacheConstant.NAMESPACE_ADMIN_LOGIN + sessionId, admin, CacheConstant.EXPIRE_ADMIN_LOGIN, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(CacheConstant.NAMESPACE_ADMIN_LOGIN + sessionId, adminInfo,
+                CacheConstant.EXPIRE_ADMIN_LOGIN, TimeUnit.SECONDS);
 
         response.setData(aoLoginResponse);
         return response;

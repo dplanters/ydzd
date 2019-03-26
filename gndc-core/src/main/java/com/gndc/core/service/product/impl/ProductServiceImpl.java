@@ -8,6 +8,7 @@ import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.product.ProductDataTypeEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
+import com.gndc.core.api.admin.account.AOLoginAdminInfo;
 import com.gndc.core.api.admin.product.*;
 import com.gndc.core.api.app.product.find.PFindProductRequest;
 import com.gndc.core.api.app.product.find.PFindProductResponse;
@@ -56,7 +57,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
 
     @Override
     public List<APProductListResponse> productList(@Validated @RequestBody APProductListRequest request) {
-        Integer partnerId = request.getAdmin().getPartnerId();
+        Integer partnerId = request.getApAdmin().getPartnerId();
 
         Weekend<Product> weekend = Weekend.of(Product.class);
         weekend.weekendCriteria()
@@ -190,7 +191,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     @Override
     @Transactional
     public Integer productHotEdit(AOProductHotEditRequest request) {
-        Admin admin = request.getAdmin();
+        AOLoginAdminInfo admin = request.getAoAdmin();
         if (admin == null) {
             logger.warn("用户未登陆");
             throw new HjException(ResultCode.SESSIONID_ISNULL);

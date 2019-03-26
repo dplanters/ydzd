@@ -8,7 +8,8 @@
  ***************************************************************************/
 package com.gndc.core.api.common;
 
-import com.gndc.core.model.Admin;
+import com.gndc.core.api.admin.account.AOLoginAdminInfo;
+import com.gndc.core.api.partner.account.APLoginAdminInfo;
 import com.gndc.core.model.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +29,7 @@ public class RequestMessage implements Serializable {
 
     protected Header header;
     protected User user;
-    protected Admin admin;
+    protected AOLoginAdminInfo aoAdmin;
+    protected APLoginAdminInfo apAdmin;
 
 }
