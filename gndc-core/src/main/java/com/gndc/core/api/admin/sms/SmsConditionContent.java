@@ -21,33 +21,21 @@ public class SmsConditionContent implements Serializable {
      */
     private Byte marketingType;
     /**
-     * 营销时间
+     * 营销时间单位:日
      */
     private Integer marketingTime;
-    /**
-     * 营销时间单位1日2月
-     */
-    private Byte marketingUnit;
     /*******************营销类****************/
     /*******************催收类****************/
     /**
-     * 催收时间
+     * 催收时间单位:日
      */
     private Integer collectionTime[];
-    /**
-     * 催收时间单位1日2月
-     */
-    private Byte collectionUnit;
     /*******************催收类****************/
     /*******************提醒类****************/
     /**
-     * 提醒时间
+     * 提醒时间单位:日
      */
     private Integer remindTime[];
-    /**
-     * 提醒时间单位1日2月
-     */
-    private Byte remindUnit;
     /*******************提醒类****************/
     /*******************通知类****************/
     /**

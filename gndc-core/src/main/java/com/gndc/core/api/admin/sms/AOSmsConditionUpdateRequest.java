@@ -9,12 +9,13 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class AOSmsTemplateEditRequest extends RequestMessage {
+public class AOSmsConditionUpdateRequest extends RequestMessage {
 
     /**
      * 模板ID
      */
-    private Integer templateId;
+    @NotNull
+    private Integer conditionId;
 
     /**
      * 类型 0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
@@ -23,13 +24,8 @@ public class AOSmsTemplateEditRequest extends RequestMessage {
     private Byte type;
 
     /**
-     * 短信模板内容
+     * 短信条件内容
      */
     @NotBlank
-    private String content;
-
-    /**
-     * 状态id状态 1正常 -1删除
-     */
-    private Byte status;
+    private SmsConditionContent smsConditionContent;
 }

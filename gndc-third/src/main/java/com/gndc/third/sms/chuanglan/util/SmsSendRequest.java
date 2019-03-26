@@ -51,23 +51,14 @@ public class SmsSendRequest {
         this.phone = phone;
     }
 
-    public SmsSendRequest(String account, String password, String msg, String phone, String report) {
+    public SmsSendRequest(String account, String password, String msg, String phone, String report, String uid) {
         super();
         this.account = account;
         this.password = password;
         this.msg = msg;
         this.phone = phone;
         this.report = report;
-    }
-
-    public SmsSendRequest(String account, String password, String msg, String phone, String report, String sendtime) {
-        super();
-        this.account = account;
-        this.password = password;
-        this.msg = msg;
-        this.phone = phone;
-        this.sendtime = sendtime;
-        this.report = report;
+        this.uid = uid;
     }
 
     public SmsSendRequest(String account, String password, String msg, String phone, String sendtime, String report,

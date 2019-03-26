@@ -29,4 +29,14 @@ public interface SmsLogService extends BaseService<SmsLog, Integer> {
     boolean validateSmsCount(Sms10MinuteCount sms10MinuteCount, Sms24HourCount sms24HourCount, ResponseMessage<?> response);
 
     boolean validateSms(SmsInfo sms, Sms10MinuteCount sms10MinuteCount, String key, String valCode, ResponseMessage<?> response);
+
+    /**
+     * 群发营销类短信
+     *
+     * @param channel 短信通道
+     * @param phone   手机号(多个","隔开"15800000000,15300000000")
+     * @param smsText 短信内容
+     * @return
+     */
+    void groupSendSmsJson(String channel, String phone, String smsText) throws Exception;
 }

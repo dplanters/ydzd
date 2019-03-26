@@ -8,12 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class AOSmsConditionEditRequest extends RequestMessage {
-
-    /**
-     * 模板ID
-     */
-    private Integer conditionId;
+public class AOSmsConditionAddRequest extends RequestMessage {
 
     /**
      * 类型 0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
@@ -27,8 +22,4 @@ public class AOSmsConditionEditRequest extends RequestMessage {
     @NotNull
     private SmsConditionContent smsConditionContent;
 
-    /**
-     * 状态id状态 1正常 -1删除
-     */
-    private Byte status;
 }

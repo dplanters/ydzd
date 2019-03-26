@@ -9,10 +9,10 @@
         <if test="options.type">
             and dsc.type = #{options.type}
         </if>
-        <if test="options.createTimeStart != ''">
+        <if test="options.createTimeStart != null and options.createTimeStart != ''">
             and dsc.create_time <![CDATA[>=]]> #{options.createTimeStart}
         </if>
-        <if test="options.createTimeEnd != ''">
+        <if test="options.createTimeEnd != null and options.createTimeEnd != ''">
             and dsc.create_time <![CDATA[<=]]> #{options.createTimeEnd}
         </if>
         order by dsc.create_time

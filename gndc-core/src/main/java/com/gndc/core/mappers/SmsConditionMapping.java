@@ -1,6 +1,7 @@
 package com.gndc.core.mappers;
 
-import com.gndc.core.api.admin.sms.AOSmsConditionEditRequest;
+import com.gndc.core.api.admin.sms.AOSmsConditionAddRequest;
+import com.gndc.core.api.admin.sms.AOSmsConditionUpdateRequest;
 import com.gndc.core.model.SmsCondition;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,5 +17,11 @@ public interface SmsConditionMapping {
             @Mapping(target = "condition", expression = "java(com.alibaba.fastjson.JSONObject.toJSONString(request.getSmsConditionContent(), false))"),
             @Mapping(target = "createAdminId", source = "admin.id")
     })
-    SmsCondition convert(AOSmsConditionEditRequest request);
+    SmsCondition convert(AOSmsConditionUpdateRequest request);
+
+    @Mappings({
+            @Mapping(target = "condition", expression = "java(com.alibaba.fastjson.JSONObject.toJSONString(request.getSmsConditionContent(), false))"),
+            @Mapping(target = "createAdminId", source = "admin.id")
+    })
+    SmsCondition convert(AOSmsConditionAddRequest request);
 }

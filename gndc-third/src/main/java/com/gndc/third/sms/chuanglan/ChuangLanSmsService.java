@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 短信http接口的java代码调用示例 基于Apache HttpClient 4.X
@@ -73,8 +74,7 @@ public class ChuangLanSmsService implements ISmsService {
             String report = "true";
 
             SmsSendRequest smsSingleRequest = new SmsSendRequest(CHUANG_LAN_ACCOUNT, CHUANG_LAN_PASSWORD, text, to,
-                    report);
-
+                    report, UUID.randomUUID().toString().replace("-", ""));
             String requestJson = JSON.toJSONString(smsSingleRequest);
 
             System.out.println("chuanglan sms request: " + requestJson);

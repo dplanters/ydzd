@@ -254,4 +254,54 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
 
         return true;
     }
+
+    @Override
+    public void groupSendSmsJson(String channel, String phone, String smsText) throws Exception {
+
+
+        Map<String, String> sendResult = new HashMap<>();
+
+        if (channel.equals(SmsChannelEnum.PAASOO.getCode())) {
+            sendResult = paasooSmsService.sendSms(phone, smsText, null);
+        } else if (channel.equals(SmsChannelEnum.CHUANGLAN.getCode())) {
+            sendResult = chuangLanSmsService.sendSms(phone, smsText, null);
+        }
+
+        String status = null;
+        // 短信发送日志
+        Date now = DateUtil.getCountyTime();
+        SmsLog sl = new SmsLog();
+        sl.setMobile(phone);
+//        sl.setUserId(userId);
+//        sl.setSmsType(smsTemplateType.getCode());
+//        sl.setSmsParam(valCodeStr);
+//        sl.setMessage(message);
+        sl.setCreateTime(now);
+        sl.setUpdateTime(now);
+        sl.setThirdChannel(channel);
+
+        if (channel.equals(SmsChannelEnum.PAASOO.getCode())) {
+            status = sendResult.get("status");
+            sl.setPaasooPhoneValErrcode(sendResult.get("phoneValidateErrorCode"));
+            sl.setPaasooPhoneValFormat(sendResult.get("phoneValidateFormat"));
+            sl.setPaasooPhoneValStr(sendResult.get("phoneValidateStr"));
+
+            sl.setPaasooSmsMessageid(sendResult.get("messageid"));
+            sl.setPaasooSmsStatus(status);
+            sl.setPaasooSmsStatusCode(sendResult.get("statusCode"));
+            sl.setPaasooSmsStr(sendResult.get("response"));
+
+        } else if (channel.equals(SmsChannelEnum.CHUANGLAN.getCode())) {
+            status = sendResult.get("code");
+            sl.setPaasooPhoneValFormat(sendResult.get("errorMsg"));
+            sl.setPaasooPhoneValStr(sendResult.get("phoneValidateStr"));
+
+            sl.setPaasooSmsMessageid(sendResult.get("msgId"));
+            sl.setPaasooSmsStatus(sendResult.get("code"));
+            sl.setPaasooSmsStatusCode(sendResult.get("code"));
+            sl.setPaasooSmsStr(sendResult.get("response"));
+        }
+
+        smsLogService.insertSelective(sl);
+    }
 }
