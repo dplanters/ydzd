@@ -16,7 +16,7 @@ CHANGE COLUMN `status` `advertis_status`  tinyint(4) NOT NULL DEFAULT 1 COMMENT 
 CHANGE COLUMN `is_del` `status`  tinyint(4) NOT NULL DEFAULT 1 COMMENT '状态  1：正常；0：删除' AFTER `advertis_status`;
 
 ALTER TABLE `dc_operation_banner`
-MODIFY COLUMN `status`  tinyint(4) NOT NULL DEFAULT 1 COMMENT '状态  1：正常；0：删除' AFTER `title`,
+CHANGE COLUMN `is_del` `status`  tinyint(4) NOT NULL DEFAULT 1 COMMENT '状态  1：正常；0：删除' AFTER `title`,
 ADD COLUMN `banner_status`  tinyint(4) NOT NULL DEFAULT 1 COMMENT '广告状态  1未上线;2上线;-1下线' AFTER `title`;
 
 ALTER TABLE `dc_partner`

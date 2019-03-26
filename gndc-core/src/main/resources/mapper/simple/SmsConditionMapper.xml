@@ -5,7 +5,7 @@
         select dsc.id,dsc.type,dsc.condition,dsc.create_time as createTime,da.name
         from dc_sms_condition dsc
         left join dc_admin da on da.id = dsc.create_admin_id
-        where dsc.is_del = 1
+        where dsc.status = 1
         <if test="options.type">
             and dsc.type = #{options.type}
         </if>

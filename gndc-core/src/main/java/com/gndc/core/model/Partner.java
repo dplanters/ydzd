@@ -41,7 +41,7 @@ public class Partner extends BaseEntity {
     /**
      * 状态：1 正常； -1删除
      */
-    @LogicDelete(isDeletedValue = 0, notDeletedValue = 1)
+    @LogicDelete(notDeletedValue = 1, isDeletedValue = 0)
     private Byte status;
 
 }

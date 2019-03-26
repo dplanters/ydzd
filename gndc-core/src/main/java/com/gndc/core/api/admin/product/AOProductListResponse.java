@@ -53,7 +53,7 @@ public class AOProductListResponse implements Serializable {
     /**
      * 状态
      */
-    private Byte status;
+    private Byte productStatus;
 
     /**
      * 热推状态

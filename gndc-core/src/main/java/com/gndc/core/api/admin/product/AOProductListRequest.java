@@ -21,7 +21,7 @@ public class AOProductListRequest extends RequestMessage {
     /**
      * 产品状态
      */
-    private Byte status;
+    private Byte productStatus;
 
     /**
      * 合作机构id
