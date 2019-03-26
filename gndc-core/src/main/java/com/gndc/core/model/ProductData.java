@@ -72,7 +72,6 @@ public class ProductData extends BaseEntity {
     /**
      * 状态  1存在；-1删除
      */
-    @LogicDelete(notDeletedValue = 1, isDeletedValue = 0)
     private Byte status;
 
 }

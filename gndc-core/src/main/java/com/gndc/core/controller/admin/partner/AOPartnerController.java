@@ -1,5 +1,6 @@
 package com.gndc.core.controller.admin.partner;
 
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.core.api.admin.partner.*;
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.mappers.PartnerMapping;
@@ -25,6 +26,11 @@ public class AOPartnerController {
     @Autowired
     private PartnerService partnerService;
 
+    /**
+     * 添加商户信息
+     * @param request
+     * @return
+     */
     @PostMapping("/addPartner")
     public ResponseMessage<Integer> addPartner(@Validated @RequestBody AOPartnerAddRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
@@ -34,6 +40,11 @@ public class AOPartnerController {
         return response;
     }
 
+    /**
+     * 修改商户信息
+     * @param request
+     * @return
+     */
     @PostMapping("/modifyPartner")
     public ResponseMessage<Integer> modifyPartner(@Validated @RequestBody AOPartnerModifyRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
@@ -43,14 +54,25 @@ public class AOPartnerController {
         return response;
     }
 
+    /**
+     * 删除商户
+     * @param request
+     * @return
+     */
     @PostMapping("/deletePartner")
     public ResponseMessage<Boolean> deletePartner(@Validated @RequestBody AOPartnerDeleteRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
-        partnerService.deleteByPrimaryKey(request.getId());
+        Partner partner = new Partner().setId(request.getId()).setStatus(StatusEnum.DELETE.getCode());
+        partnerService.updateByPrimaryKeySelective(partner);
         response.setData(true);
         return response;
     }
 
+    /**
+     * 获取商户详情
+     * @param request
+     * @return
+     */
     @PostMapping("/detailPartner")
     public ResponseMessage<Partner> detailPartner(@Validated @RequestBody AOPartnerDetailRequest request) {
         ResponseMessage<Partner> response = new ResponseMessage<>();
@@ -59,6 +81,11 @@ public class AOPartnerController {
         return response;
     }
 
+    /**
+     * 商户列表
+     * @param request
+     * @return
+     */
     @PostMapping("/partnerList")
     public ResponseMessage<List<Partner>> partnerList(@Validated @RequestBody AOPartnerListRequest request) {
         ResponseMessage<List<Partner>> response = new ResponseMessage<>();

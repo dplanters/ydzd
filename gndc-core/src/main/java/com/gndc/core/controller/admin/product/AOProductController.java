@@ -1,5 +1,6 @@
 package com.gndc.core.controller.admin.product;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.enums.common.OnlineStatusEnum;
 import com.gndc.core.api.common.ResponseMessage;
@@ -33,9 +34,17 @@ public class AOProductController {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    /**
+     * 产品列表
+     * @param request
+     * @return
+     */
     @PostMapping("/productList")
     public ResponseMessage<List<AOProductListResponse>> productList(@Validated @RequestBody AOProductListRequest request) {
         ResponseMessage<List<AOProductListResponse>> response = new ResponseMessage<>();
+        PageInfo page = request.getHeader().getPage();
+
+        PageHelper.startPage(page.getPageNum(), page.getPageSize());
         List<AOProductListResponse> aoProductListResponses = productService.productList(request);
         PageInfo<AOProductListResponse> pageInfo = new PageInfo<>(aoProductListResponses);
 
@@ -45,6 +54,11 @@ public class AOProductController {
         return response;
     }
 
+    /**
+     * 产品名列表（下拉框数据初始化接口）
+     * @param request
+     * @return
+     */
     @PostMapping("/productNameAll")
     public ResponseMessage<List<Product>> productNameAll(@Validated @RequestBody AOAllProductNameRequest request) {
         ResponseMessage<List<Product>> response = new ResponseMessage<>();
@@ -67,6 +81,11 @@ public class AOProductController {
         return response;
     }
 
+    /**
+     * 添加产品
+     * @param request
+     * @return
+     */
     @PostMapping("/addProduct")
     public ResponseMessage<Integer> addProduct(@Validated @RequestBody AOProductAddRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
@@ -77,6 +96,11 @@ public class AOProductController {
         return response;
     }
 
+    /**
+     * 修改产品
+     * @param request
+     * @return
+     */
     @PostMapping("/modifyProduct")
     public ResponseMessage<Integer> modifyProduct(@Validated @RequestBody AOProductModifyRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
@@ -87,6 +111,11 @@ public class AOProductController {
         return response;
     }
 
+    /**
+     * 获取产品详情
+     * @param request
+     * @return
+     */
     @PostMapping("/productDetail")
     public ResponseMessage<AOProductDetailResponse> productDetail(@Validated @RequestBody AOProductDetailRequest request) {
         ResponseMessage<AOProductDetailResponse> response = new ResponseMessage<>();
@@ -96,7 +125,12 @@ public class AOProductController {
         return response;
     }
 
-    @PostMapping("/aoProductUpperAndLowerLine")
+    /**
+     * 产品上下线
+     * @param request
+     * @return
+     */
+    @PostMapping("/productUpperAndLowerLine")
     public ResponseMessage<Boolean> productUpperAndLowerLine(@Validated @RequestBody AOUpperAndLowerLineRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
         Boolean success = productService.productUpperAndLowerLine(request);
@@ -104,6 +138,11 @@ public class AOProductController {
         return response;
     }
 
+    /**
+     * 产品删除
+     * @param request
+     * @return
+     */
     @PostMapping("/productDelete")
     public ResponseMessage<Boolean> productDelete(@Validated @RequestBody AOProductDeleteRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
@@ -112,10 +151,17 @@ public class AOProductController {
         return response;
     }
 
+    /**
+     * 获取爆款产品列表
+     * @param request
+     * @return
+     */
     @PostMapping("/productHotList")
     public ResponseMessage<List<AOProductHotListResponse>> productHotList(@Validated @RequestBody AOProductHotListRequest request) {
         ResponseMessage<List<AOProductHotListResponse>> response = new ResponseMessage<>();
+        PageInfo page = request.getHeader().getPage();
 
+        PageHelper.startPage(page.getPageNum(), page.getPageSize());
         List<AOProductHotListResponse> aoProductHotListResponses = productService.productHotList(request);
 
         PageInfo<AOProductHotListResponse> pageInfo = new PageInfo<>(aoProductHotListResponses);
@@ -125,6 +171,11 @@ public class AOProductController {
         return response;
     }
 
+    /**
+     * 爆款产品编辑
+     * @param request
+     * @return
+     */
     @PostMapping("/productHotEdit")
     @Transactional
     public ResponseMessage<Integer> productHotEdit(@Validated @RequestBody AOProductHotEditRequest request) {

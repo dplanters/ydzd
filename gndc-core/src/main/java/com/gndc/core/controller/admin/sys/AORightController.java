@@ -38,6 +38,11 @@ public class AORightController {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    /**
+     * 添加权限
+     * @param request
+     * @return
+     */
     @PostMapping("/addRight")
     public ResponseMessage<Integer> addRight(@Validated @RequestBody AORightAddRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
@@ -48,6 +53,11 @@ public class AORightController {
         return response;
     }
 
+    /**
+     * 修改权限
+     * @param request
+     * @return
+     */
     @PostMapping("/modifyRight")
     public ResponseMessage<Integer> modifyRight(@Validated @RequestBody AORightModifyRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
@@ -58,6 +68,11 @@ public class AORightController {
         return response;
     }
 
+    /**
+     * 获取权限树
+     * @param request
+     * @return
+     */
     @PostMapping("/rightTree")
     public ResponseMessage<Right> rightTree(@Validated @RequestBody AORightTreeRequest request) {
         ResponseMessage<Right> response = new ResponseMessage<>();
@@ -67,6 +82,11 @@ public class AORightController {
         return response;
     }
 
+    /**
+     * 获取权限详情
+     * @param request
+     * @return
+     */
     @PostMapping("/detail")
     public ResponseMessage<Right> detail(@Validated @RequestBody AORightDetailRequest request) {
         ResponseMessage<Right> resposne = new ResponseMessage<>();
@@ -75,6 +95,11 @@ public class AORightController {
         return resposne;
     }
 
+    /**
+     * 删除权限
+     * @param request
+     * @return
+     */
     @PostMapping("/delete")
     public ResponseMessage<Boolean> delete(@Validated @RequestBody AORightDeleteRequest request) {
         ResponseMessage<Boolean> resposne = new ResponseMessage<>();

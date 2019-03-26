@@ -3,6 +3,7 @@ package com.gndc.core.model;
 import com.gndc.common.model.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import tk.mybatis.mapper.annotation.LogicDelete;
 
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 @Getter
 @Setter
+@Accessors(chain = true)
 @Table(name = "dc_product")
 public class Product extends BaseEntity {
     @Id
@@ -97,7 +99,6 @@ public class Product extends BaseEntity {
     /**
      * 状态  1存在；0删除
      */
-    @LogicDelete(notDeletedValue = 1, isDeletedValue = 0)
     private Byte status;
 
     /**

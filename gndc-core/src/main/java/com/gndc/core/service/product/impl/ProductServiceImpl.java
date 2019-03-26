@@ -77,11 +77,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
 
     @Override
     public List<AOProductListResponse> productList(AOProductListRequest request) {
-        PageInfo page = request.getHeader().getPage();
-
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
         List<AOProductListResponse> aoProductListResponses = productMapper.aoProductList(request);
-
         return aoProductListResponses;
     }
 
@@ -161,32 +157,31 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     @Override
     public Boolean productDelete(AOProductDeleteRequest request) {
         Integer id = request.getId();
-        Product product = productMapper.selectByPrimaryKey(id);
-        if (product == null) {
+        Product originalProduct = productMapper.selectByPrimaryKey(id);
+        if (originalProduct == null) {
             logger.warn("产品编号{}不存在或已下线", request.getId());
             throw new HjException(ResultCode.RECORD_NOT_EXIST);
         }
 
-        if (product.getProductStatus().equals(OnlineStatusEnum.ONLINE.getCode())) {
+        if (originalProduct.getProductStatus().equals(OnlineStatusEnum.ONLINE.getCode())) {
             logger.warn("产品编号{}在线不允许删除", request.getId());
             throw new HjException(ResultCode.PRODUCT_ONLINE);
         }
-        product.setStatus(StatusEnum.DELETE.getCode());
+        originalProduct.setStatus(StatusEnum.DELETE.getCode());
 
         Weekend<ProductData> weekend = Weekend.of(ProductData.class);
         weekend.weekendCriteria()
                 .andEqualTo(ProductData::getProductId, id);
 
+        Product product = new Product().setId(id).setStatus(StatusEnum.DELETE.getCode());
         boolean affectedRows = productDataMapper.deleteByExample(weekend) > 0;
-        boolean affected = productMapper.deleteByPrimaryKey(id) == 1;
+        boolean affected = productMapper.updateByPrimaryKeySelective(product) == 1;
         return affectedRows && affected;
     }
 
     @Override
     public List<AOProductHotListResponse> productHotList(AOProductHotListRequest request) {
-        PageInfo page = request.getHeader().getPage();
 
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
         List<AOProductHotListResponse> aoProductListResponses = productMapper.aoProductHotList(request);
 
         return aoProductListResponses;

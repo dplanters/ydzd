@@ -17,11 +17,13 @@ public class AOBannerSortRequest extends RequestMessage {
     /**
      * 第一个banner
       */
+    @NotNull
     private Banner one;
 
     /**
      * 第二个banner
      */
+    @NotNull
     private Banner two;
 
 }

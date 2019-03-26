@@ -25,6 +25,6 @@ public class AOUserDetailRequest extends RequestMessage {
      * 用户ID
      */
     @NotNull
-    private int userId;
+    private Integer userId;
 
 }

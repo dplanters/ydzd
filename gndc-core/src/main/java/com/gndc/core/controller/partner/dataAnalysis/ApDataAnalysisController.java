@@ -27,6 +27,11 @@ public class ApDataAnalysisController {
     @Autowired
     private EventFeeService eventFeeService;
 
+    /**
+     * 数据分析
+     * @param request
+     * @return
+     */
     @PostMapping("/apDataAnalysis")
     public ResponseMessage<List<APDataAnalysisListResponse>> apDataAnalysis(@Validated @RequestBody APDataAnalysisListRequest request) {
         ResponseMessage<List<APDataAnalysisListResponse>> response = new ResponseMessage<>();

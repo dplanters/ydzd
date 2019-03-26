@@ -28,6 +28,7 @@ public class AOPartnerModifyRequest extends RequestMessage {
     /**
      * 授信额度
      */
+    @NotNull
     @Digits(integer = 10, fraction = 2)
     private BigDecimal authAmount;
 

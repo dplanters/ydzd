@@ -58,6 +58,11 @@ public class AOAccountController {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    /**
+     * 管理员登录
+     * @param request
+     * @return
+     */
     @PostMapping("/login")
     public ResponseMessage<AOLoginResponse> login(@Validated @RequestBody AOLoginRequest request) {
         ResponseMessage<AOLoginResponse> response = new ResponseMessage<>();

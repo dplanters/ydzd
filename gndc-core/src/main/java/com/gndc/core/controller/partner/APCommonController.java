@@ -29,6 +29,11 @@ public class APCommonController {
     @Autowired
     private SystemOptionService systemOptionService;
 
+    /**
+     * 获取所有商户信息
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/getAllPartner")
     public ResponseMessage<List<Partner>> getAllPartner(@Validated @RequestBody APAllPartnerRequest request) {
         ResponseMessage<List<Partner>> response = new ResponseMessage<>();
@@ -39,6 +44,11 @@ public class APCommonController {
         return response;
     }
 
+    /**
+     * 获取收款人列表
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/payeeList")
     public ResponseMessage<List<String>> payeeList(@Validated @RequestBody APPayeeListRequest request) {
         ResponseMessage<List<String>> response = new ResponseMessage<>();

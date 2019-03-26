@@ -28,6 +28,11 @@ public class AOBannerController {
     @Autowired
     private BannerService bannerService;
 
+    /**
+     * 添加Banner
+     * @param request
+     * @return
+     */
     @PostMapping("/addBanner")
     public ResponseMessage<Integer> addBanner(@Validated @RequestBody AOBannerAddRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
@@ -46,6 +51,11 @@ public class AOBannerController {
         return response;
     }
 
+    /**
+     * Banner排序
+     * @param request
+     * @return
+     */
     @PostMapping("/sort")
     public ResponseMessage<Boolean> sort(@Validated @RequestBody AOBannerSortRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
@@ -55,6 +65,11 @@ public class AOBannerController {
         return response;
     }
 
+    /**
+     * 修改Banner
+     * @param request
+     * @return
+     */
     @PostMapping("/modifyBanner")
     public ResponseMessage<Integer> modifyBanner(@Validated @RequestBody AOBannerModifyRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
@@ -64,6 +79,11 @@ public class AOBannerController {
         return response;
     }
 
+    /**
+     * 获取Banner列表
+     * @param request
+     * @return
+     */
     @PostMapping("/bannerList")
     public ResponseMessage<List<Banner>> bannerList(@Validated @RequestBody AOBannerListRequest request) {
         ResponseMessage<List<Banner>> response = new ResponseMessage<>();
@@ -74,6 +94,11 @@ public class AOBannerController {
         return response;
     }
 
+    /**
+     * 删除Banner
+     * @param request
+     * @return
+     */
     @PostMapping("/deleteBanner")
     public ResponseMessage<Boolean> deleteBanner(@Validated @RequestBody AOBannerDeleteRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
@@ -85,6 +110,11 @@ public class AOBannerController {
         return response;
     }
 
+    /**
+     * 下线Banner
+     * @param request
+     * @return
+     */
     @PostMapping("/offline")
     public ResponseMessage<Integer> offline(@Validated @RequestBody AOBannerOfflineRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
@@ -97,6 +127,11 @@ public class AOBannerController {
         return response;
     }
 
+    /**
+     * 上线Banner
+     * @param request
+     * @return
+     */
     @PostMapping("/online")
     public ResponseMessage<Integer> online(@Validated @RequestBody AOBannerOnlineRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();

@@ -54,6 +54,11 @@ public class AOAdminController {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    /**
+     * 添加管理员账号
+     * @param request
+     * @return
+     */
     @PostMapping("/addAdmin")
     public ResponseMessage<Integer> addAdmin(@Validated @RequestBody AOAdminAddRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
@@ -92,6 +97,11 @@ public class AOAdminController {
         return response;
     }
 
+    /**
+     * 修改管理员账号
+     * @param request
+     * @return
+     */
     @PostMapping("/modifyAdmin")
     public ResponseMessage<Integer> modifyAdmin(@Validated @RequestBody AOAdminModifyRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
@@ -129,6 +139,11 @@ public class AOAdminController {
         return response;
     }
 
+    /**
+     * 删除管理员账号
+     * @param request
+     * @return
+     */
     @PostMapping("/deleteAdmin")
     public ResponseMessage<Boolean> deleteAdmin(@Validated @RequestBody AOAdminDeleteRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
@@ -140,6 +155,11 @@ public class AOAdminController {
         return response;
     }
 
+    /**
+     * 获取管理员列表
+     * @param request
+     * @return
+     */
     @PostMapping("/adminList")
     public ResponseMessage<List<AOAdminListResponse>> adminList(@Validated @RequestBody AOAdminListRequest request) {
         ResponseMessage<List<AOAdminListResponse>> response = new ResponseMessage<>();
@@ -166,6 +186,11 @@ public class AOAdminController {
         return response;
     }
 
+    /**
+     * 重置密码
+     * @param request
+     * @return
+     */
     @PostMapping("/resetPwd")
     public ResponseMessage<Boolean> resetPwd(@Validated @RequestBody AOAdminResetPwdRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();

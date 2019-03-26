@@ -34,6 +34,11 @@ public class AOCommonController {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    /**
+     * 获取所有机构
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/getAllPartner")
     public ResponseMessage<List<Partner>> getAllPartner(@Validated @RequestBody APAllPartnerRequest request) {
         ResponseMessage<List<Partner>> response = new ResponseMessage<>();

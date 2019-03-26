@@ -56,6 +56,11 @@ public class AORoleController {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    /**
+     * 添加角色
+     * @param request
+     * @return
+     */
     @PostMapping("/addRole")
     public ResponseMessage<Integer> addModifyRole(@Validated @RequestBody AORoleAddRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
@@ -64,6 +69,11 @@ public class AORoleController {
         return response;
     }
 
+    /**
+     * 修改角色
+     * @param request
+     * @return
+     */
     @PostMapping("/modifyRole")
     public ResponseMessage<Integer> addModifyRole(@Validated @RequestBody AORoleModifyRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
@@ -72,6 +82,11 @@ public class AORoleController {
         return response;
     }
 
+    /**
+     * 删除角色
+     * @param request
+     * @return
+     */
     @PostMapping("/deleteRole")
     public ResponseMessage<Boolean> deleteRole(@Validated @RequestBody AORoleDeleteRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
@@ -109,6 +124,11 @@ public class AORoleController {
         return response;
     }
 
+    /**
+     * 获取角色的权限树
+     * @param request
+     * @return
+     */
     @PostMapping("/roleRightTree")
     public ResponseMessage<AORightTreeResponse> roleRightTree(@Validated @RequestBody AORoleRightTreeRequest request) {
         ResponseMessage<AORightTreeResponse> response = new ResponseMessage<>();
@@ -166,6 +186,11 @@ public class AORoleController {
         }
     }
 
+    /**
+     * 获取角色列表
+     * @param request
+     * @return
+     */
     @PostMapping("/roleList")
     public ResponseMessage<List<Role>> roleList(@Validated @RequestBody AORoleListRequest request) {
         ResponseMessage<List<Role>> response = new ResponseMessage<>();
@@ -181,6 +206,11 @@ public class AORoleController {
         return response;
     }
 
+    /**
+     * 获取角色名列表
+     * @param request
+     * @return
+     */
     @PostMapping("/roleNameList")
     public ResponseMessage<List<Role>> roleList(@Validated @RequestBody AORoleNameListRequest request) {
         ResponseMessage<List<Role>> response = new ResponseMessage<>();

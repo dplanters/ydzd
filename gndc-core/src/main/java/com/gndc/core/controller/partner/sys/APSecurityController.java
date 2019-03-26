@@ -21,6 +21,11 @@ public class APSecurityController {
     @Autowired
     private PartnerContactService partnerContactService;
 
+    /**
+     * 添加紧急联系人
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/addPartnerContact")
     public ResponseMessage<Boolean> addPartnerContact(@Validated @RequestBody PartnerContactAddRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();

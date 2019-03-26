@@ -24,6 +24,11 @@ public class APProductController {
     @Autowired
     private ProductService productService;
 
+    /**
+     * 获取产品列表
+     * @param request
+     * @return
+     */
     @PostMapping("/productList")
     public ResponseMessage<List<APProductListResponse>> productList(@Validated @RequestBody APProductListRequest request) {
         ResponseMessage<List<APProductListResponse>> response = new ResponseMessage<>();
