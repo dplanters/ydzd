@@ -24,7 +24,7 @@ public class Banner extends BaseEntity {
 
     private Byte status;
 
-    private Byte isDel;
+    private Byte bannerStatus;
 
     private Byte position;
 

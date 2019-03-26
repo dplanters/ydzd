@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.common.DelEnum;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.partner.EventFeeStatusEnum;
 import com.gndc.common.enums.partner.EventFeeTypeEnum;
 import com.gndc.common.exception.HjException;
@@ -28,16 +28,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tk.mybatis.mapper.weekend.Weekend;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -88,22 +83,22 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
 
             //h5总数 已结算的数量
             long h5Count = eventFeeMapper.selectCountByDate(EventFeeTypeEnum.H5.getCode(), admin.getPartnerId(),
-                    EventFeeStatusEnum.COMPLETE.getCode(), DelEnum.NORMAL.getCode(), now.getYear(), request.getMonth());
+                    EventFeeStatusEnum.COMPLETE.getCode(), StatusEnum.NORMAL.getCode(), now.getYear(), request.getMonth());
             //h5总数 已结算+未结算
             long h5CountTotal = eventFeeMapper.selectCountByDate(EventFeeTypeEnum.H5.getCode(), admin.getPartnerId(),
-                    null, DelEnum.NORMAL.getCode(), now.getYear(), request.getMonth());
+                    null, StatusEnum.NORMAL.getCode(), now.getYear(), request.getMonth());
 
             //api总数 已结算的数量
             long apiCount = eventFeeMapper.selectCountByDate(EventFeeTypeEnum.API.getCode(), admin.getPartnerId(),
-                    EventFeeStatusEnum.COMPLETE.getCode(), DelEnum.NORMAL.getCode(), now.getYear(), request.getMonth());
+                    EventFeeStatusEnum.COMPLETE.getCode(), StatusEnum.NORMAL.getCode(), now.getYear(), request.getMonth());
 
             //api总数 已结算+未结算
             long apiCountTotal = eventFeeMapper.selectCountByDate(EventFeeTypeEnum.API.getCode(), admin.getPartnerId(),
-                    null, DelEnum.NORMAL.getCode(), now.getYear(), request.getMonth());
+                    null, StatusEnum.NORMAL.getCode(), now.getYear(), request.getMonth());
 
             //h5 已结算金额
             BigDecimal h5Sum = eventFeeMapper.selectSum(EventFeeTypeEnum.H5.getCode(), admin.getPartnerId(),
-                    EventFeeStatusEnum.COMPLETE.getCode(), DelEnum.NORMAL.getCode(), now.getYear(),
+                    EventFeeStatusEnum.COMPLETE.getCode(), StatusEnum.NORMAL.getCode(), now.getYear(),
                     request.getMonth());
             if (h5Sum == null) {
                 h5Sum = new BigDecimal(0);
@@ -111,7 +106,7 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
 
             //api 已结算金额
             BigDecimal apiSum = eventFeeMapper.selectSum(EventFeeTypeEnum.API.getCode(), admin.getPartnerId(),
-                    EventFeeStatusEnum.COMPLETE.getCode(), DelEnum.NORMAL.getCode(), now.getYear(),
+                    EventFeeStatusEnum.COMPLETE.getCode(), StatusEnum.NORMAL.getCode(), now.getYear(),
                     request.getMonth());
 
             if (apiSum == null) {

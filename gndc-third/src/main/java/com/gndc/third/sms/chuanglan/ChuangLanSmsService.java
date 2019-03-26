@@ -64,7 +64,7 @@ public class ChuangLanSmsService implements ISmsService {
             sendResult.put("phoneValidateErrorCode", "00");
             sendResult.put("phoneValidateFormat", "1");
 
-            sendResult.put("response", "{\"status\":\"0\",\"messageid\":\"000090-ca43c5-4000\"}");
+            sendResult.put("response", "{\"bannerStatus\":\"0\",\"messageid\":\"000090-ca43c5-4000\"}");
             sendResult.put("messageid", "000090-ca43c5-4000");
             sendResult.put("code", "0");
         } else {

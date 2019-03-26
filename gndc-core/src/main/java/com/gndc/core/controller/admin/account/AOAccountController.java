@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.admin.AdminSuperAdminEnum;
-import com.gndc.common.enums.common.DelEnum;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.common.PlatformEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.Utils;
@@ -76,7 +76,7 @@ public class AOAccountController {
             throw new HjException(ResultCode.ADMIN_NOT_EXIST, msg);
         }
 
-        if (admin.getStatus().equals(DelEnum.IS_DEL.getCode())) {
+        if (admin.getStatus().equals(StatusEnum.DELETE.getCode())) {
             String template = "用户名 {} 已停用";
             String msg = StrUtil.format(template, loginName);
             logger.warn(msg);

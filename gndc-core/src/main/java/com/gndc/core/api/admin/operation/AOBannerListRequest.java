@@ -15,7 +15,7 @@ public class AOBannerListRequest extends RequestMessage {
     /**
      * 状态
      */
-    private Byte status;
+    private Byte bannerStatus;
 
     /**
      * 开始时间

@@ -45,7 +45,7 @@ ALTER TABLE `dc_product_interface`
 MODIFY COLUMN `status`  tinyint(4) NOT NULL DEFAULT  1 COMMENT '状态  1：正常；0：删除' AFTER `update_time`;
 
 ALTER TABLE `dc_right`
-MODIFY COLUMN `status`  tinyint(4) NOT NULL DEFAULT 1 COMMENT '状态  1：正常；0：删除' AFTER `id`;
+MODIFY COLUMN `right_status` `status`  tinyint(4) NOT NULL DEFAULT 1 COMMENT '状态  1：正常；0：删除' AFTER `id`;
 
 ALTER TABLE `dc_role`
 MODIFY COLUMN `status`  tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态  1：正常；0：删除' AFTER `platform`;

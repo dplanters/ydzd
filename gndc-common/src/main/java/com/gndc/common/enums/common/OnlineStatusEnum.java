@@ -12,7 +12,7 @@ public enum OnlineStatusEnum {
 
     ONLINE((byte)2, "上线"),
 
-    OFF_LINE((byte)-1, "下线");
+    OFFLINE((byte)-1, "下线");
 
     private static final Map<Byte, OnlineStatusEnum> map;
 

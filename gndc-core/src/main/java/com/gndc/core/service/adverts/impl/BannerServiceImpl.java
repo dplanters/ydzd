@@ -3,7 +3,7 @@ package com.gndc.core.service.adverts.impl;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.gndc.common.enums.common.DelEnum;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.admin.operation.AOBannerListRequest;
 import com.gndc.core.mapper.simple.BannerMapper;
@@ -36,8 +36,8 @@ public class BannerServiceImpl extends BaseServiceImpl<Banner, Integer> implemen
         weekend.orderBy("position").desc();
         WeekendCriteria<Banner, Object> weekendCriteria = weekend.weekendCriteria();
         weekendCriteria
-                .andEqualTo(Banner::getIsDel, DelEnum.NORMAL.getCode())
-                .andEqualTo(Banner::getStatus, ObjectUtil.defaultIfNull(request.getStatus(), null))
+                .andEqualTo(Banner::getStatus, StatusEnum.NORMAL.getCode())
+                .andEqualTo(Banner::getBannerStatus, ObjectUtil.defaultIfNull(request.getBannerStatus(), null))
                 .andGreaterThanOrEqualTo(Banner::getCreateTime, ObjectUtil.defaultIfNull(request.getStartTime(), null))
                 .andLessThanOrEqualTo(Banner::getCreateTime, ObjectUtil.defaultIfNull(request.getEndTime(), null));
         List<Banner> banners = bannerMapper.selectByExample(weekend);

@@ -2,7 +2,7 @@ package com.gndc.core.controller.admin.sms;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.gndc.common.enums.common.DelEnum;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.core.api.admin.sms.*;
 import com.gndc.core.api.common.CommonResponse;
 import com.gndc.core.api.common.ResponseMessage;
@@ -102,7 +102,7 @@ public class AOSmsController {
         if(StringUtils.isNotBlank(request.getCreateTimeEnd())){
             criteria.andLessThanOrEqualTo(SmsSign::getCreateTime,request.getCreateTimeEnd());
         }
-        criteria.andEqualTo(SmsSign::getStatus, DelEnum.NORMAL.getCode());
+        criteria.andEqualTo(SmsSign::getStatus, StatusEnum.NORMAL.getCode());
         List<SmsSign> smsSigns = smsSignService.selectByExample(weekend);
         PageInfo<SmsSign> pageInfo = new PageInfo<>(smsSigns);
         response.setData(smsSigns);

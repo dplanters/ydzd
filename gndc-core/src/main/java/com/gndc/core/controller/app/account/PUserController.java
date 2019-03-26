@@ -1,7 +1,7 @@
 package com.gndc.core.controller.app.account;
 
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.common.DelEnum;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.feedback.FeedbackStatusTypeEnum;
 import com.gndc.common.enums.message.MessageTypeEnum;
 import com.gndc.common.enums.partner.EventFeeStatusEnum;
@@ -92,7 +92,7 @@ public class PUserController {
         feedback.setUserPhone(feedBackEditRequest.getPhone());
         feedback.setContent(feedBackEditRequest.getContent().replaceAll("[\ud800\udc00-\udbff\udfff\ud800-\udfff]", ""));
         feedback.setCreateTime(now);
-        feedback.setStatus(FeedbackStatusTypeEnum.SUBMIT.getCode());
+        feedback.setFeedbackStatus(FeedbackStatusTypeEnum.SUBMIT.getCode());
         feedback.setPictureUrl(feedBackEditRequest.getFeedbackPictureUrl());
         int ret = feedbackService.insertSelective(feedback);
         CommonResponse commonResponse = new CommonResponse();
@@ -149,7 +149,7 @@ public class PUserController {
             if (eventRequest.getType() == (int) UserEventsTypeEnum.DOWNLOAD_CLICK.getCode()) {
                 Weekend<MessageTemplate> weekend = Weekend.of(MessageTemplate.class);
                 weekend.weekendCriteria()
-                        .andEqualTo(MessageTemplate::getStatus,DelEnum.NORMAL.getCode())
+                        .andEqualTo(MessageTemplate::getStatus, StatusEnum.NORMAL.getCode())
                         .andEqualTo(MessageTemplate::getType,MessageTypeEnum.SYSTEM.getCode());
                 List<MessageTemplate> messageTemplates = messageTemplateService.selectByExample(weekend);
 
@@ -162,7 +162,7 @@ public class PUserController {
                     message.setMessage(messageContent);
                     message.setProductId(eventRequest.getProductId());
                     message.setMessageType(MessageTypeEnum.SYSTEM.getCode());
-                    message.setStatus(DelEnum.NORMAL.getCode());
+                    message.setMessageStatus(StatusEnum.NORMAL.getCode());
                     userMessageService.insertSelective(message);
                 }
             }

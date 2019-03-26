@@ -18,7 +18,7 @@ public interface EventFeeMapper extends MyMapper<EventFee, Long> {
     long selectCountByDate(@Param("feeType") Byte feeType,
                            @Param("partnerId") int partnerId,
                            @Param("feeStatus") Byte feeStatus,
-                           @Param("status") Byte status,
+                           @Param("bannerStatus") Byte status,
                            @Param("year") int year,
                            @Param("month") int month);
 
@@ -27,12 +27,12 @@ public interface EventFeeMapper extends MyMapper<EventFee, Long> {
                                    @Param("coopeMode") Byte coopeMode,
                                    @Param("eventType") Byte eventType,
                                    @Param("feeStatus") Byte feeStatus,
-                                   @Param("status") Byte status);
+                                   @Param("bannerStatus") Byte status);
 
     BigDecimal selectSum(@Param("feeType") Byte feeType,
                          @Param("partnerId") int partnerId,
                          @Param("feeStatus") Byte feeStatus,
-                         @Param("status") Byte status,
+                         @Param("bannerStatus") Byte status,
                          @Param("year") int year,
                          @Param("month") int month);
 
@@ -41,7 +41,7 @@ public interface EventFeeMapper extends MyMapper<EventFee, Long> {
                        @Param("coopeMode") Byte coopeMode,
                        @Param("eventType") Byte eventType,
                        @Param("feeStatus") Byte feeStatus,
-                       @Param("status") Byte status,
+                       @Param("bannerStatus") Byte status,
                        @Param("startDate") Date startDate,
                        @Param("endDate") Date endDate);
 
@@ -51,7 +51,7 @@ public interface EventFeeMapper extends MyMapper<EventFee, Long> {
                                                     @Param("coopeMode") Byte coopeMode,
                                                     @Param("eventType") Byte eventType,
                                                     @Param("feeStatus") Byte feeStatus,
-                                                    @Param("status") Byte status,
+                                                    @Param("bannerStatus") Byte status,
                                                     @Param("startDate") String startDate,
                                                     @Param("endDate") String endDate);
 
@@ -61,7 +61,7 @@ public interface EventFeeMapper extends MyMapper<EventFee, Long> {
                              @Param("coopeMode") Byte coopeMode,
                              @Param("eventType") Byte eventType,
                              @Param("feeStatus") Byte feeStatus,
-                             @Param("status") Byte status,
+                             @Param("bannerStatus") Byte status,
                              @Param("startDate") String startDate,
                              @Param("endDate") String endDate);
 
@@ -71,7 +71,7 @@ public interface EventFeeMapper extends MyMapper<EventFee, Long> {
                                  @Param("coopeMode") Byte coopeMode,
                                  @Param("eventType") Byte eventType,
                                  @Param("feeStatus") Byte feeStatus,
-                                 @Param("status") Byte status,
+                                 @Param("bannerStatus") Byte status,
                                  @Param("startDate") String startDate,
                                  @Param("endDate") String endDate);
 

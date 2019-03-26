@@ -1,11 +1,10 @@
 package com.gndc.core.controller.admin.product;
 
 import com.github.pagehelper.PageInfo;
+import com.gndc.common.enums.common.OnlineStatusEnum;
 import com.gndc.core.api.common.ResponseMessage;
-import com.gndc.common.enums.common.DelEnum;
-import com.gndc.common.enums.product.ProductStatusEnum;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.core.api.admin.product.*;
-import com.gndc.core.model.Admin;
 import com.gndc.core.model.Product;
 import com.gndc.core.service.product.ProductService;
 import org.slf4j.Logger;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.weekend.Weekend;
 
-import java.io.Serializable;
 import java.util.List;
 
 @RestController
@@ -54,8 +52,8 @@ public class AOProductController {
         Weekend<Product> weekend = Weekend.of(Product.class);
         weekend.selectProperties("id", "name");
         weekend.weekendCriteria()
-                .andEqualTo(Product::getIsDel, DelEnum.NORMAL.getCode())
-                .andEqualTo(Product::getStatus, ProductStatusEnum.ON_LINE.getCode());
+                .andEqualTo(Product::getStatus, StatusEnum.NORMAL.getCode())
+                .andEqualTo(Product::getProductStatus, OnlineStatusEnum.ONLINE.getCode());
 
         Integer partnerId = request.getPartnerId();
         if (partnerId != null) {

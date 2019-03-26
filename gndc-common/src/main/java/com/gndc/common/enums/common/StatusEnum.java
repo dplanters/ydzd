@@ -14,22 +14,22 @@ package com.gndc.common.enums.common;
  * @Description 删除状态
  * @date 2018年1月24日 下午4:48:34
  */
-public enum DelEnum {
+public enum StatusEnum {
 
     NORMAL((byte) 1, "正常状态"),
 
-    IS_DEL((byte) -1, "伪删除状态 ");
+    DELETE((byte) 0, "伪删除状态 ");
 
     private byte code;
     private String name;
 
-    DelEnum(byte code, String name) {
+    StatusEnum(byte code, String name) {
         this.code = code;
         this.name = name;
     }
 
     public static String getName(byte code) {
-        for (DelEnum del : DelEnum.values()) {
+        for (StatusEnum del : StatusEnum.values()) {
             if (del.code == code) {
                 return del.name;
             }

@@ -3,9 +3,9 @@ package com.gndc.core.service.product.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.common.DelEnum;
+import com.gndc.common.enums.common.OnlineStatusEnum;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.product.ProductDataTypeEnum;
-import com.gndc.common.enums.product.ProductStatusEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.admin.product.*;
@@ -35,7 +35,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import tk.mybatis.mapper.weekend.Weekend;
 
 import javax.annotation.Resource;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -62,7 +61,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
         Weekend<Product> weekend = Weekend.of(Product.class);
         weekend.weekendCriteria()
                 .andEqualTo(Product::getPartnerId, partnerId)
-                .andEqualTo(Product::getIsDel, DelEnum.NORMAL.getCode());
+                .andEqualTo(Product::getStatus, StatusEnum.NORMAL.getCode());
 
         List<Product> products = productMapper.selectByExample(weekend);
 
@@ -147,11 +146,11 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             throw new HjException(ResultCode.RECORD_NOT_EXIST);
         }
         Byte upperAndLowerLine = request.getUpperAndLowerLine();
-        if (upperAndLowerLine.equals(ProductStatusEnum.ON_LINE.getCode())) {
-            product.setStatus(ProductStatusEnum.ON_LINE.getCode());
+        if (upperAndLowerLine.equals(OnlineStatusEnum.ONLINE.getCode())) {
+            product.setProductStatus(OnlineStatusEnum.ONLINE.getCode());
             product.setOnlineTime(new Date());
         } else {
-            product.setStatus(ProductStatusEnum.OFF_LINE.getCode());
+            product.setProductStatus(OnlineStatusEnum.OFFLINE.getCode());
             product.setOfflineTime(new Date());
         }
         boolean affected = productMapper.updateByPrimaryKey(product) == 1;
@@ -168,11 +167,11 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             throw new HjException(ResultCode.RECORD_NOT_EXIST);
         }
 
-        if (product.getStatus().equals(ProductStatusEnum.ON_LINE.getCode())) {
+        if (product.getProductStatus().equals(OnlineStatusEnum.ONLINE.getCode())) {
             logger.warn("产品编号{}在线不允许删除", request.getId());
             throw new HjException(ResultCode.PRODUCT_ONLINE);
         }
-        product.setIsDel(DelEnum.IS_DEL.getCode());
+        product.setStatus(StatusEnum.DELETE.getCode());
 
         Weekend<ProductData> weekend = Weekend.of(ProductData.class);
         weekend.weekendCriteria()
@@ -205,7 +204,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
         ProductHot productHot4Edit = ProductHotMapping.INSTANCE.convert(request);
 
         Product product = productMapper.selectByPrimaryKey(request.getProductId());
-        if (product == null || !product.getStatus().equals(ProductStatusEnum.ON_LINE.getCode())) {
+        if (product == null || !product.getProductStatus().equals(OnlineStatusEnum.ONLINE.getCode())) {
             logger.warn("产品未上线");
             throw new HjException(ResultCode.PRODUCTS_NOT_ONLINE);
         }
@@ -222,23 +221,23 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             //修改
             ProductHot productHot = productHotTemps.get(0);
 
-            if (productHot4Edit.getStatus().equals(ProductStatusEnum.ON_LINE.getCode())
-                    && productHot.getStatus().equals(ProductStatusEnum.ON_LINE.getCode())) {
+            if (productHot4Edit.getHotStatus().equals(OnlineStatusEnum.ONLINE.getCode())
+                    && productHot.getHotStatus().equals(OnlineStatusEnum.ONLINE.getCode())) {
                 logger.warn("产品在线");
                 throw new HjException(ResultCode.PRODUCTS_HOT_IS_ONLINE);
             }
 
             productHot4Edit.setId(productHot.getId());
-            if (productHot4Edit.getStatus().equals(ProductStatusEnum.OFF_LINE.getCode())) {
+            if (productHot4Edit.getHotStatus().equals(OnlineStatusEnum.OFFLINE.getCode())) {
                 productHot4Edit.setOfflineTime(new Date());
             }
             productHotMapper.updateByPrimaryKeySelective(productHot4Edit);
         } else {
             //新增
-            if (productHot4Edit.getStatus().equals(ProductStatusEnum.ON_LINE.getCode())) {
+            if (productHot4Edit.getHotStatus().equals(OnlineStatusEnum.ONLINE.getCode())) {
                 productHot4Edit.setOnlineTime(new Date());
             }
-            if (productHot4Edit.getStatus().equals(ProductStatusEnum.OFF_LINE.getCode())) {
+            if (productHot4Edit.getHotStatus().equals(OnlineStatusEnum.OFFLINE.getCode())) {
                 productHot4Edit.setOfflineTime(new Date());
             }
             productHotMapper.insertSelective(productHot4Edit);

@@ -8,7 +8,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.common.DelEnum;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.common.PlatformEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.core.api.admin.sys.*;
@@ -79,7 +79,7 @@ public class AORoleController {
 
         Weekend<Admin> adminWeekend = Weekend.of(Admin.class);
         adminWeekend.weekendCriteria()
-                .andEqualTo(Admin::getStatus, DelEnum.NORMAL.getCode())
+                .andEqualTo(Admin::getStatus, StatusEnum.NORMAL.getCode())
                 .andEqualTo(Admin::getRoleId, ObjectUtil.defaultIfNull(request.getId(), null));
         //正常用户数量
         int normalAdminCount = adminService.selectCountByExample(adminWeekend);

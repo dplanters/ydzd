@@ -2,7 +2,7 @@ package com.gndc.core.controller.app.platform;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.gndc.common.enums.common.DelEnum;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.core.api.app.platform.PPlatformBaseInfoRequest;
 import com.gndc.core.api.common.CommonRequest;
 import com.gndc.core.api.common.ResponseMessage;
@@ -76,7 +76,7 @@ public class PPlatformController {
         Weekend<CommonQuestion> weekend = Weekend.of(CommonQuestion.class);
         weekend.selectProperties("title", "answer");
         weekend.weekendCriteria()
-                .andEqualTo(CommonQuestion::getStatus, DelEnum.NORMAL.getCode());
+                .andEqualTo(CommonQuestion::getStatus, StatusEnum.NORMAL.getCode());
         List<CommonQuestion> commonQuestions = commonQuestionService.selectByExample(weekend);
 
         PageInfo<CommonQuestion> pageInfo = new PageInfo<>(commonQuestions);

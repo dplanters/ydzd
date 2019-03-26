@@ -106,8 +106,8 @@ public class NiuxinService implements ISmsService {
             String response = HttpClientUtil.get(URI_GET_SEND_SMS, params, ENCODING);
             logger.info("sendsms response:" + response);
 
-            // 成功 : {"status":"0","messageid":"015bd4-d6dfa7-58w"}
-            // 失败 : {"status_code":"Missing params.","status":"2"}
+            // 成功 : {"bannerStatus":"0","messageid":"015bd4-d6dfa7-58w"}
+            // 失败 : {"status_code":"Missing params.","bannerStatus":"2"}
             sendResult = JsonUtil.getObject(response, new TypeReference<Map<String, String>>() {
             });
 

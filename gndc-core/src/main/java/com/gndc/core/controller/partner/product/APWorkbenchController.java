@@ -1,6 +1,6 @@
 package com.gndc.core.controller.partner.product;
 
-import com.gndc.common.enums.common.DelEnum;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.partner.EventFeeStatusEnum;
 import com.gndc.common.enums.partner.EventFeeTypeEnum;
 import com.gndc.common.enums.product.ProductCoopeModeEnum;
@@ -59,14 +59,14 @@ public class APWorkbenchController {
             long currentPeriodCount = eventFeeService.countByPeriod(productId,
                     EventFeeTypeEnum.H5.getCode(),
                     ProductCoopeModeEnum.CPC.getCode(), UserEventsTypeEnum.PRODUCT_CLICK.getCode(),
-                    EventFeeStatusEnum.COMPLETE.getCode(), DelEnum.NORMAL.getCode(),
+                    EventFeeStatusEnum.COMPLETE.getCode(), StatusEnum.NORMAL.getCode(),
                     beginDate, endDate);
 
             //昨天对应时段UV
             long yesterSamePeriodCount = eventFeeService.countByPeriod(productId,
                     EventFeeTypeEnum.H5.getCode(),
                     ProductCoopeModeEnum.CPC.getCode(), UserEventsTypeEnum.PRODUCT_CLICK.getCode(),
-                    EventFeeStatusEnum.COMPLETE.getCode(), DelEnum.NORMAL.getCode(),
+                    EventFeeStatusEnum.COMPLETE.getCode(), StatusEnum.NORMAL.getCode(),
                     yBeginDate, yEndDate);
 
 

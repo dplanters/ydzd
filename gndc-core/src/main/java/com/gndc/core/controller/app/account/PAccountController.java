@@ -187,7 +187,7 @@ public class PAccountController {
             user.setPhone(phone);
             user.setRegDevice(deviceType);
             user.setImei(imei);
-            user.setStatus(UserStatusEnum.INFO_UNFILLED.getCode());
+            user.setUserStatus(UserStatusEnum.INFO_UNFILLED.getCode());
             user.setRegTime(date);
             user.setLastLoginTime(date);
             user.setRegChannel(regChannel);

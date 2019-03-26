@@ -91,7 +91,7 @@ public class PaasooSmsService implements ISmsService {
             sendResult.put("phoneValidateErrorCode", "00");
             sendResult.put("phoneValidateFormat", "1");
 
-            sendResult.put("response", "{\"status\":\"0\",\"messageid\":\"000090-ca43c5-4000\"}");
+            sendResult.put("response", "{\"bannerStatus\":\"0\",\"messageid\":\"000090-ca43c5-4000\"}");
             sendResult.put("messageid", "000090-ca43c5-4000");
             sendResult.put("status", "0");
         } else {
@@ -167,8 +167,8 @@ public class PaasooSmsService implements ISmsService {
             String response = HttpClientUtil.get(URI_GET_SEND_SMS, params, ENCODING);
             logger.info("sendsms response:" + response);
 
-            // 成功 : {"status":"0","messageid":"015bd4-d6dfa7-58w"}
-            // 失败 : {"status_code":"Missing params.","status":"2"}
+            // 成功 : {"bannerStatus":"0","messageid":"015bd4-d6dfa7-58w"}
+            // 失败 : {"status_code":"Missing params.","bannerStatus":"2"}
             sendResult = JsonUtil.getObject(response, new TypeReference<Map<String, String>>() {
             });
 
@@ -220,8 +220,8 @@ public class PaasooSmsService implements ISmsService {
         String response = HttpClientUtil.get(URI_GET_USER_BALANCE, params, ENCODING);
         logger.info("getUserBalance response:" + response);
 
-        // 成功 : {"status":"0","messageid":"015bd4-d6dfa7-58w"}
-        // 失败 : {"status_code":"Missing params.","status":"2"}
+        // 成功 : {"bannerStatus":"0","messageid":"015bd4-d6dfa7-58w"}
+        // 失败 : {"status_code":"Missing params.","bannerStatus":"2"}
         Map<String, String> result = JsonUtil.getObject(response, new TypeReference<Map<String, String>>() {
         });
 
@@ -247,8 +247,8 @@ public class PaasooSmsService implements ISmsService {
         String response = HttpClientUtil.get(URI_GET_VALID_NUMBER, params, ENCODING);
         logger.info("getValidNumber response:" + response);
 
-        // 成功 : {"status":"0","messageid":"015bd4-d6dfa7-58w"}
-        // 失败 : {"status_code":"Missing params.","status":"2"}
+        // 成功 : {"bannerStatus":"0","messageid":"015bd4-d6dfa7-58w"}
+        // 失败 : {"status_code":"Missing params.","bannerStatus":"2"}
         Map<String, String> result = JsonUtil.getObject(response, new TypeReference<Map<String, String>>() {
         });
 
@@ -309,7 +309,7 @@ public class PaasooSmsService implements ISmsService {
                     "{\"requestId\":\"200090-ca43bb-3000\",\"msgId\":\"200090-ca43bb-3000\",\"to\":\"6283113551239\",\"format\":1,\"errorCode\":\"00\",\"cc\":\"62\",\"countryIso\":\"ID\",\"mccmnc\":\"51008\",\"operator\":\"PTXLAxiataTbk(XL)\"}");
             sendResult.put("phoneValidateErrorCode", "00");
             sendResult.put("phoneValidateFormat", "1");
-            sendResult.put("response", "{\"status\":\"0\",\"messageid\":\"000090-ca43c5-4000\"}");
+            sendResult.put("response", "{\"bannerStatus\":\"0\",\"messageid\":\"000090-ca43c5-4000\"}");
             sendResult.put("messageid", "000090-ca43c5-4000");
             sendResult.put("status", "0");
         } else {
@@ -349,8 +349,8 @@ public class PaasooSmsService implements ISmsService {
             String response = HttpClientUtil.get(URI_GET_SEND_SMS, params, ENCODING);
             logger.info("sendsms response:" + response);
 
-            // 成功 : {"status":"0","messageid":"015bd4-d6dfa7-58w"}
-            // 失败 : {"status_code":"Missing params.","status":"2"}
+            // 成功 : {"bannerStatus":"0","messageid":"015bd4-d6dfa7-58w"}
+            // 失败 : {"status_code":"Missing params.","bannerStatus":"2"}
             sendResult = JsonUtil.getObject(response, new TypeReference<Map<String, String>>() {
             });
 

@@ -13,7 +13,7 @@ public interface ProductHotMapping {
     ProductHotMapping INSTANCE = Mappers.getMapper(ProductHotMapping.class);
 
     @Mappings({
-            @Mapping(target = "status", source = "hotStatus")
+            @Mapping(target = "hotStatus", source = "hotStatus")
     })
     ProductHot convert(AOProductHotEditRequest aoProductAddRequest);
 }

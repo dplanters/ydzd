@@ -1,10 +1,8 @@
 package com.gndc.core.controller.admin.operation;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ObjectUtil;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.gndc.common.enums.common.DelEnum;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.common.OnlineStatusEnum;
 import com.gndc.core.api.admin.operation.*;
 import com.gndc.core.api.common.ResponseMessage;
@@ -81,7 +79,7 @@ public class AOBannerController {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
         Banner banner = new Banner();
         banner.setId(request.getId());
-        banner.setIsDel(DelEnum.IS_DEL.getCode());
+        banner.setStatus(StatusEnum.DELETE.getCode());
         bannerService.updateByPrimaryKeySelective(banner);
         response.setData(true);
         return response;
@@ -93,7 +91,7 @@ public class AOBannerController {
         Banner banner = new Banner();
         Integer id = request.getId();
         banner.setId(id);
-        banner.setStatus(OnlineStatusEnum.OFF_LINE.getCode());
+        banner.setStatus(OnlineStatusEnum.OFFLINE.getCode());
         bannerService.updateByPrimaryKeySelective(banner);
         request.setId(id);
         return response;

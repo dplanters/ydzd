@@ -129,7 +129,7 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
                 sl.setThirdChannel(channel);
 
                 if (channel.equals(SmsChannelEnum.PAASOO.getCode())) {
-                    status = sendResult.get("status");
+                    status = sendResult.get("bannerStatus");
                     sl.setPaasooPhoneValErrcode(sendResult.get("phoneValidateErrorCode"));
                     sl.setPaasooPhoneValFormat(sendResult.get("phoneValidateFormat"));
                     sl.setPaasooPhoneValStr(sendResult.get("phoneValidateStr"));
