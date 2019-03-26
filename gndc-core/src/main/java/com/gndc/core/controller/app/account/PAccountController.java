@@ -320,7 +320,7 @@ public class PAccountController {
         userInfo.setPassword(PwdUtil.getPassword(newPassword, passwordSign));
         int flag = userService.updatePassword(userInfo);
         if (flag <= 0) {
-            response.createError(ResultCode.RECORD_UPDATE_FAIL);
+            response.createError(ResultCode.RECORD_MODIFY_FAIL);
             logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
             return response;
         }
@@ -375,7 +375,7 @@ public class PAccountController {
         user.setPassword(PwdUtil.getPassword(password, passwordSign));
         int flag = userService.updatePassword(user);
         if (flag <= 0) {
-            response.createError(ResultCode.RECORD_UPDATE_FAIL);
+            response.createError(ResultCode.RECORD_MODIFY_FAIL);
             logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
             return response;
         }

@@ -125,7 +125,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
 
         if (product == null) {
             logger.warn("产品编号{}不存在或已下线", request.getId());
-            throw new HjException(ResultCode.PRODUCT_NOT_EXIST);
+            throw new HjException(ResultCode.RECORD_NOT_EXIST);
         }
 
         Weekend<ProductData> weekend = Weekend.of(ProductData.class);
@@ -144,7 +144,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
         Product product = productMapper.selectByPrimaryKey(request.getId());
         if (product == null) {
             logger.warn("产品编号{}不存在或已下线", request.getId());
-            throw new HjException(ResultCode.PRODUCT_NOT_EXIST);
+            throw new HjException(ResultCode.RECORD_NOT_EXIST);
         }
         Byte upperAndLowerLine = request.getUpperAndLowerLine();
         if (upperAndLowerLine.equals(ProductStatusEnum.ON_LINE.getCode())) {
@@ -165,7 +165,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
         Product product = productMapper.selectByPrimaryKey(id);
         if (product == null) {
             logger.warn("产品编号{}不存在或已下线", request.getId());
-            throw new HjException(ResultCode.PRODUCT_NOT_EXIST);
+            throw new HjException(ResultCode.RECORD_NOT_EXIST);
         }
 
         if (product.getStatus().equals(ProductStatusEnum.ON_LINE.getCode())) {

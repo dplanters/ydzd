@@ -73,14 +73,14 @@ public class AOAccountController {
             String template = "用户名 {} 不存在";
             String msg = StrUtil.format(template, loginName);
             logger.warn(msg);
-            throw new HjException(ResultCode.USER_NOT_EXISTS, msg);
+            throw new HjException(ResultCode.ADMIN_NOT_EXIST, msg);
         }
 
         if (admin.getStatus().equals(DelEnum.IS_DEL.getCode())) {
             String template = "用户名 {} 已停用";
             String msg = StrUtil.format(template, loginName);
             logger.warn(msg);
-            throw new HjException(ResultCode.USER_DISABLED, msg);
+            throw new HjException(ResultCode.ADMIN_NOT_EXIST, msg);
         }
         //密码校验
         if (!accountService.passwordCheck(admin, password)) {

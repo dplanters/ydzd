@@ -66,7 +66,7 @@ public class AOAdminController {
         Role role = roleService.selectByPrimaryKey(request.getRoleId());
         if (ObjectUtil.isNull(role)) {
             String msg = StrUtil.format("角色id {} 不存在", request.getRoleId());
-            throw new HjException(ResultCode.ROLE_NOTEXISTS, msg);
+            throw new HjException(ResultCode.ROLE_NOT_EXIST, msg);
         }
         String passwordDec = PwdUtil.decryptRSA(request.getPassword());
         String operateSign = RandomUtil.randomString(6);
@@ -104,7 +104,7 @@ public class AOAdminController {
         Role role = roleService.selectByPrimaryKey(request.getRoleId());
         if (ObjectUtil.isNull(role)) {
             String msg = StrUtil.format("角色id {} 不存在", request.getRoleId());
-            throw new HjException(ResultCode.ROLE_NOTEXISTS, msg);
+            throw new HjException(ResultCode.ROLE_NOT_EXIST, msg);
         }
         String passwordDec = PwdUtil.decryptRSA(request.getPassword());
         String operateSign = RandomUtil.randomString(6);
