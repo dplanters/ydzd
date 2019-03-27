@@ -12,9 +12,11 @@ import com.github.pagehelper.PageInfo;
 import com.gndc.common.enums.ResultCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
+@Accessors(chain = true)
 @Getter
 @Setter
 public class ResponseMessage<T> implements Serializable {

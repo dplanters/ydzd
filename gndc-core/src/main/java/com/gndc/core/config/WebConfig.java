@@ -5,9 +5,13 @@ import com.alibaba.fastjson.serializer.SimpleDateFormatSerializer;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.gndc.common.utils.DateUtil;
+import com.gndc.core.controller.common.CustomErrorController;
 import com.gndc.core.interceptor.LoginCheckInterceptor;
 import com.gndc.core.interceptor.OpenSourceInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
+import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -24,6 +28,13 @@ import java.util.List;
 
 @Configuration
 public class WebConfig extends WebMvcConfigurationSupport {
+
+    @Autowired
+    private ServerProperties serverProperties;
+
+    @Autowired
+    private List<ErrorViewResolver> errorViewResolvers;
+
 
     @Autowired
     private OpenSourceInterceptor openSourceInterceptor;
@@ -53,6 +64,11 @@ public class WebConfig extends WebMvcConfigurationSupport {
     @Bean
     public RequestContextListener requestContextListener() {
         return new RequestContextListener();
+    }
+
+    @Bean
+    public CustomErrorController customErrorController(ErrorAttributes errorAttributes) {
+        return new CustomErrorController(errorAttributes, serverProperties.getError(), errorViewResolvers);
     }
 
     @Override

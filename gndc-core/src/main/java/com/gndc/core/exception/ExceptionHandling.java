@@ -11,6 +11,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.List;
 @Slf4j
@@ -19,29 +20,58 @@ public class ExceptionHandling {
 
     @ExceptionHandler
     public ResponseMessage handler(Throwable e) {
-        log.error(e.getMessage(), e);
         //处理异常
-        ResponseMessage<Object> response = new ResponseMessage<>();
-        response.setSuccess(false);
+        log.error(e.getMessage(), e);
         Integer code = ResultCode.SYSTEM_BUSY.getCode();
         String msg = ResultCode.SYSTEM_BUSY.getI18NContent();
-        if (e instanceof MethodArgumentNotValidException) {
-            List<ObjectError> allErrors = ((MethodArgumentNotValidException) e).getBindingResult().getAllErrors();
-            JSONArray jsonArray = new JSONArray();
-            for (ObjectError error : allErrors) {
-                String field = ((FieldError) error).getField();
-                String defaultMessage = error.getDefaultMessage();
-                jsonArray.fluentAdd(new JSONObject().fluentPut(field, defaultMessage));
-            }
-            msg = jsonArray.toJSONString();
-            log.warn("参数校验异常", jsonArray.toJSONString());
+        ResponseMessage<Object> response = new ResponseMessage<>();
+        response.setSuccess(false)
+                .setCode(code)
+                .setMsg(msg);
+        return response;
+    }
+
+    @ExceptionHandler
+    public ResponseMessage handler(NoHandlerFoundException e) {
+        //处理异常
+        log.warn(e.getMessage(), e);
+        Integer code = ResultCode.NOT_FOUND.getCode();
+        String msg = ResultCode.NOT_FOUND.getI18NContent();
+        ResponseMessage<Object> response = new ResponseMessage<>();
+        response.setSuccess(false)
+                .setCode(code)
+                .setMsg(msg);
+        return response;
+    }
+
+    @ExceptionHandler
+    public ResponseMessage handler(MethodArgumentNotValidException e) {
+        //处理异常
+        ResponseMessage<Object> response = new ResponseMessage<>();
+        response.setSuccess(false)
+                .setCode(ResultCode.PARAMETER_CHECK_FAIL.getCode());
+        List<ObjectError> allErrors = e.getBindingResult().getAllErrors();
+        JSONArray jsonArray = new JSONArray();
+        for (ObjectError error : allErrors) {
+            String field = ((FieldError) error).getField();
+            String defaultMessage = error.getDefaultMessage();
+            jsonArray.fluentAdd(new JSONObject().fluentPut(field, defaultMessage));
         }
-        if (e instanceof HjException) {
-            code = ((HjException) e).getCode();
-            msg = ((HjException) e).getMsg();
-        }
-        response.setCode(code);
+        String msg = jsonArray.toJSONString();
+        log.warn("参数校验异常", msg);
         response.setMsg(msg);
         return response;
     }
+
+    @ExceptionHandler
+    public ResponseMessage handler(HjException e) {
+        //处理异常
+        ResponseMessage<Object> response = new ResponseMessage<>();
+        response.setSuccess(false)
+                .setCode(e.getCode())
+                .setMsg(e.getMsg());
+        log.warn(e.getMessage());
+        return response;
+    }
+
 }
