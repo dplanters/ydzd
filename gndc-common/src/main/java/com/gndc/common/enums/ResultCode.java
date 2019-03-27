@@ -98,6 +98,13 @@ public enum ResultCode {
 
     PRODUCTS_NOT_ONLINE(2000502, "未上线的产品", "未上线的产品", "", ""),
 
+    /**
+     * 0006为短信相关
+     */
+    SIGN_NOT_EXIST(2000601, "签名不存在", "", "", ""),
+    TEMPLATE_NOT_EXIST(2000602, "模板不存在", "", "", ""),
+    CONDITION_NOT_EXIST(2000603, "条件不存在", "", "", ""),
+
     UNSUPPORTED_OPERATION(-17, "不支持的操作方式", "", "", ""),
 
     // 用户已锁定

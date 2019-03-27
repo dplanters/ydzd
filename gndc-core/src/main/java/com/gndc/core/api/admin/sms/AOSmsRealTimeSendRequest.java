@@ -1,7 +1,6 @@
 package com.gndc.core.api.admin.sms;
 
 import com.gndc.core.api.common.RequestMessage;
-import com.gndc.core.model.SmsSign;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -22,7 +21,7 @@ public class AOSmsRealTimeSendRequest extends RequestMessage {
      * 渠道id 1创蓝2大汉三通
      */
     @NotNull
-    private Byte channelId;
+    private Integer channelId;
 
     /**
      * 条件id
@@ -45,7 +44,7 @@ public class AOSmsRealTimeSendRequest extends RequestMessage {
      * 运营商id
      */
     @NonNull
-    private Integer operatorId[];
+    private Integer operatorIds[];
 
     /**
      * 电话，",隔开（15800000000,15300000000）

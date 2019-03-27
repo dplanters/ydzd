@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -15,10 +16,9 @@ public class AOSmsSignAddRequest extends RequestMessage {
      */
     @NotBlank
     private String name;
-
     /**
      * 通道id
      */
-    @NotBlank
-    private String channelId;
+    @NotNull
+    private Integer channelId;
 }

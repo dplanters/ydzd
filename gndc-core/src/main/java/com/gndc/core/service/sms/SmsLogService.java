@@ -6,6 +6,7 @@ import com.gndc.core.api.app.platform.Sms10MinuteCount;
 import com.gndc.core.api.app.platform.Sms24HourCount;
 import com.gndc.core.api.app.platform.SmsInfo;
 import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.core.model.SmsGroupLog;
 import com.gndc.core.model.SmsLog;
 
 public interface SmsLogService extends BaseService<SmsLog, Integer> {
@@ -38,5 +39,5 @@ public interface SmsLogService extends BaseService<SmsLog, Integer> {
      * @param smsText 短信内容
      * @return
      */
-    void groupSendSmsJson(String channel, String phone, String smsText) throws Exception;
+    void groupSendSmsJson(String channel, String phone, String smsText, SmsGroupLog smsGroupLog) throws Exception;
 }
