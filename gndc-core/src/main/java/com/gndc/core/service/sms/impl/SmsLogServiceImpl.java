@@ -12,7 +12,9 @@ import com.gndc.core.api.app.platform.Sms10MinuteCount;
 import com.gndc.core.api.app.platform.Sms24HourCount;
 import com.gndc.core.api.app.platform.SmsInfo;
 import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.core.model.SmsGroupLog;
 import com.gndc.core.model.SmsLog;
+import com.gndc.core.service.sms.SmsGroupLogService;
 import com.gndc.core.service.sms.SmsLogService;
 import com.gndc.third.sms.chuanglan.ChuangLanSmsService;
 import com.gndc.third.sms.paasoo.PaasooSmsService;
@@ -51,6 +53,9 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
 
     @Autowired
     private SmsLogService smsLogService;
+
+    @Autowired
+    private SmsGroupLogService smsGroupLogService;
 
     @Override
     public void sendValCodeSms(String code, String phone, SmsTemplateType userForgetPwd, int valCode, int i, String key, Sms10MinuteCount sms10MinuteCount, Sms24HourCount sms24HourCount) throws InterruptedException {
@@ -193,7 +198,7 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
      * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
      */
     public boolean validateSmsCount(Sms10MinuteCount sms10MinuteCount, Sms24HourCount sms24HourCount,
-                                     ResponseMessage<?> response) {
+                                    ResponseMessage<?> response) {
 
         if (sms10MinuteCount == null) {
             sms10MinuteCount = new Sms10MinuteCount();
@@ -233,7 +238,7 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
      * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
      */
     public boolean validateSms(SmsInfo sms, Sms10MinuteCount sms10MinuteCount, String key, String valCode,
-                                ResponseMessage<?> response) {
+                               ResponseMessage<?> response) {
         if (sms == null) {
             response.createError(ResultCode.AUTH_INVALID);
             return false;
@@ -256,9 +261,7 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
     }
 
     @Override
-    public void groupSendSmsJson(String channel, String phone, String smsText) throws Exception {
-
-
+    public void groupSendSmsJson(String channel, String phone, String smsText, SmsGroupLog smsGroupLog) throws Exception {
         Map<String, String> sendResult = new HashMap<>();
 
         if (channel.equals(SmsChannelEnum.PAASOO.getCode())) {
@@ -266,42 +269,22 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
         } else if (channel.equals(SmsChannelEnum.CHUANGLAN.getCode())) {
             sendResult = chuangLanSmsService.sendSms(phone, smsText, null);
         }
-
-        String status = null;
-        // 短信发送日志
-        Date now = DateUtil.getCountyTime();
-        SmsLog sl = new SmsLog();
-        sl.setMobile(phone);
-//        sl.setUserId(userId);
-//        sl.setSmsType(smsTemplateType.getCode());
-//        sl.setSmsParam(valCodeStr);
-//        sl.setMessage(message);
-        sl.setCreateTime(now);
-        sl.setUpdateTime(now);
-        sl.setThirdChannel(channel);
-
+        // 短信群发发送日志
         if (channel.equals(SmsChannelEnum.PAASOO.getCode())) {
-            status = sendResult.get("status");
-            sl.setPaasooPhoneValErrcode(sendResult.get("phoneValidateErrorCode"));
-            sl.setPaasooPhoneValFormat(sendResult.get("phoneValidateFormat"));
-            sl.setPaasooPhoneValStr(sendResult.get("phoneValidateStr"));
-
-            sl.setPaasooSmsMessageid(sendResult.get("messageid"));
-            sl.setPaasooSmsStatus(status);
-            sl.setPaasooSmsStatusCode(sendResult.get("statusCode"));
-            sl.setPaasooSmsStr(sendResult.get("response"));
 
         } else if (channel.equals(SmsChannelEnum.CHUANGLAN.getCode())) {
-            status = sendResult.get("code");
-            sl.setPaasooPhoneValFormat(sendResult.get("errorMsg"));
-            sl.setPaasooPhoneValStr(sendResult.get("phoneValidateStr"));
-
-            sl.setPaasooSmsMessageid(sendResult.get("msgId"));
-            sl.setPaasooSmsStatus(sendResult.get("code"));
-            sl.setPaasooSmsStatusCode(sendResult.get("code"));
-            sl.setPaasooSmsStr(sendResult.get("response"));
+            String failNum = sendResult.get("failNum");
+            String successNum = sendResult.get("successNum");
+            if(failNum != null){
+                smsGroupLog.setFailNum(Integer.parseInt(failNum));
+            }
+            if(successNum != null){
+                smsGroupLog.setSuccessNum(Integer.parseInt(successNum));
+            }
+            smsGroupLog.setUid(sendResult.get("msgId"));
+            smsGroupLog.setResponseMsg(JsonUtil.toJSONString(sendResult));
         }
 
-        smsLogService.insertSelective(sl);
+        smsGroupLogService.insertSelective(smsGroupLog);
     }
 }

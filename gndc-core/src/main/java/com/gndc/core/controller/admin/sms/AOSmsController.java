@@ -2,6 +2,7 @@ package com.gndc.core.controller.admin.sms;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.sms.SmsChannelEnum;
 import com.gndc.common.utils.DateUtil;
@@ -17,6 +18,8 @@ import com.gndc.core.model.*;
 import com.gndc.core.service.sms.*;
 import com.gndc.core.service.user.UserService;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +39,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/smsManage")
 public class AOSmsController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AOSmsController.class);
 
     /**
      * 1条件筛选 2导入
@@ -64,11 +69,11 @@ public class AOSmsController {
     /**
      * 渠道id 1创蓝2大汉三通
      */
-    private static final Byte CHANNEL_ID_1 = 1;
+    private static final Integer CHANNEL_ID_1 = 1;
     /**
      * 渠道id 1创蓝2大汉三通
      */
-    private static final Byte CHANNEL_ID_2 = 2;
+    private static final Integer CHANNEL_ID_2 = 2;
     /**
      * 运营商id 1:移动，2：联通，3：电信
      */
@@ -81,8 +86,14 @@ public class AOSmsController {
      * 运营商id 1:移动，2：联通，3：电信
      */
     private static final Integer OPERATOR_ID_3 = 3;
-
-    private Byte marketingType;
+    /**
+     * 发送模式1：定时发送2：实时发送
+     */
+    private static final Byte SEND_TYPE_1 = 1;
+    /**
+     * 发送模式1：定时发送2：实时发送
+     */
+    private static final Byte SEND_TYPE_2 = 1;
 
     @Autowired
     private SmsChannelService smsChannelService;
@@ -127,10 +138,10 @@ public class AOSmsController {
     public ResponseMessage<CommonResponse> signAdd(@Validated @RequestBody AOSmsSignAddRequest request) {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
         SmsSign smsSign = SmsSignMapping.INSTANCE.convert(request);
-        if(request.getChannelId() == CHANNEL_ID_1 + ""){
+        if (request.getChannelId() == CHANNEL_ID_1) {
             smsSign.setChannelName("创蓝");
         }
-        if(request.getChannelId() == CHANNEL_ID_2 + ""){
+        if (request.getChannelId()== CHANNEL_ID_2) {
             smsSign.setChannelName("大汉三通");
         }
         CommonResponse commonResponse = new CommonResponse();
@@ -150,10 +161,10 @@ public class AOSmsController {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
         SmsSign smsSign = SmsSignMapping.INSTANCE.convert(request);
         CommonResponse commonResponse = new CommonResponse();
-        if(request.getChannelId() == CHANNEL_ID_1 + ""){
+        if (request.getChannelId() == CHANNEL_ID_1) {
             smsSign.setChannelName("创蓝");
         }
-        if(request.getChannelId() == CHANNEL_ID_2 + ""){
+        if (request.getChannelId()== CHANNEL_ID_2) {
             smsSign.setChannelName("大汉三通");
         }
         commonResponse.setResult(smsSignService.updateByPrimaryKeySelective(smsSign));
@@ -191,7 +202,7 @@ public class AOSmsController {
         PageInfo page = request.getHeader().getPage();
         PageHelper.startPage(page.getPageNum(), page.getPageSize());
         Weekend<SmsSign> weekend = Weekend.of(SmsSign.class);
-        weekend.selectProperties("id", "name", "channelName", "createTime");
+        weekend.selectProperties("id", "name", "channelId", "channelName", "createTime");
         WeekendCriteria<SmsSign, Object> criteria = weekend.weekendCriteria();
         if (StringUtils.isNotBlank(request.getName())) {
             criteria.andLike(SmsSign::getName, "%" + request.getName() + "%");
@@ -253,6 +264,7 @@ public class AOSmsController {
     public ResponseMessage<CommonResponse> templateDelete(@Validated @RequestBody AOSmsTemplateDeleteRequest request) {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
         SmsTemplate smsTemplate = new SmsTemplate();
+        smsTemplate.setId(request.getTemplateId());
         smsTemplate.setStatus(StatusEnum.DELETE.getCode());
         CommonResponse commonResponse = new CommonResponse();
         commonResponse.setResult(smsTemplateService.updateByPrimaryKeySelective(smsTemplate));
@@ -367,80 +379,212 @@ public class AOSmsController {
     public ResponseMessage<CommonResponse> realTimeSend(@Validated @RequestBody AOSmsRealTimeSendRequest request) throws Exception {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
         //需要发送短信的号码用","隔开
-        String phoneToSend = "";
+        String phoneToSend = null;
         //通道
         String channel = "";
-        Integer templateId = request.getTemplateId();
-        SmsTemplate smsTemplate = smsTemplateService.selectByPrimaryKey(templateId);
-        if (request.getSourceType() == SOURCE_TYPE_1) {
-            SmsCondition smsCondition = smsConditionService.selectByPrimaryKey(request.getConditionId());
-            //当前支持营销类
-            if (smsCondition != null && smsCondition.getType() == CONDITION_TYPE_1) {
-                //条件类型json
-                String condition = smsCondition.getCondition();
-                SmsConditionContent smsConditionContent = JsonUtil.getObject(condition, SmsConditionContent.class);
-                //营销事件1登录 2注册
-                Byte marketingType = smsConditionContent.getMarketingType();
-                //营销时间
-                Integer marketingTime = smsConditionContent.getMarketingTime();
-                Weekend<User> weekend = Weekend.of(User.class);
-                weekend.selectProperties("phone");
-                WeekendCriteria<User, Object> criteria = weekend.weekendCriteria();
-
-                //当前时间减去营销时间
-                String beginTime = DateUtil.nowDateAddDays(-marketingTime, DateUtil.FORMAT_2);
-                Date currentTime = new Date();
-                String endTime = DateUtil.timeToString(currentTime, DateUtil.FORMAT_2);
-
-
-                if (marketingType == MARKETING_TYPE_1) {
-                    criteria.andBetween(User::getLastLoginTime, beginTime, endTime);
+        Integer[] signArr = request.getSmsSignIds();
+        //创蓝
+        if (request.getChannelId() == CHANNEL_ID_1) {
+            channel = SmsChannelEnum.CHUANGLAN.getCode();
+        }
+        //大汉三通
+        if (request.getChannelId() == CHANNEL_ID_2) {
+//            channel = SmsChannelEnum.CHUANGLAN.getCode();
+        }
+        //签名数组
+        if (signArr.length > 0) {
+            for (int i = 0; i <= signArr.length; i++) {
+                Integer signId = signArr[i];
+                SmsSign smsSign = smsSignService.selectByPrimaryKey(signId);
+                if (smsSign == null || smsSign.getStatus() == StatusEnum.DELETE.getCode()) {
+                    response.createError(ResultCode.SIGN_NOT_EXIST);
+                    logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                    return response;
                 }
-                if (marketingType == MARKETING_TYPE_2) {
-                    criteria.andBetween(User::getRegTime, beginTime, endTime);
+                String message = "";
+                Integer templateId = request.getTemplateId();
+                SmsTemplate smsTemplate = smsTemplateService.selectByPrimaryKey(templateId);
+                if (smsTemplate == null || smsTemplate.getStatus() == StatusEnum.DELETE.getCode()) {
+                    response.createError(ResultCode.TEMPLATE_NOT_EXIST);
+                    logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                    return response;
                 }
+                message = smsSign.getName() + smsTemplate.getContent();
+                if (request.getSourceType() == SOURCE_TYPE_1) {
+                    SmsCondition smsCondition = smsConditionService.selectByPrimaryKey(request.getConditionId());
+                    //当前支持营销类
+                    if (smsCondition != null && smsCondition.getType() == CONDITION_TYPE_1) {
+                        phoneToSend = searchPhones(smsCondition, request);
+                    } else {
+                        //暂时只支持营销类
+                        response.createError(ResultCode.CONDITION_NOT_EXIST);
+                        logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                        return response;
+                    }
 
-                List<User> users = userService.selectByExample(weekend);
-                if (users != null && users.size() > 0) {
-                    StringBuffer phoneBuffer = new StringBuffer();
-                    for (User temp : users) {
-                        //创蓝
-                        if (request.getChannelId() == CHANNEL_ID_1) {
-                            channel = SmsChannelEnum.CHUANGLAN.getCode();
-                            //筛选出相应的运营商
-                            if (Arrays.asList(request.getOperatorId()).contains(OPERATOR_ID_1)) {
-                                if (PhoneUtil.isChinaMobilePhoneNum(temp.getPhone()) == OPERATOR_ID_1) {
-                                    phoneBuffer.append(temp.getPhone()).append(",");
-                                }
-                            }
-                            if (Arrays.asList(request.getOperatorId()).contains(OPERATOR_ID_2)) {
-                                if (PhoneUtil.isChinaMobilePhoneNum(temp.getPhone()) == OPERATOR_ID_2) {
-                                    phoneBuffer.append(temp.getPhone()).append(",");
-                                }
-                            }
-                            if (Arrays.asList(request.getOperatorId()).contains(OPERATOR_ID_3)) {
-                                if (PhoneUtil.isChinaMobilePhoneNum(temp.getPhone()) == OPERATOR_ID_3) {
-                                    phoneBuffer.append(temp.getPhone()).append(",");
-                                }
-                            }
-                        }
-                        //大汉三通
-                        if (request.getChannelId() == CHANNEL_ID_2) {
+                } else if (request.getSourceType() == SOURCE_TYPE_2) {
+                    phoneToSend = request.getPhones();
+                }
+                if (phoneToSend == null) {
+                    response.createError(ResultCode.RECORD_NOT_EXIST);
+                    logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                    return response;
+                }
+                SmsGroupLog smsGroupLog = new SmsGroupLog();
+                smsGroupLog.setPhone(phoneToSend);
+                smsGroupLog.setMessage(message);
+                smsGroupLog.setChannelId(request.getChannelId());
+                smsGroupLog.setConditionId(request.getConditionId());
+                smsGroupLog.setSendType(SEND_TYPE_1);
+                smsGroupLog.setSignId(signId);
+                smsGroupLog.setPhoneCount(phoneToSend.split(",").length);
+                smsLogService.groupSendSmsJson(channel, phoneToSend, message, smsGroupLog);
+            }
+        } else {
+            response.createError(ResultCode.SIGN_NOT_EXIST);
+            logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+            return response;
+        }
+        return response;
+    }
 
+    /**
+     * 编辑短息-定时发送
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/timingSend")
+    public ResponseMessage<CommonResponse> timingSend(@Validated @RequestBody AOSmsRealTimeSendRequest request) throws Exception {
+        ResponseMessage<CommonResponse> response = new ResponseMessage<>();
+        //需要发送短信的号码用","隔开
+        String phoneToSend = null;
+        //通道
+        String channel = "";
+        Integer[] signArr = request.getSmsSignIds();
+        //创蓝
+        if (request.getChannelId() == CHANNEL_ID_1) {
+            channel = SmsChannelEnum.CHUANGLAN.getCode();
+        }
+        //大汉三通
+        if (request.getChannelId() == CHANNEL_ID_2) {
+//            channel = SmsChannelEnum.CHUANGLAN.getCode();
+        }
+        //签名数组
+        if (signArr.length > 0) {
+            for (int i = 0; i <= signArr.length; i++) {
+                Integer signId = signArr[i];
+                SmsSign smsSign = smsSignService.selectByPrimaryKey(signId);
+                if (smsSign == null || smsSign.getStatus() == StatusEnum.DELETE.getCode()) {
+                    response.createError(ResultCode.SIGN_NOT_EXIST);
+                    logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                    return response;
+                }
+                String message = "";
+                Integer templateId = request.getTemplateId();
+                SmsTemplate smsTemplate = smsTemplateService.selectByPrimaryKey(templateId);
+                if (smsTemplate == null || smsTemplate.getStatus() == StatusEnum.DELETE.getCode()) {
+                    response.createError(ResultCode.TEMPLATE_NOT_EXIST);
+                    logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                    return response;
+                }
+                message = smsSign.getName() + smsTemplate.getContent();
+                if (request.getSourceType() == SOURCE_TYPE_1) {
+                    SmsCondition smsCondition = smsConditionService.selectByPrimaryKey(request.getConditionId());
+                    //当前支持营销类
+                    if (smsCondition != null && smsCondition.getType() == CONDITION_TYPE_1) {
+                        phoneToSend = searchPhones(smsCondition, request);
+                    } else {
+                        //暂时只支持营销类
+                        response.createError(ResultCode.CONDITION_NOT_EXIST);
+                        logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                        return response;
+                    }
+
+                } else if (request.getSourceType() == SOURCE_TYPE_2) {
+                    phoneToSend = request.getPhones();
+                }
+                if (phoneToSend == null) {
+                    response.createError(ResultCode.RECORD_NOT_EXIST);
+                    logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                    return response;
+                }
+                SmsGroupLog smsGroupLog = new SmsGroupLog();
+                smsGroupLog.setPhone(phoneToSend);
+                smsGroupLog.setMessage(message);
+                smsGroupLog.setChannelId(request.getChannelId());
+                smsGroupLog.setConditionId(request.getConditionId());
+                smsGroupLog.setSendType(SEND_TYPE_1);
+                smsGroupLog.setSignId(signId);
+                smsGroupLog.setPhoneCount(phoneToSend.split(",").length);
+                smsLogService.groupSendSmsJson(channel, phoneToSend, message, smsGroupLog);
+            }
+        } else {
+            response.createError(ResultCode.SIGN_NOT_EXIST);
+            logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+            return response;
+        }
+
+        return response;
+    }
+
+    private String searchPhones(SmsCondition smsCondition, AOSmsRealTimeSendRequest request) {
+        String phoneToSend = "";
+        //条件类型json
+        String condition = smsCondition.getCondition();
+        SmsConditionContent smsConditionContent = JsonUtil.getObject(condition, SmsConditionContent.class);
+        //营销事件1登录 2注册
+        Byte marketingType = smsConditionContent.getMarketingType();
+        //营销时间
+        Integer marketingTime = smsConditionContent.getMarketingTime();
+        Weekend<User> weekend = Weekend.of(User.class);
+        weekend.selectProperties("phone");
+        WeekendCriteria<User, Object> criteria = weekend.weekendCriteria();
+
+        //当前时间减去营销时间
+        String beginTime = DateUtil.nowDateAddDays(-marketingTime, DateUtil.FORMAT_2);
+        Date currentTime = new Date();
+        String endTime = DateUtil.timeToString(currentTime, DateUtil.FORMAT_2);
+
+        if (marketingType == MARKETING_TYPE_1) {
+            criteria.andBetween(User::getLastLoginTime, beginTime, endTime);
+        }
+        if (marketingType == MARKETING_TYPE_2) {
+            criteria.andBetween(User::getRegTime, beginTime, endTime);
+        }
+
+        List<User> users = userService.selectByExample(weekend);
+        if (users != null && users.size() > 0) {
+            StringBuffer phoneBuffer = new StringBuffer();
+            for (User temp : users) {
+                //创蓝
+                if (request.getChannelId() == CHANNEL_ID_1) {
+                    //筛选出相应的运营商
+                    if (Arrays.asList(request.getOperatorIds()).contains(OPERATOR_ID_1)) {
+                        if (PhoneUtil.isChinaMobilePhoneNum(temp.getPhone()) == OPERATOR_ID_1) {
+                            phoneBuffer.append(temp.getPhone()).append(",");
                         }
                     }
-                    phoneToSend = phoneBuffer.substring(0, phoneBuffer.length() - 1);
+                    if (Arrays.asList(request.getOperatorIds()).contains(OPERATOR_ID_2)) {
+                        if (PhoneUtil.isChinaMobilePhoneNum(temp.getPhone()) == OPERATOR_ID_2) {
+                            phoneBuffer.append(temp.getPhone()).append(",");
+                        }
+                    }
+                    if (Arrays.asList(request.getOperatorIds()).contains(OPERATOR_ID_3)) {
+                        if (PhoneUtil.isChinaMobilePhoneNum(temp.getPhone()) == OPERATOR_ID_3) {
+                            phoneBuffer.append(temp.getPhone()).append(",");
+                        }
+                    }
+                }
+                //大汉三通
+                if (request.getChannelId() == CHANNEL_ID_2) {
 
                 }
-            } else {
-                return response;
             }
-
-        } else if (request.getSourceType() == SOURCE_TYPE_2) {
-            phoneToSend = request.getPhones();
+            return phoneBuffer.substring(0, phoneBuffer.length() - 1);
+        } else {
+            return null;
         }
-        smsLogService.groupSendSmsJson(channel, phoneToSend, smsTemplate.getContent());
-        return response;
     }
 
     /**
@@ -457,6 +601,27 @@ public class AOSmsController {
 //        List<AOSmsScheduleListResponse> smsConditions = smsConditionService.selectConditionWithAdminList(request);
         List<AOSmsScheduleListResponse> smsConditions = null;
         PageInfo<AOSmsScheduleListResponse> pageInfo = new PageInfo<>(smsConditions);
+        pageInfo.setList(null);
+        response.setPage(pageInfo);
+        response.setData(smsConditions);
+        return response;
+    }
+
+    /**
+     * 短信群发发送记录
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/groupLog/list")
+
+    public ResponseMessage<List<AOSmsGroupLogListResponse>> scheduleList(@Validated @RequestBody AOSmsGroupLogListRequest request) {
+        ResponseMessage<List<AOSmsGroupLogListResponse>> response = new ResponseMessage<>();
+        PageInfo page = request.getHeader().getPage();
+        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+//        List<AOSmsScheduleListResponse> smsConditions = smsConditionService.selectConditionWithAdminList(request);
+        List<AOSmsGroupLogListResponse> smsConditions = null;
+        PageInfo<AOSmsGroupLogListResponse> pageInfo = new PageInfo<>(smsConditions);
         pageInfo.setList(null);
         response.setPage(pageInfo);
         response.setData(smsConditions);

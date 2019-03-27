@@ -26,6 +26,6 @@ public class AOSmsConditionUpdateRequest extends RequestMessage {
     /**
      * 短信条件内容
      */
-    @NotBlank
+    @NotNull
     private SmsConditionContent smsConditionContent;
 }
