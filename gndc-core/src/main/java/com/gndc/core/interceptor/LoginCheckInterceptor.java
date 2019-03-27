@@ -31,10 +31,6 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws ServletException {
-        //预检请求放行
-        if (request.getMethod().equals(HttpMethod.OPTIONS.name())) {
-            return true;
-        }
         Object requireAuth = RequestContextHolder.getRequestAttributes().getAttribute("requireAuth", RequestAttributes.SCOPE_REQUEST);
         Object noHandler = RequestContextHolder.getRequestAttributes().getAttribute("noHandler",
                 RequestAttributes.SCOPE_REQUEST);

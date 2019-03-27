@@ -23,9 +23,6 @@ public class OpenSourceInterceptor extends WebContentInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws ServletException {
-        if (request.getMethod().equals(HttpMethod.OPTIONS.name())) {
-            return true;
-        }
         RedisTemplate redisTemplate =
                 (RedisTemplate) BeanFactoryUtil.getBean(
                         "redisTemplate");
