@@ -13,7 +13,7 @@ import com.gndc.common.utils.JsonUtil;
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.api.partner.*;
 import com.gndc.core.api.partner.account.APLoginAdminInfo;
-import com.gndc.core.api.partner.dataAnalysis.APDataAnalysisListResponse;
+import com.gndc.core.api.partner.data.APDataAnalysisListResponse;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Request;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Response;
 import com.gndc.core.api.statistics.AOPartnerCostStatisticRequest;

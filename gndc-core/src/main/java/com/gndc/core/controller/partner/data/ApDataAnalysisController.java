@@ -1,4 +1,4 @@
-package com.gndc.core.controller.partner.dataAnalysis;
+package com.gndc.core.controller.partner.data;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -8,8 +8,8 @@ import com.gndc.common.enums.partner.EventFeeTypeEnum;
 import com.gndc.common.enums.product.ProductCoopeModeEnum;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.core.api.common.ResponseMessage;
-import com.gndc.core.api.partner.dataAnalysis.APDataAnalysisListRequest;
-import com.gndc.core.api.partner.dataAnalysis.APDataAnalysisListResponse;
+import com.gndc.core.api.partner.data.APDataAnalysisListRequest;
+import com.gndc.core.api.partner.data.APDataAnalysisListResponse;
 import com.gndc.core.service.partner.EventFeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/partner/dataAnalysis")
+@RequestMapping("/partner/data")
 public class ApDataAnalysisController {
 
     @Autowired
@@ -32,7 +32,7 @@ public class ApDataAnalysisController {
      * @param request
      * @return
      */
-    @PostMapping("/apDataAnalysis")
+    @PostMapping("/dataAnalysis")
     public ResponseMessage<List<APDataAnalysisListResponse>> apDataAnalysis(@Validated @RequestBody APDataAnalysisListRequest request) {
         ResponseMessage<List<APDataAnalysisListResponse>> response = new ResponseMessage<>();
         PageInfo page = request.getHeader().getPage();

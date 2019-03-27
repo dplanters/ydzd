@@ -1,5 +1,6 @@
 package com.gndc.core.api.admin.sms;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,7 @@ public class AOSmsConditionAddRequest extends RequestMessage {
     @NotNull
     private Byte type;
 
+    private JSONObject sms;
     /**
      * 短信条件内容
      */

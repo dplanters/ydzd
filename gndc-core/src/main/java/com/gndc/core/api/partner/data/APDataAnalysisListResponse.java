@@ -1,4 +1,4 @@
-package com.gndc.core.api.partner.dataAnalysis;
+package com.gndc.core.api.partner.data;
 
 import lombok.Getter;
 import lombok.Setter;

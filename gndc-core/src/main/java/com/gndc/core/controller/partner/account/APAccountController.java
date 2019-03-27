@@ -1,17 +1,21 @@
 package com.gndc.core.controller.partner.account;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.common.PlatformEnum;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.exception.HjException;
+import com.gndc.common.utils.PasswordUtil;
+import com.gndc.common.utils.PwdUtil;
 import com.gndc.common.utils.Utils;
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.api.partner.account.APLoginAdminInfo;
 import com.gndc.core.api.partner.account.APLoginRequest;
 import com.gndc.core.api.partner.account.APLoginResponse;
+import com.gndc.core.api.partner.sys.APAdminResetPwdRequest;
 import com.gndc.core.mappers.APLoginAdminInfoMapping;
 import com.gndc.core.model.Admin;
 import com.gndc.core.model.Right;
@@ -90,8 +94,8 @@ public class APAccountController {
         }
         //密码校验
         if (!accountService.passwordCheck(admin, password)) {
-            logger.warn(ResultCode.USER_NAME_PASSWORD_ERROR.getI18NContent());
-            throw new HjException(ResultCode.USER_NAME_PASSWORD_ERROR);
+            logger.warn(ResultCode.PASSWORD_ERROR.getI18NContent());
+            throw new HjException(ResultCode.PASSWORD_ERROR);
         }
         admin.setLastLoginIp(request.getHeader().getIp());
         admin.setLastLoginTime(new Date());
@@ -110,7 +114,7 @@ public class APAccountController {
         } else {
             Role role = roleService.selectByPrimaryKey(admin.getRoleId());
             rightIds = roleRightService.getRightIds(role.getId());
-            rights = rightService.rightsTree((byte)1, PlatformEnum.OPERATOR.getCode(), 0, rightIds);
+            rights = rightService.rightsTree((byte)1, PlatformEnum.PARTNER.getCode(), 0, rightIds);
             admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
         }
         APLoginAdminInfo adminInfo = APLoginAdminInfoMapping.INSTANCE.convert(admin);
@@ -121,6 +125,38 @@ public class APAccountController {
                 CacheConstant.EXPIRE_PARTNER_LOGIN, TimeUnit.SECONDS);
 
         response.setData(apLoginResponse);
+        return response;
+    }
+
+    /**
+     * 重置密码
+     * @param request
+     * @return
+     */
+    @PostMapping("/resetPwd")
+    public ResponseMessage<Boolean> resetPwd(@Validated @RequestBody APAdminResetPwdRequest request) {
+        ResponseMessage<Boolean> response = new ResponseMessage<>();
+        Admin admin = adminService.selectByPrimaryKey(request.getId());
+
+        //密码校验
+        if (!accountService.passwordCheck(admin, request.getOldPassword())) {
+            logger.warn(ResultCode.OLD_PASSWORD_ERROR.getI18NContent());
+            throw new HjException(ResultCode.OLD_PASSWORD_ERROR);
+        }
+
+        String passwordDec = PwdUtil.decryptRSA(request.getPassword());
+        String operateSign = RandomUtil.randomString(6);
+        String passwordSign = RandomUtil.randomString(6);
+        String md5Password = PasswordUtil.getPassword(passwordDec, passwordSign);
+
+
+        admin.setPasswordSign(passwordSign);
+        admin.setOperateSign(operateSign);
+        admin.setPassword(md5Password);
+        admin.setUpdateTime(new Date());
+
+        adminService.updateByPrimaryKeySelective(admin);
+        response.setData(true);
         return response;
     }
 }

@@ -1,4 +1,4 @@
-package com.gndc.core.api.partner.dataAnalysis;
+package com.gndc.core.api.partner.data;
 
 import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;

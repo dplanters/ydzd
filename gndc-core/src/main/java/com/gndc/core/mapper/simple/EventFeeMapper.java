@@ -2,7 +2,7 @@ package com.gndc.core.mapper.simple;
 
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.mybatis.MyMapper;
-import com.gndc.core.api.partner.dataAnalysis.APDataAnalysisListResponse;
+import com.gndc.core.api.partner.data.APDataAnalysisListResponse;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Request;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Response;
 import com.gndc.core.api.statistics.AOPartnerCostStatisticResponse;

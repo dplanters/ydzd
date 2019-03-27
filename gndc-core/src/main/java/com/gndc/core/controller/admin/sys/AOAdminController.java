@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tk.mybatis.mapper.weekend.Weekend;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,7 +64,11 @@ public class AOAdminController {
     public ResponseMessage<Integer> addAdmin(@Validated @RequestBody AOAdminAddRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
         String loginName = request.getLoginName();
-        Admin originalAdmin = adminService.selectOneByProperty("loginName", loginName);
+        Weekend<Admin> weekend = Weekend.of(Admin.class);
+        weekend.weekendCriteria()
+                .andEqualTo(Admin::getLoginName, loginName)
+                .andEqualTo(Admin::getStatus, StatusEnum.NORMAL.getCode());
+        Admin originalAdmin = adminService.selectOneByExample(weekend);
         if (ObjectUtil.isNotNull(originalAdmin)) {
             String msg = StrUtil.format("登录名 {} 已经存在", loginName);
             throw new HjException(ResultCode.USER_EXISTS, msg);

@@ -39,9 +39,10 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
         Object noHandler = RequestContextHolder.getRequestAttributes().getAttribute("noHandler",
                 RequestAttributes.SCOPE_REQUEST);
         if (noHandler.equals(true)) {
-            String msg = StrUtil.format("{} 不存在", request.getServletPath());
+            String msg = StrUtil.format("{} 未初始化", request.getServletPath());
             logger.warn(msg);
-            sendError(response, HttpStatus.OK.value(), msg);
+            ResultCode.RIGHT_NOT_INITIALISE.setCNContent(msg);
+            sendError(response, HttpStatus.OK.value(), String.valueOf(ResultCode.RIGHT_NOT_INITIALISE.getCode()));
             return false;
         }
         //不需要授权的请求放行
@@ -121,8 +122,14 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
                 }
 
                 Set<Boolean> hasRight = new HashSet<>();
-                //权限校验
-                hasRight(admin.getRights(), request.getServletPath(), hasRight);
+                if (ObjectUtil.isNotNull(admin)) {
+                    //权限校验
+                    hasRight(admin.getRights(), request.getServletPath(), hasRight);
+                }
+                if (ObjectUtil.isNotNull(partner)) {
+                    //权限校验
+                    hasRight(partner.getRights(), request.getServletPath(), hasRight);
+                }
                 if (!hasRight.contains(true)) {
                     logger.warn(ResultCode.NO_PERMISSION.getI18NContent());
                     sendError(response, HttpStatus.OK.value(), String.valueOf(ResultCode.NO_PERMISSION.getCode()));

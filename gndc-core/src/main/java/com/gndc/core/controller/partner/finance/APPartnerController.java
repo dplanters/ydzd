@@ -127,7 +127,7 @@ public class APPartnerController {
      * @param request
      * @return
      */
-    @PostMapping(value = "/H5/settlementList")
+    @PostMapping(value = "/h5/settlementList")
     public ResponseMessage<List<APFinanceSettlement4H5Response>> settlementList4H5(@Validated @RequestBody APFinanceSettlement4H5Request request) {
         ResponseMessage<List<APFinanceSettlement4H5Response>> response = new ResponseMessage<>();
         PageInfo page = request.getHeader().getPage();

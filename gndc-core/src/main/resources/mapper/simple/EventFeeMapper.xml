@@ -15,15 +15,13 @@
             <if test="feeStatus != null">
                 and fee_status = #{feeStatus,jdbcType=TINYINT}
             </if>
-            <if test="status != null">
-                and status = #{status,jdbcType=TINYINT}
-            </if>
             <if test="year != null">
                 and year(create_time) = #{year,jdbcType=INTEGER}
             </if>
             <if test="month != null">
                 and month(create_time) = #{month,jdbcType=INTEGER}
             </if>
+            and status = 1
         </trim>
     </select>
 
@@ -40,15 +38,13 @@
             <if test="feeStatus != null">
                 and fee_status = #{feeStatus,jdbcType=TINYINT}
             </if>
-            <if test="status != null">
-                and status = #{status,jdbcType=TINYINT}
-            </if>
             <if test="year != null">
                 and year(create_time) = #{year,jdbcType=INTEGER}
             </if>
             <if test="month != null">
                 and month(create_time) = #{month,jdbcType=INTEGER}
             </if>
+            and status = 1
         </trim>
     </select>
 
@@ -69,15 +65,13 @@
             <if test="feeStatus != null and feeStatus != ''">
                 and fee_status = #{feeStatus,jdbcType=TINYINT}
             </if>
-            <if test="status != null and status != ''">
-                and status = #{status,jdbcType=TINYINT}
-            </if>
             <if test="startDate != null">
                 and create_time &gt;= #{startDate, jdbcType=TIMESTAMP}
             </if>
             <if test="endDate != null">
                 and create_time &lt;= #{endDate, jdbcType=TIMESTAMP}
             </if>
+            and status = 1
         </trim>
     </select>
 
@@ -100,13 +94,11 @@
             <if test="feeStatus != null and feeStatus != ''">
                 and fee_status = #{feeStatus,jdbcType=TINYINT}
             </if>
-            <if test="status != null and status != ''">
-                and status = #{status,jdbcType=TINYINT}
-            </if>
+            and status = 1
         </trim>
     </select>
 
-    <select id="apDataAnalysis" resultType="com.gndc.core.api.partner.dataAnalysis.APDataAnalysisListResponse">
+    <select id="apDataAnalysis" resultType="com.gndc.core.api.partner.data.APDataAnalysisListResponse">
         select date(create_time) date, count(*) count
         from dc_event_fee
         where
@@ -129,15 +121,13 @@
             <if test="feeStatus != null and feeStatus != ''">
                 and fee_status = #{feeStatus,jdbcType=TINYINT}
             </if>
-            <if test="status != null and status != ''">
-                and status = #{status,jdbcType=TINYINT}
-            </if>
             <if test="startDate != null and startDate != ''">
                 and date(create_time) &gt;= str_to_date(#{startDate}, '%Y-%m-%d %H:%i:%s')
             </if>
             <if test="endDate != null and endDate != ''">
                 and date(create_time) &lt;= str_to_date(#{endDate},'%Y-%m-%d %H:%i:%s')
             </if>
+            and status = 1
         </trim>
         group by year(create_time), month(create_time), day(create_time)
         order by create_time desc
@@ -167,15 +157,13 @@
             <if test="feeStatus != null and feeStatus != ''">
                 and fee_status = #{feeStatus,jdbcType=TINYINT}
             </if>
-            <if test="status != null and status != ''">
-                and status = #{status,jdbcType=TINYINT}
-            </if>
             <if test="startDate != null and startDate != ''">
                 and date(create_time) &gt;= str_to_date(#{startDate}, '%Y-%m-%d %H:%i:%s')
             </if>
             <if test="endDate != null and endDate != ''">
                 and date(create_time) &lt;= str_to_date(#{endDate},'%Y-%m-%d %H:%i:%s')
             </if>
+            and status = 1
         </trim>
     </select>
 
@@ -203,15 +191,13 @@
             <if test="feeStatus != null and feeStatus != ''">
                 and fee_status = #{feeStatus,jdbcType=TINYINT}
             </if>
-            <if test="status != null and status != ''">
-                and status = #{status,jdbcType=TINYINT}
-            </if>
             <if test="startDate != null and startDate != ''">
                 and date(create_time) &gt;= str_to_date(#{startDate}, '%Y-%m-%d %H:%i:%s')
             </if>
             <if test="endDate != null and endDate != ''">
                 and date(create_time) &lt;= str_to_date(#{endDate},'%Y-%m-%d %H:%i:%s')
             </if>
+            and status = 1
         </trim>
     </select>
 

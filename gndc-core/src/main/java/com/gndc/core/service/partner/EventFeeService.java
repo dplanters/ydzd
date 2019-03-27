@@ -3,7 +3,7 @@ package com.gndc.core.service.partner;
 import com.alibaba.fastjson.JSONArray;
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.common.service.BaseService;
-import com.gndc.core.api.partner.dataAnalysis.APDataAnalysisListResponse;
+import com.gndc.core.api.partner.data.APDataAnalysisListResponse;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Request;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Response;
 import com.gndc.core.api.statistics.AOPartnerCostStatisticResponse;

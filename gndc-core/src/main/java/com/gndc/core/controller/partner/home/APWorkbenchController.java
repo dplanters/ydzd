@@ -1,4 +1,4 @@
-package com.gndc.core.controller.partner.product;
+package com.gndc.core.controller.partner.home;
 
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.partner.EventFeeStatusEnum;
@@ -7,8 +7,8 @@ import com.gndc.common.enums.product.ProductCoopeModeEnum;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.common.utils.DateUtil;
 import com.gndc.core.api.common.ResponseMessage;
-import com.gndc.core.api.partner.product.APWorkbenchStatisticUVRequest;
-import com.gndc.core.api.partner.product.APWorkbenchStatisticUVResponse;
+import com.gndc.core.api.partner.home.APWorkbenchStatisticUVRequest;
+import com.gndc.core.api.partner.home.APWorkbenchStatisticUVResponse;
 import com.gndc.core.model.Product;
 import com.gndc.core.service.partner.EventFeeService;
 import com.gndc.core.service.product.ProductService;
@@ -22,7 +22,7 @@ import java.text.ParseException;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/partner/workbench")
+@RequestMapping("/partner/home")
 public class APWorkbenchController {
 
     @Autowired

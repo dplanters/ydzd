@@ -80,6 +80,8 @@ CHANGE COLUMN `status` `feedback_status`  tinyint(4) NOT NULL DEFAULT -1 COMMENT
 ALTER TABLE `dc_user_message`
 CHANGE COLUMN `status` `message_status`  tinyint(4) NOT NULL DEFAULT 1 COMMENT '状态 1已发送；2已查看' AFTER `message`;
 
+ALTER TABLE `dc_right` DROP COLUMN `status`;
+
 
 
 

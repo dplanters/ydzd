@@ -1,4 +1,4 @@
-package com.gndc.core.controller.partner;
+package com.gndc.core.controller.partner.common;
 
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.api.partner.APPayeeListRequest;
