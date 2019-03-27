@@ -4,15 +4,14 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.BeanFactoryUtil;
 import com.gndc.core.api.admin.account.AOLoginAdminInfo;
 import com.gndc.core.api.partner.account.APLoginAdminInfo;
-import com.gndc.core.model.Admin;
 import com.gndc.core.model.Right;
 import com.gndc.core.model.User;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -21,6 +20,7 @@ import org.springframework.web.servlet.mvc.WebContentInterceptor;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,13 +31,18 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws ServletException {
+        //预检请求放行
+        if (request.getMethod().equals(HttpMethod.OPTIONS.name())) {
+            return true;
+        }
         Object requireAuth = RequestContextHolder.getRequestAttributes().getAttribute("requireAuth", RequestAttributes.SCOPE_REQUEST);
         Object noHandler = RequestContextHolder.getRequestAttributes().getAttribute("noHandler",
                 RequestAttributes.SCOPE_REQUEST);
         if (noHandler.equals(true)) {
             String msg = StrUtil.format("{} 不存在", request.getServletPath());
             logger.warn(msg);
-            throw new HjException(ResultCode.ERROR, msg);
+            sendError(response, HttpStatus.OK.value(), msg);
+            return false;
         }
         //不需要授权的请求放行
         if (requireAuth.equals(false)) {
@@ -48,8 +53,9 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
                 (RedisTemplate) BeanFactoryUtil.getBean("redisTemplate");
 
         if (StrUtil.isEmpty(sessionId)) {
-            logger.warn(ResultCode.NO_SESSION);
-            throw new HjException(ResultCode.NO_SESSION);
+            logger.warn(ResultCode.NO_SESSION.getI18NContent());
+            sendError(response, HttpStatus.OK.value(), String.valueOf(ResultCode.NO_SESSION.getCode()));
+            return false;
         } else {
             AOLoginAdminInfo admin = null;
             APLoginAdminInfo partner = null;
@@ -76,7 +82,8 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
             if (ObjectUtil.isNull(admin) && ObjectUtil.isNull(partner) && ObjectUtil.isNull(user)) {
                 String msg = StrUtil.format("session : {} 已失效", sessionId);
                 logger.warn(msg);
-                throw new HjException(ResultCode.SESSION_EXPIRED);
+                sendError(response, HttpStatus.OK.value(), String.valueOf(ResultCode.SESSION_EXPIRED.getCode()));
+                return false;
             } else {
                 Long expire = 0L;
                 RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
@@ -104,7 +111,8 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
                             TimeUnit.SECONDS);
                 } else {
                     logger.warn("无效的sessionId");
-                    throw new HjException(ResultCode.INVALID_SESSION);
+                    sendError(response, HttpStatus.OK.value(), String.valueOf(ResultCode.INVALID_SESSION.getCode()));
+                    return false;
                 }
                 RequestContextHolder.getRequestAttributes().setAttribute("sessionId", sessionId, RequestAttributes.SCOPE_REQUEST);
                 if (ObjectUtil.isNotNull(user)) {
@@ -117,7 +125,8 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
                 hasRight(admin.getRights(), request.getServletPath(), hasRight);
                 if (!hasRight.contains(true)) {
                     logger.warn(ResultCode.NO_PERMISSION.getI18NContent());
-                    throw new HjException(ResultCode.NO_PERMISSION);
+                    sendError(response, HttpStatus.OK.value(), String.valueOf(ResultCode.NO_PERMISSION.getCode()));
+                    return false;
                 }
             }
         }
@@ -134,6 +143,14 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
                     break;
                 }
             }
+        }
+    }
+
+    private void sendError(HttpServletResponse response, int sc, String message) {
+        try {
+            response.sendError(sc, message);
+        } catch (IOException e) {
+            logger.error("发送错误失败", e);
         }
     }
 }
