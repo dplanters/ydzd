@@ -8,8 +8,8 @@
  ***************************************************************************/
 package com.gndc.common.utils;
 
+import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.Constant;
-import org.apache.commons.lang.StringUtils;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -239,14 +239,6 @@ public class DateUtil {
         return sdf.parse(date);
     }
 
-    public static Date format(String date, String pattern) throws ParseException {
-        if (StringUtils.isEmpty(date))
-            return null;
-
-        SimpleDateFormat tempDate = new SimpleDateFormat(pattern);
-        return tempDate.parse(date);
-    }
-
     public static String timestampToDate(Timestamp timestamp, String format) {
         String tsStr = null;
         DateFormat sdf = new SimpleDateFormat(format);
@@ -376,7 +368,6 @@ public class DateUtil {
      * 当前时间加几个月
      *
      * @param date  设置的时间
-     * @param 相加的月数
      * @return
      */
     public static String nowDateAddMonths(int n, Date date) {
@@ -622,7 +613,7 @@ public class DateUtil {
     public static String getMonthFirstDate(String dateStr) {
         Calendar calendar = Calendar.getInstance();
         try {
-            if (StringUtils.isNotBlank(dateStr)) {
+            if (StrUtil.isNotBlank(dateStr)) {
                 calendar.setTime(DATE_FORMAT_23.parse(dateStr));
             }
         } catch (ParseException e) {
@@ -646,7 +637,7 @@ public class DateUtil {
     public static String getMonthLastDate(String dateStr) {
         Calendar calendar = Calendar.getInstance();
         try {
-            if (StringUtils.isNotBlank(dateStr)) {
+            if (StrUtil.isNotBlank(dateStr)) {
                 calendar.setTime(DATE_FORMAT_23.parse(dateStr));
             }
         } catch (ParseException e) {

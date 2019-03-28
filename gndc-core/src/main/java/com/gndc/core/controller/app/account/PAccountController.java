@@ -1,11 +1,16 @@
 package com.gndc.core.controller.app.account;
 
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.UserDeviceEnum;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.common.enums.user.UserStatusEnum;
-import com.gndc.common.utils.*;
+import com.gndc.common.utils.DateUtil;
+import com.gndc.common.utils.JsonUtil;
+import com.gndc.common.utils.PwdUtil;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
 import com.gndc.core.api.app.platform.SmsInfo;
 import com.gndc.core.api.app.user.account.*;
@@ -16,7 +21,6 @@ import com.gndc.core.model.UserEvent;
 import com.gndc.core.service.sms.SmsLogService;
 import com.gndc.core.service.user.UserEventService;
 import com.gndc.core.service.user.UserService;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +78,7 @@ public class PAccountController {
 
         User userInfo = null;
 
-        if (StringUtils.isBlank(request.getHeader().getDeviceType())) {
+        if (StrUtil.isBlank(request.getHeader().getDeviceType())) {
             response.createError(ResultCode.DEVICETYPE_ISNULL);
             logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
             return response;
@@ -85,13 +89,13 @@ public class PAccountController {
 
 
         if ((deviceType == UserDeviceEnum.ANDROID.getCode() || deviceType == UserDeviceEnum.IOS.getCode())) {
-            if (StringUtils.isBlank(imei)) {
+            if (StrUtil.isBlank(imei)) {
                 response.createError(ResultCode.IMEI_TOKEN_ISNULL);
                 logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
                 return response;
             }
 
-            if (StringUtils.isBlank(termType)) {
+            if (StrUtil.isBlank(termType)) {
                 response.createError(ResultCode.TERM_TYPE_ISNULL);
                 logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
                 return response;
@@ -143,7 +147,7 @@ public class PAccountController {
         String appName = request.getAppName();
         String appPackage = request.getAppPackage();
 
-        if (StringUtils.isBlank(request.getHeader().getDeviceType())) {
+        if (StrUtil.isBlank(request.getHeader().getDeviceType())) {
             response.createError(ResultCode.DEVICETYPE_ISNULL);
             logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
             return response;
@@ -152,13 +156,13 @@ public class PAccountController {
         byte deviceType = Byte.parseByte(request.getHeader().getDeviceType());
 
         if ((deviceType == UserDeviceEnum.ANDROID.getCode() || deviceType == UserDeviceEnum.IOS.getCode())) {
-            if (StringUtils.isBlank(imei)) {
+            if (StrUtil.isBlank(imei)) {
                 response.createError(ResultCode.IMEI_TOKEN_ISNULL);
                 logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
                 return response;
             }
 
-            if (StringUtils.isBlank(termType)) {
+            if (StrUtil.isBlank(termType)) {
                 response.createError(ResultCode.TERM_TYPE_ISNULL);
                 logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
                 return response;
@@ -207,7 +211,7 @@ public class PAccountController {
         userLoginResponse.setPhone(phone);
         userLoginResponse.setSessionId(sessionId);
         // 判断有没有密码
-        if (StringUtils.isBlank(user.getPassword())) {
+        if (StrUtil.isBlank(user.getPassword())) {
             userLoginResponse.setHasPassword(0);
         } else {
             userLoginResponse.setHasPassword(1);
@@ -235,7 +239,7 @@ public class PAccountController {
         user4update.setLastLoginIp(ip);
         userService.updateByPrimaryKeySelective(user4update);
 
-        String sessionId = Utils.getSessionId();
+        String sessionId = IdUtil.simpleUUID();
         User userInfo = new User();
         userInfo.setId(userId);
         redisTemplate.opsForValue().set(CacheConstant.NAMESPACE_USER_LOGIN + sessionId, userInfo,
@@ -267,14 +271,14 @@ public class PAccountController {
         String newPassword = request.getNewPassword();
         String confirmPassword = request.getConfirmPassword();
 
-        if (StringUtils.isBlank(newPassword) || StringUtils.isBlank(confirmPassword)) {
+        if (StrUtil.isBlank(newPassword) || StrUtil.isBlank(confirmPassword)) {
             response.createError(ResultCode.PARAM_MISSING);
             logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
             return response;
         }
 
         try {
-            if (StringUtils.isNotBlank(password)) {
+            if (StrUtil.isNotBlank(password)) {
                 password = PwdUtil.decryptRSA(password);
             }
 
@@ -291,7 +295,7 @@ public class PAccountController {
         PwdUtil.validate(newPassword);
         // 从数据获取用户信息
         User userInfo = userService.selectByPrimaryKey(user.getId());
-        if (StringUtils.isNotBlank(userInfo.getPassword()) && StringUtils.isBlank(password)) {
+        if (StrUtil.isNotBlank(userInfo.getPassword()) && StrUtil.isBlank(password)) {
             response.createError(ResultCode.PASSWORD_ISNULL);
             logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
             return response;
@@ -299,7 +303,7 @@ public class PAccountController {
 
         String passwordSign = userInfo.getPasswordSign();
 
-        if (StringUtils.isNotBlank(userInfo.getPassword())) {
+        if (StrUtil.isNotBlank(userInfo.getPassword())) {
 
             if (!userInfo.getPassword().equals(PwdUtil.getPassword(password, userInfo.getPasswordSign()))) {
                 response.createError(ResultCode.OLD_PASSWORD_ERROR);
@@ -315,7 +319,7 @@ public class PAccountController {
             }
         }
 
-        passwordSign = String.valueOf(Utils.getRandom(6));
+        passwordSign = RandomUtil.randomString(6);
         userInfo.setPasswordSign(passwordSign);
         userInfo.setPassword(PwdUtil.getPassword(newPassword, passwordSign));
         int flag = userService.updatePassword(userInfo);
@@ -361,7 +365,7 @@ public class PAccountController {
             return response;
         }
 
-        String passwordSign = String.valueOf(Utils.getRandom(6));
+        String passwordSign = RandomUtil.randomString(6);
         user.setPasswordSign(passwordSign);
 
         password = PwdUtil.decryptRSA(password);

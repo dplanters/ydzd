@@ -201,33 +201,6 @@
         </trim>
     </select>
 
-    <resultMap id="selectPartnerCostResultMap" type="com.gndc.core.api.statistics.AOPartnerCostStatisticResponse">
-        <id column="id" jdbcType="BIGINT" property="id" />
-        <result column="name" jdbcType="VARCHAR" property="name" />
-        <result column="count" jdbcType="INTEGER" property="count" />
-        <result column="cost" jdbcType="DECIMAL" property="cost" />
-    </resultMap>
-
-    <select id="selectPartnerCost" resultMap="selectPartnerCostResultMap">
-        select
-        par.name,
-        count(pro.partner_id) count,
-        sum(ef.fee) cost
-        from
-        dc_partner par
-        left join dc_product pro on par.id = pro.partner_id
-        left join dc_event_fee ef on ef.product_id = pro.id
-        WHERE
-        <trim prefix="(" prefixOverrides="and" suffix=")">
-            <if test="partnerId != null and partnerId != ''">
-                and partner_id = #{partnerId,jdbcType=INTEGER}
-            </if>
-            and ef.fee_status = 1
-        </trim>
-        LIMIT
-        #{page.startRowNum, jdbcType=INTEGER}, #{page.size, jdbcType=INTEGER}
-    </select>
-
     <select id="selectPartnerCostCount" resultType="java.lang.Long">
         select
         count(*)

@@ -12,10 +12,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class APAdminResetPwdRequest extends RequestMessage {
 
-    @NotNull
-    @Min(1)
-    private Integer id;
-
     /**
      * 旧密码
      */

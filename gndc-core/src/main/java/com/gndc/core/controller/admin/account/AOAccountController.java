@@ -1,14 +1,14 @@
 package com.gndc.core.controller.admin.account;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.admin.AdminSuperAdminEnum;
-import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.common.PlatformEnum;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.exception.HjException;
-import com.gndc.common.utils.Utils;
 import com.gndc.core.api.admin.account.AOLoginAdminInfo;
 import com.gndc.core.api.admin.account.AOLoginRequest;
 import com.gndc.core.api.admin.account.AOLoginResponse;
@@ -100,7 +100,7 @@ public class AOAccountController {
         //更新登录信息
         adminService.updateByPrimaryKeySelective(admin);
         //分配session
-        String sessionId = Utils.getSessionId();
+        String sessionId = IdUtil.simpleUUID();
         //不是运营账号不允许登录
         if (!PlatformEnum.OPERATOR.getCode().equals(admin.getPlatform())) {
             logger.warn("{} 不允许登录运营平台", admin.getPlatform());

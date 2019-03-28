@@ -8,8 +8,6 @@
  ***************************************************************************/
 package com.gndc.common.utils;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
  * @version V1.0.1
@@ -22,6 +20,7 @@ public final class PasswordUtil {
      * 正则表达式验证密码必须要包含数字和大小写字母的6-20位密码
      *
      * @param input
+     * @return
      * @return
      */
     public static boolean rexCheckPassword(String input) {
@@ -43,18 +42,5 @@ public final class PasswordUtil {
      */
     public static String getPassword(String password, String sign) {
         return MD5Util.getMD5(password + sign).substring(5, 30);
-    }
-
-    /**
-     * 登陆验证
-     *
-     * @param passStr
-     * @param passLogin
-     * @param salt
-     * @return
-     */
-    public static boolean validate(String passStr, String passLogin) {
-
-        return StringUtils.equals(passStr, passLogin);
     }
 }

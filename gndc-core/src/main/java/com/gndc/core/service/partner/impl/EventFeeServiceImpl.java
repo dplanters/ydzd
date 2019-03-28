@@ -1,39 +1,22 @@
 package com.gndc.core.service.partner.impl;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
-import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.partner.EventFeeStatusEnum;
-import com.gndc.common.enums.partner.EventFeeTypeEnum;
-import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
-import com.gndc.common.utils.JsonUtil;
-import com.gndc.core.api.common.ResponseMessage;
-import com.gndc.core.api.partner.*;
-import com.gndc.core.api.partner.account.APLoginAdminInfo;
 import com.gndc.core.api.partner.data.APDataAnalysisListResponse;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Request;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Response;
-import com.gndc.core.api.statistics.AOPartnerCostStatisticRequest;
-import com.gndc.core.api.statistics.AOPartnerCostStatisticResponse;
 import com.gndc.core.mapper.simple.EventFeeMapper;
-import com.gndc.core.mapper.simple.ProductMapper;
-import com.gndc.core.mapper.simple.UserEventMapper;
-import com.gndc.core.mapper.simple.UserMapper;
-import com.gndc.core.model.*;
+import com.gndc.core.model.EventFee;
+import com.gndc.core.model.Partner;
 import com.gndc.core.service.partner.EventFeeService;
 import com.gndc.core.service.partner.PartnerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -60,128 +43,10 @@ public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> impleme
     @Resource
     private EventFeeMapper eventFeeMapper;
 
-    @Resource
-    private ProductMapper productMapper;
-
-    @Resource
-    private UserEventMapper userEventMapper;
-
-    @Resource
-    private UserMapper userMapper;
-
-    @Override
-    @PostMapping(value = "/feeStatisticTable")
-    public ResponseMessage<JSONArray> feeStatisticTable(String requestStr) {
-        logger.info(String.format("请求:%s", requestStr));
-        FeeStatisticTableRequest request = JsonUtil.getObject(requestStr, FeeStatisticTableRequest.class);
-        ResponseMessage<JSONArray> response = new ResponseMessage<>();
-        try {
-
-
-            APLoginAdminInfo admin = request.getApAdmin();
-
-            LocalDate now = LocalDate.now();
-
-            //h5总数 已结算的数量
-            long h5Count = eventFeeMapper.selectCountByDate(EventFeeTypeEnum.H5.getCode(), admin.getPartnerId(),
-                    EventFeeStatusEnum.COMPLETE.getCode(), StatusEnum.NORMAL.getCode(), now.getYear(), request.getMonth());
-            //h5总数 已结算+未结算
-            long h5CountTotal = eventFeeMapper.selectCountByDate(EventFeeTypeEnum.H5.getCode(), admin.getPartnerId(),
-                    null, StatusEnum.NORMAL.getCode(), now.getYear(), request.getMonth());
-
-            //api总数 已结算的数量
-            long apiCount = eventFeeMapper.selectCountByDate(EventFeeTypeEnum.API.getCode(), admin.getPartnerId(),
-                    EventFeeStatusEnum.COMPLETE.getCode(), StatusEnum.NORMAL.getCode(), now.getYear(), request.getMonth());
-
-            //api总数 已结算+未结算
-            long apiCountTotal = eventFeeMapper.selectCountByDate(EventFeeTypeEnum.API.getCode(), admin.getPartnerId(),
-                    null, StatusEnum.NORMAL.getCode(), now.getYear(), request.getMonth());
-
-            //h5 已结算金额
-            BigDecimal h5Sum = eventFeeMapper.selectSum(EventFeeTypeEnum.H5.getCode(), admin.getPartnerId(),
-                    EventFeeStatusEnum.COMPLETE.getCode(), StatusEnum.NORMAL.getCode(), now.getYear(),
-                    request.getMonth());
-            if (h5Sum == null) {
-                h5Sum = new BigDecimal(0);
-            }
-
-            //api 已结算金额
-            BigDecimal apiSum = eventFeeMapper.selectSum(EventFeeTypeEnum.API.getCode(), admin.getPartnerId(),
-                    EventFeeStatusEnum.COMPLETE.getCode(), StatusEnum.NORMAL.getCode(), now.getYear(),
-                    request.getMonth());
-
-            if (apiSum == null) {
-                apiSum = new BigDecimal(0);
-            }
-
-            JSONArray array = new JSONArray();
-
-            JSONObject api = new JSONObject()
-                    .fluentPut("category", "API结算")
-                    .fluentPut("count", apiCount)
-                    .fluentPut("amount", apiSum)
-                    .fluentPut("rate", apiCountTotal == 0 ? 0 : String.format("%.2f",
-                            apiCount / (apiCountTotal * 1.0)));
-            array.fluentAdd(api);
-
-            JSONObject h5 = new JSONObject()
-                    .fluentPut("category", "H5结算")
-                    .fluentPut("count", h5Count)
-                    .fluentPut("amount", h5Sum)
-                    .fluentPut("rate", h5CountTotal == 0 ? 0 : String.format("%.2f", h5Count / (h5CountTotal * 1.0)));
-            array.fluentAdd(h5);
-
-            JSONObject total = new JSONObject()
-                    .fluentPut("category", "总计")
-                    .fluentPut("count", h5Count + apiCount)
-                    .fluentPut("amount", h5Sum.add(apiSum));
-            array.fluentAdd(total);
-
-            response.setData(array);
-            return response;
-        } catch (HjException e) {
-            logger.error(e.getMessage(), e);
-
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return response;
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-
-            response.createError(ResultCode.ERROR);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return response;
-        }
-    }
-
     @Override
     public List<APDataAnalysisListResponse> dataAnalysis(Integer partnerId, Integer productId, Byte feeType, Byte coopeMode, Byte eventType, Byte feeStatus,
                                                                     Byte status, String startDate, String endDate) {
         return eventFeeMapper.apDataAnalysis(partnerId, productId, feeType, coopeMode, eventType, feeStatus, status, startDate, endDate);
-    }
-
-    @Override
-    @PostMapping(value = "/aoPartnerCostStatisticTable")
-    public ResponseMessage<List<AOPartnerCostStatisticResponse>> aoPartnerCostStatisticTable(String requestStr) {
-        AOPartnerCostStatisticRequest request = JsonUtil.getObject(requestStr, AOPartnerCostStatisticRequest.class);
-        ResponseMessage<List<AOPartnerCostStatisticResponse>> response = new ResponseMessage<>();
-        try {
-            PageInfo page = request.getHeader().getPage();
-
-
-            Integer partnerId = request.getPartnerId();
-            List<AOPartnerCostStatisticResponse> aoPartnerCostStatisticResponses = eventFeeMapper.selectPartnerCost(partnerId, page);
-            long total = eventFeeMapper.selectPartnerCostCount(partnerId);
-
-            response.setData(aoPartnerCostStatisticResponses);
-            response.getPage().setTotal(total);
-
-            return response;
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            response.createError(ResultCode.ERROR);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
-            return response;
-        }
     }
 
     @Override

@@ -1,12 +1,9 @@
 package com.gndc.core.service.partner;
 
-import com.alibaba.fastjson.JSONArray;
-import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.common.service.BaseService;
 import com.gndc.core.api.partner.data.APDataAnalysisListResponse;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Request;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Response;
-import com.gndc.core.api.statistics.AOPartnerCostStatisticResponse;
 import com.gndc.core.model.EventFee;
 
 import java.math.BigDecimal;
@@ -21,26 +18,10 @@ public interface EventFeeService extends BaseService<EventFee, Long> {
 
 
     /**
-     * 费用统计table
-     *
-     * @param requestStr
-     * @return
-     */
-    ResponseMessage<JSONArray> feeStatisticTable(String requestStr);
-
-    /**
      * 商户后台-数据分析
      */
     List<APDataAnalysisListResponse> dataAnalysis(Integer partnerId, Integer productId, Byte feeType, Byte coopeMode, Byte eventType, Byte feeStatus,
                                                              Byte status, String startDate, String endDate);
-
-    /**
-     * 运营后台-费用管理-机构费用列表
-     *
-     * @param requestStr
-     * @return
-     */
-    ResponseMessage<List<AOPartnerCostStatisticResponse>> aoPartnerCostStatisticTable(String requestStr);
 
     /**
      * 费用结算

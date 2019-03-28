@@ -1,5 +1,6 @@
 package com.gndc.third.sms.chuanglan;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.gndc.common.enums.sms.SmsTemplateType;
@@ -8,7 +9,6 @@ import com.gndc.third.sms.ISmsService;
 import com.gndc.third.sms.chuanglan.enums.ChuangLanStatusType;
 import com.gndc.third.sms.chuanglan.util.ChuangLanSmsUtil;
 import com.gndc.third.sms.chuanglan.util.SmsSendRequest;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -81,7 +81,7 @@ public class ChuangLanSmsService implements ISmsService {
 
             String response = ChuangLanSmsUtil.sendSmsByPost(CHUANGLAN_SMS_SEND, requestJson);
 
-            if (StringUtils.isBlank(response)) {
+            if (StrUtil.isBlank(response)) {
                 sendResult.put("response", ChuangLanStatusType.REQUEST_NO_RESPONSE_FAILED.getDesc());
                 sendResult.put("code", ChuangLanStatusType.REQUEST_NO_RESPONSE_FAILED.getStatus());
             }

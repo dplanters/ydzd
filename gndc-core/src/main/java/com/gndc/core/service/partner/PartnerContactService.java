@@ -1,7 +1,7 @@
 package com.gndc.core.service.partner;
 
 import com.gndc.common.service.BaseService;
-import com.gndc.core.api.partner.PartnerContactAddRequest;
+import com.gndc.core.api.partner.sys.APPartnerContactAddRequest;
 import com.gndc.core.model.PartnerContact;
 
 /**
@@ -15,5 +15,5 @@ public interface PartnerContactService extends BaseService<PartnerContact, Integ
      *
      * @return
      */
-    Boolean addPartnerContact(PartnerContactAddRequest request);
+    Boolean addPartnerContact(APPartnerContactAddRequest request);
 }

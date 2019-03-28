@@ -2,6 +2,7 @@ package com.gndc.core;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson.JSONObject;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import java.sql.SQLException;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CoreApplication.class)
+@Ignore
 public class CoreApplicationTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CoreApplicationTest.class);

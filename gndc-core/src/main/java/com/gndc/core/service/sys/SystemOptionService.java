@@ -1,7 +1,7 @@
 package com.gndc.core.service.sys;
 
 import com.gndc.common.service.BaseService;
-import com.gndc.core.api.partner.APPayeeListRequest;
+import com.gndc.core.api.partner.common.APPayeeListRequest;
 import com.gndc.core.model.SystemOption;
 
 import java.util.List;

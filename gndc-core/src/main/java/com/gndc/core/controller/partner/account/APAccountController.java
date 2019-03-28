@@ -1,6 +1,7 @@
 package com.gndc.core.controller.partner.account;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.CacheConstant;
@@ -10,7 +11,6 @@ import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.PasswordUtil;
 import com.gndc.common.utils.PwdUtil;
-import com.gndc.common.utils.Utils;
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.api.partner.account.APLoginAdminInfo;
 import com.gndc.core.api.partner.account.APLoginRequest;
@@ -103,7 +103,7 @@ public class APAccountController {
         //更新登录信息
         adminService.updateByPrimaryKeySelective(admin);
         //分配session
-        String sessionId = Utils.getSessionId();
+        String sessionId = IdUtil.simpleUUID();
         //获取权限树
         List<Right> rights = null;
         List<Integer> rightIds = null;
@@ -136,7 +136,7 @@ public class APAccountController {
     @PostMapping("/resetPwd")
     public ResponseMessage<Boolean> resetPwd(@Validated @RequestBody APAdminResetPwdRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
-        Admin admin = adminService.selectByPrimaryKey(request.getId());
+        Admin admin = adminService.selectByPrimaryKey(request.getApAdmin().getId());
 
         //密码校验
         if (!accountService.passwordCheck(admin, request.getOldPassword())) {

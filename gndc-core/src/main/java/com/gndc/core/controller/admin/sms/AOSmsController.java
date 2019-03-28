@@ -1,5 +1,6 @@
 package com.gndc.core.controller.admin.sms;
 
+import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.enums.ResultCode;
@@ -17,7 +18,6 @@ import com.gndc.core.mappers.SmsTemplateMapping;
 import com.gndc.core.model.*;
 import com.gndc.core.service.sms.*;
 import com.gndc.core.service.user.UserService;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -204,13 +204,13 @@ public class AOSmsController {
         Weekend<SmsSign> weekend = Weekend.of(SmsSign.class);
         weekend.selectProperties("id", "name", "channelId", "channelName", "createTime");
         WeekendCriteria<SmsSign, Object> criteria = weekend.weekendCriteria();
-        if (StringUtils.isNotBlank(request.getName())) {
+        if (StrUtil.isNotBlank(request.getName())) {
             criteria.andLike(SmsSign::getName, "%" + request.getName() + "%");
         }
-        if (StringUtils.isNotBlank(request.getCreateTimeStart())) {
+        if (StrUtil.isNotBlank(request.getCreateTimeStart())) {
             criteria.andGreaterThanOrEqualTo(SmsSign::getCreateTime, request.getCreateTimeStart());
         }
-        if (StringUtils.isNotBlank(request.getCreateTimeEnd())) {
+        if (StrUtil.isNotBlank(request.getCreateTimeEnd())) {
             criteria.andLessThanOrEqualTo(SmsSign::getCreateTime, request.getCreateTimeEnd());
         }
         criteria.andEqualTo(SmsSign::getStatus, StatusEnum.NORMAL.getCode());

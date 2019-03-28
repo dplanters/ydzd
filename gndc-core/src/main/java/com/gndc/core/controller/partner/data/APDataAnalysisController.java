@@ -22,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/partner/data")
-public class ApDataAnalysisController {
+public class APDataAnalysisController {
 
     @Autowired
     private EventFeeService eventFeeService;

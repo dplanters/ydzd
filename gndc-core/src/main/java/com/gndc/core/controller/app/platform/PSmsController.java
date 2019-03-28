@@ -1,12 +1,12 @@
 package com.gndc.core.controller.app.platform;
 
+import cn.hutool.core.util.RandomUtil;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.message.SMSTypeEnum;
 import com.gndc.common.enums.sms.SmsChannelEnum;
 import com.gndc.common.enums.sms.SmsTemplateType;
 import com.gndc.common.utils.JsonUtil;
-import com.gndc.common.utils.Utils;
 import com.gndc.core.api.app.platform.PSendSmsRequest;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
 import com.gndc.core.api.app.platform.Sms24HourCount;
@@ -85,7 +85,7 @@ public class PSmsController {
         }
 
         // 生成4位短信验证码
-        int valCode = Utils.getRandom(4);
+        int valCode = RandomUtil.randomInt(4);
 
         logger.info("-------" + valCode);
         // paasoo短信发送

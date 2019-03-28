@@ -5,6 +5,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+/**
+ * 获取springboot中的bean工具
+ */
 @Component
 public class BeanFactoryUtil implements ApplicationContextAware {
     private static ApplicationContext applicationContext;

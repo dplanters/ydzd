@@ -1,4 +1,4 @@
-package com.gndc.core.api.partner;
+package com.gndc.core.api.partner.sys;
 
 import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  */
 @Getter
 @Setter
-public class PartnerContactAddRequest extends RequestMessage {
+public class APPartnerContactAddRequest extends RequestMessage {
     private static final long serialVersionUID = 1L;
 
     @NotNull

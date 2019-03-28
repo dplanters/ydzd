@@ -1,7 +1,7 @@
 package com.gndc.core.controller.partner.sys;
 
 import com.gndc.core.api.common.ResponseMessage;
-import com.gndc.core.api.partner.PartnerContactAddRequest;
+import com.gndc.core.api.partner.sys.APPartnerContactAddRequest;
 import com.gndc.core.service.partner.PartnerContactService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ public class APSecurityController {
      * @return
      */
     @PostMapping(value = "/addPartnerContact")
-    public ResponseMessage<Boolean> addPartnerContact(@Validated @RequestBody PartnerContactAddRequest request) {
+    public ResponseMessage<Boolean> addPartnerContact(@Validated @RequestBody APPartnerContactAddRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
         response.setData(partnerContactService.addPartnerContact(request));
 
