@@ -3,13 +3,13 @@ package com.gndc.core.controller.app.account;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.UserDeviceEnum;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.common.enums.user.UserStatusEnum;
 import com.gndc.common.utils.DateUtil;
-import com.gndc.common.utils.JsonUtil;
 import com.gndc.common.utils.PwdUtil;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
 import com.gndc.core.api.app.platform.SmsInfo;
@@ -80,7 +80,7 @@ public class PAccountController {
 
         if (StrUtil.isBlank(request.getHeader().getDeviceType())) {
             response.createError(ResultCode.DEVICETYPE_ISNULL);
-            logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
             return response;
         }
 
@@ -91,19 +91,19 @@ public class PAccountController {
         if ((deviceType == UserDeviceEnum.ANDROID.getCode() || deviceType == UserDeviceEnum.IOS.getCode())) {
             if (StrUtil.isBlank(imei)) {
                 response.createError(ResultCode.IMEI_TOKEN_ISNULL);
-                logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
                 return response;
             }
 
             if (StrUtil.isBlank(termType)) {
                 response.createError(ResultCode.TERM_TYPE_ISNULL);
-                logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
                 return response;
             }
 
             if (userInfo == null) {
                 response.createError(ResultCode.USER_NOT_EXISTS);
-                logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
                 return response;
             }
 
@@ -113,7 +113,7 @@ public class PAccountController {
 
             if (!pwdMd5.equals(userInfo.getPassword())) {
                 response.createError(ResultCode.USER_NAME_PASSWORD_ERROR);
-                logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
                 return response;
             }
 
@@ -149,7 +149,7 @@ public class PAccountController {
 
         if (StrUtil.isBlank(request.getHeader().getDeviceType())) {
             response.createError(ResultCode.DEVICETYPE_ISNULL);
-            logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
             return response;
         }
 
@@ -158,13 +158,13 @@ public class PAccountController {
         if ((deviceType == UserDeviceEnum.ANDROID.getCode() || deviceType == UserDeviceEnum.IOS.getCode())) {
             if (StrUtil.isBlank(imei)) {
                 response.createError(ResultCode.IMEI_TOKEN_ISNULL);
-                logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
                 return response;
             }
 
             if (StrUtil.isBlank(termType)) {
                 response.createError(ResultCode.TERM_TYPE_ISNULL);
-                logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
                 return response;
             }
         }
@@ -174,8 +174,8 @@ public class PAccountController {
         String sms10MinuteCountStr = (String) redisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_10_PREFIX + key);
         String smsInfoStr = (String) redisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_15M_PREFIX + key);
 
-        Sms10MinuteCount sms10MinuteCount = JsonUtil.getObject(sms10MinuteCountStr, Sms10MinuteCount.class);
-        SmsInfo smsInfo = JsonUtil.getObject(smsInfoStr, SmsInfo.class);
+        Sms10MinuteCount sms10MinuteCount = JSONObject.parseObject(sms10MinuteCountStr, Sms10MinuteCount.class);
+        SmsInfo smsInfo = JSONObject.parseObject(smsInfoStr, SmsInfo.class);
 
         if (!smsLogService.validateSms(smsInfo, sms10MinuteCount, key, valCode, response)) {
             return response;
@@ -261,10 +261,10 @@ public class PAccountController {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
         String sessionId = request.getHeader().getSessionId();
         String userInfoStr = (String) redisTemplate.opsForValue().get(CacheConstant.KEY_USER_LOGIN_PREFIX + sessionId);
-        User user = JsonUtil.getObject(userInfoStr, User.class);
+        User user = JSONObject.parseObject(userInfoStr, User.class);
         if (user == null) {
             response.createError(ResultCode.SESSIONID_ISNULL);
-            logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
             return response;
         }
         String password = request.getPassword();
@@ -273,7 +273,7 @@ public class PAccountController {
 
         if (StrUtil.isBlank(newPassword) || StrUtil.isBlank(confirmPassword)) {
             response.createError(ResultCode.PARAM_MISSING);
-            logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
             return response;
         }
 
@@ -288,7 +288,7 @@ public class PAccountController {
 
         } catch (Exception e) {
             response.createError(ResultCode.PARAMETER_ERROR);
-            logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
             return response;
         }
 
@@ -297,7 +297,7 @@ public class PAccountController {
         User userInfo = userService.selectByPrimaryKey(user.getId());
         if (StrUtil.isNotBlank(userInfo.getPassword()) && StrUtil.isBlank(password)) {
             response.createError(ResultCode.PASSWORD_ISNULL);
-            logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
             return response;
         }
 
@@ -307,14 +307,14 @@ public class PAccountController {
 
             if (!userInfo.getPassword().equals(PwdUtil.getPassword(password, userInfo.getPasswordSign()))) {
                 response.createError(ResultCode.OLD_PASSWORD_ERROR);
-                logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
                 return response;
             }
 
         } else {
             if (!newPassword.equals(confirmPassword)) {
                 response.createError(ResultCode.CONFIRM_PASSWORD_ERROR);
-                logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
                 return response;
             }
         }
@@ -325,7 +325,7 @@ public class PAccountController {
         int flag = userService.updatePassword(userInfo);
         if (flag <= 0) {
             response.createError(ResultCode.RECORD_MODIFY_FAIL);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
+            logger.error(String.format("应答:%s", JSONObject.toJSONString(response)));
             return response;
         }
         return response;
@@ -350,8 +350,8 @@ public class PAccountController {
         String sms10MinuteCountStr = (String) redisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_10_PREFIX + key);
         String smsInfoStr = (String) redisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_15M_PREFIX + key);
 
-        Sms10MinuteCount sms10MinuteCount = JsonUtil.getObject(sms10MinuteCountStr, Sms10MinuteCount.class);
-        SmsInfo smsInfo = JsonUtil.getObject(smsInfoStr, SmsInfo.class);
+        Sms10MinuteCount sms10MinuteCount = JSONObject.parseObject(sms10MinuteCountStr, Sms10MinuteCount.class);
+        SmsInfo smsInfo = JSONObject.parseObject(smsInfoStr, SmsInfo.class);
 
         if (!smsLogService.validateSms(smsInfo, sms10MinuteCount, key, valCode, response)) {
             return response;
@@ -361,7 +361,7 @@ public class PAccountController {
         User user = userService.selectOneByProperty("phone", phone);
         if (null == user) {
             response.createError(ResultCode.USER_NOT_EXISTS);
-            logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
             return response;
         }
 
@@ -372,7 +372,7 @@ public class PAccountController {
         confirmPassword = PwdUtil.decryptRSA(confirmPassword);
         if (!password.equals(confirmPassword)) {
             response.createError(ResultCode.CONFIRM_PASSWORD_ERROR);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
+            logger.error(String.format("应答:%s", JSONObject.toJSONString(response)));
             return response;
         }
 
@@ -380,10 +380,10 @@ public class PAccountController {
         int flag = userService.updatePassword(user);
         if (flag <= 0) {
             response.createError(ResultCode.RECORD_MODIFY_FAIL);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
+            logger.error(String.format("应答:%s", JSONObject.toJSONString(response)));
             return response;
         }
-        logger.info(String.format("应答:%s", JsonUtil.toJSONString(response)));
+        logger.info(String.format("应答:%s", JSONObject.toJSONString(response)));
         return response;
     }
 }

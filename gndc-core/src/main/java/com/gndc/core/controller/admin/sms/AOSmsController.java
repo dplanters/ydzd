@@ -1,13 +1,13 @@
 package com.gndc.core.controller.admin.sms;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.sms.SmsChannelEnum;
 import com.gndc.common.utils.DateUtil;
-import com.gndc.common.utils.JsonUtil;
 import com.gndc.common.utils.PhoneUtil;
 import com.gndc.core.api.admin.sms.*;
 import com.gndc.core.api.common.CommonResponse;
@@ -398,7 +398,7 @@ public class AOSmsController {
                 SmsSign smsSign = smsSignService.selectByPrimaryKey(signId);
                 if (smsSign == null || smsSign.getStatus() == StatusEnum.DELETE.getCode()) {
                     response.createError(ResultCode.SIGN_NOT_EXIST);
-                    logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                    logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
                     return response;
                 }
                 String message = "";
@@ -406,7 +406,7 @@ public class AOSmsController {
                 SmsTemplate smsTemplate = smsTemplateService.selectByPrimaryKey(templateId);
                 if (smsTemplate == null || smsTemplate.getStatus() == StatusEnum.DELETE.getCode()) {
                     response.createError(ResultCode.TEMPLATE_NOT_EXIST);
-                    logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                    logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
                     return response;
                 }
                 message = smsSign.getName() + smsTemplate.getContent();
@@ -418,7 +418,7 @@ public class AOSmsController {
                     } else {
                         //暂时只支持营销类
                         response.createError(ResultCode.CONDITION_NOT_EXIST);
-                        logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                        logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
                         return response;
                     }
 
@@ -427,7 +427,7 @@ public class AOSmsController {
                 }
                 if (phoneToSend == null) {
                     response.createError(ResultCode.RECORD_NOT_EXIST);
-                    logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                    logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
                     return response;
                 }
                 SmsGroupLog smsGroupLog = new SmsGroupLog();
@@ -442,7 +442,7 @@ public class AOSmsController {
             }
         } else {
             response.createError(ResultCode.SIGN_NOT_EXIST);
-            logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
             return response;
         }
         return response;
@@ -477,7 +477,7 @@ public class AOSmsController {
                 SmsSign smsSign = smsSignService.selectByPrimaryKey(signId);
                 if (smsSign == null || smsSign.getStatus() == StatusEnum.DELETE.getCode()) {
                     response.createError(ResultCode.SIGN_NOT_EXIST);
-                    logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                    logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
                     return response;
                 }
                 String message = "";
@@ -485,7 +485,7 @@ public class AOSmsController {
                 SmsTemplate smsTemplate = smsTemplateService.selectByPrimaryKey(templateId);
                 if (smsTemplate == null || smsTemplate.getStatus() == StatusEnum.DELETE.getCode()) {
                     response.createError(ResultCode.TEMPLATE_NOT_EXIST);
-                    logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                    logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
                     return response;
                 }
                 message = smsSign.getName() + smsTemplate.getContent();
@@ -497,7 +497,7 @@ public class AOSmsController {
                     } else {
                         //暂时只支持营销类
                         response.createError(ResultCode.CONDITION_NOT_EXIST);
-                        logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                        logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
                         return response;
                     }
 
@@ -506,7 +506,7 @@ public class AOSmsController {
                 }
                 if (phoneToSend == null) {
                     response.createError(ResultCode.RECORD_NOT_EXIST);
-                    logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                    logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
                     return response;
                 }
                 SmsGroupLog smsGroupLog = new SmsGroupLog();
@@ -521,7 +521,7 @@ public class AOSmsController {
             }
         } else {
             response.createError(ResultCode.SIGN_NOT_EXIST);
-            logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
             return response;
         }
 
@@ -532,7 +532,7 @@ public class AOSmsController {
         String phoneToSend = "";
         //条件类型json
         String condition = smsCondition.getCondition();
-        SmsConditionContent smsConditionContent = JsonUtil.getObject(condition, SmsConditionContent.class);
+        SmsConditionContent smsConditionContent = JSONObject.parseObject(condition, SmsConditionContent.class);
         //营销事件1登录 2注册
         Byte marketingType = smsConditionContent.getMarketingType();
         //营销时间

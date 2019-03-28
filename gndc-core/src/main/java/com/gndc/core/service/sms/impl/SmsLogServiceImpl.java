@@ -1,5 +1,6 @@
 package com.gndc.core.service.sms.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.constant.Constant;
 import com.gndc.common.enums.ResultCode;
@@ -7,7 +8,6 @@ import com.gndc.common.enums.sms.SmsChannelEnum;
 import com.gndc.common.enums.sms.SmsTemplateType;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.common.utils.DateUtil;
-import com.gndc.common.utils.JsonUtil;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
 import com.gndc.core.api.app.platform.Sms24HourCount;
 import com.gndc.core.api.app.platform.SmsInfo;
@@ -169,16 +169,16 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
 
 
                     sms10MinuteCount.setCount(sms10MinuteCount.getCount() + 1);
-                    String JsonText10M = JsonUtil.toJSONString(sms10MinuteCount);
+                    String JsonText10M = JSONObject.toJSONString(sms10MinuteCount);
                     redisTemplate.opsForValue().set(CacheConstant.KEY_USER_SMS_10_PREFIX + key, JsonText10M, CacheConstant.EXPIRE_USER_SMS_10, TimeUnit.SECONDS);
 
                     sms24HourCount.setCount(sms24HourCount.getCount() + 1);
-                    String jsonText24H = JsonUtil.toJSONString(sms24HourCount);
+                    String jsonText24H = JSONObject.toJSONString(sms24HourCount);
                     redisTemplate.opsForValue().set(CacheConstant.KEY_USER_SMS_24H_PREFIX + key, jsonText24H, CacheConstant.EXPIRE_USER_SMS_24H, TimeUnit.SECONDS);
 
                     SmsInfo sms = new SmsInfo();
                     sms.setValCode(String.valueOf(valCode));
-                    String jsonTextSms = JsonUtil.toJSONString(sms);
+                    String jsonTextSms = JSONObject.toJSONString(sms);
                     redisTemplate.opsForValue().set(CacheConstant.KEY_USER_SMS_15M_PREFIX + key, jsonTextSms, CacheConstant.EXPIRE_USER_SMS_15M, TimeUnit.SECONDS);
                 }
             } catch (Exception e) {
@@ -250,7 +250,7 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
 
         if (!valCode.equals(sms.getValCode())) {
             sms10MinuteCount.setFailCount(sms10MinuteCount.getFailCount() + 1);
-            String JsonText10M = JsonUtil.toJSONString(sms10MinuteCount);
+            String JsonText10M = JSONObject.toJSONString(sms10MinuteCount);
             redisTemplate.opsForValue().set(CacheConstant.KEY_USER_SMS_10_PREFIX + key, JsonText10M, CacheConstant.EXPIRE_USER_SMS_10, TimeUnit.SECONDS);
 
             response.createError(ResultCode.AUTH_ERROR);
@@ -282,7 +282,7 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
                 smsGroupLog.setSuccessNum(Integer.parseInt(successNum));
             }
             smsGroupLog.setUid(sendResult.get("msgId"));
-            smsGroupLog.setResponseMsg(JsonUtil.toJSONString(sendResult));
+            smsGroupLog.setResponseMsg(JSONObject.toJSONString(sendResult));
         }
 
         smsGroupLogService.insertSelective(smsGroupLog);

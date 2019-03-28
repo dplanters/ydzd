@@ -8,12 +8,13 @@
  ***************************************************************************/
 package com.gndc.third.sms.niuxin;
 
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.gndc.common.constant.Constant;
 import com.gndc.common.enums.sms.SmsTemplateType;
 import com.gndc.common.utils.DateUtil;
 import com.gndc.common.utils.HttpClientUtil;
-import com.gndc.common.utils.JsonUtil;
 import com.gndc.common.utils.MD5Util;
 import com.gndc.third.sms.ISmsService;
 import org.slf4j.Logger;
@@ -88,7 +89,7 @@ public class NiuxinService implements ISmsService {
                 phone = Constant.COUNTRY_CODE + phone;
             }
 
-            Map<String, String> params = new HashMap<String, String>();
+            Map<String, String> params = new HashMap<>();
 
             params.put("appkey", API_KEY);
             params.put("secretkey", API_SECRET);
@@ -108,7 +109,7 @@ public class NiuxinService implements ISmsService {
 
             // 成功 : {"bannerStatus":"0","messageid":"015bd4-d6dfa7-58w"}
             // 失败 : {"status_code":"Missing params.","bannerStatus":"2"}
-            sendResult = JsonUtil.getObject(response, new TypeReference<Map<String, String>>() {
+            sendResult = JSONObject.parseObject(response, new TypeReference<Map<String, String>>() {
             });
 
             sendResult.put("response", response);
@@ -116,7 +117,7 @@ public class NiuxinService implements ISmsService {
 
         result.putAll(sendResult);
 
-        logger.info("sendsms sendResult:" + JsonUtil.toJSONString(result));
+        logger.info("sendsms sendResult:" + JSONObject.toJSONString(result));
         return result;
     }
 

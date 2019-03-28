@@ -1,6 +1,6 @@
 package com.gndc.core.controller.common;
 
-import com.gndc.common.utils.JsonUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.gndc.third.oss.UploadToOSS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +45,6 @@ public class OSSController {
        } catch (IOException e) {
            e.printStackTrace();
        }
-       return JsonUtil.toJSONString(result);
+       return JSONObject.toJSONString(result);
    }
 }

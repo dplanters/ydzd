@@ -2,9 +2,9 @@ package com.gndc.third.sms.chuanglan;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.gndc.common.enums.sms.SmsTemplateType;
-import com.gndc.common.utils.JsonUtil;
 import com.gndc.third.sms.ISmsService;
 import com.gndc.third.sms.chuanglan.enums.ChuangLanStatusType;
 import com.gndc.third.sms.chuanglan.util.ChuangLanSmsUtil;
@@ -88,7 +88,7 @@ public class ChuangLanSmsService implements ISmsService {
 
             System.out.println("chuanglan sms response:" + response);
 
-            sendResult = JsonUtil.getObject(response, new TypeReference<Map<String, String>>() {
+            sendResult = JSONObject.parseObject(response, new TypeReference<Map<String, String>>() {
             });
 
             sendResult.put("response", response);

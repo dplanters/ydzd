@@ -1,10 +1,10 @@
 package com.gndc.third.sms.paasoo;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.gndc.common.constant.Constant;
 import com.gndc.common.enums.sms.SmsTemplateType;
 import com.gndc.common.utils.HttpClientUtil;
-import com.gndc.common.utils.JsonUtil;
 import com.gndc.third.sms.ISmsService;
 import com.gndc.third.sms.paasoo.enums.PaasooNotSupporMccmnc;
 import com.gndc.third.sms.paasoo.enums.PaasooPhoneNumberErrcodeType;
@@ -169,7 +169,7 @@ public class PaasooSmsService implements ISmsService {
 
             // 成功 : {"bannerStatus":"0","messageid":"015bd4-d6dfa7-58w"}
             // 失败 : {"status_code":"Missing params.","bannerStatus":"2"}
-            sendResult = JsonUtil.getObject(response, new TypeReference<Map<String, String>>() {
+            sendResult = JSONObject.parseObject(response, new TypeReference<Map<String, String>>() {
             });
 
             sendResult.put("response", response);
@@ -177,7 +177,7 @@ public class PaasooSmsService implements ISmsService {
 
         result.putAll(sendResult);
 
-        logger.info("sendsms sendResult:" + JsonUtil.toJSONString(result));
+        logger.info("sendsms sendResult:" + JSONObject.toJSONString(result));
         return result;
 
     }
@@ -199,7 +199,7 @@ public class PaasooSmsService implements ISmsService {
         String response = HttpClientUtil.get(URI_GET_SEND_RECORD, params, ENCODING);
         logger.info("getSendRecord response:" + response);
 
-        Map<String, String> result = JsonUtil.getObject(response, new TypeReference<Map<String, String>>() {
+        Map<String, String> result = JSONObject.parseObject(response, new TypeReference<Map<String, String>>() {
         });
 
         return result;
@@ -222,7 +222,7 @@ public class PaasooSmsService implements ISmsService {
 
         // 成功 : {"bannerStatus":"0","messageid":"015bd4-d6dfa7-58w"}
         // 失败 : {"status_code":"Missing params.","bannerStatus":"2"}
-        Map<String, String> result = JsonUtil.getObject(response, new TypeReference<Map<String, String>>() {
+        Map<String, String> result = JSONObject.parseObject(response, new TypeReference<Map<String, String>>() {
         });
 
         return result;
@@ -249,7 +249,7 @@ public class PaasooSmsService implements ISmsService {
 
         // 成功 : {"bannerStatus":"0","messageid":"015bd4-d6dfa7-58w"}
         // 失败 : {"status_code":"Missing params.","bannerStatus":"2"}
-        Map<String, String> result = JsonUtil.getObject(response, new TypeReference<Map<String, String>>() {
+        Map<String, String> result = JSONObject.parseObject(response, new TypeReference<Map<String, String>>() {
         });
 
         return result;
@@ -279,7 +279,7 @@ public class PaasooSmsService implements ISmsService {
 
         // 失败 :
         // {"requestId":"200090-24092e-3000","msgId":"200090-24092e-3000","to":"615990006398","format":0,"errorCode":"00","cc":"61","countryIso":"AU"}
-        Map<String, String> result = JsonUtil.getObject(response, new TypeReference<Map<String, String>>() {
+        Map<String, String> result = JSONObject.parseObject(response, new TypeReference<Map<String, String>>() {
         });
 
         result.put("response", response);
@@ -351,7 +351,7 @@ public class PaasooSmsService implements ISmsService {
 
             // 成功 : {"bannerStatus":"0","messageid":"015bd4-d6dfa7-58w"}
             // 失败 : {"status_code":"Missing params.","bannerStatus":"2"}
-            sendResult = JsonUtil.getObject(response, new TypeReference<Map<String, String>>() {
+            sendResult = JSONObject.parseObject(response, new TypeReference<Map<String, String>>() {
             });
 
             sendResult.put("response", response);
@@ -359,7 +359,7 @@ public class PaasooSmsService implements ISmsService {
 
         result.putAll(sendResult);
 
-        logger.info("sendsms sendResult:" + JsonUtil.toJSONString(result));
+        logger.info("sendsms sendResult:" + JSONObject.toJSONString(result));
         return result;
     }
 }

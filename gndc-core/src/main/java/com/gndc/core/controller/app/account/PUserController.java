@@ -1,5 +1,6 @@
 package com.gndc.core.controller.app.account;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.feedback.FeedbackStatusTypeEnum;
@@ -9,7 +10,6 @@ import com.gndc.common.enums.partner.EventFeeTypeEnum;
 import com.gndc.common.enums.product.ProductCoopeModeEnum;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.common.utils.DateUtil;
-import com.gndc.common.utils.JsonUtil;
 import com.gndc.core.api.app.user.event.PUserEventRequest;
 import com.gndc.core.api.app.user.feedback.PFeedBackEditRequest;
 import com.gndc.core.api.common.CommonResponse;
@@ -82,7 +82,7 @@ public class PUserController {
         User user = feedBackEditRequest.getUser();
         if (user == null) {
             response.createError(ResultCode.SESSIONID_ISNULL);
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
+            logger.error(String.format("应答:%s", JSONObject.toJSONString(response)));
             return response;
         }
 
@@ -114,7 +114,7 @@ public class PUserController {
         User user = eventRequest.getUser();
         if (user == null) {
             response.createError(ResultCode.SESSIONID_ISNULL);
-            logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
             return response;
         }
 
@@ -125,7 +125,7 @@ public class PUserController {
 
             if (eventRequest.getProductId() == 0) {
                 response.createError(ResultCode.PARAM_MISSING);
-                logger.warn(String.format("应答:%s", JsonUtil.toJSONString(response)));
+                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
                 return response;
             }
             Date now = DateUtil.getCountyTime();

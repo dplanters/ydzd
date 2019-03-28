@@ -1,12 +1,12 @@
 package com.gndc.core.controller.app.platform;
 
 import cn.hutool.core.util.RandomUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.message.SMSTypeEnum;
 import com.gndc.common.enums.sms.SmsChannelEnum;
 import com.gndc.common.enums.sms.SmsTemplateType;
-import com.gndc.common.utils.JsonUtil;
 import com.gndc.core.api.app.platform.PSendSmsRequest;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
 import com.gndc.core.api.app.platform.Sms24HourCount;
@@ -74,13 +74,13 @@ public class PSmsController {
         String sms10MinuteCountStr = (String) redisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_10_PREFIX + key);
         String sms24HourCountStr = (String) redisTemplate.opsForValue().get(CacheConstant.KEY_USER_SMS_24H_PREFIX + key);
 
-        Sms10MinuteCount sms10MinuteCount = JsonUtil.getObject(sms10MinuteCountStr, Sms10MinuteCount.class);
-        Sms24HourCount sms24HourCount = JsonUtil.getObject(sms24HourCountStr, Sms24HourCount.class);
+        Sms10MinuteCount sms10MinuteCount = JSONObject.parseObject(sms10MinuteCountStr, Sms10MinuteCount.class);
+        Sms24HourCount sms24HourCount = JSONObject.parseObject(sms24HourCountStr, Sms24HourCount.class);
 
 
 
         if (!smsLogService.validateSmsCount(sms10MinuteCount, sms24HourCount, response)) {
-            logger.error(String.format("应答:%s", JsonUtil.toJSONString(response)));
+            logger.error(String.format("应答:%s", JSONObject.toJSONString(response)));
             return response;
         }
 
