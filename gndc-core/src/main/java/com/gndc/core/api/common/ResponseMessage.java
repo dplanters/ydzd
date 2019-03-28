@@ -39,10 +39,4 @@ public class ResponseMessage<T> implements Serializable {
 
     private PageInfo page;
 
-    public void createError(ResultCode result) {
-        this.success = false;
-        this.code = result.getCode();
-        this.msg = result.getI18NContent();
-    }
-
 }

@@ -78,6 +78,11 @@ public class DateUtil {
      */
     public static final String FORMAT_12 = "yyyy-MM";
 
+    /**
+     * HH:mm:ss
+     */
+    public static final String FORMAT_13 = "HH:mm:ss";
+
     /* "MM/dd/yyyy"格式形式日期 */
     public static SimpleDateFormat DATE_FORMAT_10 = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
     public static SimpleDateFormat DATE_FORMAT_11 = new SimpleDateFormat("MM/dd/yyyy");

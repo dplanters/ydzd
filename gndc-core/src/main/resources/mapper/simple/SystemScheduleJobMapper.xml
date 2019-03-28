@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gndc.core.mapper.simple.SystemScheduleJobMapper">
+  <resultMap id="BaseResultMap" type="com.gndc.core.model.SystemScheduleJob">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="job_name" jdbcType="VARCHAR" property="jobName" />
+    <result column="bean_class" jdbcType="VARCHAR" property="beanClass" />
+    <result column="cron_expression" jdbcType="VARCHAR" property="cronExpression" />
+    <result column="method_name" jdbcType="VARCHAR" property="methodName" />
+    <result column="is_concurrent" jdbcType="TINYINT" property="isConcurrent" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="job_status" jdbcType="TINYINT" property="jobStatus" />
+    <result column="job_group" jdbcType="VARCHAR" property="jobGroup" />
+    <result column="extend_id" jdbcType="INTEGER" property="extendId" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="create_admin_id" jdbcType="INTEGER" property="createAdminId" />
+    <result column="update_admin_id" jdbcType="INTEGER" property="updateAdminId" />
+  </resultMap>
 
 </mapper>

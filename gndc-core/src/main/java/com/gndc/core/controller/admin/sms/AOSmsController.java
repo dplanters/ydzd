@@ -6,16 +6,22 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.StatusEnum;
+import com.gndc.common.enums.job.JobConcurrentEnum;
+import com.gndc.common.enums.job.JobGroupEnum;
+import com.gndc.common.enums.job.JobRunStatusEnum;
 import com.gndc.common.enums.sms.SmsChannelEnum;
+import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.DateUtil;
 import com.gndc.common.utils.PhoneUtil;
 import com.gndc.core.api.admin.sms.*;
 import com.gndc.core.api.common.CommonResponse;
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.mappers.SmsConditionMapping;
+import com.gndc.core.mappers.SmsJobConditionMapping;
 import com.gndc.core.mappers.SmsSignMapping;
 import com.gndc.core.mappers.SmsTemplateMapping;
 import com.gndc.core.model.*;
+import com.gndc.core.service.platform.SystemScheduleJobService;
 import com.gndc.core.service.sms.*;
 import com.gndc.core.service.user.UserService;
 import org.slf4j.Logger;
@@ -30,6 +36,7 @@ import tk.mybatis.mapper.weekend.Weekend;
 import tk.mybatis.mapper.weekend.WeekendCriteria;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -94,7 +101,14 @@ public class AOSmsController {
      * 发送模式1：定时发送2：实时发送
      */
     private static final Byte SEND_TYPE_2 = 1;
-
+    /**
+     * 定时发送类型1循环发送 2非循环发送
+     */
+    private static final Byte TIMING_SEND_TYPE_1 = 1;
+    /**
+     * 定时发送类型1循环发送 2非循环发送
+     */
+    private static final Byte TIMING_SEND_TYPE_2 = 2;
     @Autowired
     private SmsChannelService smsChannelService;
 
@@ -109,6 +123,12 @@ public class AOSmsController {
 
     @Autowired
     private SmsConditionService smsConditionService;
+
+    @Autowired
+    private SmsJobConditionService smsJobConditionService;
+
+    @Autowired
+    private SystemScheduleJobService systemScheduleJobService;
 
     @Autowired
     private UserService userService;
@@ -141,7 +161,7 @@ public class AOSmsController {
         if (request.getChannelId() == CHANNEL_ID_1) {
             smsSign.setChannelName("创蓝");
         }
-        if (request.getChannelId()== CHANNEL_ID_2) {
+        if (request.getChannelId() == CHANNEL_ID_2) {
             smsSign.setChannelName("大汉三通");
         }
         CommonResponse commonResponse = new CommonResponse();
@@ -164,7 +184,7 @@ public class AOSmsController {
         if (request.getChannelId() == CHANNEL_ID_1) {
             smsSign.setChannelName("创蓝");
         }
-        if (request.getChannelId()== CHANNEL_ID_2) {
+        if (request.getChannelId() == CHANNEL_ID_2) {
             smsSign.setChannelName("大汉三通");
         }
         commonResponse.setResult(smsSignService.updateByPrimaryKeySelective(smsSign));
@@ -397,17 +417,13 @@ public class AOSmsController {
                 Integer signId = signArr[i];
                 SmsSign smsSign = smsSignService.selectByPrimaryKey(signId);
                 if (smsSign == null || smsSign.getStatus() == StatusEnum.DELETE.getCode()) {
-                    response.createError(ResultCode.SIGN_NOT_EXIST);
-                    logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-                    return response;
+                    throw new HjException(ResultCode.SIGN_NOT_EXIST);
                 }
                 String message = "";
                 Integer templateId = request.getTemplateId();
                 SmsTemplate smsTemplate = smsTemplateService.selectByPrimaryKey(templateId);
                 if (smsTemplate == null || smsTemplate.getStatus() == StatusEnum.DELETE.getCode()) {
-                    response.createError(ResultCode.TEMPLATE_NOT_EXIST);
-                    logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-                    return response;
+                    throw new HjException(ResultCode.TEMPLATE_NOT_EXIST);
                 }
                 message = smsSign.getName() + smsTemplate.getContent();
                 if (request.getSourceType() == SOURCE_TYPE_1) {
@@ -417,18 +433,14 @@ public class AOSmsController {
                         phoneToSend = searchPhones(smsCondition, request);
                     } else {
                         //暂时只支持营销类
-                        response.createError(ResultCode.CONDITION_NOT_EXIST);
-                        logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-                        return response;
+                        throw new HjException(ResultCode.CONDITION_NOT_EXIST);
                     }
 
                 } else if (request.getSourceType() == SOURCE_TYPE_2) {
                     phoneToSend = request.getPhones();
                 }
                 if (phoneToSend == null) {
-                    response.createError(ResultCode.RECORD_NOT_EXIST);
-                    logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-                    return response;
+                    throw new HjException(ResultCode.RECORD_NOT_EXIST);
                 }
                 SmsGroupLog smsGroupLog = new SmsGroupLog();
                 smsGroupLog.setPhone(phoneToSend);
@@ -441,9 +453,7 @@ public class AOSmsController {
                 smsLogService.groupSendSmsJson(channel, phoneToSend, message, smsGroupLog);
             }
         } else {
-            response.createError(ResultCode.SIGN_NOT_EXIST);
-            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-            return response;
+            throw new HjException(ResultCode.SIGN_NOT_EXIST);
         }
         return response;
     }
@@ -455,76 +465,71 @@ public class AOSmsController {
      * @return
      */
     @PostMapping("/timingSend")
-    public ResponseMessage<CommonResponse> timingSend(@Validated @RequestBody AOSmsRealTimeSendRequest request) throws Exception {
+    public ResponseMessage<CommonResponse> timingSend(@Validated @RequestBody AOSmsTimingSendRequest request) throws Exception {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
+
         //需要发送短信的号码用","隔开
         String phoneToSend = null;
-        //通道
-        String channel = "";
-        Integer[] signArr = request.getSmsSignIds();
-        //创蓝
-        if (request.getChannelId() == CHANNEL_ID_1) {
-            channel = SmsChannelEnum.CHUANGLAN.getCode();
-        }
-        //大汉三通
-        if (request.getChannelId() == CHANNEL_ID_2) {
-//            channel = SmsChannelEnum.CHUANGLAN.getCode();
-        }
-        //签名数组
-        if (signArr.length > 0) {
-            for (int i = 0; i <= signArr.length; i++) {
-                Integer signId = signArr[i];
-                SmsSign smsSign = smsSignService.selectByPrimaryKey(signId);
-                if (smsSign == null || smsSign.getStatus() == StatusEnum.DELETE.getCode()) {
-                    response.createError(ResultCode.SIGN_NOT_EXIST);
-                    logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-                    return response;
-                }
-                String message = "";
-                Integer templateId = request.getTemplateId();
-                SmsTemplate smsTemplate = smsTemplateService.selectByPrimaryKey(templateId);
-                if (smsTemplate == null || smsTemplate.getStatus() == StatusEnum.DELETE.getCode()) {
-                    response.createError(ResultCode.TEMPLATE_NOT_EXIST);
-                    logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-                    return response;
-                }
-                message = smsSign.getName() + smsTemplate.getContent();
-                if (request.getSourceType() == SOURCE_TYPE_1) {
-                    SmsCondition smsCondition = smsConditionService.selectByPrimaryKey(request.getConditionId());
-                    //当前支持营销类
-                    if (smsCondition != null && smsCondition.getType() == CONDITION_TYPE_1) {
-                        phoneToSend = searchPhones(smsCondition, request);
-                    } else {
-                        //暂时只支持营销类
-                        response.createError(ResultCode.CONDITION_NOT_EXIST);
-                        logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-                        return response;
-                    }
-
-                } else if (request.getSourceType() == SOURCE_TYPE_2) {
-                    phoneToSend = request.getPhones();
-                }
-                if (phoneToSend == null) {
-                    response.createError(ResultCode.RECORD_NOT_EXIST);
-                    logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-                    return response;
-                }
-                SmsGroupLog smsGroupLog = new SmsGroupLog();
-                smsGroupLog.setPhone(phoneToSend);
-                smsGroupLog.setMessage(message);
-                smsGroupLog.setChannelId(request.getChannelId());
-                smsGroupLog.setConditionId(request.getConditionId());
-                smsGroupLog.setSendType(SEND_TYPE_1);
-                smsGroupLog.setSignId(signId);
-                smsGroupLog.setPhoneCount(phoneToSend.split(",").length);
-                smsLogService.groupSendSmsJson(channel, phoneToSend, message, smsGroupLog);
+        SmsJobCondition smsJobCondition = SmsJobConditionMapping.INSTANCE.convert(request);
+        if (request.getSourceType() == SOURCE_TYPE_1) {
+            SmsCondition smsCondition = smsConditionService.selectByPrimaryKey(request.getConditionId());
+            //当前支持营销类
+            if (smsCondition != null && smsCondition.getType() == CONDITION_TYPE_1) {
+                phoneToSend = searchPhones(smsCondition, request);
+                smsJobCondition.setPhones(phoneToSend);
+            } else {
+                //暂时只支持营销类
+                throw new HjException(ResultCode.CONDITION_NOT_EXIST);
             }
-        } else {
-            response.createError(ResultCode.SIGN_NOT_EXIST);
-            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-            return response;
-        }
 
+        }
+        smsJobConditionService.insertSelective(smsJobCondition);
+        SystemScheduleJob systemScheduleJob = null;
+        if (TIMING_SEND_TYPE_1 == request.getTimingSendType()) {
+            String sendStartDate = request.getSendStartDate();
+            String sendEndDate = request.getSendEndDate();
+            //发送时间数组
+            String[] sendTimeArr = request.getSendTime();
+            if (sendTimeArr.length < 1) {
+                throw new HjException(ResultCode.SMS_ILLEGAL_DATE);
+            }
+        }
+        if (TIMING_SEND_TYPE_2 == request.getTimingSendType()) {
+            //发送日期
+            Calendar calendar = Calendar.getInstance();
+            Date sendDate = DateUtil.getDateTime(request.getSendDate(), DateUtil.FORMAT_1);
+            calendar.setTime(sendDate);
+            Integer year = calendar.get(Calendar.YEAR);
+            Integer month = calendar.get(Calendar.MONTH);
+            Integer day = calendar.get(Calendar.DAY_OF_MONTH);
+            //发送时间数组
+            String[] sendTimeArr = request.getSendTime();
+            if (sendTimeArr.length < 1) {
+                throw new HjException(ResultCode.SMS_ILLEGAL_DATE);
+            }
+            for (int i = 0; i < sendTimeArr.length; i++) {
+                Date dateTime = DateUtil.getDateTime(sendTimeArr[i], DateUtil.FORMAT_13);
+                calendar.setTime(dateTime);
+                Integer hour = calendar.get(Calendar.HOUR_OF_DAY);
+                Integer minute = calendar.get(Calendar.MINUTE);
+                Integer second = calendar.get(Calendar.SECOND);
+                String cronExpression = second + " " + minute + " " + hour + " " + day + " " + month + " * " + year;
+                systemScheduleJob = new SystemScheduleJob();
+                systemScheduleJob.setJobName("短信定时任务");
+                systemScheduleJob.setBeanClass("com.gndc.core.service.sms.impl.SmsLogServiceImpl");
+                systemScheduleJob.setCronExpression(cronExpression);
+                systemScheduleJob.setMethodName("groupSendSmsJson");
+                systemScheduleJob.setIsConcurrent(JobConcurrentEnum.CONCURRENT_NOT.getCode());
+                systemScheduleJob.setDescription("短信定时任务");
+                systemScheduleJob.setJobStatus(JobRunStatusEnum.STATUS_RUNNING.getCode());
+                systemScheduleJob.setJobGroup(JobGroupEnum.SMS_TIMING_SEND.getCode());
+                systemScheduleJob.setExtendId(smsJobCondition.getId());
+                systemScheduleJob.setCreateAdminId(request.getAoAdmin().getId());
+                systemScheduleJob.setUpdateAdminId(request.getAoAdmin().getId());
+                systemScheduleJobService.insertSelective(systemScheduleJob);
+            }
+
+        }
         return response;
     }
 

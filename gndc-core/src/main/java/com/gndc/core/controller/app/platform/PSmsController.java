@@ -7,6 +7,7 @@ import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.message.SMSTypeEnum;
 import com.gndc.common.enums.sms.SmsChannelEnum;
 import com.gndc.common.enums.sms.SmsTemplateType;
+import com.gndc.common.exception.HjException;
 import com.gndc.core.api.app.platform.PSendSmsRequest;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
 import com.gndc.core.api.app.platform.Sms24HourCount;
@@ -61,8 +62,7 @@ public class PSmsController {
             // 查询手机号是否注册
             User user = userService.selectOneByProperty("phone", phone);
             if (user == null) {
-                response.createError(ResultCode.USER_NOT_EXISTS);
-                return response;
+                throw new HjException(ResultCode.USER_NOT_EXISTS);
             }
             key = P_SMS_USER_FORGET_PWD + phone;
             smsTemplateType = SmsTemplateType.USER_FORGET_PWD;

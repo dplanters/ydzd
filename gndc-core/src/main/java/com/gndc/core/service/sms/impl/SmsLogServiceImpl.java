@@ -6,6 +6,7 @@ import com.gndc.common.constant.Constant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.sms.SmsChannelEnum;
 import com.gndc.common.enums.sms.SmsTemplateType;
+import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.common.utils.DateUtil;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
@@ -205,21 +206,18 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
         }
 
         if (sms10MinuteCount.getFailCount() >= Constant.SMS_FAIL_COUNT_LIMIT) {
-            response.createError(ResultCode.AUTH_FAIL_COUNT);
-            return false;
+            throw new HjException(ResultCode.AUTH_FAIL_COUNT);
         }
 
         if (sms10MinuteCount.getCount() >= Constant.SMS_COUNT_LIMIT_TEN_MINTUE) {
-            response.createError(ResultCode.AUTH_COUNT_TEN_LIMIT);
-            return false;
+            throw new HjException(ResultCode.AUTH_COUNT_TEN_LIMIT);
         }
 
         if (sms24HourCount == null) {
             sms24HourCount = new Sms24HourCount();
         }
         if (sms24HourCount.getCount() >= Constant.SMS_COUNT_LIMIT_24_HOUR) {
-            response.createError(ResultCode.AUTH_COUNT_24_HOUR);
-            return false;
+            throw new HjException(ResultCode.AUTH_COUNT_24_HOUR);
         }
 
         return true;
@@ -240,8 +238,7 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
     public boolean validateSms(SmsInfo sms, Sms10MinuteCount sms10MinuteCount, String key, String valCode,
                                ResponseMessage<?> response) {
         if (sms == null) {
-            response.createError(ResultCode.AUTH_INVALID);
-            return false;
+            throw new HjException(ResultCode.AUTH_INVALID);
         }
 
         if (sms10MinuteCount == null) {
@@ -252,9 +249,7 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
             sms10MinuteCount.setFailCount(sms10MinuteCount.getFailCount() + 1);
             String JsonText10M = JSONObject.toJSONString(sms10MinuteCount);
             redisTemplate.opsForValue().set(CacheConstant.KEY_USER_SMS_10_PREFIX + key, JsonText10M, CacheConstant.EXPIRE_USER_SMS_10, TimeUnit.SECONDS);
-
-            response.createError(ResultCode.AUTH_ERROR);
-            return false;
+            throw new HjException(ResultCode.AUTH_ERROR);
         }
 
         return true;

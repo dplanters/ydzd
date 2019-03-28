@@ -113,6 +113,7 @@ public enum ResultCode {
     SIGN_NOT_EXIST(2000601, "签名不存在", "", "", ""),
     TEMPLATE_NOT_EXIST(2000602, "模板不存在", "", "", ""),
     CONDITION_NOT_EXIST(2000603, "条件不存在", "", "", ""),
+    SMS_ILLEGAL_DATE(2000604, "配置不合法", "", "", ""),
 
     UNSUPPORTED_OPERATION(-17, "不支持的操作方式", "", "", ""),
 

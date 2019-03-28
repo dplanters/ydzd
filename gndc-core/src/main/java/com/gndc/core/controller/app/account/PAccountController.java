@@ -9,6 +9,8 @@ import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.UserDeviceEnum;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.common.enums.user.UserStatusEnum;
+import com.gndc.common.exception.HjException;
+import com.gndc.common.utils.*;
 import com.gndc.common.utils.DateUtil;
 import com.gndc.common.utils.PwdUtil;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
@@ -79,9 +81,7 @@ public class PAccountController {
         User userInfo = null;
 
         if (StrUtil.isBlank(request.getHeader().getDeviceType())) {
-            response.createError(ResultCode.DEVICETYPE_ISNULL);
-            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-            return response;
+            throw new HjException(ResultCode.DEVICETYPE_ISNULL);
         }
 
         userInfo = userService.selectOneByProperty("phone", phone);
@@ -90,21 +90,15 @@ public class PAccountController {
 
         if ((deviceType == UserDeviceEnum.ANDROID.getCode() || deviceType == UserDeviceEnum.IOS.getCode())) {
             if (StrUtil.isBlank(imei)) {
-                response.createError(ResultCode.IMEI_TOKEN_ISNULL);
-                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-                return response;
+                throw new HjException(ResultCode.IMEI_TOKEN_ISNULL);
             }
 
             if (StrUtil.isBlank(termType)) {
-                response.createError(ResultCode.TERM_TYPE_ISNULL);
-                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-                return response;
+                throw new HjException(ResultCode.TERM_TYPE_ISNULL);
             }
 
             if (userInfo == null) {
-                response.createError(ResultCode.USER_NOT_EXISTS);
-                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-                return response;
+                throw new HjException(ResultCode.USER_NOT_EXISTS);
             }
 
             String passwordDec = PwdUtil.decryptRSA(password);
@@ -112,9 +106,7 @@ public class PAccountController {
             String pwdMd5 = PwdUtil.getPassword(passwordDec, userInfo.getPasswordSign());
 
             if (!pwdMd5.equals(userInfo.getPassword())) {
-                response.createError(ResultCode.USER_NAME_PASSWORD_ERROR);
-                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-                return response;
+                throw new HjException(ResultCode.USER_NAME_PASSWORD_ERROR);
             }
 
         }
@@ -148,24 +140,18 @@ public class PAccountController {
         String appPackage = request.getAppPackage();
 
         if (StrUtil.isBlank(request.getHeader().getDeviceType())) {
-            response.createError(ResultCode.DEVICETYPE_ISNULL);
-            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-            return response;
+            throw new HjException(ResultCode.DEVICETYPE_ISNULL);
         }
 
         byte deviceType = Byte.parseByte(request.getHeader().getDeviceType());
 
         if ((deviceType == UserDeviceEnum.ANDROID.getCode() || deviceType == UserDeviceEnum.IOS.getCode())) {
             if (StrUtil.isBlank(imei)) {
-                response.createError(ResultCode.IMEI_TOKEN_ISNULL);
-                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-                return response;
+                throw new HjException(ResultCode.IMEI_TOKEN_ISNULL);
             }
 
             if (StrUtil.isBlank(termType)) {
-                response.createError(ResultCode.TERM_TYPE_ISNULL);
-                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-                return response;
+                throw new HjException(ResultCode.TERM_TYPE_ISNULL);
             }
         }
 
@@ -263,18 +249,14 @@ public class PAccountController {
         String userInfoStr = (String) redisTemplate.opsForValue().get(CacheConstant.KEY_USER_LOGIN_PREFIX + sessionId);
         User user = JSONObject.parseObject(userInfoStr, User.class);
         if (user == null) {
-            response.createError(ResultCode.SESSIONID_ISNULL);
-            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-            return response;
+            throw new HjException(ResultCode.SESSIONID_ISNULL);
         }
         String password = request.getPassword();
         String newPassword = request.getNewPassword();
         String confirmPassword = request.getConfirmPassword();
 
         if (StrUtil.isBlank(newPassword) || StrUtil.isBlank(confirmPassword)) {
-            response.createError(ResultCode.PARAM_MISSING);
-            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-            return response;
+            throw new HjException(ResultCode.PARAM_MISSING);
         }
 
         try {
@@ -287,18 +269,14 @@ public class PAccountController {
             confirmPassword = PwdUtil.decryptRSA(confirmPassword);
 
         } catch (Exception e) {
-            response.createError(ResultCode.PARAMETER_ERROR);
-            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-            return response;
+            throw new HjException(ResultCode.PARAMETER_ERROR);
         }
 
         PwdUtil.validate(newPassword);
         // 从数据获取用户信息
         User userInfo = userService.selectByPrimaryKey(user.getId());
         if (StrUtil.isNotBlank(userInfo.getPassword()) && StrUtil.isBlank(password)) {
-            response.createError(ResultCode.PASSWORD_ISNULL);
-            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-            return response;
+            throw new HjException(ResultCode.PASSWORD_ISNULL);
         }
 
         String passwordSign = userInfo.getPasswordSign();
@@ -306,16 +284,12 @@ public class PAccountController {
         if (StrUtil.isNotBlank(userInfo.getPassword())) {
 
             if (!userInfo.getPassword().equals(PwdUtil.getPassword(password, userInfo.getPasswordSign()))) {
-                response.createError(ResultCode.OLD_PASSWORD_ERROR);
-                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-                return response;
+                throw new HjException(ResultCode.OLD_PASSWORD_ERROR);
             }
 
         } else {
             if (!newPassword.equals(confirmPassword)) {
-                response.createError(ResultCode.CONFIRM_PASSWORD_ERROR);
-                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-                return response;
+                throw new HjException(ResultCode.CONFIRM_PASSWORD_ERROR);
             }
         }
 
@@ -324,9 +298,7 @@ public class PAccountController {
         userInfo.setPassword(PwdUtil.getPassword(newPassword, passwordSign));
         int flag = userService.updatePassword(userInfo);
         if (flag <= 0) {
-            response.createError(ResultCode.RECORD_MODIFY_FAIL);
-            logger.error(String.format("应答:%s", JSONObject.toJSONString(response)));
-            return response;
+            throw new HjException(ResultCode.RECORD_MODIFY_FAIL);
         }
         return response;
     }
@@ -360,9 +332,7 @@ public class PAccountController {
         // 根据手机号查询出当前用户
         User user = userService.selectOneByProperty("phone", phone);
         if (null == user) {
-            response.createError(ResultCode.USER_NOT_EXISTS);
-            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-            return response;
+            throw new HjException(ResultCode.USER_NOT_EXISTS);
         }
 
         String passwordSign = RandomUtil.randomString(6);
@@ -371,17 +341,13 @@ public class PAccountController {
         password = PwdUtil.decryptRSA(password);
         confirmPassword = PwdUtil.decryptRSA(confirmPassword);
         if (!password.equals(confirmPassword)) {
-            response.createError(ResultCode.CONFIRM_PASSWORD_ERROR);
-            logger.error(String.format("应答:%s", JSONObject.toJSONString(response)));
-            return response;
+            throw new HjException(ResultCode.CONFIRM_PASSWORD_ERROR);
         }
 
         user.setPassword(PwdUtil.getPassword(password, passwordSign));
         int flag = userService.updatePassword(user);
         if (flag <= 0) {
-            response.createError(ResultCode.RECORD_MODIFY_FAIL);
-            logger.error(String.format("应答:%s", JSONObject.toJSONString(response)));
-            return response;
+            throw new HjException(ResultCode.RECORD_MODIFY_FAIL);
         }
         logger.info(String.format("应答:%s", JSONObject.toJSONString(response)));
         return response;

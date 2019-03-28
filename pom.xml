@@ -54,6 +54,7 @@
         <mapstruct.version>1.2.0.Final</mapstruct.version>
         <libphonenumber.version>6.3</libphonenumber.version>
         <geocoder.version>2.15</geocoder.version>
+        <quartz.version>2.2.3</quartz.version>
 
         <!-- 分布式服务部分 -->
 
@@ -120,6 +121,12 @@
                 <groupId>com.aliyun.oss</groupId>
                 <artifactId>aliyun-sdk-oss</artifactId>
                 <version>${oss.version}</version>
+            </dependency>
+            <!-- quartz 依赖 -->
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz</artifactId>
+                <version>${quartz.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

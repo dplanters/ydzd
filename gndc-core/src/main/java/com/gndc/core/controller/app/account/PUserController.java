@@ -9,6 +9,7 @@ import com.gndc.common.enums.partner.EventFeeStatusEnum;
 import com.gndc.common.enums.partner.EventFeeTypeEnum;
 import com.gndc.common.enums.product.ProductCoopeModeEnum;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
+import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.DateUtil;
 import com.gndc.core.api.app.user.event.PUserEventRequest;
 import com.gndc.core.api.app.user.feedback.PFeedBackEditRequest;
@@ -81,9 +82,7 @@ public class PUserController {
 
         User user = feedBackEditRequest.getUser();
         if (user == null) {
-            response.createError(ResultCode.SESSIONID_ISNULL);
-            logger.error(String.format("应答:%s", JSONObject.toJSONString(response)));
-            return response;
+            throw new HjException(ResultCode.SESSIONID_ISNULL);
         }
 
         Date now = DateUtil.getCountyTime();
@@ -113,9 +112,7 @@ public class PUserController {
 
         User user = eventRequest.getUser();
         if (user == null) {
-            response.createError(ResultCode.SESSIONID_ISNULL);
-            logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-            return response;
+            throw new HjException(ResultCode.SESSIONID_ISNULL);
         }
 
         int ref = 0;
@@ -124,9 +121,7 @@ public class PUserController {
         } else {
 
             if (eventRequest.getProductId() == 0) {
-                response.createError(ResultCode.PARAM_MISSING);
-                logger.warn(String.format("应答:%s", JSONObject.toJSONString(response)));
-                return response;
+                throw new HjException(ResultCode.PARAM_MISSING);
             }
             Date now = DateUtil.getCountyTime();
             UserEvent event = new UserEvent();
