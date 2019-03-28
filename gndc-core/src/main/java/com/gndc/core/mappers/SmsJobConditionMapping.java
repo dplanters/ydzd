@@ -15,6 +15,7 @@ public interface SmsJobConditionMapping {
     @Mappings({
             @Mapping(target = "signIds", expression = "java(cn.hutool.core.util.StrUtil.join( \",\",request.getSmsSignIds()))"),
             @Mapping(target = "operatorIds", expression = "java(cn.hutool.core.util.StrUtil.join(\",\",request.getOperatorIds()))"),
+            @Mapping(target = "phones", expression = "java(cn.hutool.core.util.StrUtil.join(\",\",request.getPhones()))"),
             @Mapping(target = "createAdminId", source = "aoAdmin.id")
     })
     SmsJobCondition convert(AOSmsTimingSendRequest request);

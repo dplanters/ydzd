@@ -11,19 +11,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class AOSmsTimingSendRequest extends AOSmsRealTimeSendRequest {
 
-
-    /**
-     * 签名id
-     */
-    @NonNull
-    private Integer smsSignIds[];
-
-    /**
-     * 运营商id
-     */
-    @NonNull
-    private Integer operatorIds[];
-
     /**
      * 发送类型1循环发送 2非循环发送
      */

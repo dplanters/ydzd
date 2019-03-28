@@ -10,4 +10,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemScheduleJob, Integer> implements SystemScheduleJobService {
+
+    @Override
+    public Integer saveJob(SystemScheduleJob systemScheduleJob) {
+        return null;
+    }
 }

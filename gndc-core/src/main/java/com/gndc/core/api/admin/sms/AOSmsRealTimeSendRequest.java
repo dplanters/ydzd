@@ -47,8 +47,8 @@ public class AOSmsRealTimeSendRequest extends RequestMessage {
     private Integer operatorIds[];
 
     /**
-     * 电话，",隔开（15800000000,15300000000）
+     * 电话
      */
-    private String phones;
+    private String phones[];
 
 }

@@ -437,7 +437,7 @@ public class AOSmsController {
                     }
 
                 } else if (request.getSourceType() == SOURCE_TYPE_2) {
-                    phoneToSend = request.getPhones();
+                    phoneToSend = StrUtil.join(",",request.getPhones());
                 }
                 if (phoneToSend == null) {
                     throw new HjException(ResultCode.RECORD_NOT_EXIST);
@@ -526,9 +526,8 @@ public class AOSmsController {
                 systemScheduleJob.setExtendId(smsJobCondition.getId());
                 systemScheduleJob.setCreateAdminId(request.getAoAdmin().getId());
                 systemScheduleJob.setUpdateAdminId(request.getAoAdmin().getId());
-                systemScheduleJobService.insertSelective(systemScheduleJob);
+                systemScheduleJobService.saveJob(systemScheduleJob);
             }
-
         }
         return response;
     }
