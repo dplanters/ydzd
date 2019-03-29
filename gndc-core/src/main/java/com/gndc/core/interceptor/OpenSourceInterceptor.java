@@ -1,10 +1,9 @@
 package com.gndc.core.interceptor;
 
-import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.utils.BeanFactoryUtil;
 import com.gndc.core.model.Right;
-import org.springframework.data.redis.core.HashOperations;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -15,9 +14,9 @@ import org.springframework.web.servlet.mvc.WebContentInterceptor;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.Serializable;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class OpenSourceInterceptor extends WebContentInterceptor {
 
