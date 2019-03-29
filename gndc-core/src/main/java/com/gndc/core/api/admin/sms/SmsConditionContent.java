@@ -29,13 +29,13 @@ public class SmsConditionContent implements Serializable {
     /**
      * 催收时间单位:日
      */
-    private Integer collectionTime[];
+    private Integer[] collectionTime;
     /*******************催收类****************/
     /*******************提醒类****************/
     /**
      * 提醒时间单位:日
      */
-    private Integer remindTime[];
+    private Integer[] remindTime;
     /*******************提醒类****************/
     /*******************通知类****************/
     /**

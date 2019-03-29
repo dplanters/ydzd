@@ -29,7 +29,11 @@ public class AOSmsConditionListResponse implements Serializable {
      */
     private String name;
     /**
-     * 条件
+     * 条件(json)
      */
     private String condition;
+    /**
+     * 条件(内容)
+     */
+    private String conditionText;
 }

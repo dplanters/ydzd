@@ -63,6 +63,21 @@ public class AOSmsController {
      * 当前支持营销类
      */
     private static final Byte CONDITION_TYPE_1 = 1;
+    /**
+     * 营销条件0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
+     * 当前支持营销类
+     */
+    private static final Byte CONDITION_TYPE_2 = 2;
+    /**
+     * 营销条件0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
+     * 当前支持营销类
+     */
+    private static final Byte CONDITION_TYPE_3 = 3;
+    /**
+     * 营销条件0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
+     * 当前支持营销类
+     */
+    private static final Byte CONDITION_TYPE_4 = 4;
 
     /**
      * 营销事件1登录 2注册
@@ -73,6 +88,14 @@ public class AOSmsController {
      * 营销事件1登录 2注册
      */
     private static final Byte MARKETING_TYPE_2 = 2;
+    /**
+     * 通知事件1当日放款成功 2当日申请成功
+     */
+    private static final Byte NOTICE_TYPE_1 = 1;
+    /**
+     * 通知事件1当日放款成功 2当日申请成功
+     */
+    private static final Byte NOTICE_TYPE_2 = 2;
     /**
      * 渠道id 1创蓝2大汉三通
      */
@@ -329,6 +352,43 @@ public class AOSmsController {
             PageHelper.startPage(page.getPageNum(), page.getPageSize());
         }
         List<AOSmsConditionListResponse> smsConditions = smsConditionService.selectConditionWithAdminList(request);
+        if (smsConditions != null && smsConditions.size() > 0) {
+            for (AOSmsConditionListResponse temp : smsConditions) {
+                String condition = temp.getCondition();
+                SmsConditionContent smsConditionContent = JSONObject.parseObject(condition, SmsConditionContent.class);
+                //营销条件0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
+                if (smsConditionContent.getConditionType() == CONDITION_TYPE_1) {
+                    if (smsConditionContent.getMarketingType() == MARKETING_TYPE_1) {
+                        temp.setConditionText("最近" + smsConditionContent.getMarketingTime() + "天登录");
+                    }
+                    if (smsConditionContent.getMarketingType() == MARKETING_TYPE_2) {
+                        temp.setConditionText("最近" + smsConditionContent.getMarketingTime() + "天注册");
+                    }
+                }
+                if (smsConditionContent.getConditionType() == CONDITION_TYPE_2) {
+                    Integer[] collectionTime = smsConditionContent.getCollectionTime();
+                    if (collectionTime != null && collectionTime.length > 0) {
+                        String collectionTimeText = StrUtil.join("、", collectionTime);
+                        temp.setConditionText("逾期天数等于" + collectionTimeText);
+                    }
+                }
+                if (smsConditionContent.getConditionType() == CONDITION_TYPE_3) {
+                    Integer[] remindTime = smsConditionContent.getRemindTime();
+                    if (remindTime != null && remindTime.length > 0) {
+                        String remindTimeText = StrUtil.join("、", remindTime);
+                        temp.setConditionText("提醒天数等于" + remindTimeText);
+                    }
+                }
+                if (smsConditionContent.getConditionType() == CONDITION_TYPE_4) {
+                    if (smsConditionContent.getNoticeType() == NOTICE_TYPE_1) {
+                        temp.setConditionText("当日注册成功");
+                    }
+                    if (smsConditionContent.getNoticeType() == NOTICE_TYPE_2) {
+                        temp.setConditionText("当日申请成功");
+                    }
+                }
+            }
+        }
         if (page != null) {
             PageInfo<AOSmsConditionListResponse> pageInfo = new PageInfo<>(smsConditions);
             pageInfo.setList(null);
@@ -437,7 +497,7 @@ public class AOSmsController {
                     }
 
                 } else if (request.getSourceType() == SOURCE_TYPE_2) {
-                    phoneToSend = StrUtil.join(",",request.getPhones());
+                    phoneToSend = StrUtil.join(",", request.getPhones());
                 }
                 if (phoneToSend == null) {
                     throw new HjException(ResultCode.RECORD_NOT_EXIST);
@@ -483,11 +543,16 @@ public class AOSmsController {
             }
 
         }
+        if (TIMING_SEND_TYPE_1 == request.getTimingSendType()) {
+            if(StrUtil.isBlank(request.getSendStartDate()) || StrUtil.isBlank(request.getSendEndDate())){
+                throw new HjException(ResultCode.SMS_ILLEGAL_DATE);
+            }
+            smsJobCondition.setSendStartDate(request.getSendStartDate());
+            smsJobCondition.setSendEndDate(request.getSendEndDate());
+        }
         smsJobConditionService.insertSelective(smsJobCondition);
         SystemScheduleJob systemScheduleJob = null;
         if (TIMING_SEND_TYPE_1 == request.getTimingSendType()) {
-            String sendStartDate = request.getSendStartDate();
-            String sendEndDate = request.getSendEndDate();
             //发送时间数组
             String[] sendTimeArr = request.getSendTime();
             if (sendTimeArr.length < 1) {

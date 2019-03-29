@@ -32,7 +32,7 @@ public class AOSmsRealTimeSendRequest extends RequestMessage {
      * 签名id
      */
     @NonNull
-    private Integer smsSignIds[];
+    private Integer[] smsSignIds;
 
     /**
      * 模板id
@@ -44,11 +44,11 @@ public class AOSmsRealTimeSendRequest extends RequestMessage {
      * 运营商id
      */
     @NonNull
-    private Integer operatorIds[];
+    private Integer[] operatorIds;
 
     /**
      * 电话
      */
-    private String phones[];
+    private String[] phones;
 
 }

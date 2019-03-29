@@ -26,7 +26,7 @@ public class AOSmsTimingSendRequest extends AOSmsRealTimeSendRequest {
      * 非循环发送：发送时间
      */
     @NotNull
-    private String sendTime[];
+    private String[] sendTime;
 
     /**
      * 循环发送：循环开始日期
