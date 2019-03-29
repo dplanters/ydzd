@@ -1,50 +1,61 @@
 package com.gndc.common.utils;
 
 
-import com.gndc.common.enums.ResultCode;
-import com.gndc.common.exception.HjException;
+import cn.hutool.core.codec.Base64;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.asymmetric.KeyType;
+import cn.hutool.crypto.asymmetric.RSA;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
+import javax.annotation.PostConstruct;
+
+@Configuration
+@PropertySource(value = "classpath:/system.properties")
 public class PwdUtil {
 
+    @Value("${rsa.private}")
+    private String privateKey;
+
+    @Value("${rsa.public}")
+    private String publicKey;
+
+    public static RSA rsa;
+
+    @PostConstruct
+    public void init() {
+        rsa = SecureUtil.rsa(privateKey, publicKey);
+    }
+
     /**
-     * @param rsaPwd
+     * 对字符串加密，返回加密后的base64编码
+     * @param data
      * @return
-     * @throws HjException
-     * @Description RSA解密
-     * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
      */
-    public static String decryptRSA(String rsaPwd) throws HjException {
-        String password = "";
-        try {
-            password = RSAUtil.decrypt(rsaPwd);
-        } catch (Exception e) {
-            throw new HjException(ResultCode.PARAMETER_ERROR);
-        }
-        return password;
+    public static String encrypt(String data) {
+        return Base64.encode(rsa.encrypt(data, KeyType.PublicKey));
     }
 
     /**
-     * 校验密码合法性
-     *
-     * @param password
-     * @throws RtfException
+     * 对加密后的Base64串进行解密得到原数据
+     * @param data 加密后的Base64串
+     * @return 原数据
      */
-    public static void validate(String password) throws HjException {
-        if (password.length() < 6 || password.length() > 12) {
-            throw new HjException(ResultCode.PASSWORD_LENGTH);
-        }
+    public static String decrypt(String data) {
+        return StrUtil.str(rsa.decrypt(Base64.decode(data), KeyType.PrivateKey), "UTF-8");
     }
 
     /**
-     * 加密用户密码
+     * 根据用户密码和随机sign生成一个md5串作为密码
      *
      * @param password
      * @param sign
      * @return
      * @Description
      */
-    public static String getPassword(String password, String sign) {
-        return MD5Util.getMD5(password + sign).substring(5, 30);
+    public static String passwordGenerate(String password, String sign) {
+        return SecureUtil.md5(password + sign).substring(5, 30);
     }
-
 }

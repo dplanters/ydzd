@@ -1,6 +1,5 @@
 package com.gndc.core.service.account.impl;
 
-import com.gndc.common.utils.MD5Util;
 import com.gndc.common.utils.PwdUtil;
 import com.gndc.core.mapper.simple.AdminMapper;
 import com.gndc.core.model.Admin;
@@ -20,9 +19,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Boolean passwordCheck(Admin admin, String password) {
         Boolean pass = true;
-        String passwordDec = PwdUtil.decryptRSA(password);
+        String originalPassword = PwdUtil.decrypt(password);
 
-        String pwdMd5 = MD5Util.getMD5(passwordDec + admin.getPasswordSign()).substring(5, 30);
+        String pwdMd5 = PwdUtil.passwordGenerate(originalPassword, admin.getPasswordSign());
 
         if (!pwdMd5.equals(admin.getPassword())) {
             pass = false;

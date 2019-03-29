@@ -8,14 +8,13 @@
  ***************************************************************************/
 package com.gndc.third.sms.niuxin;
 
-import cn.hutool.http.HttpUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.gndc.common.constant.Constant;
 import com.gndc.common.enums.sms.SmsTemplateType;
 import com.gndc.common.utils.DateUtil;
 import com.gndc.common.utils.HttpClientUtil;
-import com.gndc.common.utils.MD5Util;
 import com.gndc.third.sms.ISmsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +96,7 @@ public class NiuxinService implements ISmsService {
             String timestamp = String.valueOf(DateUtil.timeToLong(new Date()));
             params.put("timestamp", timestamp);
 
-            String sign = MD5Util.getMD5(API_KEY + API_SECRET + timestamp, ENCODING, 2);
+            String sign = SecureUtil.md5(API_KEY + API_SECRET + timestamp).toUpperCase();
             params.put("sign", sign);
 
             params.put("signaid", SENDER_ID);

@@ -10,7 +10,6 @@ import com.gndc.common.enums.common.UserDeviceEnum;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.common.enums.user.UserStatusEnum;
 import com.gndc.common.exception.HjException;
-import com.gndc.common.utils.*;
 import com.gndc.common.utils.DateUtil;
 import com.gndc.common.utils.PwdUtil;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
@@ -101,9 +100,8 @@ public class PAccountController {
                 throw new HjException(ResultCode.USER_NOT_EXISTS);
             }
 
-            String passwordDec = PwdUtil.decryptRSA(password);
-            PwdUtil.validate(passwordDec);
-            String pwdMd5 = PwdUtil.getPassword(passwordDec, userInfo.getPasswordSign());
+            String passwordDec = PwdUtil.decrypt(password);
+            String pwdMd5 = PwdUtil.passwordGenerate(passwordDec, userInfo.getPasswordSign());
 
             if (!pwdMd5.equals(userInfo.getPassword())) {
                 throw new HjException(ResultCode.USER_NAME_PASSWORD_ERROR);
@@ -261,18 +259,17 @@ public class PAccountController {
 
         try {
             if (StrUtil.isNotBlank(password)) {
-                password = PwdUtil.decryptRSA(password);
+                password = PwdUtil.decrypt(password);
             }
 
-            newPassword = PwdUtil.decryptRSA(newPassword);
+            newPassword = PwdUtil.decrypt(newPassword);
 
-            confirmPassword = PwdUtil.decryptRSA(confirmPassword);
+            confirmPassword = PwdUtil.decrypt(confirmPassword);
 
         } catch (Exception e) {
             throw new HjException(ResultCode.PARAMETER_ERROR);
         }
 
-        PwdUtil.validate(newPassword);
         // 从数据获取用户信息
         User userInfo = userService.selectByPrimaryKey(user.getId());
         if (StrUtil.isNotBlank(userInfo.getPassword()) && StrUtil.isBlank(password)) {
@@ -283,7 +280,7 @@ public class PAccountController {
 
         if (StrUtil.isNotBlank(userInfo.getPassword())) {
 
-            if (!userInfo.getPassword().equals(PwdUtil.getPassword(password, userInfo.getPasswordSign()))) {
+            if (!userInfo.getPassword().equals(PwdUtil.passwordGenerate(password, userInfo.getPasswordSign()))) {
                 throw new HjException(ResultCode.OLD_PASSWORD_ERROR);
             }
 
@@ -295,7 +292,7 @@ public class PAccountController {
 
         passwordSign = RandomUtil.randomString(6);
         userInfo.setPasswordSign(passwordSign);
-        userInfo.setPassword(PwdUtil.getPassword(newPassword, passwordSign));
+        userInfo.setPassword(PwdUtil.passwordGenerate(newPassword, passwordSign));
         int flag = userService.updatePassword(userInfo);
         if (flag <= 0) {
             throw new HjException(ResultCode.RECORD_MODIFY_FAIL);
@@ -338,13 +335,13 @@ public class PAccountController {
         String passwordSign = RandomUtil.randomString(6);
         user.setPasswordSign(passwordSign);
 
-        password = PwdUtil.decryptRSA(password);
-        confirmPassword = PwdUtil.decryptRSA(confirmPassword);
+        password = PwdUtil.decrypt(password);
+        confirmPassword = PwdUtil.decrypt(confirmPassword);
         if (!password.equals(confirmPassword)) {
             throw new HjException(ResultCode.CONFIRM_PASSWORD_ERROR);
         }
 
-        user.setPassword(PwdUtil.getPassword(password, passwordSign));
+        user.setPassword(PwdUtil.passwordGenerate(password, passwordSign));
         int flag = userService.updatePassword(user);
         if (flag <= 0) {
             throw new HjException(ResultCode.RECORD_MODIFY_FAIL);

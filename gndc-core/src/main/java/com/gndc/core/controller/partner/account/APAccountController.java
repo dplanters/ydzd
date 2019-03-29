@@ -9,7 +9,6 @@ import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.PlatformEnum;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.exception.HjException;
-import com.gndc.common.utils.PasswordUtil;
 import com.gndc.common.utils.PwdUtil;
 import com.gndc.core.api.common.ResponseMessage;
 import com.gndc.core.api.partner.account.APLoginAdminInfo;
@@ -144,10 +143,10 @@ public class APAccountController {
             throw new HjException(ResultCode.OLD_PASSWORD_ERROR);
         }
 
-        String passwordDec = PwdUtil.decryptRSA(request.getPassword());
+        String passwordDec = PwdUtil.decrypt(request.getPassword());
         String operateSign = RandomUtil.randomString(6);
         String passwordSign = RandomUtil.randomString(6);
-        String md5Password = PasswordUtil.getPassword(passwordDec, passwordSign);
+        String md5Password = PwdUtil.passwordGenerate(passwordDec, passwordSign);
 
 
         admin.setPasswordSign(passwordSign);

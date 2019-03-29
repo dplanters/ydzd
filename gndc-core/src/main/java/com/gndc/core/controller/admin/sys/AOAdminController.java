@@ -7,10 +7,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.common.PlatformEnum;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.exception.HjException;
-import com.gndc.common.utils.PasswordUtil;
 import com.gndc.common.utils.PwdUtil;
 import com.gndc.core.api.admin.sys.*;
 import com.gndc.core.api.common.ResponseMessage;
@@ -78,10 +77,10 @@ public class AOAdminController {
             String msg = StrUtil.format("角色id {} 不存在", request.getRoleId());
             throw new HjException(ResultCode.ROLE_NOT_EXIST, msg);
         }
-        String passwordDec = PwdUtil.decryptRSA(request.getPassword());
+        String passwordDec = PwdUtil.decrypt(request.getPassword());
         String operateSign = RandomUtil.randomString(6);
         String passwordSign = RandomUtil.randomString(6);
-        String md5Password = PasswordUtil.getPassword(passwordDec, passwordSign);
+        String md5Password = PwdUtil.passwordGenerate(passwordDec, passwordSign);
 
         Admin admin = AdminMapping.INSTANCE.convert(request);
         admin.setPasswordSign(passwordSign);
@@ -121,10 +120,10 @@ public class AOAdminController {
             String msg = StrUtil.format("角色id {} 不存在", request.getRoleId());
             throw new HjException(ResultCode.ROLE_NOT_EXIST, msg);
         }
-        String passwordDec = PwdUtil.decryptRSA(request.getPassword());
+        String passwordDec = PwdUtil.decrypt(request.getPassword());
         String operateSign = RandomUtil.randomString(6);
         String passwordSign = RandomUtil.randomString(6);
-        String md5Password = PasswordUtil.getPassword(passwordDec, passwordSign);
+        String md5Password = PwdUtil.passwordGenerate(passwordDec, passwordSign);
 
         Admin admin = AdminMapping.INSTANCE.convert(request);
         admin.setPasswordSign(passwordSign);
@@ -200,10 +199,10 @@ public class AOAdminController {
     public ResponseMessage<Boolean> resetPwd(@Validated @RequestBody AOAdminResetPwdRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
 
-        String passwordDec = PwdUtil.decryptRSA(request.getPassword());
+        String originalPassword = PwdUtil.decrypt(request.getPassword());
         String operateSign = RandomUtil.randomString(6);
         String passwordSign = RandomUtil.randomString(6);
-        String md5Password = PasswordUtil.getPassword(passwordDec, passwordSign);
+        String md5Password = PwdUtil.passwordGenerate(originalPassword, passwordSign);
 
         Admin admin = adminService.selectByPrimaryKey(request.getId());
 
