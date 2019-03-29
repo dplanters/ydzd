@@ -369,14 +369,14 @@ public class AOSmsController {
                     Integer[] collectionTime = smsConditionContent.getCollectionTime();
                     if (collectionTime != null && collectionTime.length > 0) {
                         String collectionTimeText = StrUtil.join("、", collectionTime);
-                        temp.setConditionText("逾期天数等于" + collectionTimeText);
+                        temp.setConditionText("逾期天数等于" + collectionTimeText + "天");
                     }
                 }
                 if (smsConditionContent.getConditionType() == CONDITION_TYPE_3) {
                     Integer[] remindTime = smsConditionContent.getRemindTime();
                     if (remindTime != null && remindTime.length > 0) {
                         String remindTimeText = StrUtil.join("、", remindTime);
-                        temp.setConditionText("提醒天数等于" + remindTimeText);
+                        temp.setConditionText("提醒天数等于" + remindTimeText + "天");
                     }
                 }
                 if (smsConditionContent.getConditionType() == CONDITION_TYPE_4) {
@@ -544,7 +544,7 @@ public class AOSmsController {
 
         }
         if (TIMING_SEND_TYPE_1 == request.getTimingSendType()) {
-            if(StrUtil.isBlank(request.getSendStartDate()) || StrUtil.isBlank(request.getSendEndDate())){
+            if (StrUtil.isBlank(request.getSendStartDate()) || StrUtil.isBlank(request.getSendEndDate())) {
                 throw new HjException(ResultCode.SMS_ILLEGAL_DATE);
             }
             smsJobCondition.setSendStartDate(request.getSendStartDate());
