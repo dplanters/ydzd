@@ -33,7 +33,7 @@ public class BannerServiceImpl extends BaseServiceImpl<Banner, Integer> implemen
         PageHelper.startPage(page.getPageNum(), page.getPageSize());
 
         Weekend<Banner> weekend = Weekend.of(Banner.class);
-        weekend.orderBy("position").desc();
+        weekend.orderBy("position").asc();
         WeekendCriteria<Banner, Object> weekendCriteria = weekend.weekendCriteria();
         weekendCriteria
                 .andEqualTo(Banner::getStatus, StatusEnum.NORMAL.getCode())
