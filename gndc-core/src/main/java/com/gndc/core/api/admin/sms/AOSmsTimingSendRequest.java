@@ -1,8 +1,6 @@
 package com.gndc.core.api.admin.sms;
 
-import com.gndc.core.api.common.RequestMessage;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;

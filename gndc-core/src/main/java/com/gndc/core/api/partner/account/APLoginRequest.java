@@ -8,7 +8,7 @@
  ***************************************************************************/
 package com.gndc.core.api.partner.account;
 
-import com.gndc.core.api.common.RequestMessage;
+import com.gndc.common.api.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 

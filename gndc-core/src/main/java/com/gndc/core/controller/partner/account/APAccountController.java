@@ -5,17 +5,17 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.CacheConstant;
+import com.gndc.common.dto.APAdminLoginInfoDTO;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.PlatformEnum;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.PwdUtil;
-import com.gndc.core.api.common.ResponseMessage;
-import com.gndc.core.api.partner.account.APLoginAdminInfo;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.partner.account.APLoginRequest;
 import com.gndc.core.api.partner.account.APLoginResponse;
 import com.gndc.core.api.partner.sys.APAdminResetPwdRequest;
-import com.gndc.core.mappers.APLoginAdminInfoMapping;
+import com.gndc.core.mappers.APAdminLoginInfoDTOMapping;
 import com.gndc.core.model.Admin;
 import com.gndc.core.model.Right;
 import com.gndc.core.model.Role;
@@ -116,7 +116,7 @@ public class APAccountController {
             rights = rightService.rightsTree((byte)1, PlatformEnum.PARTNER.getCode(), 0, rightIds);
             admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
         }
-        APLoginAdminInfo adminInfo = APLoginAdminInfoMapping.INSTANCE.convert(admin);
+        APAdminLoginInfoDTO adminInfo = APAdminLoginInfoDTOMapping.INSTANCE.convert(admin);
         apLoginResponse.setAdmin(adminInfo);
         apLoginResponse.setSessionId(sessionId);
         //缓存半小时

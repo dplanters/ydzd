@@ -1,6 +1,6 @@
 package com.gndc.core.controller.app.account;
 
-import com.alibaba.fastjson.JSONObject;
+import com.gndc.common.dto.PUserLoginInfoDTO;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.feedback.FeedbackStatusTypeEnum;
@@ -14,7 +14,7 @@ import com.gndc.common.utils.DateUtil;
 import com.gndc.core.api.app.user.event.PUserEventRequest;
 import com.gndc.core.api.app.user.feedback.PFeedBackEditRequest;
 import com.gndc.core.api.common.CommonResponse;
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.model.*;
 import com.gndc.core.service.partner.EventFeeService;
 import com.gndc.core.service.platform.FeedbackService;
@@ -80,14 +80,14 @@ public class PUserController {
     public ResponseMessage<CommonResponse> feedbackEdit(@Validated @RequestBody PFeedBackEditRequest feedBackEditRequest) {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
 
-        User user = feedBackEditRequest.getUser();
-        if (user == null) {
+        PUserLoginInfoDTO userInfo = feedBackEditRequest.getPUser();
+        if (userInfo == null) {
             throw new HjException(ResultCode.SESSIONID_ISNULL);
         }
 
         Date now = DateUtil.getCountyTime();
         UserFeedback feedback = new UserFeedback();
-        feedback.setUserId(user.getId());
+        feedback.setUserId(userInfo.getId());
         feedback.setUserPhone(feedBackEditRequest.getPhone());
         feedback.setContent(feedBackEditRequest.getContent().replaceAll("[\ud800\udc00-\udbff\udfff\ud800-\udfff]", ""));
         feedback.setCreateTime(now);
@@ -110,14 +110,14 @@ public class PUserController {
     public ResponseMessage<CommonResponse> eventCollection(@Validated @RequestBody PUserEventRequest eventRequest) throws InterruptedException {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
 
-        User user = eventRequest.getUser();
-        if (user == null) {
+        PUserLoginInfoDTO userInfo = eventRequest.getPUser();
+        if (userInfo == null) {
             throw new HjException(ResultCode.SESSIONID_ISNULL);
         }
 
         int ref = 0;
         if (eventRequest.getType() == (int) UserEventsTypeEnum.OPEN_APP.getCode()) {
-            ref =  userEventService.statisticsUserOpenApp(user.getId(), eventRequest.getHeader().getIp());
+            ref =  userEventService.statisticsUserOpenApp(userInfo.getId(), eventRequest.getHeader().getIp());
         } else {
 
             if (eventRequest.getProductId() == 0) {
@@ -125,7 +125,7 @@ public class PUserController {
             }
             Date now = DateUtil.getCountyTime();
             UserEvent event = new UserEvent();
-            event.setUserId(user.getId());
+            event.setUserId(userInfo.getId());
             event.setCreateTime(now);
             event.setEventType(eventRequest.getType());
             event.setProductId(eventRequest.getProductId());
@@ -153,7 +153,7 @@ public class PUserController {
                     MessageTemplate messageTemplate = messageTemplates.get(0);
                     Product product = productService.selectByPrimaryKey(eventRequest.getProductId());
                     String messageContent = MessageFormat.format(messageTemplate.getContent(), product.getName());
-                    message.setUserId(user.getId());
+                    message.setUserId(userInfo.getId());
                     message.setMessage(messageContent);
                     message.setProductId(eventRequest.getProductId());
                     message.setMessageType(MessageTypeEnum.SYSTEM.getCode());
@@ -168,7 +168,8 @@ public class PUserController {
                 Product product = productService.selectByPrimaryKey(eventRequest.getProductId());
                 Date currDate = new Date();
 
-                Integer eventFeesCount = userEventService.selectUVCount(user.getId(), eventRequest.getProductId(), new Date(DateUtil.getStartTime()), currDate);
+                Integer eventFeesCount = userEventService.selectUVCount(userInfo.getId(), eventRequest.getProductId(),
+                        new Date(DateUtil.getStartTime()), currDate);
                 if (eventFeesCount < 1) {
                     EventFee eventFee = new EventFee();
                     eventFee.setProductId(eventRequest.getProductId());

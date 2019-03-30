@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.core.api.app.platform.PPlatformBaseInfoRequest;
 import com.gndc.core.api.common.CommonRequest;
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.model.CommonQuestion;
 import com.gndc.core.model.SystemOption;
 import com.gndc.core.service.platform.CommonQuestionService;

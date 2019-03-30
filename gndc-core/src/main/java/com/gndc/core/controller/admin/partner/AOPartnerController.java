@@ -2,7 +2,7 @@ package com.gndc.core.controller.admin.partner;
 
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.core.api.admin.partner.*;
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.mappers.PartnerMapping;
 import com.gndc.core.model.Partner;
 import com.gndc.core.service.partner.PartnerService;

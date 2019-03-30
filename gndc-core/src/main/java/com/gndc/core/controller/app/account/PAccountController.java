@@ -5,6 +5,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.constant.CacheConstant;
+import com.gndc.common.dto.PUserLoginInfoDTO;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.UserDeviceEnum;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
@@ -16,7 +17,8 @@ import com.gndc.core.api.app.platform.Sms10MinuteCount;
 import com.gndc.core.api.app.platform.SmsInfo;
 import com.gndc.core.api.app.user.account.*;
 import com.gndc.core.api.common.CommonResponse;
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.api.ResponseMessage;
+import com.gndc.core.mappers.PUserLoginInfoDTOMapping;
 import com.gndc.core.model.User;
 import com.gndc.core.model.UserEvent;
 import com.gndc.core.service.sms.SmsLogService;
@@ -224,9 +226,8 @@ public class PAccountController {
         userService.updateByPrimaryKeySelective(user4update);
 
         String sessionId = IdUtil.simpleUUID();
-        User userInfo = new User();
-        userInfo.setId(userId);
-        redisTemplate.opsForValue().set(CacheConstant.NAMESPACE_USER_LOGIN + sessionId, userInfo,
+        PUserLoginInfoDTO userLoginInfo = PUserLoginInfoDTOMapping.INSTANCE.convert(user4update);
+        redisTemplate.opsForValue().set(CacheConstant.NAMESPACE_USER_LOGIN + sessionId, userLoginInfo,
                 CacheConstant.EXPIRE_USER_LOGIN, TimeUnit.SECONDS);
 
         // 打开app统计

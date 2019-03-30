@@ -1,7 +1,7 @@
 package com.gndc.core.api.admin.sms;
 
 
-import com.gndc.core.api.common.RequestMessage;
+import com.gndc.common.api.RequestMessage;
 
 /**
  * 短信管理-短信统计-请求

@@ -1,8 +1,8 @@
 package com.gndc.core.interceptor;
 
 import com.gndc.common.constant.CacheConstant;
+import com.gndc.common.dto.RightInfoDTO;
 import com.gndc.common.utils.BeanFactoryUtil;
-import com.gndc.core.model.Right;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
@@ -31,8 +31,8 @@ public class OpenSourceInterceptor extends WebContentInterceptor {
                         "redisTemplate");
         boolean requireAuth = true;
         boolean noHandler = true;
-        Map<Integer, Right> entries = redisTemplate.opsForHash().entries(CacheConstant.KEY_ALL_RIGHT);
-        for (Map.Entry<Integer, Right> entry : entries.entrySet()) {
+        Map<Integer, RightInfoDTO> entries = redisTemplate.opsForHash().entries(CacheConstant.KEY_ALL_RIGHT);
+        for (Map.Entry<Integer, RightInfoDTO> entry : entries.entrySet()) {
             String rightUrl = entry.getValue().getRightUrl();
             String servletPath = request.getServletPath();
             if (rightUrl.equals(servletPath)) {

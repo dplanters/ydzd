@@ -12,7 +12,7 @@ import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.PwdUtil;
 import com.gndc.core.api.admin.sys.*;
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.mappers.AOAdminListResponseMapping;
 import com.gndc.core.mappers.AdminMapping;
 import com.gndc.core.model.Admin;

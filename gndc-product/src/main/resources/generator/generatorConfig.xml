@@ -4,11 +4,11 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <properties resource="application-dev.properties"/>
+    <properties resource="application-dev.yml"/>
 
-    <context id="Mysql" targetRuntime="MyBatis3" defaultModelType="flat">
-        <!-- 不生成ModelExample-->
-        <!--<context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">-->
+    <!-- 不生成ModelExample-->
+    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+        <!--<context id="Mysql" targetRuntime="MyBatis3" defaultModelType="flat">-->
         <property name="javaFileEncoding" value="UTF-8" />
         <property name="beginningDelimiter" value="`"/>
         <property name="endingDelimiter" value="`"/>
@@ -17,24 +17,29 @@
             <property name="mappers" value="com.gndc.common.mybatis.MyMapper"/>
         </plugin>
 
-        <jdbcConnection driverClass="${spring.datasource.driverClassName}"
-                        connectionURL="${spring.datasource.url}"
-                        userId="${spring.datasource.username}"
-                        password="${spring.datasource.password}">
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://192.168.40.241:3306/gndc?useSSL=false"
+                        userId="root"
+                        password="20.112@,l">
         </jdbcConnection>
 
         <javaModelGenerator targetPackage="com.gndc.product.model" targetProject="src/main/java"/>
 
-         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
+        <sqlMapGenerator targetPackage="mapper/simple" targetProject="src/main/resources"/>
 
-         <javaClientGenerator targetPackage="com.gndc.product.mapper" targetProject="src/main/java"
-                              type="XMLMAPPER"/>
+        <javaClientGenerator targetPackage="com.gndc.product.mapper.simple" targetProject="src/main/java"
+                             type="XMLMAPPER"/>
 
-         <table tableName="t_user_base" domainObjectName="UserBaseModel">
-             <!--mysql 配置-->
+        <table tableName="dc_sms_group_log" domainObjectName="SmsGroupLog" enableSelectByExample="false"
+               enableDeleteByExample="false" enableUpdateByExample="false" enableCountByExample="false"
+        >
+            <!--mysql 配置-->
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-            <!--oracle 配置-->
-            <!--<generatedKey column="id" sqlStatement="select SEQ_{1}.nextval from dual" identity="false" type="pre"/>-->
+            <columnOverride column="birthday" javaType="java.time.LocalDate" jdbcType="date"/>
+            <columnOverride column="extend" javaType="com.alibaba.fastjson.JSONObject" jdbcType="json"/>
+            <columnOverride column="is_del" javaType="java.lang.Byte" jdbcType="tinyint"/>
+            <columnOverride column="fcd" javaType="java.time.LocalDateTime" jdbcType="timestamp"/>
+            <columnOverride column="lmd" javaType="java.time.LocalDateTime" jdbcType="timestamp"/>
         </table>
     </context>
 </generatorConfiguration>

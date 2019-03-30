@@ -1,9 +1,11 @@
 package com.gndc.core.service.common.impl;
 
 import com.gndc.common.constant.CacheConstant;
+import com.gndc.common.dto.RightInfoDTO;
 import com.gndc.core.mapper.simple.RightMapper;
 import com.gndc.core.mapper.simple.RoleMapper;
 import com.gndc.core.mapper.simple.RoleRightMapper;
+import com.gndc.core.mappers.RightInfoDTOMapping;
 import com.gndc.core.model.Right;
 import com.gndc.core.model.Role;
 import com.gndc.core.model.RoleRight;
@@ -16,7 +18,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.Serializable;
 import java.util.List;
 
 @Service
@@ -41,12 +42,14 @@ public class CacheDataServiceImpl implements CacheDataService {
         //加载所有角色
         List<Role> roles = roleMapper.selectByExample(null);
         for (Role role : roles) {
+
             redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE, role.getId(), role);
         }
         //加载所有权限
         List<Right> rights = rightMapper.selectByExample(null);
         for (Right right : rights) {
-            redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, right.getId(), right);
+            RightInfoDTO rightInfo = RightInfoDTOMapping.INSTANCE.convert(right);
+            redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, rightInfo.getId(), rightInfo);
         }
         //加载所有角色权限
         List<RoleRight> roleRights = roleRightMapper.selectByExample(null);

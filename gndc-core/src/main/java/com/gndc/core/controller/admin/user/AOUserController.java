@@ -6,7 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.core.api.admin.user.AOUserDetailResponse;
 import com.gndc.core.api.admin.user.AOUserListRequest;
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.model.User;
 import com.gndc.core.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

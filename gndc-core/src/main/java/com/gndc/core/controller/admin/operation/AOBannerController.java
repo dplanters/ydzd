@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.common.OnlineStatusEnum;
 import com.gndc.core.api.admin.operation.*;
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.mappers.BannerMapping;
 import com.gndc.core.model.Banner;
 import com.gndc.core.service.adverts.BannerService;

@@ -12,6 +12,7 @@
         <module>gndc-common</module>
         <module>gndc-core</module>
         <module>gndc-product</module>
+        <module>gndc-demo</module>
         <module>gndc-third</module>
     </modules>
 

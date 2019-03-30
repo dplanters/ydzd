@@ -12,7 +12,7 @@ import com.gndc.core.api.app.platform.PSendSmsRequest;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
 import com.gndc.core.api.app.platform.Sms24HourCount;
 import com.gndc.core.api.common.CommonResponse;
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.model.User;
 import com.gndc.core.service.sms.SmsLogService;
 import com.gndc.core.service.user.UserService;

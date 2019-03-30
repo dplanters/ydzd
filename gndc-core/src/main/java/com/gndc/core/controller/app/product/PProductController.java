@@ -4,7 +4,7 @@ import com.gndc.common.enums.product.ProductDataPeriodUnitEnum;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.core.api.app.product.find.PFindProductResponse;
 import com.gndc.core.api.app.product.find.PProductStaticUV;
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.api.ResponseMessage;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;

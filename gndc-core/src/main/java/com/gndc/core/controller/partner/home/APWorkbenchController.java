@@ -6,7 +6,7 @@ import com.gndc.common.enums.partner.EventFeeTypeEnum;
 import com.gndc.common.enums.product.ProductCoopeModeEnum;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.common.utils.DateUtil;
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.partner.home.APWorkbenchStatisticUVRequest;
 import com.gndc.core.api.partner.home.APWorkbenchStatisticUVResponse;
 import com.gndc.core.model.Product;

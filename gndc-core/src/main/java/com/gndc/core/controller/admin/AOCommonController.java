@@ -1,6 +1,6 @@
 package com.gndc.core.controller.admin;
 
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.partner.common.APAllPartnerRequest;
 import com.gndc.core.model.Partner;
 import com.gndc.core.service.partner.PartnerService;
@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 @RestController

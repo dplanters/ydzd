@@ -1,7 +1,6 @@
 package com.gndc.core.api.partner.finance.account;
 
-import com.gndc.core.api.common.RequestMessage;
-import lombok.Data;
+import com.gndc.common.api.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 

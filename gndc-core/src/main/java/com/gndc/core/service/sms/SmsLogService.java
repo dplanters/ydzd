@@ -5,7 +5,7 @@ import com.gndc.common.service.BaseService;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
 import com.gndc.core.api.app.platform.Sms24HourCount;
 import com.gndc.core.api.app.platform.SmsInfo;
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.model.SmsGroupLog;
 import com.gndc.core.model.SmsLog;
 

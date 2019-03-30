@@ -1,6 +1,6 @@
 package com.gndc.core.controller.partner.sys;
 
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.partner.sys.APPartnerContactAddRequest;
 import com.gndc.core.service.partner.PartnerContactService;
 import org.slf4j.Logger;

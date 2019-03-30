@@ -9,11 +9,11 @@ import com.gndc.common.enums.admin.AdminSuperAdminEnum;
 import com.gndc.common.enums.common.PlatformEnum;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.exception.HjException;
-import com.gndc.core.api.admin.account.AOLoginAdminInfo;
+import com.gndc.common.dto.AOAdminLoginInfoDTO;
 import com.gndc.core.api.admin.account.AOLoginRequest;
 import com.gndc.core.api.admin.account.AOLoginResponse;
-import com.gndc.core.api.common.ResponseMessage;
-import com.gndc.core.mappers.AOLoginAdminInfoMapping;
+import com.gndc.common.api.ResponseMessage;
+import com.gndc.core.mappers.AOAdminLoginInfoDTOMapping;
 import com.gndc.core.model.Admin;
 import com.gndc.core.model.Right;
 import com.gndc.core.model.Role;
@@ -133,7 +133,7 @@ public class AOAccountController {
                 logger.warn(msg);
                 throw new HjException(ResultCode.ERROR, msg);
         }
-        AOLoginAdminInfo adminInfo = AOLoginAdminInfoMapping.INSTANCE.convert(admin);
+        AOAdminLoginInfoDTO adminInfo = AOAdminLoginInfoDTOMapping.INSTANCE.convert(admin);
         aoLoginResponse.setAdmin(adminInfo);
         aoLoginResponse.setSessionId(sessionId);
         //缓存半小时

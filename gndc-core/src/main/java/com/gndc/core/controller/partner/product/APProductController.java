@@ -1,6 +1,6 @@
 package com.gndc.core.controller.partner.product;
 
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.partner.product.APProductListRequest;
 import com.gndc.core.api.partner.product.APProductListResponse;
 import com.gndc.core.service.product.ProductService;

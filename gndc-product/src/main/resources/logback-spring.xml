@@ -4,13 +4,14 @@
     <springProperty scope="context" name="LOG_HOME" source="logging.path" defaultValue=""/>
     <!--<property name="LOG_HOME" value="${logging.path}"/>-->
     <!-- 定义服务的名字 -->
-    <property name="SERVER_NAME" value="gndc-core"/>
+    <property name="SERVER_NAME" value="gndc-product"/>
     <!-- 定义日志模式 -->
     <property name="PATTERN" value="[${SERVER_NAME}][%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5level][%thread][%logger :%line] %msg %n"/>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <!-- %.-1level 只显示信息级别的首字母,%-5level 左对齐显示信息级别全称 -->
             <pattern>${PATTERN}</pattern>
+            <charset>UTF-8</charset>
         </encoder>
     </appender>
     <appender name="TRACE_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -24,6 +25,7 @@
         </rollingPolicy>
         <encoder>
             <pattern>${PATTERN}</pattern>
+            <charset>UTF-8</charset>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>TRACE</level>

@@ -1,14 +1,12 @@
 package com.gndc.core.service.product.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.OnlineStatusEnum;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.product.ProductDataTypeEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
-import com.gndc.core.api.admin.account.AOLoginAdminInfo;
+import com.gndc.common.dto.AOAdminLoginInfoDTO;
 import com.gndc.core.api.admin.product.*;
 import com.gndc.core.api.app.product.find.PFindProductRequest;
 import com.gndc.core.api.app.product.find.PFindProductResponse;
@@ -20,7 +18,6 @@ import com.gndc.core.mapper.simple.ProductDataMapper;
 import com.gndc.core.mapper.simple.ProductHotMapper;
 import com.gndc.core.mapper.simple.ProductMapper;
 import com.gndc.core.mappers.*;
-import com.gndc.core.model.Admin;
 import com.gndc.core.model.Product;
 import com.gndc.core.model.ProductData;
 import com.gndc.core.model.ProductHot;
@@ -191,7 +188,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     @Override
     @Transactional
     public Integer productHotEdit(AOProductHotEditRequest request) {
-        AOLoginAdminInfo admin = request.getAoAdmin();
+        AOAdminLoginInfoDTO admin = request.getAoAdmin();
         if (admin == null) {
             logger.warn("用户未登陆");
             throw new HjException(ResultCode.SESSIONID_ISNULL);

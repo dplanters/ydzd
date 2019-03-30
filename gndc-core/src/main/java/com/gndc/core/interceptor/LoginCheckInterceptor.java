@@ -3,12 +3,12 @@ package com.gndc.core.interceptor;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.CacheConstant;
+import com.gndc.common.dto.AOAdminLoginInfoDTO;
+import com.gndc.common.dto.APAdminLoginInfoDTO;
+import com.gndc.common.dto.PUserLoginInfoDTO;
+import com.gndc.common.dto.RightInfoDTO;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.utils.BeanFactoryUtil;
-import com.gndc.core.api.admin.account.AOLoginAdminInfo;
-import com.gndc.core.api.partner.account.APLoginAdminInfo;
-import com.gndc.core.model.Right;
-import com.gndc.core.model.User;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -58,26 +58,26 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
             sendError(response, HttpStatus.OK.value(), String.valueOf(ResultCode.NO_SESSION.getCode()));
             return false;
         } else {
-            AOLoginAdminInfo admin = null;
-            APLoginAdminInfo partner = null;
-            User user = null;
+            AOAdminLoginInfoDTO admin = null;
+            APAdminLoginInfoDTO partner = null;
+            PUserLoginInfoDTO user = null;
 
             Object o =
                     redisTemplate.opsForValue().get(CacheConstant.NAMESPACE_ADMIN_LOGIN + sessionId);
             if (ObjectUtil.isNotNull(o)) {
-                admin = (AOLoginAdminInfo) o;
+                admin = (AOAdminLoginInfoDTO) o;
             }
 
             Object o2 =
                     redisTemplate.opsForValue().get(CacheConstant.NAMESPACE_PARTNER_LOGIN + sessionId);
             if (ObjectUtil.isNotNull(o2)) {
-                partner = (APLoginAdminInfo) o2;
+                partner = (APAdminLoginInfoDTO) o2;
             }
 
             Object o3 =
                     redisTemplate.opsForValue().get(CacheConstant.NAMESPACE_USER_LOGIN + sessionId);
             if (ObjectUtil.isNotNull(o3)) {
-                user = (User) o3;
+                user = (PUserLoginInfoDTO) o3;
             }
 
             if (ObjectUtil.isNull(admin) && ObjectUtil.isNull(partner) && ObjectUtil.isNull(user)) {
@@ -140,9 +140,9 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
         return true;
     }
 
-    private void hasRight(List<Right> rights, String servletPath, Set<Boolean> hasRight) {
+    private void hasRight(List<RightInfoDTO> rights, String servletPath, Set<Boolean> hasRight) {
         if (ObjectUtil.isNotNull(rights)) {
-            for (Right right : rights) {
+            for (RightInfoDTO right : rights) {
                 hasRight(right.getChildren(), servletPath, hasRight);
                 //如果自己用户的权限中有和当前请求可以匹配，则拥有权限
                 if (right.getRightUrl().equals(servletPath)) {

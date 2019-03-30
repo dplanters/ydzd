@@ -1,13 +1,11 @@
 package com.gndc.core.api.admin.operation;
 
-import com.gndc.core.api.common.RequestMessage;
+import com.gndc.common.api.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 @Getter
 @Setter

@@ -15,7 +15,7 @@ import com.gndc.common.utils.DateUtil;
 import com.gndc.common.utils.PhoneUtil;
 import com.gndc.core.api.admin.sms.*;
 import com.gndc.core.api.common.CommonResponse;
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.mappers.SmsConditionMapping;
 import com.gndc.core.mappers.SmsJobConditionMapping;
 import com.gndc.core.mappers.SmsSignMapping;

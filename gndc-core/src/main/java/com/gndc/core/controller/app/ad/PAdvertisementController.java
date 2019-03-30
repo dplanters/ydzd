@@ -1,7 +1,7 @@
 package com.gndc.core.controller.app.ad;
 
 import com.gndc.common.enums.common.OnlineStatusEnum;
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.core.api.app.ad.PBannerListRequest;
 import com.gndc.core.api.app.ad.POpeningPopupAdvertisementRequest;

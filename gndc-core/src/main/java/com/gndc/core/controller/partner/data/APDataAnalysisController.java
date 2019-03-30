@@ -7,7 +7,7 @@ import com.gndc.common.enums.partner.EventFeeStatusEnum;
 import com.gndc.common.enums.partner.EventFeeTypeEnum;
 import com.gndc.common.enums.product.ProductCoopeModeEnum;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
-import com.gndc.core.api.common.ResponseMessage;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.partner.data.APDataAnalysisListRequest;
 import com.gndc.core.api.partner.data.APDataAnalysisListResponse;
 import com.gndc.core.service.partner.EventFeeService;
