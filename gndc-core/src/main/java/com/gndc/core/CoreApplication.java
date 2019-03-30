@@ -9,7 +9,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  * @date 2018/11/9
  * @mail kaihuijing@gmail.com
  */
-@MapperScan(basePackages = "com.gndc.demo.mapper")
+@MapperScan(basePackages = "com.gndc.core.mapper")
 @SpringBootApplication(scanBasePackages = {
         "com.gndc.core", "com.gndc.common.config",
         "com.gndc.common.utils", "com.gndc.common.exception",

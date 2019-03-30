@@ -1,8 +1,10 @@
 package com.gndc.core.controller.admin.partner;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.core.api.admin.partner.*;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.mappers.PartnerMapping;
 import com.gndc.core.model.Partner;
 import com.gndc.core.service.partner.PartnerService;
@@ -89,7 +91,10 @@ public class AOPartnerController {
     @PostMapping("/partnerList")
     public ResponseMessage<List<Partner>> partnerList(@Validated @RequestBody AOPartnerListRequest request) {
         ResponseMessage<List<Partner>> response = new ResponseMessage<>();
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         List<Partner> partners = partnerService.selectAll();
+        PageInfo<Partner> pageInfo = new PageInfo<>(partners);
+        response.setPage(pageInfo);
         response.setData(partners);
         return response;
     }

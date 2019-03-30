@@ -32,4 +32,11 @@ public class RequestMessage implements Serializable {
     protected AOAdminLoginInfoDTO aoAdmin;
     protected APAdminLoginInfoDTO apAdmin;
 
+    public Integer getPageNum() {
+        return header.getPage().getPageNum();
+    }
+
+    public Integer getPageSize() {
+        return header.getPage().getPageSize();
+    }
 }
