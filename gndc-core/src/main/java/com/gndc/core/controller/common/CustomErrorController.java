@@ -1,6 +1,7 @@
 package com.gndc.core.controller.common;
 
 import com.gndc.common.enums.ResultCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.ErrorProperties.IncludeStacktrace;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
+@Slf4j
 @Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
 public class CustomErrorController extends AbstractErrorController {

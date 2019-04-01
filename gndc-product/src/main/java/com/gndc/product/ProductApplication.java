@@ -9,6 +9,7 @@ import tk.mybatis.spring.annotation.MapperScan;
         "com.gndc.product", "com.gndc.common.config",
         "com.gndc.common.utils", "com.gndc.common.exception",
         "com.gndc.common.advice", "com.gndc.common.aspect",
+        "com.gndc.common.interceptor",
         })
 public class ProductApplication {
     public static void main(String[] args) {
