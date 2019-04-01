@@ -1,6 +1,5 @@
 package com.gndc.core.service.product;
 
-import com.gndc.common.exception.HjException;
 import com.gndc.common.service.BaseService;
 import com.gndc.core.api.admin.product.*;
 import com.gndc.core.api.app.product.find.PFindProductRequest;
@@ -49,7 +48,7 @@ public interface ProductService extends BaseService<Product, Integer> {
      * 运营后台-产品管理-产品上下线
      * @return
      */
-    Boolean productUpperAndLowerLine(AOUpperAndLowerLineRequest request);
+    Boolean productUpperAndLowerLine(AOProductOnlineOrOfflineRequest request);
 
     /**
      * 运营后台-产品管理-产品删除
@@ -62,10 +61,15 @@ public interface ProductService extends BaseService<Product, Integer> {
      */
     List<AOProductHotListResponse> productHotList(AOProductHotListRequest request);
     /**
-     * 运营后台-产品管理-精选爆款编辑
+     * 运营后台-产品管理-精选爆款添加
      * @return
      */
-    Integer productHotEdit(AOProductHotEditRequest request) throws HjException;
+    Integer productHotAdd(AOProductHotAddRequest request);
+    /**
+     * 运营后台-产品管理-精选爆款下线
+     * @return
+     */
+    Integer productHotOffline(AOProductHotOfflineRequest request);
     /**
      * 客户端-首页-精选爆款列表
      * @return

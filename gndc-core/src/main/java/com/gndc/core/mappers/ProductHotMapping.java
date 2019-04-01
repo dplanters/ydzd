@@ -1,6 +1,6 @@
 package com.gndc.core.mappers;
 
-import com.gndc.core.api.admin.product.AOProductHotEditRequest;
+import com.gndc.core.api.admin.product.AOProductHotAddRequest;
 import com.gndc.core.model.ProductHot;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -12,8 +12,5 @@ public interface ProductHotMapping {
 
     ProductHotMapping INSTANCE = Mappers.getMapper(ProductHotMapping.class);
 
-    @Mappings({
-            @Mapping(target = "hotStatus", source = "hotStatus")
-    })
-    ProductHot convert(AOProductHotEditRequest aoProductAddRequest);
+    ProductHot convert(AOProductHotAddRequest aoProductAddRequest);
 }

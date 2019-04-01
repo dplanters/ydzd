@@ -2,10 +2,12 @@ package com.gndc.core.controller.admin.sys;
 
 import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.CacheConstant;
+import com.gndc.common.dto.RightInfoDTO;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.exception.HjException;
 import com.gndc.core.api.admin.sys.*;
 import com.gndc.common.api.ResponseMessage;
+import com.gndc.core.mappers.RightInfoDTOMapping;
 import com.gndc.core.mappers.RightMapping;
 import com.gndc.core.model.Right;
 import com.gndc.core.service.sys.RightService;
@@ -47,7 +49,8 @@ public class AORightController {
         ResponseMessage<Integer> response = new ResponseMessage<>();
         Right right = RightMapping.INSTANCE.convert(request);
         rightService.insertSelective(right);
-        redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, right.getId(), right);
+        RightInfoDTO rightInfo = RightInfoDTOMapping.INSTANCE.convert(right);
+        redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, rightInfo.getId(), rightInfo);
         response.setData(right.getId());
         return response;
     }
@@ -62,7 +65,8 @@ public class AORightController {
         ResponseMessage<Integer> response = new ResponseMessage<>();
         Right right = RightMapping.INSTANCE.convert(request);
         rightService.updateByPrimaryKeySelective(right);
-        redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, right.getId(), right);
+        RightInfoDTO rightInfo = RightInfoDTOMapping.INSTANCE.convert(right);
+        redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, rightInfo.getId(), rightInfo);
         response.setData(right.getId());
         return response;
     }

@@ -1,12 +1,12 @@
 package com.gndc.core.service.product.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.OnlineStatusEnum;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.product.ProductDataTypeEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
-import com.gndc.common.dto.AOAdminLoginInfoDTO;
 import com.gndc.core.api.admin.product.*;
 import com.gndc.core.api.app.product.find.PFindProductRequest;
 import com.gndc.core.api.app.product.find.PFindProductResponse;
@@ -133,9 +133,10 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     }
 
     @Override
-    public Boolean productUpperAndLowerLine(AOUpperAndLowerLineRequest request) {
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean productUpperAndLowerLine(AOProductOnlineOrOfflineRequest request) {
         Product product = productMapper.selectByPrimaryKey(request.getId());
-        if (product == null) {
+        if (ObjectUtil.isNull(product)) {
             logger.warn("产品编号{}不存在或已下线", request.getId());
             throw new HjException(ResultCode.RECORD_NOT_EXIST);
         }
@@ -144,6 +145,11 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             product.setProductStatus(OnlineStatusEnum.ONLINE.getCode());
             product.setOnlineTime(new Date());
         } else {
+            ProductHot productHot = productHotMapper.selectOneByProperty("productId", request.getId());
+            productHot.setHotStatus(OnlineStatusEnum.OFFLINE.getCode());
+            //下线热推产品
+            productHotMapper.updateByPrimaryKeySelective(productHot);
+
             product.setProductStatus(OnlineStatusEnum.OFFLINE.getCode());
             product.setOfflineTime(new Date());
         }
@@ -187,56 +193,34 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
 
     @Override
     @Transactional
-    public Integer productHotEdit(AOProductHotEditRequest request) {
-        AOAdminLoginInfoDTO admin = request.getAoAdmin();
-        if (admin == null) {
-            logger.warn("用户未登陆");
-            throw new HjException(ResultCode.SESSIONID_ISNULL);
-        }
-
-        ProductHot productHot4Edit = ProductHotMapping.INSTANCE.convert(request);
+    public Integer productHotAdd(AOProductHotAddRequest request) {
+        ProductHot productHot = ProductHotMapping.INSTANCE.convert(request);
 
         Product product = productMapper.selectByPrimaryKey(request.getProductId());
-        if (product == null || !product.getProductStatus().equals(OnlineStatusEnum.ONLINE.getCode())) {
+
+        if (ObjectUtil.isNull(product)) {
+            throw new HjException(ResultCode.RECORD_NOT_EXIST);
+        }
+        if (ObjectUtil.isNotNull(product) && !product.getProductStatus().equals(OnlineStatusEnum.ONLINE.getCode())) {
             logger.warn("产品未上线");
             throw new HjException(ResultCode.PRODUCTS_NOT_ONLINE);
         }
-        productHot4Edit.setProductName(product.getName());
+        productHot.setHotStatus(OnlineStatusEnum.ONLINE.getCode());
+        productHot.setProductName(product.getName());
+        productHot.setOnlineTime(new Date());
+        //新增
+        productHotMapper.insertSelective(productHot);
+        return productHot.getId();
+    }
 
-        //修改
-
-        Weekend<ProductHot> weekend = Weekend.of(ProductHot.class);
-        weekend.weekendCriteria()
-                .andEqualTo(ProductHot::getProductId, request.getProductId());
-        List<ProductHot> productHotTemps = productHotMapper.selectByExample(weekend);
-
-        if (productHotTemps != null && productHotTemps.size() > 0) {
-            //修改
-            ProductHot productHot = productHotTemps.get(0);
-
-            if (productHot4Edit.getHotStatus().equals(OnlineStatusEnum.ONLINE.getCode())
-                    && productHot.getHotStatus().equals(OnlineStatusEnum.ONLINE.getCode())) {
-                logger.warn("产品在线");
-                throw new HjException(ResultCode.PRODUCTS_HOT_IS_ONLINE);
-            }
-
-            productHot4Edit.setId(productHot.getId());
-            if (productHot4Edit.getHotStatus().equals(OnlineStatusEnum.OFFLINE.getCode())) {
-                productHot4Edit.setOfflineTime(new Date());
-            }
-            productHotMapper.updateByPrimaryKeySelective(productHot4Edit);
-        } else {
-            //新增
-            if (productHot4Edit.getHotStatus().equals(OnlineStatusEnum.ONLINE.getCode())) {
-                productHot4Edit.setOnlineTime(new Date());
-            }
-            if (productHot4Edit.getHotStatus().equals(OnlineStatusEnum.OFFLINE.getCode())) {
-                productHot4Edit.setOfflineTime(new Date());
-            }
-            productHotMapper.insertSelective(productHot4Edit);
-        }
-
-        return productHot4Edit.getId();
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Integer productHotOffline(AOProductHotOfflineRequest request) {
+        ProductHot productHot = new ProductHot().setId(request.getId())
+                .setHotStatus(OnlineStatusEnum.OFFLINE.getCode());
+        //下线热推产品
+        productHotMapper.updateByPrimaryKeySelective(productHot);
+        return productHot.getId();
     }
 
     @Override

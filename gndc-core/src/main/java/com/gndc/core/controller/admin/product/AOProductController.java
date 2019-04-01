@@ -55,7 +55,7 @@ public class AOProductController {
     }
 
     /**
-     * 产品名列表（下拉框数据初始化接口）
+     * 产品名列表（精选爆款下拉框数据初始化接口）
      * @param request
      * @return
      */
@@ -67,12 +67,8 @@ public class AOProductController {
         weekend.selectProperties("id", "name");
         weekend.weekendCriteria()
                 .andEqualTo(Product::getStatus, StatusEnum.NORMAL.getCode())
-                .andEqualTo(Product::getProductStatus, OnlineStatusEnum.ONLINE.getCode());
-
-        Integer partnerId = request.getPartnerId();
-        if (partnerId != null) {
-            weekend.weekendCriteria().andEqualTo(Product::getPartnerId, partnerId);
-        }
+                .andEqualTo(Product::getProductStatus, OnlineStatusEnum.ONLINE.getCode())
+                .andEqualTo(Product::getPartnerId, request.getPartnerId());
 
         List<Product> products = productService.selectByExample(weekend);
 
@@ -131,7 +127,7 @@ public class AOProductController {
      * @return
      */
     @PostMapping("/productUpperAndLowerLine")
-    public ResponseMessage<Boolean> productUpperAndLowerLine(@Validated @RequestBody AOUpperAndLowerLineRequest request) {
+    public ResponseMessage<Boolean> productUpperAndLowerLine(@Validated @RequestBody AOProductOnlineOrOfflineRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
         Boolean success = productService.productUpperAndLowerLine(request);
         response.setData(success);
@@ -172,16 +168,32 @@ public class AOProductController {
     }
 
     /**
-     * 爆款产品编辑
+     * 爆款产品添加
      * @param request
      * @return
      */
-    @PostMapping("/productHotEdit")
+    @PostMapping("/addProductHot")
     @Transactional
-    public ResponseMessage<Integer> productHotEdit(@Validated @RequestBody AOProductHotEditRequest request) {
+    public ResponseMessage<Integer> productHotEdit(@Validated @RequestBody AOProductHotAddRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
 
-        Integer id = productService.productHotEdit(request);
+        Integer id = productService.productHotAdd(request);
+
+        response.setData(id);
+        return response;
+    }
+
+    /**
+     * 爆款产品下线
+     * @param request
+     * @return
+     */
+    @PostMapping("/productHotOffline")
+    @Transactional
+    public ResponseMessage<Integer> productHotOffline(@Validated @RequestBody AOProductHotOfflineRequest request) {
+        ResponseMessage<Integer> response = new ResponseMessage<>();
+
+        Integer id = productService.productHotOffline(request);
 
         response.setData(id);
         return response;

@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  */
 @Getter
 @Setter
-public class AOUpperAndLowerLineRequest extends RequestMessage {
+public class AOProductOnlineOrOfflineRequest extends RequestMessage {
 
     /**
      * 产品id
