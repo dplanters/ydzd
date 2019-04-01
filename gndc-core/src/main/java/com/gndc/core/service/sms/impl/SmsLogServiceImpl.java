@@ -3,31 +3,40 @@ package com.gndc.core.service.sms.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.constant.Constant;
+import com.gndc.common.constant.SmsEditConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.sms.SmsChannelEnum;
 import com.gndc.common.enums.sms.SmsTemplateType;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.common.utils.DateUtil;
+import com.gndc.common.utils.PhoneUtil;
+import com.gndc.core.api.admin.sms.AOSmsRealTimeSendRequest;
+import com.gndc.core.api.admin.sms.SmsConditionContent;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
 import com.gndc.core.api.app.platform.Sms24HourCount;
 import com.gndc.core.api.app.platform.SmsInfo;
 import com.gndc.common.api.ResponseMessage;
+import com.gndc.core.model.SmsCondition;
 import com.gndc.core.model.SmsGroupLog;
 import com.gndc.core.model.SmsLog;
+import com.gndc.core.model.User;
 import com.gndc.core.service.sms.SmsGroupLogService;
 import com.gndc.core.service.sms.SmsLogService;
+import com.gndc.core.service.user.UserService;
 import com.gndc.third.sms.chuanglan.ChuangLanSmsService;
 import com.gndc.third.sms.paasoo.PaasooSmsService;
 import com.gndc.third.sms.paasoo.enums.PaasooSendResultType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.weekend.Weekend;
+import tk.mybatis.mapper.weekend.WeekendCriteria;
 
 import java.text.MessageFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -37,7 +46,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implements SmsLogService {
-
+    private static final Logger logger = LoggerFactory.getLogger(SmsLogServiceImpl.class);
     /**
      * 发送短信并发线程数。
      */
@@ -58,8 +67,11 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
     @Autowired
     private SmsGroupLogService smsGroupLogService;
 
+    @Autowired
+    private UserService userService;
+
     @Override
-    public void sendValCodeSms(String code, String phone, SmsTemplateType userForgetPwd, int valCode, int i, String key, Sms10MinuteCount sms10MinuteCount, Sms24HourCount sms24HourCount) throws InterruptedException {
+    public void sendValCodeSms(String code, String phone, SmsTemplateType userForgetPwd, String valCode, int i, String key, Sms10MinuteCount sms10MinuteCount, Sms24HourCount sms24HourCount) throws InterruptedException {
         ExecutorService pool = Executors.newFixedThreadPool(CONCURRENCE);
         pool.execute(new ValCodeSmsThread(code, phone, userForgetPwd, valCode, i, key, sms10MinuteCount, sms24HourCount));
         pool.shutdown();
@@ -77,7 +89,7 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
         // 短信类型
         private SmsTemplateType smsTemplateType;
         // 验证码
-        private int valCode;
+        private String valCode;
         // 用户id
         private int userId;
         // key
@@ -89,7 +101,7 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
 
         // private ISmsService smsService;
 
-        public ValCodeSmsThread(String channel, String phone, SmsTemplateType smsTemplateType, int valCode, int userId,
+        public ValCodeSmsThread(String channel, String phone, SmsTemplateType smsTemplateType, String valCode, int userId,
                                 String key, Sms10MinuteCount sms10MinuteCount, Sms24HourCount sms24HourCount) {
             this.channel = channel;
             this.phone = phone;
@@ -270,16 +282,76 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
         } else if (channel.equals(SmsChannelEnum.CHUANGLAN.getCode())) {
             String failNum = sendResult.get("failNum");
             String successNum = sendResult.get("successNum");
-            if(failNum != null){
+            if (failNum != null) {
                 smsGroupLog.setFailNum(Integer.parseInt(failNum));
             }
-            if(successNum != null){
+            if (successNum != null) {
                 smsGroupLog.setSuccessNum(Integer.parseInt(successNum));
             }
-            smsGroupLog.setUid(sendResult.get("msgId"));
-            smsGroupLog.setResponseMsg(JSONObject.toJSONString(sendResult));
+            smsGroupLog.setUid(sendResult.get("uid"));
+            logger.info(JSONObject.toJSONString(sendResult));
+            smsGroupLog.setPaasooPhoneValStr(sendResult.get("phoneValidateStr"));
         }
 
         smsGroupLogService.insertSelective(smsGroupLog);
+    }
+
+    @Override
+    public String searchPhones(SmsCondition smsCondition, AOSmsRealTimeSendRequest request) {
+        //条件类型json
+        String condition = smsCondition.getCondition();
+        SmsConditionContent smsConditionContent = JSONObject.parseObject(condition, SmsConditionContent.class);
+        //营销事件1登录 2注册
+        Byte marketingType = smsConditionContent.getMarketingType();
+        //营销时间
+        Integer marketingTime = smsConditionContent.getMarketingTime();
+        Weekend<User> weekend = Weekend.of(User.class);
+        weekend.selectProperties("phone");
+        WeekendCriteria<User, Object> criteria = weekend.weekendCriteria();
+
+        //当前时间减去营销时间
+        String beginTime = DateUtil.nowDateAddDays(-marketingTime, DateUtil.FORMAT_2);
+        Date currentTime = new Date();
+        String endTime = DateUtil.timeToString(currentTime, DateUtil.FORMAT_2);
+
+        if (marketingType.equals(SmsEditConstant.MARKETING_TYPE_1)) {
+            criteria.andBetween(User::getLastLoginTime, beginTime, endTime);
+        }
+        if (marketingType.equals(SmsEditConstant.MARKETING_TYPE_2)) {
+            criteria.andBetween(User::getRegTime, beginTime, endTime);
+        }
+
+        List<User> users = userService.selectByExample(weekend);
+        if (users != null && users.size() > 0) {
+            StringBuffer phoneBuffer = new StringBuffer();
+            for (User temp : users) {
+                //创蓝
+                if (request.getChannelId().equals(SmsEditConstant.CHANNEL_ID_1)) {
+                    //筛选出相应的运营商
+                    if (Arrays.asList(request.getOperatorIds()).contains(SmsEditConstant.OPERATOR_ID_1)) {
+                        if (PhoneUtil.isChinaMobilePhoneNum(temp.getPhone()).equals(SmsEditConstant.OPERATOR_ID_1)) {
+                            phoneBuffer.append(temp.getPhone()).append(",");
+                        }
+                    }
+                    if (Arrays.asList(request.getOperatorIds()).contains(SmsEditConstant.OPERATOR_ID_2)) {
+                        if (PhoneUtil.isChinaMobilePhoneNum(temp.getPhone()).equals(SmsEditConstant.OPERATOR_ID_2)) {
+                            phoneBuffer.append(temp.getPhone()).append(",");
+                        }
+                    }
+                    if (Arrays.asList(request.getOperatorIds()).contains(SmsEditConstant.OPERATOR_ID_3)) {
+                        if (PhoneUtil.isChinaMobilePhoneNum(temp.getPhone()).equals(SmsEditConstant.OPERATOR_ID_3)) {
+                            phoneBuffer.append(temp.getPhone()).append(",");
+                        }
+                    }
+                }
+                //大汉三通
+                if (request.getChannelId().equals(SmsEditConstant.CHANNEL_ID_2)) {
+
+                }
+            }
+            return phoneBuffer.substring(0, phoneBuffer.length() - 1);
+        } else {
+            return null;
+        }
     }
 }

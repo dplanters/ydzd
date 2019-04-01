@@ -9,9 +9,9 @@ import lombok.Setter;
 public class AOSmsGroupLogListRequest extends RequestMessage {
 
     /**
-     * 类型 0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
+     * 签名id
      */
-    private Byte type;
+    private Integer signId;
 
     /**
      * 创建时间开始

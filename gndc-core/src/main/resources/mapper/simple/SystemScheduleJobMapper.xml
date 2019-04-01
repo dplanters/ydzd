@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gndc.core.mapper.simple.SystemScheduleJobMapper">
-  <resultMap id="BaseResultMap" type="com.gndc.core.model.SystemScheduleJob">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="job_name" jdbcType="VARCHAR" property="jobName" />
-    <result column="bean_class" jdbcType="VARCHAR" property="beanClass" />
-    <result column="cron_expression" jdbcType="VARCHAR" property="cronExpression" />
-    <result column="method_name" jdbcType="VARCHAR" property="methodName" />
-    <result column="is_concurrent" jdbcType="TINYINT" property="isConcurrent" />
-    <result column="description" jdbcType="VARCHAR" property="description" />
-    <result column="job_status" jdbcType="TINYINT" property="jobStatus" />
-    <result column="job_group" jdbcType="VARCHAR" property="jobGroup" />
-    <result column="extend_id" jdbcType="INTEGER" property="extendId" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="create_admin_id" jdbcType="INTEGER" property="createAdminId" />
-    <result column="update_admin_id" jdbcType="INTEGER" property="updateAdminId" />
-  </resultMap>
-
+  <select id="selectSmsJobDetailList" resultType="com.gndc.core.api.admin.sms.AOSmsScheduleListResponse">
+    select ssj.id jobId,ssj.create_time createTime,sjc.sign_ids signIds,sc.type, st.content,sc.condition,
+    ssj.cron_expression expression,ssj.job_status jobStatus,sjc.channel_id channelId,sjc.send_start_date sendStartDate,sjc.send_end_date sendEndDate
+    FROM dc_system_schedule_job ssj
+    left join dc_sms_job_condition sjc on ssj.extend_id = sjc.id
+    left join dc_sms_condition sc on sc.id = sjc.condition_id
+    left join dc_sms_template st on sjc.template_id = st.id
+    where 1=1
+    <if test="options.type">
+      and sc.type = #{options.type}
+    </if>
+    <if test="options.createTimeStart != null and options.createTimeStart != ''">
+      and ssj.create_time <![CDATA[>=]]> #{options.createTimeStart}
+    </if>
+    <if test="options.createTimeEnd != null and options.createTimeEnd != ''">
+      and ssj.create_time <![CDATA[<=]]> #{options.createTimeEnd}
+    </if>
+    order by ssj.create_time
+  </select>
 </mapper>

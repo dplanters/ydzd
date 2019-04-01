@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.gndc.common.constant.SmsEditConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.job.JobConcurrentEnum;
@@ -49,92 +50,6 @@ public class AOSmsController {
 
     private static final Logger logger = LoggerFactory.getLogger(AOSmsController.class);
 
-    /**
-     * 1条件筛选 2导入
-     */
-    private static final Byte SOURCE_TYPE_1 = 1;
-    /**
-     * 1条件筛选 2导入
-     */
-    private static final Byte SOURCE_TYPE_2 = 2;
-
-    /**
-     * 营销条件0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
-     * 当前支持营销类
-     */
-    private static final Byte CONDITION_TYPE_1 = 1;
-    /**
-     * 营销条件0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
-     * 当前支持营销类
-     */
-    private static final Byte CONDITION_TYPE_2 = 2;
-    /**
-     * 营销条件0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
-     * 当前支持营销类
-     */
-    private static final Byte CONDITION_TYPE_3 = 3;
-    /**
-     * 营销条件0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
-     * 当前支持营销类
-     */
-    private static final Byte CONDITION_TYPE_4 = 4;
-
-    /**
-     * 营销事件1登录 2注册
-     */
-    private static final Byte MARKETING_TYPE_1 = 1;
-
-    /**
-     * 营销事件1登录 2注册
-     */
-    private static final Byte MARKETING_TYPE_2 = 2;
-    /**
-     * 通知事件1当日放款成功 2当日申请成功
-     */
-    private static final Byte NOTICE_TYPE_1 = 1;
-    /**
-     * 通知事件1当日放款成功 2当日申请成功
-     */
-    private static final Byte NOTICE_TYPE_2 = 2;
-    /**
-     * 渠道id 1创蓝2大汉三通
-     */
-    private static final Integer CHANNEL_ID_1 = 1;
-    /**
-     * 渠道id 1创蓝2大汉三通
-     */
-    private static final Integer CHANNEL_ID_2 = 2;
-    /**
-     * 运营商id 1:移动，2：联通，3：电信
-     */
-    private static final Integer OPERATOR_ID_1 = 1;
-    /**
-     * 运营商id 1:移动，2：联通，3：电信
-     */
-    private static final Integer OPERATOR_ID_2 = 2;
-    /**
-     * 运营商id 1:移动，2：联通，3：电信
-     */
-    private static final Integer OPERATOR_ID_3 = 3;
-    /**
-     * 发送模式1：定时发送2：实时发送
-     */
-    private static final Byte SEND_TYPE_1 = 1;
-    /**
-     * 发送模式1：定时发送2：实时发送
-     */
-    private static final Byte SEND_TYPE_2 = 1;
-    /**
-     * 定时发送类型1循环发送 2非循环发送
-     */
-    private static final Byte TIMING_SEND_TYPE_1 = 1;
-    /**
-     * 定时发送类型1循环发送 2非循环发送
-     */
-    private static final Byte TIMING_SEND_TYPE_2 = 2;
-    @Autowired
-    private SmsChannelService smsChannelService;
-
     @Autowired
     private SmsTemplateService smsTemplateService;
 
@@ -148,13 +63,10 @@ public class AOSmsController {
     private SmsConditionService smsConditionService;
 
     @Autowired
-    private SmsJobConditionService smsJobConditionService;
-
-    @Autowired
     private SystemScheduleJobService systemScheduleJobService;
 
     @Autowired
-    private UserService userService;
+    private SmsGroupLogService smsGroupLogService;
 
     /**
      * 短信统计
@@ -181,10 +93,10 @@ public class AOSmsController {
     public ResponseMessage<CommonResponse> signAdd(@Validated @RequestBody AOSmsSignAddRequest request) {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
         SmsSign smsSign = SmsSignMapping.INSTANCE.convert(request);
-        if (request.getChannelId() == CHANNEL_ID_1) {
+        if (request.getChannelId().equals(SmsEditConstant.CHANNEL_ID_1)) {
             smsSign.setChannelName("创蓝");
         }
-        if (request.getChannelId() == CHANNEL_ID_2) {
+        if (request.getChannelId().equals(SmsEditConstant.CHANNEL_ID_2)) {
             smsSign.setChannelName("大汉三通");
         }
         CommonResponse commonResponse = new CommonResponse();
@@ -204,10 +116,10 @@ public class AOSmsController {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
         SmsSign smsSign = SmsSignMapping.INSTANCE.convert(request);
         CommonResponse commonResponse = new CommonResponse();
-        if (request.getChannelId() == CHANNEL_ID_1) {
+        if (request.getChannelId().equals(SmsEditConstant.CHANNEL_ID_1)) {
             smsSign.setChannelName("创蓝");
         }
-        if (request.getChannelId() == CHANNEL_ID_2) {
+        if (request.getChannelId().equals(SmsEditConstant.CHANNEL_ID_2)) {
             smsSign.setChannelName("大汉三通");
         }
         commonResponse.setResult(smsSignService.updateByPrimaryKeySelective(smsSign));
@@ -357,33 +269,33 @@ public class AOSmsController {
                 String condition = temp.getCondition();
                 SmsConditionContent smsConditionContent = JSONObject.parseObject(condition, SmsConditionContent.class);
                 //营销条件0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
-                if (smsConditionContent.getConditionType() == CONDITION_TYPE_1) {
-                    if (smsConditionContent.getMarketingType() == MARKETING_TYPE_1) {
+                if (smsConditionContent.getConditionType().equals(SmsEditConstant.CONDITION_TYPE_1)) {
+                    if (smsConditionContent.getMarketingType().equals(SmsEditConstant.MARKETING_TYPE_1)) {
                         temp.setConditionText("最近" + smsConditionContent.getMarketingTime() + "天登录");
                     }
-                    if (smsConditionContent.getMarketingType() == MARKETING_TYPE_2) {
+                    if (smsConditionContent.getMarketingType().equals(SmsEditConstant.MARKETING_TYPE_2)) {
                         temp.setConditionText("最近" + smsConditionContent.getMarketingTime() + "天注册");
                     }
                 }
-                if (smsConditionContent.getConditionType() == CONDITION_TYPE_2) {
+                if (smsConditionContent.getConditionType().equals(SmsEditConstant.CONDITION_TYPE_2)) {
                     Integer[] collectionTime = smsConditionContent.getCollectionTime();
                     if (collectionTime != null && collectionTime.length > 0) {
                         String collectionTimeText = StrUtil.join("、", collectionTime);
                         temp.setConditionText("逾期天数等于" + collectionTimeText + "天");
                     }
                 }
-                if (smsConditionContent.getConditionType() == CONDITION_TYPE_3) {
+                if (smsConditionContent.getConditionType().equals(SmsEditConstant.CONDITION_TYPE_3)) {
                     Integer[] remindTime = smsConditionContent.getRemindTime();
                     if (remindTime != null && remindTime.length > 0) {
                         String remindTimeText = StrUtil.join("、", remindTime);
                         temp.setConditionText("提醒天数等于" + remindTimeText + "天");
                     }
                 }
-                if (smsConditionContent.getConditionType() == CONDITION_TYPE_4) {
-                    if (smsConditionContent.getNoticeType() == NOTICE_TYPE_1) {
+                if (smsConditionContent.getConditionType().equals(SmsEditConstant.CONDITION_TYPE_4)) {
+                    if (smsConditionContent.getNoticeType().equals(SmsEditConstant.NOTICE_TYPE_1)) {
                         temp.setConditionText("当日注册成功");
                     }
-                    if (smsConditionContent.getNoticeType() == NOTICE_TYPE_2) {
+                    if (smsConditionContent.getNoticeType().equals(SmsEditConstant.NOTICE_TYPE_2)) {
                         temp.setConditionText("当日申请成功");
                     }
                 }
@@ -464,39 +376,39 @@ public class AOSmsController {
         String channel = "";
         Integer[] signArr = request.getSmsSignIds();
         //创蓝
-        if (request.getChannelId() == CHANNEL_ID_1) {
+        if (request.getChannelId().equals(SmsEditConstant.CHANNEL_ID_1)) {
             channel = SmsChannelEnum.CHUANGLAN.getCode();
         }
         //大汉三通
-        if (request.getChannelId() == CHANNEL_ID_2) {
+        if (request.getChannelId().equals(SmsEditConstant.CHANNEL_ID_2)) {
 //            channel = SmsChannelEnum.CHUANGLAN.getCode();
         }
         //签名数组
         if (signArr.length > 0) {
-            for (int i = 0; i <= signArr.length; i++) {
+            for (int i = 0; i < signArr.length; i++) {
                 Integer signId = signArr[i];
                 SmsSign smsSign = smsSignService.selectByPrimaryKey(signId);
-                if (smsSign == null || smsSign.getStatus() == StatusEnum.DELETE.getCode()) {
+                if (smsSign == null || smsSign.getStatus().equals(StatusEnum.DELETE.getCode())) {
                     throw new HjException(ResultCode.SIGN_NOT_EXIST);
                 }
                 String message = "";
                 Integer templateId = request.getTemplateId();
                 SmsTemplate smsTemplate = smsTemplateService.selectByPrimaryKey(templateId);
-                if (smsTemplate == null || smsTemplate.getStatus() == StatusEnum.DELETE.getCode()) {
+                if (smsTemplate == null || smsTemplate.getStatus().equals(StatusEnum.DELETE.getCode())) {
                     throw new HjException(ResultCode.TEMPLATE_NOT_EXIST);
                 }
                 message = smsSign.getName() + smsTemplate.getContent();
-                if (request.getSourceType() == SOURCE_TYPE_1) {
+                if (request.getSourceType().equals(SmsEditConstant.SOURCE_TYPE_1)) {
                     SmsCondition smsCondition = smsConditionService.selectByPrimaryKey(request.getConditionId());
                     //当前支持营销类
-                    if (smsCondition != null && smsCondition.getType() == CONDITION_TYPE_1) {
-                        phoneToSend = searchPhones(smsCondition, request);
+                    if (smsCondition != null && smsCondition.getType().equals(SmsEditConstant.CONDITION_TYPE_1)) {
+                        phoneToSend = smsLogService.searchPhones(smsCondition, request);
                     } else {
                         //暂时只支持营销类
                         throw new HjException(ResultCode.CONDITION_NOT_EXIST);
                     }
 
-                } else if (request.getSourceType() == SOURCE_TYPE_2) {
+                } else if (request.getSourceType().equals(SmsEditConstant.SOURCE_TYPE_2)) {
                     phoneToSend = StrUtil.join(",", request.getPhones());
                 }
                 if (phoneToSend == null) {
@@ -507,7 +419,7 @@ public class AOSmsController {
                 smsGroupLog.setMessage(message);
                 smsGroupLog.setChannelId(request.getChannelId());
                 smsGroupLog.setConditionId(request.getConditionId());
-                smsGroupLog.setSendType(SEND_TYPE_1);
+                smsGroupLog.setSendType(SmsEditConstant.SEND_TYPE_1);
                 smsGroupLog.setSignId(signId);
                 smsGroupLog.setPhoneCount(phoneToSend.split(",").length);
                 smsLogService.groupSendSmsJson(channel, phoneToSend, message, smsGroupLog);
@@ -527,133 +439,9 @@ public class AOSmsController {
     @PostMapping("/timingSend")
     public ResponseMessage<CommonResponse> timingSend(@Validated @RequestBody AOSmsTimingSendRequest request) throws Exception {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
-
-        //需要发送短信的号码用","隔开
-        String phoneToSend = null;
-        SmsJobCondition smsJobCondition = SmsJobConditionMapping.INSTANCE.convert(request);
-        if (request.getSourceType() == SOURCE_TYPE_1) {
-            SmsCondition smsCondition = smsConditionService.selectByPrimaryKey(request.getConditionId());
-            //当前支持营销类
-            if (smsCondition != null && smsCondition.getType() == CONDITION_TYPE_1) {
-                phoneToSend = searchPhones(smsCondition, request);
-                smsJobCondition.setPhones(phoneToSend);
-            } else {
-                //暂时只支持营销类
-                throw new HjException(ResultCode.CONDITION_NOT_EXIST);
-            }
-
-        }
-        if (TIMING_SEND_TYPE_1 == request.getTimingSendType()) {
-            if (StrUtil.isBlank(request.getSendStartDate()) || StrUtil.isBlank(request.getSendEndDate())) {
-                throw new HjException(ResultCode.SMS_ILLEGAL_DATE);
-            }
-            smsJobCondition.setSendStartDate(request.getSendStartDate());
-            smsJobCondition.setSendEndDate(request.getSendEndDate());
-        }
-        smsJobConditionService.insertSelective(smsJobCondition);
-        SystemScheduleJob systemScheduleJob = null;
-        if (TIMING_SEND_TYPE_1 == request.getTimingSendType()) {
-            //发送时间数组
-            String[] sendTimeArr = request.getSendTime();
-            if (sendTimeArr.length < 1) {
-                throw new HjException(ResultCode.SMS_ILLEGAL_DATE);
-            }
-        }
-        if (TIMING_SEND_TYPE_2 == request.getTimingSendType()) {
-            //发送日期
-            Calendar calendar = Calendar.getInstance();
-            Date sendDate = DateUtil.getDateTime(request.getSendDate(), DateUtil.FORMAT_1);
-            calendar.setTime(sendDate);
-            Integer year = calendar.get(Calendar.YEAR);
-            Integer month = calendar.get(Calendar.MONTH);
-            Integer day = calendar.get(Calendar.DAY_OF_MONTH);
-            //发送时间数组
-            String[] sendTimeArr = request.getSendTime();
-            if (sendTimeArr.length < 1) {
-                throw new HjException(ResultCode.SMS_ILLEGAL_DATE);
-            }
-            for (int i = 0; i < sendTimeArr.length; i++) {
-                Date dateTime = DateUtil.getDateTime(sendTimeArr[i], DateUtil.FORMAT_13);
-                calendar.setTime(dateTime);
-                Integer hour = calendar.get(Calendar.HOUR_OF_DAY);
-                Integer minute = calendar.get(Calendar.MINUTE);
-                Integer second = calendar.get(Calendar.SECOND);
-                String cronExpression = second + " " + minute + " " + hour + " " + day + " " + month + " * " + year;
-                systemScheduleJob = new SystemScheduleJob();
-                systemScheduleJob.setJobName("短信定时任务");
-                systemScheduleJob.setBeanClass("com.gndc.core.service.sms.impl.SmsLogServiceImpl");
-                systemScheduleJob.setCronExpression(cronExpression);
-                systemScheduleJob.setMethodName("groupSendSmsJson");
-                systemScheduleJob.setIsConcurrent(JobConcurrentEnum.CONCURRENT_NOT.getCode());
-                systemScheduleJob.setDescription("短信定时任务");
-                systemScheduleJob.setJobStatus(JobRunStatusEnum.STATUS_RUNNING.getCode());
-                systemScheduleJob.setJobGroup(JobGroupEnum.SMS_TIMING_SEND.getCode());
-                systemScheduleJob.setExtendId(smsJobCondition.getId());
-                systemScheduleJob.setCreateAdminId(request.getAoAdmin().getId());
-                systemScheduleJob.setUpdateAdminId(request.getAoAdmin().getId());
-                systemScheduleJobService.saveJob(systemScheduleJob);
-            }
-        }
+        CommonResponse commonResponse = new CommonResponse();
+        commonResponse.setResult(systemScheduleJobService.timingSendJob(request));
         return response;
-    }
-
-    private String searchPhones(SmsCondition smsCondition, AOSmsRealTimeSendRequest request) {
-        String phoneToSend = "";
-        //条件类型json
-        String condition = smsCondition.getCondition();
-        SmsConditionContent smsConditionContent = JSONObject.parseObject(condition, SmsConditionContent.class);
-        //营销事件1登录 2注册
-        Byte marketingType = smsConditionContent.getMarketingType();
-        //营销时间
-        Integer marketingTime = smsConditionContent.getMarketingTime();
-        Weekend<User> weekend = Weekend.of(User.class);
-        weekend.selectProperties("phone");
-        WeekendCriteria<User, Object> criteria = weekend.weekendCriteria();
-
-        //当前时间减去营销时间
-        String beginTime = DateUtil.nowDateAddDays(-marketingTime, DateUtil.FORMAT_2);
-        Date currentTime = new Date();
-        String endTime = DateUtil.timeToString(currentTime, DateUtil.FORMAT_2);
-
-        if (marketingType == MARKETING_TYPE_1) {
-            criteria.andBetween(User::getLastLoginTime, beginTime, endTime);
-        }
-        if (marketingType == MARKETING_TYPE_2) {
-            criteria.andBetween(User::getRegTime, beginTime, endTime);
-        }
-
-        List<User> users = userService.selectByExample(weekend);
-        if (users != null && users.size() > 0) {
-            StringBuffer phoneBuffer = new StringBuffer();
-            for (User temp : users) {
-                //创蓝
-                if (request.getChannelId() == CHANNEL_ID_1) {
-                    //筛选出相应的运营商
-                    if (Arrays.asList(request.getOperatorIds()).contains(OPERATOR_ID_1)) {
-                        if (PhoneUtil.isChinaMobilePhoneNum(temp.getPhone()) == OPERATOR_ID_1) {
-                            phoneBuffer.append(temp.getPhone()).append(",");
-                        }
-                    }
-                    if (Arrays.asList(request.getOperatorIds()).contains(OPERATOR_ID_2)) {
-                        if (PhoneUtil.isChinaMobilePhoneNum(temp.getPhone()) == OPERATOR_ID_2) {
-                            phoneBuffer.append(temp.getPhone()).append(",");
-                        }
-                    }
-                    if (Arrays.asList(request.getOperatorIds()).contains(OPERATOR_ID_3)) {
-                        if (PhoneUtil.isChinaMobilePhoneNum(temp.getPhone()) == OPERATOR_ID_3) {
-                            phoneBuffer.append(temp.getPhone()).append(",");
-                        }
-                    }
-                }
-                //大汉三通
-                if (request.getChannelId() == CHANNEL_ID_2) {
-
-                }
-            }
-            return phoneBuffer.substring(0, phoneBuffer.length() - 1);
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -667,12 +455,90 @@ public class AOSmsController {
         ResponseMessage<List<AOSmsScheduleListResponse>> response = new ResponseMessage<>();
         PageInfo page = request.getHeader().getPage();
         PageHelper.startPage(page.getPageNum(), page.getPageSize());
-//        List<AOSmsScheduleListResponse> smsConditions = smsConditionService.selectConditionWithAdminList(request);
-        List<AOSmsScheduleListResponse> smsConditions = null;
-        PageInfo<AOSmsScheduleListResponse> pageInfo = new PageInfo<>(smsConditions);
+        List<AOSmsScheduleListResponse> smsJobDetailList = systemScheduleJobService.selectSmsJobDetailList(request);
+        if (smsJobDetailList != null && smsJobDetailList.size() > 0) {
+            Weekend<SmsSign> weekend = Weekend.of(SmsSign.class);
+            weekend.selectProperties("id", "name");
+            List<SmsSign> smsSigns = smsSignService.selectByExample(weekend);
+
+            for (AOSmsScheduleListResponse temp : smsJobDetailList) {
+                String signIds = temp.getSignIds();
+                if (StrUtil.isNotBlank(signIds)) {
+                    StringBuffer signName = new StringBuffer();
+                    for (SmsSign smsSignTemp : smsSigns) {
+                        if (signIds.contains(",")) {
+                            if (signIds.contains(smsSignTemp.getId().toString())) {
+                                signName.append(smsSignTemp.getName()).append(",");
+                            }
+                        } else {
+                            if (signIds.equals(smsSignTemp.getId().toString())) {
+                                temp.setSignNames(smsSignTemp.getName());
+                            }
+                        }
+                    }
+                    if (signIds.contains(",")) {
+                        String signNameStr = signName.substring(0, signName.length() - 1);
+                        temp.setSignNames(signNameStr);
+                    }
+                }
+                String condition = temp.getCondition();
+                if (StrUtil.isNotBlank(condition)) {
+                    temp.setTimingSendType(SmsEditConstant.TIMING_SEND_TYPE_1);
+                    SmsConditionContent smsConditionContent = JSONObject.parseObject(condition, SmsConditionContent.class);
+                    //营销条件0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
+                    if (smsConditionContent.getConditionType().equals(SmsEditConstant.CONDITION_TYPE_1)) {
+                        if (smsConditionContent.getMarketingType().equals(SmsEditConstant.MARKETING_TYPE_1)) {
+                            temp.setConditionText("最近" + smsConditionContent.getMarketingTime() + "天登录");
+                        }
+                        if (smsConditionContent.getMarketingType().equals(SmsEditConstant.MARKETING_TYPE_2)) {
+                            temp.setConditionText("最近" + smsConditionContent.getMarketingTime() + "天注册");
+                        }
+                    }
+                    if (smsConditionContent.getConditionType().equals(SmsEditConstant.CONDITION_TYPE_2)) {
+                        Integer[] collectionTime = smsConditionContent.getCollectionTime();
+                        if (collectionTime != null && collectionTime.length > 0) {
+                            String collectionTimeText = StrUtil.join("、", collectionTime);
+                            temp.setConditionText("逾期天数等于" + collectionTimeText + "天");
+                        }
+                    }
+                    if (smsConditionContent.getConditionType().equals(SmsEditConstant.CONDITION_TYPE_3)) {
+                        Integer[] remindTime = smsConditionContent.getRemindTime();
+                        if (remindTime != null && remindTime.length > 0) {
+                            String remindTimeText = StrUtil.join("、", remindTime);
+                            temp.setConditionText("提醒天数等于" + remindTimeText + "天");
+                        }
+                    }
+                    if (smsConditionContent.getConditionType().equals(SmsEditConstant.CONDITION_TYPE_4)) {
+                        if (smsConditionContent.getNoticeType().equals(SmsEditConstant.NOTICE_TYPE_1)) {
+                            temp.setConditionText("当日注册成功");
+                        }
+                        if (smsConditionContent.getNoticeType().equals(SmsEditConstant.NOTICE_TYPE_2)) {
+                            temp.setConditionText("当日申请成功");
+                        }
+                    }
+                } else {
+                    temp.setTimingSendType(SmsEditConstant.TIMING_SEND_TYPE_2);
+                }
+            }
+        }
+        PageInfo<AOSmsScheduleListResponse> pageInfo = new PageInfo<>(smsJobDetailList);
         pageInfo.setList(null);
         response.setPage(pageInfo);
-        response.setData(smsConditions);
+        response.setData(smsJobDetailList);
+        return response;
+    }
+
+    /**
+     * 编辑短息-任务修改
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/updateTimingSend")
+    public ResponseMessage<CommonResponse> updateTimingSend(@Validated @RequestBody AOSmsUpdateTimingSendRequest request) throws Exception {
+        ResponseMessage<CommonResponse> response = new ResponseMessage<>();
+        CommonResponse commonResponse = new CommonResponse();
+        commonResponse.setResult(systemScheduleJobService.updateTimingSendJob(request));
         return response;
     }
 
@@ -683,17 +549,15 @@ public class AOSmsController {
      * @return
      */
     @PostMapping("/groupLog/list")
-
     public ResponseMessage<List<AOSmsGroupLogListResponse>> scheduleList(@Validated @RequestBody AOSmsGroupLogListRequest request) {
         ResponseMessage<List<AOSmsGroupLogListResponse>> response = new ResponseMessage<>();
         PageInfo page = request.getHeader().getPage();
         PageHelper.startPage(page.getPageNum(), page.getPageSize());
-//        List<AOSmsScheduleListResponse> smsConditions = smsConditionService.selectConditionWithAdminList(request);
-        List<AOSmsGroupLogListResponse> smsConditions = null;
-        PageInfo<AOSmsGroupLogListResponse> pageInfo = new PageInfo<>(smsConditions);
+        List<AOSmsGroupLogListResponse> smsGroupLogLists = smsGroupLogService.selectSmsGroupLogDetailList(request);
+        PageInfo<AOSmsGroupLogListResponse> pageInfo = new PageInfo<>(smsGroupLogLists);
         pageInfo.setList(null);
         response.setPage(pageInfo);
-        response.setData(smsConditions);
+        response.setData(smsGroupLogLists);
         return response;
     }
 

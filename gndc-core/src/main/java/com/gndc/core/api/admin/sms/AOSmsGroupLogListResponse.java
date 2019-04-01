@@ -20,36 +20,37 @@ public class AOSmsGroupLogListResponse implements Serializable {
     private Byte sendType;
 
     /**
-     * 发送通道
+     * 渠道id 1创蓝2大汉三通
      */
     private Integer channelId;
 
     /**
-     * 短信签名
+     * 签名
      */
     private String signName;
+
     /**
-     * 发送内容
+     * 消息内容
      */
     private String message;
 
     /**
-     * 号码个数
+     * 发送数量
      */
     private Integer phoneCount;
 
     /**
-     * 发送状态
-     */
-    private String sendStatus;
-
-    /**
-     * 发送时间
+     * 创建时间开始
      */
     private String createTime;
 
     /**
-     * 成功数
+     * 失败数量
      */
-    private String successNum;
+    private Integer failNum;
+
+    /**
+     * 成功数量
+     */
+    private Integer successNum;
 }

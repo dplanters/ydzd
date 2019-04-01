@@ -3,21 +3,16 @@ package com.gndc.core.api.admin.sms;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
 @Setter
 public class AOSmsScheduleListResponse implements Serializable {
-
     /**
-     * id
+     * 任务id
      */
-    private Integer id;
-
-    /**
-     * 类型 0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
-     */
-    private Byte type;
+    private Integer jobId;
 
     /**
      * 创建时间开始
@@ -25,11 +20,54 @@ public class AOSmsScheduleListResponse implements Serializable {
     private String createTime;
 
     /**
-     * 创建人
+     * 签名id
      */
-    private String name;
+    private String signIds;
+    /**
+     * 签名name
+     */
+    private String signNames;
+
+    /**
+     * 短信类型 0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
+     */
+    private Byte type;
+
+    /**
+     * 模板内容
+     */
+    private String content;
     /**
      * 条件
      */
     private String condition;
+    /**
+     * 条件(内容)
+     */
+    private String conditionText;
+    /**
+     * cron 表达式
+     */
+    private String expression;
+    /**
+     * 任务状态1：开始0：停止
+     */
+    private String jobStatus;
+    /**
+     * 通道id
+     */
+    private Integer channelId;
+    /**
+     * 任务开始时间
+     */
+    private String sendStartDate;
+    /**
+     * 任务结束时间
+     */
+    private String sendEndDate;
+    /**
+     * 发送类型1循环发送 2非循环发送
+     */
+    @NotNull
+    private Byte timingSendType;
 }

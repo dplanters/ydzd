@@ -52,8 +52,8 @@ public class SmsGroupLog implements Serializable {
     /**
      * 响应消息
      */
-    @Column(name = "response_msg")
-    private String responseMsg;
+    @Column(name = "paasoo_phone_val_str")
+    private String paasooPhoneValStr;
 
     /**
      * 号码个数
