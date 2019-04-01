@@ -85,7 +85,7 @@ public class PSmsController {
         }
 
         // 生成4位短信验证码
-        int valCode = RandomUtil.randomInt(4);
+        String valCode = RandomUtil.randomNumbers(4);
 
         logger.info("-------" + valCode);
         // paasoo短信发送
