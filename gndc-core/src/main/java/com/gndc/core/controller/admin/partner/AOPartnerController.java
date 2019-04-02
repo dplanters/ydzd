@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tk.mybatis.mapper.weekend.Weekend;
 
 import java.util.List;
 
@@ -92,6 +93,9 @@ public class AOPartnerController {
     public ResponseMessage<List<Partner>> partnerList(@Validated @RequestBody AOPartnerListRequest request) {
         ResponseMessage<List<Partner>> response = new ResponseMessage<>();
         PageHelper.startPage(request.getPageNum(), request.getPageSize());
+        Weekend<Partner> weekend = Weekend.of(Partner.class);
+        weekend.weekendCriteria()
+                .andEqualTo(Partner::getStatus, StatusEnum.NORMAL.getCode());
         List<Partner> partners = partnerService.selectAll();
         PageInfo<Partner> pageInfo = new PageInfo<>(partners);
         response.setPage(pageInfo);

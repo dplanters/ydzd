@@ -1,11 +1,12 @@
 package com.gndc.core.controller.admin.operation;
 
 import cn.hutool.core.collection.CollUtil;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.gndc.common.enums.common.StatusEnum;
-import com.gndc.common.enums.common.OnlineStatusEnum;
-import com.gndc.core.api.admin.operation.*;
 import com.gndc.common.api.ResponseMessage;
+import com.gndc.common.enums.common.OnlineStatusEnum;
+import com.gndc.common.enums.common.StatusEnum;
+import com.gndc.core.api.admin.operation.*;
 import com.gndc.core.mappers.BannerMapping;
 import com.gndc.core.model.Banner;
 import com.gndc.core.service.adverts.BannerService;
@@ -87,6 +88,7 @@ public class AOBannerController {
     @PostMapping("/bannerList")
     public ResponseMessage<List<Banner>> bannerList(@Validated @RequestBody AOBannerListRequest request) {
         ResponseMessage<List<Banner>> response = new ResponseMessage<>();
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         List<Banner> banners = bannerService.bannerList(request);
         PageInfo<Banner> pageInfo = new PageInfo<>(banners);
         response.setData(banners);
@@ -121,7 +123,7 @@ public class AOBannerController {
         Banner banner = new Banner();
         Integer id = request.getId();
         banner.setId(id);
-        banner.setStatus(OnlineStatusEnum.OFFLINE.getCode());
+        banner.setBannerStatus(OnlineStatusEnum.OFFLINE.getCode());
         bannerService.updateByPrimaryKeySelective(banner);
         request.setId(id);
         return response;
@@ -138,7 +140,7 @@ public class AOBannerController {
         Banner banner = new Banner();
         Integer id = request.getId();
         banner.setId(id);
-        banner.setStatus(OnlineStatusEnum.ONLINE.getCode());
+        banner.setBannerStatus(OnlineStatusEnum.ONLINE.getCode());
         bannerService.updateByPrimaryKeySelective(banner);
         request.setId(id);
         return response;

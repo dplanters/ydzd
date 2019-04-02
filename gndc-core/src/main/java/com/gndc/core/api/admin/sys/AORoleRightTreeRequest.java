@@ -14,8 +14,6 @@ public class AORoleRightTreeRequest extends RequestMessage {
     /**
      * 角色id
      */
-    @NotNull
-    @Min(1)
     private Integer id;
 
     /**

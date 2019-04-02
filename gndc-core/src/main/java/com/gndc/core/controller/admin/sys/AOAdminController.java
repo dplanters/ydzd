@@ -120,15 +120,8 @@ public class AOAdminController {
             String msg = StrUtil.format("角色id {} 不存在", request.getRoleId());
             throw new HjException(ResultCode.ROLE_NOT_EXIST, msg);
         }
-        String passwordDec = PwdUtil.decrypt(request.getPassword());
-        String operateSign = RandomUtil.randomString(6);
-        String passwordSign = RandomUtil.randomString(6);
-        String md5Password = PwdUtil.passwordGenerate(passwordDec, passwordSign);
 
         Admin admin = AdminMapping.INSTANCE.convert(request);
-        admin.setPasswordSign(passwordSign);
-        admin.setOperateSign(operateSign);
-        admin.setPassword(md5Password);
         admin.setUpdateAdminId(request.getAoAdmin().getId());
         if (PlatformEnum.PARTNER.getCode().equals(request.getPlatform())) {
             Partner partner = new Partner();

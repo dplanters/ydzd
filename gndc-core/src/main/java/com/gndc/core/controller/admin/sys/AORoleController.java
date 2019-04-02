@@ -134,13 +134,15 @@ public class AORoleController {
         ResponseMessage<AORightTreeResponse> response = new ResponseMessage<>();
         AORightTreeResponse aoRightTreeResponse = new AORightTreeResponse();
 
-        List<Integer> rightIds = roleRightService.getRightIds(request.getId());
-
         PlatformEnum fetch = PlatformEnum.fetch(request.getPlatform());
 
         //自己拥有的权限树
-        List<Right> ownRights = rightService.rightsTree((byte)1, fetch.getCode(), 0,
-                rightIds).get(0).getChildren();
+        List<Right> ownRights = null;
+        if (ObjectUtil.isNotNull(request.getId())) {
+            List<Integer> rightIds = roleRightService.getRightIds(request.getId());
+            ownRights = rightService.rightsTree((byte) 1, fetch.getCode(), 0,
+                    rightIds).get(0).getChildren();
+        }
 
         //整个权限树
         List<Right> rights = rightService.rightsTree((byte)1, fetch.getCode(), 0,

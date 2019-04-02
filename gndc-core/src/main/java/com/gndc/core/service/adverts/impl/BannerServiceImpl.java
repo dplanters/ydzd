@@ -1,8 +1,6 @@
 package com.gndc.core.service.adverts.impl;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.admin.operation.AOBannerListRequest;
@@ -29,9 +27,6 @@ public class BannerServiceImpl extends BaseServiceImpl<Banner, Integer> implemen
 
     @Override
     public List<Banner> bannerList(AOBannerListRequest request) {
-        PageInfo page = request.getHeader().getPage();
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
-
         Weekend<Banner> weekend = Weekend.of(Banner.class);
         weekend.orderBy("position").asc();
         WeekendCriteria<Banner, Object> weekendCriteria = weekend.weekendCriteria();

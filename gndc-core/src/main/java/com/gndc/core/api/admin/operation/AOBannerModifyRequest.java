@@ -18,6 +18,13 @@ public class AOBannerModifyRequest extends RequestMessage {
     private Integer id;
 
     /**
+     * 标题
+     */
+    @NotNull
+    @NotBlank
+    private String title;
+
+    /**
      * 链接地址
      */
     @NotNull

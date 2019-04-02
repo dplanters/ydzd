@@ -15,10 +15,6 @@ public class AOAdminModifyRequest extends RequestMessage {
     @Min(1)
     private Integer id;
     /**
-     * 工号
-     */
-    private Integer operId;
-    /**
      * 成员姓名，真实姓名
      */
     @NotNull
@@ -47,10 +43,6 @@ public class AOAdminModifyRequest extends RequestMessage {
     @NotNull
     @Min(1)
     private Byte platform;
-
-    @NotNull
-    @NotBlank
-    private String password;
 
     private Integer partnerId;
 
