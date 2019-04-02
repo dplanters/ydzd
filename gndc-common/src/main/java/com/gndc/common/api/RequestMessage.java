@@ -8,6 +8,8 @@
  ***************************************************************************/
 package com.gndc.common.api;
 
+import cn.hutool.core.util.ObjectUtil;
+import com.github.pagehelper.PageInfo;
 import com.gndc.common.dto.AOAdminLoginInfoDTO;
 import com.gndc.common.dto.APAdminLoginInfoDTO;
 import com.gndc.common.dto.PUserLoginInfoDTO;
@@ -33,10 +35,28 @@ public class RequestMessage implements Serializable {
     protected APAdminLoginInfoDTO apAdmin;
 
     public Integer getPageNum() {
-        return header.getPage().getPageNum();
+        Integer pageNum = 1;
+        PageInfo page = header.getPage();
+        if (ObjectUtil.isNotNull(page)) {
+            pageNum = page.getPageNum();
+            if (ObjectUtil.isNull(pageNum) || pageNum < 1) {
+                pageNum = 1;
+                page.setPageNum(pageNum);
+            }
+        }
+        return pageNum;
     }
 
     public Integer getPageSize() {
-        return header.getPage().getPageSize();
+        Integer pageSize = 10;
+        PageInfo page = header.getPage();
+        if (ObjectUtil.isNotNull(page)) {
+            pageSize = page.getPageSize();
+            if (ObjectUtil.isNull(pageSize) || pageSize < 1) {
+                pageSize = 10;
+                page.setPageSize(pageSize);
+            }
+        }
+        return pageSize;
     }
 }
