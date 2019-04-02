@@ -48,6 +48,11 @@ public enum ResultCode {
     RIGHT_NOT_INITIALISE(1000104, "权限没有配置", "权限没有配置", "权限没有配置", "权限没有配置"),
 
     /**
+     * 表示解密失败
+     */
+    DECRYPT_ERROR(1000105, "解密失败", "解密失败", "解密失败", "解密失败"),
+
+    /**
      * 0002为登录相关业务
      */
     NO_SESSION(1000201, "缺少sessionId", "缺少sessionId", "缺少sessionId", "缺少sessionId"),

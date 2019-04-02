@@ -6,12 +6,15 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
+import com.gndc.common.enums.ResultCode;
+import com.gndc.common.exception.HjException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import javax.annotation.PostConstruct;
-
+@Slf4j
 @Configuration
 @PropertySource(value = "classpath:/system.properties")
 public class PwdUtil {
@@ -44,7 +47,14 @@ public class PwdUtil {
      * @return 原数据
      */
     public static String decrypt(String data) {
-        return StrUtil.str(rsa.decrypt(Base64.decode(data), KeyType.PrivateKey), "UTF-8");
+        String decrypt = null;
+        try {
+            decrypt = StrUtil.str(rsa.decrypt(Base64.decode(data), KeyType.PrivateKey), "UTF-8");
+        } catch (Exception e) {
+            log.warn("解密失败");
+            throw new HjException(ResultCode.DECRYPT_ERROR);
+        }
+        return decrypt;
     }
 
     /**
