@@ -18,4 +18,28 @@
         </if>
         order by dsgl.create_time
     </select>
+    <select id="groupLogStatisticsByDay" resultType="com.gndc.core.api.admin.sms.AOSmsStatisticsResponse">
+        select DATE_FORMAT(create_time,'%Y-%m-%d') time,sum(phone_count) countSend,sum(success_num) countSuccess,sum(fail_num) countFail
+        from dc_sms_group_log
+        where 1 = 1
+        <if test="options.startDate != null and options.startDate != ''">
+            and create_time <![CDATA[>=]]> #{options.createTimeStart}
+        </if>
+        <if test="options.endDate != null and options.endDate != ''">
+            and create_time <![CDATA[<=]]> #{options.createTimeEnd}
+        </if>
+        group by DATE_FORMAT(create_time,'%Y-%m-%d')
+    </select>
+    <select id="groupLogStatisticsByMonth" resultType="com.gndc.core.api.admin.sms.AOSmsStatisticsResponse">
+        select DATE_FORMAT(create_time,'%Y-%m') time,sum(phone_count) countSend,sum(success_num) countSuccess,sum(fail_num) countFail
+        from dc_sms_group_log
+        where 1 = 1
+        <if test="options.startDate != null and options.startDate != ''">
+            and create_time <![CDATA[>=]]> #{options.createTimeStart}
+        </if>
+        <if test="options.endDate != null and options.endDate != ''">
+            and create_time <![CDATA[<=]]> #{options.createTimeEnd}
+        </if>
+        group by DATE_FORMAT(create_time,'%Y-%m')
+    </select>
 </mapper>

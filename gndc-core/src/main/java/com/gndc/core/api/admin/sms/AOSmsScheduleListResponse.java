@@ -68,6 +68,22 @@ public class AOSmsScheduleListResponse implements Serializable {
     /**
      * 发送类型1循环发送 2非循环发送
      */
-    @NotNull
     private Byte timingSendType;
+    /**
+     * 用户来源1条件筛选 2导入
+     */
+    private Byte sourceType;
+
+    /**
+     * 循环发送：周
+     */
+    private String[] weeks;
+    /**
+     * 发送时间
+     */
+    private String sendTime;
+    /**
+     * 非循环发送：发送日期
+     */
+    private String sendDate;
 }

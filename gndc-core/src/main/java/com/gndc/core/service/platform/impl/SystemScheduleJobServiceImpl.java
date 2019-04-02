@@ -9,10 +9,7 @@ import com.gndc.common.enums.job.JobRunStatusEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.common.utils.DateUtil;
-import com.gndc.core.api.admin.sms.AOSmsScheduleListRequest;
-import com.gndc.core.api.admin.sms.AOSmsScheduleListResponse;
-import com.gndc.core.api.admin.sms.AOSmsTimingSendRequest;
-import com.gndc.core.api.admin.sms.AOSmsUpdateTimingSendRequest;
+import com.gndc.core.api.admin.sms.*;
 import com.gndc.core.mapper.simple.SystemScheduleJobMapper;
 import com.gndc.core.mappers.SmsJobConditionMapping;
 import com.gndc.core.model.SmsCondition;
@@ -26,9 +23,11 @@ import com.gndc.core.service.sms.SmsLogService;
 import org.quartz.CronExpression;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.text.ParseException;
 import java.util.Calendar;
@@ -73,6 +72,41 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
             }
         }
         return 1;
+    }
+
+    @Override
+    @PostConstruct
+    public void initScheduleJob() {
+        List<SystemScheduleJob> jobList = this.selectAll();
+        if (jobList != null && jobList.size() > 0) {
+            for (SystemScheduleJob systemScheduleJob : jobList) {
+                Integer extendId = systemScheduleJob.getExtendId();
+                if (extendId != 0 && extendId != null) {
+                    SmsJobCondition smsJobCondition = smsJobConditionService.selectByPrimaryKey(extendId);
+                    String sendStartDate = smsJobCondition.getSendStartDate();
+                    String sendEndDate = smsJobCondition.getSendEndDate();
+                    if (StrUtil.isNotBlank(sendStartDate) && StrUtil.isNotBlank(sendEndDate)) {
+                        Date startDate = DateUtil.stringToTime(sendStartDate, DateUtil.DATE_FORMAT_23);
+                        Date endDate = DateUtil.stringToTime(sendEndDate, DateUtil.DATE_FORMAT_23);
+                        Date currDate = new Date();
+                        if (currDate.before(startDate) || endDate.before(currDate)) {
+
+                            System.err.println("==========================================================");
+                            System.out.println(sendStartDate);
+                            System.out.println(sendEndDate);
+                            continue;
+                        }
+                    }
+                }
+                try {
+                    quartzManager.addJob(systemScheduleJob);
+                } catch (SchedulerException e) {
+                    throw new HjException(ResultCode.SYSTEM_BUSY);
+                }
+            }
+
+
+        }
     }
 
     @Override
@@ -158,7 +192,7 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
     }
 
     @Override
-    public Integer updateTimingSendJob(AOSmsUpdateTimingSendRequest request) throws ParseException {
+    public Integer updateTimingSendJob(AOSmsUpdateTimingSendRequest request) throws ParseException, SchedulerException {
         String cronExpression = null;
         SystemScheduleJob systemScheduleJob = this.selectByPrimaryKey(request.getJobId());
         SystemScheduleJob systemScheduleJob4Update = new SystemScheduleJob();
@@ -194,8 +228,18 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
             smsJobCondition.setSendStartDate(request.getSendStartDate());
             smsJobCondition.setSendEndDate(request.getSendEndDate());
         }
+        quartzManager.updateJobCron(systemScheduleJob);
         systemScheduleJob4Update.setCronExpression(cronExpression);
         smsJobConditionService.updateByPrimaryKeySelective(smsJobCondition);
         return systemScheduleJobService.updateByPrimaryKeySelective(systemScheduleJob4Update);
+    }
+
+    @Override
+    public Integer stopSchedule(AOSmsStopScheduleRequest request) throws SchedulerException {
+        SystemScheduleJob systemScheduleJob = new SystemScheduleJob();
+        systemScheduleJob.setId(request.getJobId());
+        quartzManager.deleteJob(systemScheduleJob);
+        systemScheduleJob.setJobStatus(JobRunStatusEnum.STATUS_RUNNING.getCode());
+        return this.updateByPrimaryKeySelective(systemScheduleJob);
     }
 }

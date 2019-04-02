@@ -17,7 +17,7 @@ public class AOSmsStatisticsResponse implements Serializable {
     /**
      * 日期
      */
-    private Date startDate;
+    private String time;
 
     /**
      * 发送总量

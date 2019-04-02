@@ -37,8 +37,10 @@ public class QuartzManager {
         if (job == null || JobRunStatusEnum.STATUS_RUNNING.getCode() != job.getJobStatus()) {
             return;
         }
+
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         log.debug("Quartz Service [AddJob Method] >>>>>>>>" + scheduler);
+        log.debug("Quartz Service [AddJob Method] >>>>>>>>" + job.getCronExpression());
         TriggerKey triggerKey = TriggerKey.triggerKey(job.getJobName(), job.getJobGroup());
 
         CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);

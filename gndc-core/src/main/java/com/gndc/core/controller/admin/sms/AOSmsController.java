@@ -36,10 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.weekend.Weekend;
 import tk.mybatis.mapper.weekend.WeekendCriteria;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 短信管理
@@ -77,9 +74,18 @@ public class AOSmsController {
     @PostMapping("/statistics")
     public ResponseMessage<List<AOSmsStatisticsResponse>> statistics(@Validated @RequestBody AOSmsStatisticsRequest request) {
         ResponseMessage<List<AOSmsStatisticsResponse>> response = new ResponseMessage<>();
-
-
-        response.setData(null);
+        PageInfo page = request.getHeader().getPage();
+        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        List<AOSmsStatisticsResponse> smsStatisticsResponses = null;
+        if (request.getType().equals(SmsEditConstant.STATISTICS_DIMENSION_1)) {
+            smsStatisticsResponses = smsGroupLogService.groupLogStatisticsByDay(request);
+        } else if (request.getType().equals(SmsEditConstant.STATISTICS_DIMENSION_2)) {
+            smsStatisticsResponses = smsGroupLogService.groupLogStatisticsByMonth(request);
+        }
+        PageInfo<AOSmsStatisticsResponse> pageInfo = new PageInfo<>(smsStatisticsResponses);
+        response.setData(smsStatisticsResponses);
+        pageInfo.setList(null);
+        response.setPage(pageInfo);
         return response;
     }
 
@@ -481,9 +487,35 @@ public class AOSmsController {
                         temp.setSignNames(signNameStr);
                     }
                 }
+                //是否是条件选择
+                if (temp.getType() == null || temp.getType() == 0) {
+                    temp.setSourceType(SmsEditConstant.SOURCE_TYPE_2);
+                } else {
+                    temp.setSourceType(SmsEditConstant.SOURCE_TYPE_1);
+                }
+
+                if (StrUtil.isNotBlank(temp.getExpression())) {
+                    //发送：周  时间
+                    String[] expressionArr = temp.getExpression().split(" ");
+                    String weeksStr = expressionArr[5];
+                    temp.setWeeks(weeksStr.split(","));
+                    temp.setSendTime(expressionArr[2] + ":" + expressionArr[1]);
+                    //发送日期
+                    String month = expressionArr[4].length() == 1 ? "0" + expressionArr[4].length() : expressionArr[4];
+                    String day = expressionArr[3].length() == 1 ? "0" + expressionArr[3].length() : expressionArr[3];
+                    temp.setSendDate(expressionArr[6] + "-" + month + "-" + day);
+                }
+                //定时发送类型
+                String sendStartDate = temp.getSendStartDate();
+                if (StrUtil.isNotBlank(sendStartDate)) {
+                    temp.setTimingSendType(SmsEditConstant.TIMING_SEND_TYPE_1);
+                } else {
+                    temp.setTimingSendType(SmsEditConstant.TIMING_SEND_TYPE_2);
+                }
+                //条件拼接
                 String condition = temp.getCondition();
                 if (StrUtil.isNotBlank(condition)) {
-                    temp.setTimingSendType(SmsEditConstant.TIMING_SEND_TYPE_1);
+
                     SmsConditionContent smsConditionContent = JSONObject.parseObject(condition, SmsConditionContent.class);
                     //营销条件0-未定义 1-营销类 2-催收类 3-提醒类 4-通知类
                     if (smsConditionContent.getConditionType().equals(SmsEditConstant.CONDITION_TYPE_1)) {
@@ -516,8 +548,6 @@ public class AOSmsController {
                             temp.setConditionText("当日申请成功");
                         }
                     }
-                } else {
-                    temp.setTimingSendType(SmsEditConstant.TIMING_SEND_TYPE_2);
                 }
             }
         }
@@ -525,6 +555,20 @@ public class AOSmsController {
         pageInfo.setList(null);
         response.setPage(pageInfo);
         response.setData(smsJobDetailList);
+        return response;
+    }
+
+    /**
+     * 编辑短息-任务停止
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/schedule/stop")
+    public ResponseMessage<CommonResponse> stopSchedule(@Validated @RequestBody AOSmsStopScheduleRequest request) throws Exception {
+        ResponseMessage<CommonResponse> response = new ResponseMessage<>();
+        CommonResponse commonResponse = new CommonResponse();
+        commonResponse.setResult(systemScheduleJobService.stopSchedule(request));
         return response;
     }
 

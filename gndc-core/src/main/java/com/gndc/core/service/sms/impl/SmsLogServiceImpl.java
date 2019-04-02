@@ -266,7 +266,9 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
 
         return true;
     }
-
+    private void groupSendSmsJson2(){
+        System.err.println("00000000000000000000000000000000000000000000000");
+    }
     @Override
     public void groupSendSmsJson(String channel, String phone, String smsText, SmsGroupLog smsGroupLog) throws Exception {
         Map<String, String> sendResult = new HashMap<>();

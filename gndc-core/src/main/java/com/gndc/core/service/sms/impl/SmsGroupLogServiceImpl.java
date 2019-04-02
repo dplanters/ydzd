@@ -3,6 +3,8 @@ package com.gndc.core.service.sms.impl;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.admin.sms.AOSmsGroupLogListRequest;
 import com.gndc.core.api.admin.sms.AOSmsGroupLogListResponse;
+import com.gndc.core.api.admin.sms.AOSmsStatisticsRequest;
+import com.gndc.core.api.admin.sms.AOSmsStatisticsResponse;
 import com.gndc.core.mapper.simple.SmsGroupLogMapper;
 import com.gndc.core.model.SmsGroupLog;
 import com.gndc.core.service.sms.SmsGroupLogService;
@@ -23,5 +25,15 @@ public class SmsGroupLogServiceImpl extends BaseServiceImpl<SmsGroupLog, Integer
     @Override
     public List<AOSmsGroupLogListResponse> selectSmsGroupLogDetailList(AOSmsGroupLogListRequest request) {
         return smsGroupLogMapper.selectSmsGroupLogDetailList(request);
+    }
+
+    @Override
+    public List<AOSmsStatisticsResponse> groupLogStatisticsByDay(AOSmsStatisticsRequest request) {
+        return smsGroupLogMapper.groupLogStatisticsByDay(request);
+    }
+
+    @Override
+    public List<AOSmsStatisticsResponse> groupLogStatisticsByMonth(AOSmsStatisticsRequest request) {
+        return smsGroupLogMapper.groupLogStatisticsByMonth(request);
     }
 }

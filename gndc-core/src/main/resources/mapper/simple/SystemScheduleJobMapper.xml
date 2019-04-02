@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gndc.core.mapper.simple.SystemScheduleJobMapper">
   <select id="selectSmsJobDetailList" resultType="com.gndc.core.api.admin.sms.AOSmsScheduleListResponse">
-    select ssj.id jobId,ssj.create_time createTime,sjc.sign_ids signIds,sc.type, st.content,sc.condition,
+    select ssj.id jobId, DATE_FORMAT(ssj.create_time,'%Y-%m-%d %H:%m:%s') createTime,sjc.sign_ids signIds,sc.type, st.content,sc.condition,
     ssj.cron_expression expression,ssj.job_status jobStatus,sjc.channel_id channelId,sjc.send_start_date sendStartDate,sjc.send_end_date sendEndDate
     FROM dc_system_schedule_job ssj
     left join dc_sms_job_condition sjc on ssj.extend_id = sjc.id

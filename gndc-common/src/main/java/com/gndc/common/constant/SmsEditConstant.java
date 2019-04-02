@@ -1,7 +1,14 @@
 package com.gndc.common.constant;
 
 public class SmsEditConstant {
-
+    /**
+     * 统计维度 1:日发送统计 2:月发送统计
+     */
+    public static final Byte STATISTICS_DIMENSION_1 = 1;
+    /**
+     * 统计维度 1:日发送统计 2:月发送统计
+     */
+    public static final Byte STATISTICS_DIMENSION_2 = 2;
     /**
      * 1条件筛选 2导入
      */
