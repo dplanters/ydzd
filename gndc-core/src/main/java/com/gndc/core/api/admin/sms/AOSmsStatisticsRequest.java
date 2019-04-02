@@ -2,9 +2,10 @@ package com.gndc.core.api.admin.sms;
 
 
 import com.gndc.common.api.RequestMessage;
-import com.sun.istack.internal.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 短信管理-短信统计-请求

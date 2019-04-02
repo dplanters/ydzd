@@ -23,10 +23,10 @@
         from dc_sms_group_log
         where 1 = 1
         <if test="options.startDate != null and options.startDate != ''">
-            and create_time <![CDATA[>=]]> #{options.createTimeStart}
+            and create_time <![CDATA[>=]]> #{options.startDate}
         </if>
         <if test="options.endDate != null and options.endDate != ''">
-            and create_time <![CDATA[<=]]> #{options.createTimeEnd}
+            and create_time <![CDATA[<=]]> #{options.endDate}
         </if>
         group by DATE_FORMAT(create_time,'%Y-%m-%d')
     </select>
@@ -35,10 +35,10 @@
         from dc_sms_group_log
         where 1 = 1
         <if test="options.startDate != null and options.startDate != ''">
-            and create_time <![CDATA[>=]]> #{options.createTimeStart}
+            and create_time <![CDATA[>=]]> #{options.startDate}
         </if>
         <if test="options.endDate != null and options.endDate != ''">
-            and create_time <![CDATA[<=]]> #{options.createTimeEnd}
+            and create_time <![CDATA[<=]]> #{options.endDate}
         </if>
         group by DATE_FORMAT(create_time,'%Y-%m')
     </select>

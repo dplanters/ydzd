@@ -98,11 +98,14 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
                         }
                     }
                 }
-                try {
-                    quartzManager.addJob(systemScheduleJob);
-                } catch (SchedulerException e) {
-                    throw new HjException(ResultCode.SYSTEM_BUSY);
+                if(systemScheduleJob.getStatus().equals(JobRunStatusEnum.STATUS_RUNNING)){
+                    try {
+                        quartzManager.addJob(systemScheduleJob);
+                    } catch (SchedulerException e) {
+                        throw new HjException(ResultCode.SMS_ILLEGAL_CRON);
+                    }
                 }
+
             }
 
 
@@ -237,9 +240,10 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
     @Override
     public Integer stopSchedule(AOSmsStopScheduleRequest request) throws SchedulerException {
         SystemScheduleJob systemScheduleJob = new SystemScheduleJob();
+        SystemScheduleJob systemScheduleJobToStop = this.selectByPrimaryKey(request.getJobId());
+        quartzManager.deleteJob(systemScheduleJobToStop);
         systemScheduleJob.setId(request.getJobId());
-        quartzManager.deleteJob(systemScheduleJob);
-        systemScheduleJob.setJobStatus(JobRunStatusEnum.STATUS_RUNNING.getCode());
+        systemScheduleJob.setJobStatus(JobRunStatusEnum.STATUS_NOT_RUNNING.getCode());
         return this.updateByPrimaryKeySelective(systemScheduleJob);
     }
 }
