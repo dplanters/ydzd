@@ -9,9 +9,15 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://192.168.40.241:3306/gndc?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
     username: root
-  cloud:
-    consul:
-      host: localhost
-      port: 8500
-      discovery:
-        instance-id: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+  redis:
+    database: 0
+    host: localhost
+    port: 6399
+    password: guanlouyi
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+    timeout: 10000ms

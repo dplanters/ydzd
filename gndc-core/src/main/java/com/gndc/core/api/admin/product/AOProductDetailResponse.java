@@ -1,15 +1,15 @@
 package com.gndc.core.api.admin.product;
 
-import com.gndc.common.api.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class AOProductDetailResponse extends RequestMessage {
+public class AOProductDetailResponse implements Serializable {
 
     /**
      * 产品id

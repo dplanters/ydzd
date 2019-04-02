@@ -96,7 +96,7 @@ public class AOPartnerController {
         Weekend<Partner> weekend = Weekend.of(Partner.class);
         weekend.weekendCriteria()
                 .andEqualTo(Partner::getStatus, StatusEnum.NORMAL.getCode());
-        List<Partner> partners = partnerService.selectAll();
+        List<Partner> partners = partnerService.selectByExample(weekend);
         PageInfo<Partner> pageInfo = new PageInfo<>(partners);
         response.setPage(pageInfo);
         response.setData(partners);

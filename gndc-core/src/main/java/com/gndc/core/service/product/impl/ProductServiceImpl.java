@@ -146,9 +146,11 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             product.setOnlineTime(new Date());
         } else {
             ProductHot productHot = productHotMapper.selectOneByProperty("productId", request.getId());
-            productHot.setHotStatus(OnlineStatusEnum.OFFLINE.getCode());
-            //下线热推产品
-            productHotMapper.updateByPrimaryKeySelective(productHot);
+            if (ObjectUtil.isNotNull(productHot)) {
+                //产品处于热推中，下线热推产品
+                productHot.setHotStatus(OnlineStatusEnum.OFFLINE.getCode());
+                productHotMapper.updateByPrimaryKeySelective(productHot);
+            }
 
             product.setProductStatus(OnlineStatusEnum.OFFLINE.getCode());
             product.setOfflineTime(new Date());
