@@ -51,12 +51,17 @@ public class ExceptionHandling {
                 .setCode(ResultCode.PARAMETER_CHECK_FAIL.getCode());
         List<ObjectError> allErrors = e.getBindingResult().getAllErrors();
         JSONArray jsonArray = new JSONArray();
+        String msg = ResultCode.PARAMETER_CHECK_FAIL.getI18NContent();
         for (ObjectError error : allErrors) {
-            String field = ((FieldError) error).getField();
-            String defaultMessage = error.getDefaultMessage();
-            jsonArray.fluentAdd(new JSONObject().fluentPut(field, defaultMessage));
+            if (error instanceof FieldError) {
+                String field = ((FieldError) error).getField();
+                String defaultMessage = error.getDefaultMessage();
+                jsonArray.fluentAdd(new JSONObject().fluentPut(field, defaultMessage));
+                msg = jsonArray.toJSONString();
+            } else if (error instanceof ObjectError) {
+                msg = error.getDefaultMessage();
+            }
         }
-        String msg = jsonArray.toJSONString();
         log.warn("参数校验异常", msg);
         response.setMsg(msg);
         return response;

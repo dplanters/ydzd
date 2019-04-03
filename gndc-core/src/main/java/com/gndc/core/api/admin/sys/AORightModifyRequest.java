@@ -39,8 +39,12 @@ public class AORightModifyRequest extends RequestMessage {
     /**
      * 前端页面
      */
-    @NotBlank
     private String component;
+
+    /**
+     * 授权唯一标识
+     */
+    private String uniqueSign;
 
     /**
      * 父权限id
@@ -93,9 +97,6 @@ public class AORightModifyRequest extends RequestMessage {
     /**
      *权限是否可见
      */
-    @NotNull
-    @Min(0)
-    @Max(1)
     private Byte rightVisible;
 
     /**

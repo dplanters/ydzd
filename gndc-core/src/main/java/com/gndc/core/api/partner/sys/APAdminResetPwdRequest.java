@@ -1,6 +1,7 @@
 package com.gndc.core.api.partner.sys;
 
 import com.gndc.common.api.RequestMessage;
+import com.gndc.common.constraints.FieldsValueMatch;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
+@FieldsValueMatch(field = "password", fieldMatch = "confirmPassword", message = "新密码和旧密码不匹配")
 public class APAdminResetPwdRequest extends RequestMessage {
 
     /**
@@ -24,4 +26,11 @@ public class APAdminResetPwdRequest extends RequestMessage {
     @NotNull
     @NotBlank
     private String password;
+
+    /**
+     * 确认新密码
+     */
+    @NotNull
+    @NotBlank
+    private String confirmPassword;
 }

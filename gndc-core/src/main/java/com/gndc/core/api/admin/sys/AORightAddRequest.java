@@ -78,6 +78,11 @@ public class AORightAddRequest extends RequestMessage {
     private String rightPic;
 
     /**
+     * 授权唯一标识
+     */
+    private String uniqueSign;
+
+    /**
      * 是否需要授权
      */
     @NotNull
@@ -88,9 +93,6 @@ public class AORightAddRequest extends RequestMessage {
     /**
      *权限是否可见
      */
-    @NotNull
-    @Min(0)
-    @Max(1)
     private Byte rightVisible;
 
     /**
