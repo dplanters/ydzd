@@ -97,7 +97,7 @@ public class PPlatformController {
     }
 
     /**
-     * 常见问题
+     * APP端异常保存
      *
      * @param request
      * @return
