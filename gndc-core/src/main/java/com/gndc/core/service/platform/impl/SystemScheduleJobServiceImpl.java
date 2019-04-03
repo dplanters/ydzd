@@ -178,7 +178,7 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
             }
             systemScheduleJob = new SystemScheduleJob();
             systemScheduleJob.setJobName("短信定时任务_"+ IdUtil.simpleUUID());
-            systemScheduleJob.setBeanClass("com.gndc.core.service.sms.impl.SmsLogServiceImpl");
+            systemScheduleJob.setBeanClass("com.gndc.core.service.task.SmsJobTask");
             systemScheduleJob.setCronExpression(cronExpression);
             systemScheduleJob.setMethodName("groupSendSmsJson");
             systemScheduleJob.setIsConcurrent(JobConcurrentEnum.CONCURRENT_NOT.getCode());
