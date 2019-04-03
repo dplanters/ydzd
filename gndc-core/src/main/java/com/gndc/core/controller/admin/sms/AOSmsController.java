@@ -7,24 +7,17 @@ import com.github.pagehelper.PageInfo;
 import com.gndc.common.constant.SmsEditConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.StatusEnum;
-import com.gndc.common.enums.job.JobConcurrentEnum;
-import com.gndc.common.enums.job.JobGroupEnum;
-import com.gndc.common.enums.job.JobRunStatusEnum;
 import com.gndc.common.enums.sms.SmsChannelEnum;
 import com.gndc.common.exception.HjException;
-import com.gndc.common.utils.DateUtil;
-import com.gndc.common.utils.PhoneUtil;
 import com.gndc.core.api.admin.sms.*;
 import com.gndc.core.api.common.CommonResponse;
 import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.mappers.SmsConditionMapping;
-import com.gndc.core.mappers.SmsJobConditionMapping;
 import com.gndc.core.mappers.SmsSignMapping;
 import com.gndc.core.mappers.SmsTemplateMapping;
 import com.gndc.core.model.*;
 import com.gndc.core.service.platform.SystemScheduleJobService;
 import com.gndc.core.service.sms.*;
-import com.gndc.core.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -375,6 +368,13 @@ public class AOSmsController {
      */
     @PostMapping("/realTimeSend")
     public ResponseMessage<CommonResponse> realTimeSend(@Validated @RequestBody AOSmsRealTimeSendRequest request) throws Exception {
+        /**
+         *
+         *
+         * 该方法要是改动，com.gndc.core.quartz.util.TaskUtils也需要同步改动
+         *
+         *
+         */
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
         //需要发送短信的号码用","隔开
         String phoneToSend = null;
@@ -425,7 +425,7 @@ public class AOSmsController {
                 smsGroupLog.setMessage(message);
                 smsGroupLog.setChannelId(request.getChannelId());
                 smsGroupLog.setConditionId(request.getConditionId());
-                smsGroupLog.setSendType(SmsEditConstant.SEND_TYPE_1);
+                smsGroupLog.setSendType(SmsEditConstant.SEND_TYPE_2);
                 smsGroupLog.setSignId(signId);
                 smsGroupLog.setPhoneCount(phoneToSend.split(",").length);
                 smsLogService.groupSendSmsJson(channel, phoneToSend, message, smsGroupLog);
@@ -465,6 +465,7 @@ public class AOSmsController {
         if (smsJobDetailList != null && smsJobDetailList.size() > 0) {
             Weekend<SmsSign> weekend = Weekend.of(SmsSign.class);
             weekend.selectProperties("id", "name");
+            weekend.weekendCriteria().andEqualTo(SmsSign::getStatus,StatusEnum.NORMAL.getCode());
             List<SmsSign> smsSigns = smsSignService.selectByExample(weekend);
 
             for (AOSmsScheduleListResponse temp : smsJobDetailList) {
