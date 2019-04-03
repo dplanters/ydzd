@@ -3,11 +3,16 @@ package com.gndc.core.controller.app.platform;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.enums.common.StatusEnum;
+import com.gndc.common.utils.DateUtil;
+import com.gndc.core.api.app.platform.PAppExceptionUploadRequest;
 import com.gndc.core.api.app.platform.PPlatformBaseInfoRequest;
 import com.gndc.core.api.common.CommonRequest;
 import com.gndc.common.api.ResponseMessage;
+import com.gndc.core.api.common.CommonResponse;
+import com.gndc.core.model.AppException;
 import com.gndc.core.model.CommonQuestion;
 import com.gndc.core.model.SystemOption;
+import com.gndc.core.service.platform.AppExceptionService;
 import com.gndc.core.service.platform.CommonQuestionService;
 import com.gndc.core.service.sys.SystemOptionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.weekend.Weekend;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,6 +38,9 @@ public class PPlatformController {
 
     @Autowired
     private CommonQuestionService commonQuestionService;
+
+    @Autowired
+    private AppExceptionService appExceptionService;
 
     /**
      * 微信公众号、客服电话、微信客服获取
@@ -85,5 +94,27 @@ public class PPlatformController {
         response.setPage(pageInfo);
         response.setData(commonQuestions);
         return response;
+    }
+
+    /**
+     * 常见问题
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/appExceptionSave")
+    public ResponseMessage<CommonResponse> appExceptionSave(@Validated @RequestBody PAppExceptionUploadRequest request) {
+        ResponseMessage<CommonResponse> response = new ResponseMessage<>();
+        AppException appException = new AppException();
+
+        Date now = DateUtil.getCountyTime();
+        appException.setCreateTime(now);
+        appException.setSessionId(request.getHeader().getSessionId());
+        appException.setException(request.getException());
+        appException.setDeviceAndVersion(request.getDeviceAndVersionInfo());
+        appException.setUserId(request.getPUser().getId());
+        CommonResponse commonResponse = new CommonResponse();
+        commonResponse.setResult(appExceptionService.insertSelective(appException));
+        return response.setData(commonResponse);
     }
 }
