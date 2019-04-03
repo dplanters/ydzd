@@ -1,17 +1,19 @@
 package com.gndc.core.controller.admin.product;
 
+import cn.hutool.core.collection.CollUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.gndc.common.enums.common.OnlineStatusEnum;
 import com.gndc.common.api.ResponseMessage;
+import com.gndc.common.enums.common.OnlineStatusEnum;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.core.api.admin.product.*;
 import com.gndc.core.model.Product;
+import com.gndc.core.model.ProductHot;
+import com.gndc.core.service.product.ProductHotService;
 import com.gndc.core.service.product.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.weekend.Weekend;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -32,8 +35,7 @@ public class AOProductController {
     private ProductService productService;
 
     @Autowired
-    private RedisTemplate redisTemplate;
-
+    private ProductHotService productHotService;
     /**
      * 产品列表
      * @param request
@@ -63,16 +65,44 @@ public class AOProductController {
     public ResponseMessage<List<Product>> productNameAll(@Validated @RequestBody AOAllProductNameRequest request) {
         ResponseMessage<List<Product>> response = new ResponseMessage<>();
 
+        //处于热推中的产品
+        Weekend<ProductHot> hotWeekend = Weekend.of(ProductHot.class);
+        hotWeekend.selectProperties("productId");
+        hotWeekend.weekendCriteria()
+                .andEqualTo(ProductHot::getHotStatus, OnlineStatusEnum.ONLINE.getCode());
+        List<ProductHot> productHots = productHotService.selectByExample(hotWeekend);
+
+        List<Integer> productHotIds = new ArrayList<>();
+        productHots.forEach(productHot -> productHotIds.add(productHot.getProductId()));
+
+        //机构中正常在线的产品
         Weekend<Product> weekend = Weekend.of(Product.class);
-        weekend.selectProperties("id", "name");
+        weekend.selectProperties("id");
         weekend.weekendCriteria()
                 .andEqualTo(Product::getStatus, StatusEnum.NORMAL.getCode())
                 .andEqualTo(Product::getProductStatus, OnlineStatusEnum.ONLINE.getCode())
                 .andEqualTo(Product::getPartnerId, request.getPartnerId());
-
         List<Product> products = productService.selectByExample(weekend);
 
-        response.setData(products);
+        List<Integer> productIds = new ArrayList<>();
+        products.forEach(product -> productIds.add(product.getId()));
+
+        //未处于热推中的产品Id集合
+        productIds.removeAll(productHotIds);
+
+        List<Product> productList = new ArrayList<>();
+        if (CollUtil.isNotEmpty(productIds)) {
+            //如果未处于热推中的产品id集合size多余1个，避免idList size为0时查询所有产品
+            productList = productService.selectByIdList(productIds);
+        }
+        List<Product> productsListResult = new ArrayList<>();
+        productList.forEach(product -> {
+            productsListResult.add(new Product()
+                    .setId(product.getId())
+                    .setName(product.getName()));
+        });
+
+        response.setData(productsListResult);
 
         return response;
     }
