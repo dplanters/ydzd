@@ -1,8 +1,10 @@
 package com.gndc.core.service.platform.impl;
 
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.SmsEditConstant;
 import com.gndc.common.enums.ResultCode;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.job.JobConcurrentEnum;
 import com.gndc.common.enums.job.JobGroupEnum;
 import com.gndc.common.enums.job.JobRunStatusEnum;
@@ -23,7 +25,6 @@ import com.gndc.core.service.sms.SmsLogService;
 import org.quartz.CronExpression;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -90,15 +91,12 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
                         Date endDate = DateUtil.stringToTime(sendEndDate, DateUtil.DATE_FORMAT_23);
                         Date currDate = new Date();
                         if (currDate.before(startDate) || endDate.before(currDate)) {
-
-                            System.err.println("==========================================================");
-                            System.out.println(sendStartDate);
-                            System.out.println(sendEndDate);
                             continue;
                         }
                     }
                 }
-                if(systemScheduleJob.getStatus().equals(JobRunStatusEnum.STATUS_RUNNING)){
+                if (systemScheduleJob.getJobStatus().equals(JobRunStatusEnum.STATUS_RUNNING.getCode())
+                        && systemScheduleJob.getStatus().equals(StatusEnum.NORMAL.getCode())) {
                     try {
                         quartzManager.addJob(systemScheduleJob);
                     } catch (SchedulerException e) {
@@ -179,7 +177,7 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
                 cronExpression = second + " " + minute + " " + hour + " ? * " + weeksStr + " * ";
             }
             systemScheduleJob = new SystemScheduleJob();
-            systemScheduleJob.setJobName("短信定时任务");
+            systemScheduleJob.setJobName("短信定时任务_"+ IdUtil.simpleUUID());
             systemScheduleJob.setBeanClass("com.gndc.core.service.sms.impl.SmsLogServiceImpl");
             systemScheduleJob.setCronExpression(cronExpression);
             systemScheduleJob.setMethodName("groupSendSmsJson");
