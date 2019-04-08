@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.weekend.Weekend;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,7 +47,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer> implements R
         List<Integer> rightIds = request.getRightIds();
         List<RoleRight> roleRights = new ArrayList<>(rightIds.size());
         //新增
-        Role originalRole = roleMapper.selectOneByProperty("roleName", roleName);
+        Role originalRole = roleMapper.selectOneByProperty(Role::getRoleName, roleName);
 
         if (originalRole != null) {
             String msg = StrUtil.format("{} 已经存在", roleName);
@@ -95,7 +94,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer> implements R
 
         redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE, role.getId(), role);
 
-        List<RoleRight> oldRoleRights = roleRightMapper.selectByProperty("roleId", id);
+        List<RoleRight> oldRoleRights = roleRightMapper.selectByProperty(RoleRight::getRoleId, id);
 
         //删除旧的权限
         Weekend<RoleRight> weekend = Weekend.of(RoleRight.class);

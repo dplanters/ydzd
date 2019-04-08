@@ -23,7 +23,7 @@ public class SystemOptionServiceImpl extends BaseServiceImpl<SystemOption, Integ
 
     @Override
     public List<String> payeeList(APPayeeListRequest request) {
-        SystemOption systemOption = systemOptionMapper.selectOneByProperty("optionKey", "PARTNER_PAYEE_LIST");
+        SystemOption systemOption = systemOptionMapper.selectOneByProperty(SystemOption::getOptionKey, "PARTNER_PAYEE_LIST");
         return Arrays.asList(systemOption.getOptionValue().split(";"));
     }
 }

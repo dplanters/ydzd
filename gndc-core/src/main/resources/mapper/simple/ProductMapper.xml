@@ -18,6 +18,7 @@
         <result column="coope_price" jdbcType="DECIMAL" property="coopePrice" />
         <result column="borrow_amount_range" jdbcType="VARCHAR" property="borrowAmountRange" />
         <result column="borrow_time_range" jdbcType="VARCHAR" property="borrowTimeRange" />
+        <result column="borrow_period_unit" jdbcType="TINYINT" property="borrowPeriodUnit" />
     </resultMap>
 
     <select id="aoProductListCount" resultType="long">
@@ -67,6 +68,7 @@
         concat(floor(a.borrow_amount_begin),'~',floor(a.borrow_amount_end)) as borrow_amount_range,
         concat(b.borrow_period_start,'~', b.borrow_period_end) as borrow_time_range,
         b.borrow_time_description,
+        b.borrow_period_unit,
         c.hot_status hot_status,
         a.day_rate,
         d.name partner_name

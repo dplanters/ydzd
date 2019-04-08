@@ -85,7 +85,7 @@ public class PAccountController {
             throw new HjException(ResultCode.DEVICETYPE_ISNULL);
         }
 
-        userInfo = userService.selectOneByProperty("phone", phone);
+        userInfo = userService.selectOneByProperty(User::getPhone, phone);
         byte deviceType = Byte.parseByte(request.getHeader().getDeviceType());
 
 
@@ -170,7 +170,7 @@ public class PAccountController {
         Date now = DateUtil.getCountyTime();
 
         // 验证手机号是否已经注册
-        User user = userService.selectOneByProperty("phone", phone);
+        User user = userService.selectOneByProperty(User::getPhone, phone);
 
         if (null == user) {
             Date date = DateUtil.getCountyTime();
@@ -328,7 +328,7 @@ public class PAccountController {
         }
 
         // 根据手机号查询出当前用户
-        User user = userService.selectOneByProperty("phone", phone);
+        User user = userService.selectOneByProperty(User::getPhone, phone);
         if (null == user) {
             throw new HjException(ResultCode.USER_NOT_EXISTS);
         }

@@ -5,6 +5,7 @@ import com.gndc.common.mybatis.MyMapper;
 import com.gndc.common.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.additional.aggregation.AggregateCondition;
+import tk.mybatis.mapper.weekend.Fn;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -130,23 +131,23 @@ public class BaseServiceImpl<T, PK> implements BaseService<T, PK> {
     }
 
     @Override
-    public T selectOneByProperty(String property, Object value) {
-        return myMapper.selectOneByProperty(property, value);
+    public T selectOneByProperty(Fn<T, ?> fn, Object value) {
+        return myMapper.selectOneByProperty(fn, value);
     }
 
     @Override
-    public List<T> selectByProperty(String property, Object value) {
-        return myMapper.selectByProperty(property, value);
+    public List<T> selectByProperty(Fn<T, ?> fn, Object value) {
+        return myMapper.selectByProperty(fn, value);
     }
 
     @Override
-    public boolean existsWithProperty(String property, Object value) {
-        return myMapper.existsWithProperty(property, value);
+    public boolean existsWithProperty(Fn<T, ?> fn, Object value) {
+        return myMapper.existsWithProperty(fn, value);
     }
 
     @Override
-    public int selectCountByProperty(String property, Object value) {
-        return myMapper.selectCountByProperty(property, value);
+    public int selectCountByProperty(Fn<T, ?> fn, Object value) {
+        return myMapper.selectCountByProperty(fn, value);
     }
 
     @Override

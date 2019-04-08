@@ -60,7 +60,7 @@ public class PSmsController {
         SmsTemplateType smsTemplateType = null;
         if (SMSTypeEnum.FORGET_PWD.getCode() == type) {
             // 查询手机号是否注册
-            User user = userService.selectOneByProperty("phone", phone);
+            User user = userService.selectOneByProperty(User::getPhone, phone);
             if (user == null) {
                 throw new HjException(ResultCode.USER_NOT_EXISTS);
             }

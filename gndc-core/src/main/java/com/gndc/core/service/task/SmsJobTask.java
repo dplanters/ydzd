@@ -3,12 +3,12 @@ package com.gndc.core.service.task;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.enums.sms.SmsChannelEnum;
-import com.gndc.common.utils.SpringContextHolder;
 import com.gndc.core.model.SmsGroupLog;
 import com.gndc.core.service.sms.SmsGroupLogService;
 import com.gndc.third.sms.chuanglan.ChuangLanSmsService;
 import com.gndc.third.sms.paasoo.PaasooSmsService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -18,10 +18,14 @@ import java.util.Map;
 @Slf4j
 public class SmsJobTask {
 
-    //获取bean
-    PaasooSmsService paasooSmsService = SpringContextHolder.getBean(PaasooSmsService.class);
-    ChuangLanSmsService chuangLanSmsService = SpringContextHolder.getBean(ChuangLanSmsService.class);
-    SmsGroupLogService smsGroupLogService = SpringContextHolder.getBean(SmsGroupLogService.class);
+    @Autowired
+    PaasooSmsService paasooSmsService;
+
+    @Autowired
+    ChuangLanSmsService chuangLanSmsService;
+
+    @Autowired
+    SmsGroupLogService smsGroupLogService;
 
     public void groupSendSmsJson(String channel, String phone, String smsText, SmsGroupLog smsGroupLog) throws Exception {
         Map<String, String> sendResult = new HashMap<>();

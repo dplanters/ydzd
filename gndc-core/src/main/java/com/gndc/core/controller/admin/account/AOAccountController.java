@@ -74,7 +74,7 @@ public class AOAccountController {
         //业务校验
         String loginName = request.getLoginName();
         String password = request.getPassword();
-        Admin admin = adminService.selectOneByProperty("loginName", loginName);
+        Admin admin = adminService.selectOneByProperty(Admin::getLoginName, loginName);
 
         if (admin == null) {
             String template = "用户名 {} 不存在";

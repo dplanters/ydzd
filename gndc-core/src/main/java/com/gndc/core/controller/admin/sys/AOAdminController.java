@@ -110,7 +110,7 @@ public class AOAdminController {
     public ResponseMessage<Integer> modifyAdmin(@Validated @RequestBody AOAdminModifyRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
         String loginName = request.getLoginName();
-        Admin originalAdmin = adminService.selectOneByProperty("loginName", loginName);
+        Admin originalAdmin = adminService.selectOneByProperty(Admin::getLoginName, loginName);
         if (ObjectUtil.isNotNull(originalAdmin) && !originalAdmin.getId().equals(request.getId())) {
             String msg = StrUtil.format("登录名 {} 已经存在", loginName);
             throw new HjException(ResultCode.USER_EXISTS, msg);

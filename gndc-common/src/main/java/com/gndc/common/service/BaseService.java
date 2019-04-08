@@ -1,10 +1,7 @@
 package com.gndc.common.service;
 
-import com.gndc.common.mybatis.CustomSelectProvider;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.SelectProvider;
 import tk.mybatis.mapper.additional.aggregation.AggregateCondition;
-import tk.mybatis.mapper.provider.base.BaseSelectProvider;
+import tk.mybatis.mapper.weekend.Fn;
 
 import java.util.List;
 
@@ -182,39 +179,39 @@ public interface BaseService<T, PK> {
     /**
      * 根据属性及对应值进行查询，只能有一个返回值，有多个结果是抛出异常，查询条件使用等号
      *
-     * @param property 查询属性
+     * @param fn 查询属性
      * @param value    属性值
      * @return
      */
-    T selectOneByProperty(String property, Object value);
+    T selectOneByProperty(Fn<T, ?> fn, Object value);
 
     /**
      * 根据实体中的属性值进行查询，查询条件使用等号
      *
-     * @param property 查询属性
+     * @param fn 查询属性
      * @param value 属性值
      * @return
      */
-    List<T> selectByProperty(String property, Object value);
+    List<T> selectByProperty(Fn<T, ?> fn, Object value);
 
     /**
      * 根据主键字段查询总数，方法参数必须包含完整的主键属性，查询条件使用等号
      *
-     * @param property 查询属性
+     * @param fn 查询属性
      * @param value 属性值
      * @return
      */
-    boolean existsWithProperty(String property, Object value);
+    boolean existsWithProperty(Fn<T, ?> fn, Object value);
 
 
     /**
      * 根据实体中的属性查询总数，查询条件使用等号
      *
-     * @param property 查询属性
+     * @param fn 查询属性
      * @param value 属性值
      * @return
      */
-    int selectCountByProperty(String property, Object value);
+    int selectCountByProperty(Fn<T, ?> fn, Object value);
 
 
     /**

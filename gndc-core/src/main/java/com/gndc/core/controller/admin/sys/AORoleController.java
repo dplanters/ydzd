@@ -104,7 +104,7 @@ public class AORoleController {
             throw new HjException(ResultCode.ROLE_HAS_NORMAL_ADMIN, msg);
         }
 
-        List<RoleRight> roleRights = roleRightService.selectByProperty("roleId", id);
+        List<RoleRight> roleRights = roleRightService.selectByProperty(RoleRight::getRoleId, id);
 
         List<Integer> roleRightIds = new ArrayList<>(roleRights.size());
 
@@ -199,7 +199,7 @@ public class AORoleController {
 
         PageInfo page = request.getHeader().getPage();
         PageHelper.startPage(page.getPageNum(), page.getPageSize());
-        List<Role> roles = roleService.selectByProperty("platform", request.getPlatform());
+        List<Role> roles = roleService.selectByProperty(Role::getPlatform, request.getPlatform());
 
         PageInfo<Role> pageInfo = new PageInfo<>(roles);
         pageInfo.setList(null);
