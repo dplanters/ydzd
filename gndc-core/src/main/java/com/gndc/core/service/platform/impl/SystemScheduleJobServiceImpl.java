@@ -22,6 +22,7 @@ import com.gndc.core.service.platform.SystemScheduleJobService;
 import com.gndc.core.service.sms.SmsConditionService;
 import com.gndc.core.service.sms.SmsJobConditionService;
 import com.gndc.core.service.sms.SmsLogService;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.CronExpression;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ import java.util.List;
  * 平台Job
  */
 @Service
+@Slf4j
 public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemScheduleJob, Integer> implements SystemScheduleJobService {
 
     @Autowired
@@ -100,6 +102,7 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
                     try {
                         quartzManager.addJob(systemScheduleJob);
                     } catch (SchedulerException e) {
+                        log.error("job初始化失败-----------id:" + systemScheduleJob.getId());
                         throw new HjException(ResultCode.SMS_ILLEGAL_CRON);
                     }
                 }
@@ -177,7 +180,7 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
                 cronExpression = second + " " + minute + " " + hour + " ? * " + weeksStr + " * ";
             }
             systemScheduleJob = new SystemScheduleJob();
-            systemScheduleJob.setJobName("短信定时任务_"+ IdUtil.simpleUUID());
+            systemScheduleJob.setJobName("短信定时任务_" + IdUtil.simpleUUID());
             systemScheduleJob.setBeanClass("com.gndc.core.service.task.SmsJobTask");
             systemScheduleJob.setCronExpression(cronExpression);
             systemScheduleJob.setMethodName("groupSendSmsJson");
