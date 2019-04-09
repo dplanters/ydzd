@@ -131,7 +131,7 @@ public class AOAccountController {
                 String template = "无效的账号类型";
                 String msg = StrUtil.format(template, loginName);
                 logger.warn(msg);
-                throw new HjException(ResultCode.ERROR, msg);
+                throw new HjException(ResultCode.SYSTEM_BUSY, msg);
         }
         AOAdminLoginInfoDTO adminInfo = AOAdminLoginInfoDTOMapping.INSTANCE.convert(admin);
         aoLoginResponse.setAdmin(adminInfo);

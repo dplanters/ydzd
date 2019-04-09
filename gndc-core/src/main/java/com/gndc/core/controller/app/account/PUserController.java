@@ -82,7 +82,7 @@ public class PUserController {
 
         PUserLoginInfoDTO userInfo = feedBackEditRequest.getPUser();
         if (userInfo == null) {
-            throw new HjException(ResultCode.SESSIONID_ISNULL);
+            throw new HjException(ResultCode.INVALID_SESSION);
         }
 
         Date now = DateUtil.date().toJdkDate();
@@ -112,7 +112,7 @@ public class PUserController {
 
         PUserLoginInfoDTO userInfo = eventRequest.getPUser();
         if (userInfo == null) {
-            throw new HjException(ResultCode.SESSIONID_ISNULL);
+            throw new HjException(ResultCode.PARAMETER_CHECK_FAIL);
         }
 
         int ref = 0;
@@ -121,7 +121,7 @@ public class PUserController {
         } else {
 
             if (eventRequest.getProductId() == 0) {
-                throw new HjException(ResultCode.PARAM_MISSING);
+                throw new HjException(ResultCode.PARAMETER_CHECK_FAIL);
             }
             Date now = DateUtil.date().toJdkDate();
             UserEvent event = new UserEvent();

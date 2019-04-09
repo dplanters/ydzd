@@ -82,7 +82,7 @@ public class PAccountController {
         User userInfo = null;
 
         if (StrUtil.isBlank(request.getHeader().getDeviceType())) {
-            throw new HjException(ResultCode.DEVICETYPE_ISNULL);
+            throw new HjException(ResultCode.DEVICE_TYPE_ISNULL);
         }
 
         userInfo = userService.selectOneByProperty(User::getPhone, phone);
@@ -140,7 +140,7 @@ public class PAccountController {
         String appPackage = request.getAppPackage();
 
         if (StrUtil.isBlank(request.getHeader().getDeviceType())) {
-            throw new HjException(ResultCode.DEVICETYPE_ISNULL);
+            throw new HjException(ResultCode.DEVICE_TYPE_ISNULL);
         }
 
         byte deviceType = Byte.parseByte(request.getHeader().getDeviceType());
@@ -248,14 +248,14 @@ public class PAccountController {
         String userInfoStr = (String) redisTemplate.opsForValue().get(CacheConstant.KEY_USER_LOGIN_PREFIX + sessionId);
         User user = JSONObject.parseObject(userInfoStr, User.class);
         if (user == null) {
-            throw new HjException(ResultCode.SESSIONID_ISNULL);
+            throw new HjException(ResultCode.INVALID_SESSION);
         }
         String password = request.getPassword();
         String newPassword = request.getNewPassword();
         String confirmPassword = request.getConfirmPassword();
 
         if (StrUtil.isBlank(newPassword) || StrUtil.isBlank(confirmPassword)) {
-            throw new HjException(ResultCode.PARAM_MISSING);
+            throw new HjException(ResultCode.PARAMETER_CHECK_FAIL);
         }
 
         try {
@@ -268,13 +268,13 @@ public class PAccountController {
             confirmPassword = PwdUtil.decrypt(confirmPassword);
 
         } catch (Exception e) {
-            throw new HjException(ResultCode.PARAMETER_ERROR);
+            throw new HjException(ResultCode.PARAMETER_CHECK_FAIL);
         }
 
         // 从数据获取用户信息
         User userInfo = userService.selectByPrimaryKey(user.getId());
         if (StrUtil.isNotBlank(userInfo.getPassword()) && StrUtil.isBlank(password)) {
-            throw new HjException(ResultCode.PASSWORD_ISNULL);
+            throw new HjException(ResultCode.PARAMETER_CHECK_FAIL);
         }
 
         String passwordSign = userInfo.getPasswordSign();

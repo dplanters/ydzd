@@ -53,6 +53,11 @@ public enum ResultCode {
     DECRYPT_ERROR(1000105, "解密失败", "解密失败", "解密失败", "解密失败"),
 
     /**
+     * 发送http请求发生异常
+     */
+    HTTP_EXCEPTION(1000103, "", "", "", ""),
+
+    /**
      * 0002为登录相关业务
      */
     NO_SESSION(1000201, "缺少sessionId", "缺少sessionId", "缺少sessionId", "缺少sessionId"),
@@ -66,6 +71,29 @@ public enum ResultCode {
     ADMIN_NOT_EXIST(1000205, "账号不存在", "账号不存在", "账号不存在", "账号不存在"),
 
     PASSWORD_ERROR(1000206, "密码错误", "密码错误", "密码错误", "密码错误"),
+    /**
+     * 设备类型为空
+     */
+    DEVICE_TYPE_ISNULL(1000207, "设备类型为空", "Jenis peralatan kosong", "Loại thiết bị trống", "Blank device type"),
+    /**
+     * 手机终端类型为空
+     */
+    TERM_TYPE_ISNULL(1000208, "手机终端类型为空", "Jenis akhir ponsel kosong", "Loại thiết bị đầu cuối điện thoại trống",
+            "Blank phone terminal type"),
+    /**
+     * 设备IMEI不能为空
+     */
+    IMEI_TOKEN_ISNULL(1000209, "备IMEI不能为空", "IMEI peralatan tidak boleh kosong", "thiết bị IMEI  không được rỗng",
+            "Device IMEI can not be blank"),
+    /**
+     * 用户已锁定
+     */
+    USER_DISABLED(1000210, "用户已锁定", "用户已锁定", "用户已锁定", "用户已锁定"),
+    /**
+     * 用户名或密码错误
+     */
+    USER_NAME_PASSWORD_ERROR(1000211, "用户名或密码错误", "Nama pelanggan atau kata sandi salah",
+            "Tên người dùng hoặc mật khẩu không chính xác", "Wrong user's name or password"),
 
     /**
      * 0003
@@ -90,6 +118,23 @@ public enum ResultCode {
      * 0002为账号相关
      */
     ADMIN_EXIST(2000201, "账号已存在", "账号已存在", "账号已存在", "账号已存在"),
+    /**
+     * 用户不存在
+     */
+    USER_NOT_EXISTS(2000202, "用户不存在", "用户不存在", "用户不存在", "用户不存在"),
+    /**
+     * 用户已存在
+     */
+    USER_EXISTS(2000203, "用户已存在", "Pengguna telah ada", "Người dùng đã tồn tại", "The user existed already "),
+    /**
+     * 密码不一致
+     */
+    CONFIRM_PASSWORD_ERROR(2000204, "密码不一致", "Kata sandi tidak sesuai", "Mật khẩu không nhất quán",
+            "Inconsistant password"),
+    /**
+     * 原密码错误
+     */
+    OLD_PASSWORD_ERROR(2000205, "原密码错误", "Kata sandi sebelumnya salah", "Lỗi mật khẩu ban đầu", "Wrong old password"),
 
     /**
      * 00003为角色相关业务
@@ -98,6 +143,7 @@ public enum ResultCode {
 
     ROLE_HAS_NORMAL_ADMIN(2000302, "角色下存在正常用户,请先删除相关用户", "角色下存在正常用户,请先删除相关用户", "角色下存在正常用户,请先删除相关用户", "角色下存在正常用户," +
             "请先删除相关用户"),
+    ROLENAME_EXISTS(2000303, "角色名已经存在", "Nama peran telah ada", "Tên vai trò đã tồn tại", "The role name existed already"),
     /**
      * 0004为权限管理相关
      */
@@ -119,87 +165,30 @@ public enum ResultCode {
     TEMPLATE_NOT_EXIST(2000602, "模板不存在", "", "", ""),
     CONDITION_NOT_EXIST(2000603, "条件不存在", "", "", ""),
     SMS_ILLEGAL_DATE(2000604, "配置不合法", "", "", ""),
-    SMS_ILLEGAL_CRON(2000604, "cron表达式不正确", "", "", ""),
-
-    UNSUPPORTED_OPERATION(-17, "不支持的操作方式", "", "", ""),
-
-    // 用户已锁定
-    USER_DISABLED(-1033, "用户已锁定", "Pengguna telah terkunci", "người dùng đã bị  khóa ", "User locked"),
-    // 身份证验证失败
-    ID_CARD_VALIDATE_FAIL(-301, "身份证验证失败", "Verifikasi kartu identitas gagal", "Xác minh ID không thành công",
-            "ID verification falied"),
-    // 参数错误
-    PARAMETER_ERROR(-124, "参数错误", "Parameter salah", "Lỗi tham số", "Wrong parameter"),
-    // 用户未登录
-    SESSIONID_ISNULL(-105, "用户未登录", "Pengguna belum masuk", "Người dùng chưa đăng nhập", "Not login yet"),
-    // 用户不存在
-    USER_NOT_EXISTS(-122, "用户不存在", "Pengguna tidak ada", "Người dùng không tồn tại", "The user doesn't exist"),
-
-    // 缺少必要参数
-    PARAM_MISSING(-107, "缺少必要参数", "Kekurangan parameter yang diperlukan", "Thiếu thông số cần thiết",
-            "Necessary parameters missing"),
-    // 设备类型为空
-    DEVICETYPE_ISNULL(-103, "设备类型为空", "Jenis peralatan kosong", "Loại thiết bị trống", "Blank device type"),
-
-    // 发送http请求发生异常
-    HTTP_EXCEPTION(-404, "", "", "", ""),
-    ERROR(1, "失败", "Gagal", "Không thành công", "Failed"),
-
-    // 密码长度不合法
-    PASSWORD_LENGTH(-221, "密码长度不合法", "Panjang pesan pendek ilegal", "Độ dài mật khẩu là bất hợp pháp",
-            "Password in unvalid length"),
-
-    // 10分钟内只能发送3条短信
-    AUTH_COUNT_TEN_LIMIT(-204, "10分钟内只能发送3条短信", "Hanya dapat kirim 3 pesan dalam waktu 10 menit",
+    SMS_ILLEGAL_CRON(2000605, "cron表达式不正确", "", "", ""),
+    /**
+     * 10分钟内只能发送3条短信
+     */
+    AUTH_COUNT_TEN_LIMIT(2000606, "10分钟内只能发送3条短信", "Hanya dapat kirim 3 pesan dalam waktu 10 menit",
             "Chỉ có thể gửi 3 tin nhắn  trong vòng 5 phút", "You can have only 3 SMS in 5 minutes"),
-    // 密码格式错误
-
-    // 热推产品已上线
-    PRODUCTS_HOT_IS_ONLINE(-146, "该产品已热推", "该产品已热推", "", ""),
-
-
-    // 验证码失效，请重新获取
-    AUTH_INVALID(-201, "验证码失效，请重新获取", "Kode verifikasi tidak valid, silahkan ambil kembali",
+    /**
+     * 验证码失效，请重新获取
+     */
+    AUTH_INVALID(2000607, "验证码失效，请重新获取", "Kode verifikasi tidak valid, silahkan ambil kembali",
             "Mã xác minh không hợp lệ, vui lòng lấy lại", "Unvalid verification code, please request again"),
-
-    // 用户已存在
-    USER_EXISTS(-123, "用户已存在", "Pengguna telah ada", "Người dùng đã tồn tại", "The user existed already "),
-    PASSWORD_FORMAT_ERROR(-222, "密码格式错误", "Format kata sandi salah", "Định dạng mật khẩu sai",
-            "Password in wrong form"),
-    // 验证码错误
-    AUTH_ERROR(-202, "验证码错误", "Kode verifikasi salah", "Lỗi mã xác minh", "Wrong verification code"),
-    // 验证码输错次数过多
-    AUTH_FAIL_COUNT(-203, "验证码输错次数过多", "Input kode verifikasi salah banyak kali", "xác minh quá nhiều lần lỗi",
+    /**
+     * 验证码错误
+     */
+    AUTH_ERROR(2000608, "验证码错误", "Kode verifikasi salah", "Lỗi mã xác minh", "Wrong verification code"),
+    /**
+     * 验证码输错次数过多
+     */
+    AUTH_FAIL_COUNT(2000609, "验证码输错次数过多", "Input kode verifikasi salah banyak kali", "xác minh quá nhiều lần lỗi",
             "  Too many errors"),
-    // 角色名已经存在
-
-    // 24小时内只能发送10条同类短信
-    AUTH_COUNT_24_HOUR(-205, "", "", "", ""),
-
-
-    // 手机终端类型为空
-    TERM_TYPE_ISNULL(-244, "手机终端类型为空", "Jenis akhir ponsel kosong", "Loại thiết bị đầu cuối điện thoại trống",
-            "Blank phone terminal type"),
-
-    // 密码为空
-    PASSWORD_ISNULL(-220, "密码为空", "Kata sandi kosong", "Mật khẩu trống", "Blank password"),
-
-
-    // 密码不一致
-    CONFIRM_PASSWORD_ERROR(-227, "密码不一致", "Kata sandi tidak sesuai", "Mật khẩu không nhất quán",
-            "Inconsistant password"),
-
-    // 原密码错误
-    OLD_PASSWORD_ERROR(-226, "原密码错误", "Kata sandi sebelumnya salah", "Lỗi mật khẩu ban đầu", "Wrong old password"),
-    // 用户名或密码错误
-    USER_NAME_PASSWORD_ERROR(-272, "用户名或密码错误", "Nama pelanggan atau kata sandi salah",
-            "Tên người dùng hoặc mật khẩu không chính xác", "Wrong user's name or password"),
-    ROLENAME_EXISTS(-701, "角色名已经存在", "Nama peran telah ada", "Tên vai trò đã tồn tại", "The role name existed already"),
-
-    // 设备IMEI不能为空
-    IMEI_TOKEN_ISNULL(-330, "备IMEI不能为空", "IMEI peralatan tidak boleh kosong", "thiết bị IMEI  không được rỗng",
-            "Device IMEI can not be blank"),
-
+    /**
+     * 24小时内只能发送10条同类短信
+     */
+    AUTH_COUNT_24_HOUR(2000610, "24小时内只能发送10条同类短信", "24小时内只能发送10条同类短信", "24小时内只能发送10条同类短信", "24小时内只能发送10条同类短信"),
     ;
 
     /**
