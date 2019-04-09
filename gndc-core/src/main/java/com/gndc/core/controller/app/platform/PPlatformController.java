@@ -1,13 +1,13 @@
 package com.gndc.core.controller.app.platform;
 
+import cn.hutool.core.date.DateUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.enums.common.StatusEnum;
-import com.gndc.common.utils.DateUtil;
 import com.gndc.core.api.app.platform.PAppExceptionUploadRequest;
 import com.gndc.core.api.app.platform.PPlatformBaseInfoRequest;
 import com.gndc.core.api.common.CommonRequest;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.common.CommonResponse;
 import com.gndc.core.model.AppException;
 import com.gndc.core.model.CommonQuestion;
@@ -107,7 +107,7 @@ public class PPlatformController {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
         AppException appException = new AppException();
 
-        Date now = DateUtil.getCountyTime();
+        Date now = DateUtil.date().toJdkDate();
         appException.setCreateTime(now);
         appException.setSessionId(request.getHeader().getSessionId());
         appException.setException(request.getException());

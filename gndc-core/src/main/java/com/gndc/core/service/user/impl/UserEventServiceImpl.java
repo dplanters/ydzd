@@ -1,9 +1,9 @@
 package com.gndc.core.service.user.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.common.model.BaseEntity;
 import com.gndc.common.service.impl.BaseServiceImpl;
-import com.gndc.common.utils.DateUtil;
 import com.gndc.core.mapper.simple.UserEventMapper;
 import com.gndc.core.model.UserEvent;
 import com.gndc.core.service.user.UserEventService;
@@ -37,10 +37,10 @@ public class UserEventServiceImpl extends BaseServiceImpl<UserEvent, Integer> im
     @Override
     public int statisticsUserOpenApp(Integer userId, String ip) {
         int ref = 0;
-        Date now = DateUtil.getCountyTime();
+        Date now = DateUtil.date().toJdkDate();
 
-        Date start = DateUtil.getStartTime(now, 0);
-        Date end = DateUtil.getDateEndTime(now);
+        Date start = DateUtil.beginOfDay(now);
+        Date end = DateUtil.endOfDay(now);
 
         Weekend<UserEvent> weekend = Weekend.of(UserEvent.class);
         weekend.selectProperties("id");

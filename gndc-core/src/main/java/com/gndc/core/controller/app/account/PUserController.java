@@ -1,5 +1,7 @@
 package com.gndc.core.controller.app.account;
 
+import cn.hutool.core.date.DateUtil;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.dto.PUserLoginInfoDTO;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.StatusEnum;
@@ -10,11 +12,9 @@ import com.gndc.common.enums.partner.EventFeeTypeEnum;
 import com.gndc.common.enums.product.ProductCoopeModeEnum;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.common.exception.HjException;
-import com.gndc.common.utils.DateUtil;
 import com.gndc.core.api.app.user.event.PUserEventRequest;
 import com.gndc.core.api.app.user.feedback.PFeedBackEditRequest;
 import com.gndc.core.api.common.CommonResponse;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.model.*;
 import com.gndc.core.service.partner.EventFeeService;
 import com.gndc.core.service.platform.FeedbackService;
@@ -85,7 +85,7 @@ public class PUserController {
             throw new HjException(ResultCode.SESSIONID_ISNULL);
         }
 
-        Date now = DateUtil.getCountyTime();
+        Date now = DateUtil.date().toJdkDate();
         UserFeedback feedback = new UserFeedback();
         feedback.setUserId(userInfo.getId());
         feedback.setUserPhone(feedBackEditRequest.getPhone());
@@ -123,7 +123,7 @@ public class PUserController {
             if (eventRequest.getProductId() == 0) {
                 throw new HjException(ResultCode.PARAM_MISSING);
             }
-            Date now = DateUtil.getCountyTime();
+            Date now = DateUtil.date().toJdkDate();
             UserEvent event = new UserEvent();
             event.setUserId(userInfo.getId());
             event.setCreateTime(now);
@@ -169,7 +169,8 @@ public class PUserController {
                 Date currDate = new Date();
 
                 Integer eventFeesCount = userEventService.selectUVCount(userInfo.getId(), eventRequest.getProductId(),
-                        new Date(DateUtil.getStartTime()), currDate);
+                        DateUtil.beginOfDay(DateUtil.date()).toJdkDate(),
+                        currDate);
                 if (eventFeesCount < 1) {
                     EventFee eventFee = new EventFee();
                     eventFee.setProductId(eventRequest.getProductId());

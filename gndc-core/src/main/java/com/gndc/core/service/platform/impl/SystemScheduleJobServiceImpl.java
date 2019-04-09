@@ -1,5 +1,7 @@
 package com.gndc.core.service.platform.impl;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gndc.common.constant.SmsEditConstant;
@@ -10,7 +12,6 @@ import com.gndc.common.enums.job.JobGroupEnum;
 import com.gndc.common.enums.job.JobRunStatusEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
-import com.gndc.common.utils.DateUtil;
 import com.gndc.core.api.admin.sms.*;
 import com.gndc.core.mapper.simple.SystemScheduleJobMapper;
 import com.gndc.core.mappers.SmsJobConditionMapping;
@@ -89,8 +90,8 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
                     String sendStartDate = smsJobCondition.getSendStartDate();
                     String sendEndDate = smsJobCondition.getSendEndDate();
                     if (StrUtil.isNotBlank(sendStartDate) && StrUtil.isNotBlank(sendEndDate)) {
-                        Date startDate = DateUtil.stringToTime(sendStartDate, DateUtil.DATE_FORMAT_23);
-                        Date endDate = DateUtil.stringToTime(sendEndDate, DateUtil.DATE_FORMAT_23);
+                        Date startDate = DateUtil.parse(sendStartDate, DatePattern.NORM_DATE_PATTERN);
+                        Date endDate = DateUtil.parse(sendEndDate, DatePattern.NORM_DATE_PATTERN);
                         Date currDate = new Date();
                         if (currDate.before(startDate) || endDate.before(currDate)) {
                             continue;
@@ -155,12 +156,12 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
             if (SmsEditConstant.TIMING_SEND_TYPE_2.equals(request.getTimingSendType())) {
                 //发送日期
                 Calendar calendar = Calendar.getInstance();
-                Date sendDate = DateUtil.getDateTime(request.getSendDate(), DateUtil.FORMAT_1);
+                Date sendDate = DateUtil.parse(request.getSendDate(), DatePattern.NORM_DATE_PATTERN);
                 calendar.setTime(sendDate);
                 Integer year = calendar.get(Calendar.YEAR);
                 Integer month = calendar.get(Calendar.MONTH) + 1;
                 Integer day = calendar.get(Calendar.DAY_OF_MONTH);
-                Date dateTime = DateUtil.getDateTime(sendTimeArr[i], DateUtil.FORMAT_7);
+                Date dateTime = DateUtil.parse(sendTimeArr[i], "HH:mm").toJdkDate();
                 calendar.setTime(dateTime);
                 Integer hour = calendar.get(Calendar.HOUR_OF_DAY);
                 Integer minute = calendar.get(Calendar.MINUTE);
@@ -170,7 +171,7 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
             if (SmsEditConstant.TIMING_SEND_TYPE_1.equals(request.getTimingSendType())) {
                 //发送时间
                 Calendar calendar = Calendar.getInstance();
-                Date dateTime = DateUtil.getDateTime(sendTimeArr[i], DateUtil.FORMAT_7);
+                Date dateTime = DateUtil.parse(sendTimeArr[i], "HH:mm").toJdkDate();
                 calendar.setTime(dateTime);
                 Integer hour = calendar.get(Calendar.HOUR_OF_DAY);
                 Integer minute = calendar.get(Calendar.MINUTE);
@@ -207,12 +208,12 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
         if (SmsEditConstant.TIMING_SEND_TYPE_2.equals(request.getTimingSendType())) {
             //发送日期
             Calendar calendar = Calendar.getInstance();
-            Date sendDate = DateUtil.getDateTime(request.getSendDate(), DateUtil.FORMAT_1);
+            Date sendDate = DateUtil.parse(request.getSendDate(), DatePattern.NORM_DATE_PATTERN);
             calendar.setTime(sendDate);
             Integer year = calendar.get(Calendar.YEAR);
             Integer month = calendar.get(Calendar.MONTH) + 1;
             Integer day = calendar.get(Calendar.DAY_OF_MONTH);
-            Date dateTime = DateUtil.getDateTime(request.getSendTime(), DateUtil.FORMAT_7);
+            Date dateTime = DateUtil.parse(request.getSendTime(), "HH:mm").toJdkDate();
             calendar.setTime(dateTime);
             Integer hour = calendar.get(Calendar.HOUR_OF_DAY);
             Integer minute = calendar.get(Calendar.MINUTE);
@@ -221,7 +222,7 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
         } else if (SmsEditConstant.TIMING_SEND_TYPE_1.equals(request.getTimingSendType())) {
             //发送时间
             Calendar calendar = Calendar.getInstance();
-            Date dateTime = DateUtil.getDateTime(request.getSendDate(), DateUtil.FORMAT_7);
+            Date dateTime = DateUtil.parse(request.getSendDate(), "HH:mm").toJdkDate();
             calendar.setTime(dateTime);
             Integer hour = calendar.get(Calendar.HOUR_OF_DAY);
             Integer minute = calendar.get(Calendar.MINUTE);
