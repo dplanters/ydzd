@@ -77,15 +77,13 @@ public class AOAccountController {
         Admin admin = adminService.selectOneByProperty(Admin::getLoginName, loginName);
 
         if (admin == null) {
-            String template = "用户名 {} 不存在";
-            String msg = StrUtil.format(template, loginName);
+            String msg = StrUtil.format("用户名 {} 不存在", loginName);
             logger.warn(msg);
-            throw new HjException(ResultCode.ADMIN_NOT_EXIST, msg);
+            throw new HjException(ResultCode.ADMIN_NOT_EXIST);
         }
 
         if (admin.getStatus().equals(StatusEnum.DELETE.getCode())) {
-            String template = "用户名 {} 已停用";
-            String msg = StrUtil.format(template, loginName);
+            String msg = StrUtil.format("用户名 {} 已停用", loginName);
             logger.warn(msg);
             throw new HjException(ResultCode.ADMIN_NOT_EXIST, msg);
         }
@@ -128,10 +126,9 @@ public class AOAccountController {
                 admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
                 break;
             default:
-                String template = "无效的账号类型";
-                String msg = StrUtil.format(template, loginName);
+                String msg = "无效的账号类型";
                 logger.warn(msg);
-                throw new HjException(ResultCode.SYSTEM_BUSY, msg);
+                throw new HjException(ResultCode.SYSTEM_BUSY);
         }
         AOAdminLoginInfoDTO adminInfo = AOAdminLoginInfoDTOMapping.INSTANCE.convert(admin);
         aoLoginResponse.setAdmin(adminInfo);

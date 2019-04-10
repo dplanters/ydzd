@@ -52,7 +52,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer> implements R
         if (originalRole != null) {
             String msg = StrUtil.format("{} 已经存在", roleName);
             logger.warn(msg);
-            throw new HjException(ResultCode.ROLENAME_EXISTS, msg);
+            throw new HjException(ResultCode.ROLENAME_EXISTS);
         }
         role.setPlatform(request.getPlatform());
         role.setRoleName(roleName);

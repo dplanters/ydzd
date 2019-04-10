@@ -55,7 +55,7 @@ public enum ResultCode {
     /**
      * 发送http请求发生异常
      */
-    HTTP_EXCEPTION(1000103, "", "", "", ""),
+    HTTP_EXCEPTION(1000106, "请求错误", "请求错误", "请求错误", "请求错误"),
 
     /**
      * 0002为登录相关业务
@@ -83,7 +83,7 @@ public enum ResultCode {
     /**
      * 设备IMEI不能为空
      */
-    IMEI_TOKEN_ISNULL(1000209, "备IMEI不能为空", "IMEI peralatan tidak boleh kosong", "thiết bị IMEI  không được rỗng",
+    IMEI_TOKEN_ISNULL(1000209, "设备IMEI不能为空", "IMEI peralatan tidak boleh kosong", "thiết bị IMEI  không được rỗng",
             "Device IMEI can not be blank"),
     /**
      * 用户已锁定
@@ -147,9 +147,9 @@ public enum ResultCode {
     /**
      * 0004为权限管理相关
      */
-    RIGHT_IS_USING(2000401, "权限在使用", "权限在使用", "权限在使用", "权限在使用"),
+    RIGHT_IS_USING(2000401, "权限在使用，请先取消相关角色授权后再进行删除", "权限在使用，请先取消相关角色授权后再进行删除", "权限在使用，请先取消相关角色授权后再进行删除", "权限在使用，请先取消相关角色授权后再进行删除"),
 
-    RIGHT_HAS_CHILDREN(2000402, "权限存在子权限", "权限存在子权限", "权限存在子权限", "权限存在子权限"),
+    RIGHT_HAS_CHILDREN(2000402, "权限存在子权限，请先删除子权限后后再进行删除", "权限存在子权限，请先删除子权限后后再进行删除", "权限存在子权限，请先删除子权限后后再进行删除", "权限存在子权限，请先删除子权限后后再进行删除"),
 
     /**
      * 0005为产品相关

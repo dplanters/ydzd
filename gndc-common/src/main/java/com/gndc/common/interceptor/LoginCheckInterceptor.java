@@ -115,7 +115,8 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
                         redisTemplate.opsForValue().set(CacheConstant.NAMESPACE_USER_LOGIN + sessionId, user, expire,
                                 TimeUnit.SECONDS);
                     } else {
-                        logger.warn("无效的sessionId");
+                        String msg = StrUtil.format("无效的sessionId:{}", sessionId);
+                        logger.warn(msg);
                         ResponseUtil.sendError(response, HttpStatus.OK.value(),
                                 String.valueOf(ResultCode.INVALID_SESSION.getCode()));
                         return false;

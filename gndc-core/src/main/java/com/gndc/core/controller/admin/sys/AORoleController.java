@@ -101,7 +101,7 @@ public class AORoleController {
         if (normalAdminCount > 0) {
             String msg = StrUtil.format("角色编号 {} 存在正常用户，请先删除相关用户", request.getId());
             logger.warn(msg);
-            throw new HjException(ResultCode.ROLE_HAS_NORMAL_ADMIN, msg);
+            throw new HjException(ResultCode.ROLE_HAS_NORMAL_ADMIN);
         }
 
         List<RoleRight> roleRights = roleRightService.selectByProperty(RoleRight::getRoleId, id);

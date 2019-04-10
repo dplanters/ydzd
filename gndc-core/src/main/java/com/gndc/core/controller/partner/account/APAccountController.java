@@ -79,17 +79,15 @@ public class APAccountController {
         Admin admin = adminService.selectOneByProperty(Admin::getLoginName, loginName);
 
         if (admin == null) {
-            String template = "用户名 {} 不存在";
-            String msg = StrUtil.format(template, loginName);
+            String msg = StrUtil.format("用户名 {} 不存在", loginName);
             logger.warn(msg);
-            throw new HjException(ResultCode.USER_NOT_EXISTS, msg);
+            throw new HjException(ResultCode.USER_NOT_EXISTS);
         }
 
         if (admin.getStatus().equals(StatusEnum.DELETE.getCode())) {
-            String template = "用户名 {} 已停用";
-            String msg = StrUtil.format(template, loginName);
+            String msg = StrUtil.format("用户名 {} 已停用", loginName);
             logger.warn(msg);
-            throw new HjException(ResultCode.USER_DISABLED, msg);
+            throw new HjException(ResultCode.USER_DISABLED);
         }
         //密码校验
         if (!accountService.passwordCheck(admin, password)) {

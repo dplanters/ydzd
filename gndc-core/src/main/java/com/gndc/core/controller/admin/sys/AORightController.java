@@ -113,7 +113,7 @@ public class AORightController {
         if (rightIdCount > 0) {
             String msg = StrUtil.format("权限编号 {} 在使用，请先取消相关角色授权后再进行删除！", id);
             logger.warn(msg);
-            throw new HjException(ResultCode.RIGHT_IS_USING, msg);
+            throw new HjException(ResultCode.RIGHT_IS_USING);
         }
 
         int superIdCount = rightService.selectCountByProperty(Right::getSuperId, id);
@@ -121,7 +121,7 @@ public class AORightController {
         if (superIdCount> 0) {
             String msg = StrUtil.format("权限编号 {} 存在子权限，请先删除子权限后后再进行删除！", id);
             logger.warn(msg);
-            throw new HjException(ResultCode.RIGHT_IS_USING, msg);
+            throw new HjException(ResultCode.RIGHT_IS_USING);
         }
 
         boolean success = rightService.deleteByPrimaryKey(id);
