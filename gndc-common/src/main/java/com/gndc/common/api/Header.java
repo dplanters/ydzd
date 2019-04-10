@@ -72,6 +72,11 @@ public class Header implements Serializable {
     private String signMsg;
 
     /**
+     * 地区
+     */
+    private String locale;
+
+    /**
      * 分页信息
      */
     private PageInfo page;

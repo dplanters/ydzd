@@ -24,12 +24,12 @@ public class HjException extends RuntimeException {
     private String msg;
 
     public HjException(ResultCode result) {
-        super(result.getI18NContent());
+        super(result.getMsg());
         this.result = result;
     }
 
     public HjException(ResultCode result, String msg) {
-        super(result.getI18NContent());
+        super(result.getMsg());
         this.result = result;
         this.msg = msg;
     }
@@ -39,7 +39,7 @@ public class HjException extends RuntimeException {
     }
 
     public String getMsg() {
-        return null == msg ? result.getI18NContent() : msg;
+        return null == msg ? result.getMsg() : msg;
     }
 
 }

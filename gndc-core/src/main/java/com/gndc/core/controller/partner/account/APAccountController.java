@@ -91,7 +91,6 @@ public class APAccountController {
         }
         //密码校验
         if (!accountService.passwordCheck(admin, password)) {
-            logger.warn(ResultCode.PASSWORD_ERROR.getI18NContent());
             throw new HjException(ResultCode.PASSWORD_ERROR);
         }
         admin.setLastLoginIp(request.getHeader().getIp());
@@ -137,7 +136,6 @@ public class APAccountController {
 
         //密码校验
         if (!accountService.passwordCheck(admin, request.getOldPassword())) {
-            logger.warn(ResultCode.OLD_PASSWORD_ERROR.getI18NContent());
             throw new HjException(ResultCode.OLD_PASSWORD_ERROR);
         }
 

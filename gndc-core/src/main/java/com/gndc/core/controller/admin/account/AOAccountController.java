@@ -89,7 +89,6 @@ public class AOAccountController {
         }
         //密码校验
         if (!accountService.passwordCheck(admin, password)) {
-            logger.warn(ResultCode.PASSWORD_ERROR.getI18NContent());
             throw new HjException(ResultCode.PASSWORD_ERROR);
         }
         admin.setLastLoginIp(request.getHeader().getIp());

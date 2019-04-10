@@ -43,7 +43,6 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
             if (noHandler.equals(true)) {
                 String msg = StrUtil.format("{} 未初始化", request.getServletPath());
                 logger.warn(msg);
-                ResultCode.RIGHT_NOT_INITIALISE.setCNContent(msg);
                 ResponseUtil.sendError(response, HttpStatus.OK.value(),
                         String.valueOf(ResultCode.RIGHT_NOT_INITIALISE.getCode()));
                 return false;
@@ -57,7 +56,7 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
                     (RedisTemplate) BeanFactoryUtil.getBean("redisTemplate");
 
             if (StrUtil.isEmpty(sessionId)) {
-                logger.warn(ResultCode.NO_SESSION.getI18NContent());
+                logger.warn("缺少sessionId");
                 ResponseUtil.sendError(response, HttpStatus.OK.value(), String.valueOf(ResultCode.NO_SESSION.getCode()));
                 return false;
             } else {
@@ -137,7 +136,7 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
                         hasRight(partner.getRights(), request.getServletPath(), hasRight);
                     }
                     if (!hasRight.contains(true)) {
-                        logger.warn(ResultCode.NO_PERMISSION.getI18NContent());
+                        logger.warn("没有权限");
                         ResponseUtil.sendError(response, HttpStatus.OK.value(),
                                 String.valueOf(ResultCode.NO_PERMISSION.getCode()));
                         return false;

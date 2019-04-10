@@ -7,7 +7,7 @@ import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.gndc.common.interceptor.LoginCheckInterceptor;
 import com.gndc.common.interceptor.OpenSourceInterceptor;
-import com.gndc.core.controller.common.CustomErrorController;
+import com.gndc.common.exception.CustomErrorController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
