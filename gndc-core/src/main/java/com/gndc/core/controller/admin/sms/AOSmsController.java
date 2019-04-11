@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.constant.SmsEditConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.StatusEnum;
@@ -11,13 +12,16 @@ import com.gndc.common.enums.sms.SmsChannelEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.core.api.admin.sms.*;
 import com.gndc.core.api.common.CommonResponse;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.mappers.SmsConditionMapping;
 import com.gndc.core.mappers.SmsSignMapping;
 import com.gndc.core.mappers.SmsTemplateMapping;
-import com.gndc.core.model.*;
+import com.gndc.core.model.SmsCondition;
+import com.gndc.core.model.SmsGroupLog;
+import com.gndc.core.model.SmsSign;
+import com.gndc.core.model.SmsTemplate;
 import com.gndc.core.service.platform.SystemScheduleJobService;
 import com.gndc.core.service.sms.*;
+import org.quartz.CronExpression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.weekend.Weekend;
 import tk.mybatis.mapper.weekend.WeekendCriteria;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * 短信管理
@@ -444,6 +448,9 @@ public class AOSmsController {
      */
     @PostMapping("/timingSend")
     public ResponseMessage<CommonResponse> timingSend(@Validated @RequestBody AOSmsTimingSendRequest request) throws Exception {
+        if(!CronExpression.isValidExpression(request.getCronExpression())){
+            throw new HjException(ResultCode.SMS_ILLEGAL_CRON);
+        }
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
         CommonResponse commonResponse = new CommonResponse();
         commonResponse.setResult(systemScheduleJobService.timingSendJob(request));
@@ -581,6 +588,9 @@ public class AOSmsController {
      */
     @PostMapping("/updateTimingSend")
     public ResponseMessage<CommonResponse> updateTimingSend(@Validated @RequestBody AOSmsUpdateTimingSendRequest request) throws Exception {
+        if(!CronExpression.isValidExpression(request.getCronExpression())){
+            throw new HjException(ResultCode.SMS_ILLEGAL_CRON);
+        }
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
         CommonResponse commonResponse = new CommonResponse();
         commonResponse.setResult(systemScheduleJobService.updateTimingSendJob(request));

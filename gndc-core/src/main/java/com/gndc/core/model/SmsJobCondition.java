@@ -3,9 +3,9 @@ package com.gndc.core.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 @Table(name = "dc_sms_job_condition")
 @Getter
@@ -75,16 +75,4 @@ public class SmsJobCondition implements Serializable {
      * 电话
      */
     private String phones;
-
-    /**
-     * 发送开始时间
-     */
-    @Column(name = "send_start_date")
-    private String sendStartDate;
-
-    /**
-     * 发送结束时间
-     */
-    @Column(name = "send_end_date")
-    private String sendEndDate;
 }

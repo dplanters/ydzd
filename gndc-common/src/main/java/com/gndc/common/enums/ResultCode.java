@@ -153,6 +153,9 @@ public enum ResultCode {
     TEMPLATE_NOT_EXIST(2000602),
     CONDITION_NOT_EXIST(2000603),
     SMS_ILLEGAL_DATE(2000604),
+    /**
+     * cron表达式非法
+     */
     SMS_ILLEGAL_CRON(2000605),
     /**
      * 10分钟内只能发送3条短信

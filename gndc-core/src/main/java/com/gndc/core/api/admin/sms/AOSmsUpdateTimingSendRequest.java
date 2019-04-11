@@ -17,36 +17,12 @@ public class AOSmsUpdateTimingSendRequest {
     /**
      * 任务id
      */
-    private Integer jobId;
-    /**
-     * 发送类型1循环发送 2非循环发送
-     */
     @NotNull
-    private Byte timingSendType;
+    private Integer jobId;
 
     /**
-     * 非循环发送：发送日期
-     */
-    private String sendDate;
-
-    /**
-     * 发送时间
+     * cron表达式
      */
     @NotBlank
-    private String sendTime;
-
-    /**
-     * 循环发送：循环开始日期
-     */
-    private String sendStartDate;
-
-    /**
-     * 循环发送：循环结束日期
-     */
-    private String sendEndDate;
-
-    /**
-     * 循环发送：周
-     */
-    private Integer[] weeks;
+    private String cronExpression;
 }
