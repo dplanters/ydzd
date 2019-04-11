@@ -4,14 +4,15 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.dto.APAdminLoginInfoDTO;
+import com.gndc.common.dto.RightInfoDTO;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.PlatformEnum;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.PwdUtil;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.partner.account.APLoginRequest;
 import com.gndc.core.api.partner.account.APLoginResponse;
 import com.gndc.core.api.partner.sys.APAdminResetPwdRequest;
@@ -24,6 +25,7 @@ import com.gndc.core.service.account.AdminService;
 import com.gndc.core.service.sys.RightService;
 import com.gndc.core.service.sys.RoleRightService;
 import com.gndc.core.service.sys.RoleService;
+import com.gndc.core.util.RightConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,6 +116,8 @@ public class APAccountController {
             admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
         }
         APAdminLoginInfoDTO adminInfo = APAdminLoginInfoDTOMapping.INSTANCE.convert(admin);
+        List<RightInfoDTO> rightInfoDTOS = RightConvertUtil.convertToRightInfo(rights);
+        adminInfo.setRights(CollUtil.isEmpty(rightInfoDTOS) ? null : rightInfoDTOS.get(0).getChildren());
         apLoginResponse.setAdmin(adminInfo);
         apLoginResponse.setSessionId(sessionId);
         //缓存半小时

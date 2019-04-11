@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.dto.AOAdminLoginInfoDTO;
+import com.gndc.common.dto.RightInfoDTO;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.admin.AdminSuperAdminEnum;
 import com.gndc.common.enums.common.PlatformEnum;
@@ -117,13 +118,13 @@ public class AOAccountController {
                 //获取所有权限id集合
                 rightIds = rightService.rightIds(PlatformEnum.OPERATOR.getCode());
                 rights = rightService.rightsTree((byte)1, PlatformEnum.OPERATOR.getCode(), 0, rightIds);
-                admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
+//                admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
                 break;
             case ORDINARY_ADMIN:
                 Role role = roleService.selectByPrimaryKey(admin.getRoleId());
                 rightIds = roleRightService.getRightIds(role.getId());
                 rights = rightService.rightsTree((byte)1, PlatformEnum.OPERATOR.getCode(), 0, rightIds);
-                admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
+//                admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
                 break;
             default:
                 String msg = "无效的账号类型";
@@ -131,7 +132,8 @@ public class AOAccountController {
                 throw new HjException(ResultCode.SYSTEM_BUSY);
         }
         AOAdminLoginInfoDTO adminInfo = AOAdminLoginInfoDTOMapping.INSTANCE.convert(admin);
-        adminInfo.setRights(RightConvertUtil.convertToRightInfo(rights));
+        List<RightInfoDTO> rightInfoDTOS = RightConvertUtil.convertToRightInfo(rights);
+        adminInfo.setRights(CollUtil.isEmpty(rightInfoDTOS) ? null : rightInfoDTOS.get(0).getChildren());
         aoLoginResponse.setAdmin(adminInfo);
         aoLoginResponse.setSessionId(sessionId);
         //缓存半小时
