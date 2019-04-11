@@ -1,18 +1,16 @@
 package com.gndc.core.controller.admin.sys;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
-import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.common.PlatformEnum;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.core.api.admin.sys.*;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.model.Admin;
 import com.gndc.core.model.Right;
 import com.gndc.core.model.Role;
@@ -21,6 +19,7 @@ import com.gndc.core.service.account.AdminService;
 import com.gndc.core.service.sys.RightService;
 import com.gndc.core.service.sys.RoleRightService;
 import com.gndc.core.service.sys.RoleService;
+import com.gndc.core.util.RightConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,44 +147,10 @@ public class AORoleController {
         List<Right> rights = rightService.rightsTree((byte)1, fetch.getCode(), 0,
                 rightService.rightIds(request.getPlatform())).get(0).getChildren();
 
-        aoRightTreeResponse.setRightIds(convertOwn(ownRights));
-        aoRightTreeResponse.setRightTree(convert(rights));
+        aoRightTreeResponse.setRightIds(RightConvertUtil.convertOwn(ownRights));
+        aoRightTreeResponse.setRightTree(RightConvertUtil.convert(rights));
         response.setData(aoRightTreeResponse);
         return response;
-    }
-
-    private List<JSONObject> convert(List<Right> rights) {
-        if (CollUtil.isEmpty(rights)) {
-            return null;
-        } else {
-            List<JSONObject> rightsTree = new ArrayList<>();
-            for (int i = 0; i < rights.size(); i++) {
-                Right right = rights.get(i);
-                List<JSONObject> convert = convert(right.getChildren());
-                rightsTree.add(new JSONObject()
-                        .fluentPut("key", right.getId())
-                        .fluentPut("title", right.getRightName())
-                        .fluentPut("children", convert));
-            }
-            return rightsTree;
-        }
-    }
-
-    private List<JSONObject> convertOwn(List<Right> rights) {
-        if (CollUtil.isEmpty(rights)) {
-            return null;
-        } else {
-            List<JSONObject> rightsTree = new ArrayList<>();
-            for (int i = 0; i < rights.size(); i++) {
-                Right right = rights.get(i);
-                List<JSONObject> convert = convertOwn(right.getChildren());
-                rightsTree.add(new JSONObject()
-                        .fluentPut("id", right.getId())
-                        .fluentPut("platform", right.getRightLevel())
-                        .fluentPut("children", convert));
-            }
-            return rightsTree;
-        }
     }
 
     /**

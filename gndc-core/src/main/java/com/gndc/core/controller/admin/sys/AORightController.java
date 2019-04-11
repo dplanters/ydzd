@@ -13,6 +13,7 @@ import com.gndc.core.model.Right;
 import com.gndc.core.model.RoleRight;
 import com.gndc.core.service.sys.RightService;
 import com.gndc.core.service.sys.RoleRightService;
+import com.gndc.core.util.RightConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,11 +79,11 @@ public class AORightController {
      * @return
      */
     @PostMapping("/rightTree")
-    public ResponseMessage<Right> rightTree(@Validated @RequestBody AORightTreeRequest request) {
-        ResponseMessage<Right> response = new ResponseMessage<>();
+    public ResponseMessage<RightInfoDTO> rightTree(@Validated @RequestBody AORightTreeRequest request) {
+        ResponseMessage<RightInfoDTO> response = new ResponseMessage<>();
         List<Right> rights = rightService.rightsTree((byte)1, request.getPlatform(), 0,
                 rightService.rightIds(request.getPlatform()));
-        response.setData(rights.get(0));
+        response.setData(RightConvertUtil.convertToRightInfo(rights).get(0));
         return response;
     }
 

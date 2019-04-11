@@ -3,16 +3,16 @@ package com.gndc.core.controller.admin.account;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.constant.CacheConstant;
+import com.gndc.common.dto.AOAdminLoginInfoDTO;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.admin.AdminSuperAdminEnum;
 import com.gndc.common.enums.common.PlatformEnum;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.exception.HjException;
-import com.gndc.common.dto.AOAdminLoginInfoDTO;
 import com.gndc.core.api.admin.account.AOLoginRequest;
 import com.gndc.core.api.admin.account.AOLoginResponse;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.mappers.AOAdminLoginInfoDTOMapping;
 import com.gndc.core.model.Admin;
 import com.gndc.core.model.Right;
@@ -22,6 +22,7 @@ import com.gndc.core.service.account.AdminService;
 import com.gndc.core.service.sys.RightService;
 import com.gndc.core.service.sys.RoleRightService;
 import com.gndc.core.service.sys.RoleService;
+import com.gndc.core.util.RightConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,6 +131,7 @@ public class AOAccountController {
                 throw new HjException(ResultCode.SYSTEM_BUSY);
         }
         AOAdminLoginInfoDTO adminInfo = AOAdminLoginInfoDTOMapping.INSTANCE.convert(admin);
+        adminInfo.setRights(RightConvertUtil.convertToRightInfo(rights));
         aoLoginResponse.setAdmin(adminInfo);
         aoLoginResponse.setSessionId(sessionId);
         //缓存半小时
