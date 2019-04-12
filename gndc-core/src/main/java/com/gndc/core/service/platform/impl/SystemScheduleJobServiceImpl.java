@@ -135,16 +135,18 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
     }
 
     @Override
-    public Integer updateTimingSendJob(AOSmsUpdateTimingSendRequest request) throws ParseException, SchedulerException {
+    public Integer updateTimingSendJob(AOSmsUpdateTimingSendRequest request) throws SchedulerException {
         SystemScheduleJob systemScheduleJob = this.selectByPrimaryKey(request.getJobId());
         SystemScheduleJob systemScheduleJob4Update = new SystemScheduleJob();
         systemScheduleJob4Update.setId(request.getJobId());
-        SmsJobCondition smsJobCondition = new SmsJobCondition();
-        smsJobCondition.setId(systemScheduleJob.getExtendId());
-        smsJobCondition.setChannelId(request.getChannelId());
         quartzManager.updateJobCron(systemScheduleJob);
         systemScheduleJob4Update.setCronExpression(request.getCronExpression());
-        smsJobConditionService.updateByPrimaryKeySelective(smsJobCondition);
+        if(request.getChannelId() != null && request.getChannelId() != 0 ){
+            SmsJobCondition smsJobCondition = new SmsJobCondition();
+            smsJobCondition.setId(systemScheduleJob.getExtendId());
+            smsJobCondition.setChannelId(request.getChannelId());
+            smsJobConditionService.updateByPrimaryKeySelective(smsJobCondition);
+        }
         return systemScheduleJobService.updateByPrimaryKeySelective(systemScheduleJob4Update);
     }
 

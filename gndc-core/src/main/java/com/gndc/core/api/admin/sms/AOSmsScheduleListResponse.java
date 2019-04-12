@@ -3,7 +3,6 @@ package com.gndc.core.api.admin.sms;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
@@ -58,32 +57,7 @@ public class AOSmsScheduleListResponse implements Serializable {
      */
     private Integer channelId;
     /**
-     * 任务开始时间
-     */
-    private String sendStartDate;
-    /**
-     * 任务结束时间
-     */
-    private String sendEndDate;
-    /**
-     * 发送类型1循环发送 2非循环发送
-     */
-    private Byte timingSendType;
-    /**
      * 用户来源1条件筛选 2导入
      */
     private Byte sourceType;
-
-    /**
-     * 循环发送：周
-     */
-    private String[] weeks;
-    /**
-     * 发送时间
-     */
-    private String sendTime;
-    /**
-     * 非循环发送：发送日期
-     */
-    private String sendDate;
 }

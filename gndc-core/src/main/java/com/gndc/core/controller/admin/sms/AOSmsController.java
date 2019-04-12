@@ -488,25 +488,6 @@ public class AOSmsController {
                 } else {
                     temp.setSourceType(SmsEditConstant.SOURCE_TYPE_1);
                 }
-
-                if (StrUtil.isNotBlank(temp.getExpression())) {
-                    //发送：周  时间
-                    String[] expressionArr = temp.getExpression().split(" ");
-                    String weeksStr = expressionArr[5];
-                    temp.setWeeks(weeksStr.split(","));
-                    temp.setSendTime(expressionArr[2] + ":" + expressionArr[1]);
-                    //发送日期
-                    String month = expressionArr[4].length() == 1 ? "0" + expressionArr[4].length() : expressionArr[4];
-                    String day = expressionArr[3].length() == 1 ? "0" + expressionArr[3].length() : expressionArr[3];
-                    temp.setSendDate(expressionArr[6] + "-" + month + "-" + day);
-                }
-                //定时发送类型
-                String sendStartDate = temp.getSendStartDate();
-                if (StrUtil.isNotBlank(sendStartDate)) {
-                    temp.setTimingSendType(SmsEditConstant.TIMING_SEND_TYPE_1);
-                } else {
-                    temp.setTimingSendType(SmsEditConstant.TIMING_SEND_TYPE_2);
-                }
                 //条件拼接
                 String condition = temp.getCondition();
                 if (StrUtil.isNotBlank(condition)) {

@@ -17,7 +17,7 @@ public interface SystemScheduleJobService extends BaseService<SystemScheduleJob,
 
     Integer timingSendJob(AOSmsTimingSendRequest request) throws ParseException;
 
-    Integer updateTimingSendJob(AOSmsUpdateTimingSendRequest request) throws ParseException, SchedulerException;
+    Integer updateTimingSendJob(AOSmsUpdateTimingSendRequest request) throws SchedulerException;
 
     Integer stopSchedule(AOSmsStopScheduleRequest request) throws SchedulerException;
 }
