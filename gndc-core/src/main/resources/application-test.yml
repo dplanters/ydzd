@@ -5,10 +5,10 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     name: druid
-    password: RooT@Hj01
+    password: dc@2019#pshj
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://127.0.0.1:3306/gndc?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
-    username: root
+    url: jdbc:mysql://127.0.0.1:3306/dc_vn?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+    username: vndc
   redis:
     database: 0
     host: localhost

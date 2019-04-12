@@ -9,7 +9,7 @@ CREATE TABLE `dc_partner_api` (
   `id` int(11) NOT NULL,
   `partner_id` int(11) NOT NULL COMMENT '机构id',
   `api_url` varchar(32) NOT NULL COMMENT '接口地址',
-  `api_type` int(30) NOT NULL COMMENT '接口类型',
+  `api_type` tinyint(2) NOT NULL COMMENT '接口类型',
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   `status` tinyint(2) NOT NULL COMMENT '状态：1 正常； -1删除',
