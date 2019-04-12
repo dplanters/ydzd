@@ -3,6 +3,7 @@ package com.gndc.core.controller.app.platform;
 import cn.hutool.core.date.DateUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.gndc.common.api.Page;
 import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.core.api.app.platform.PAppExceptionUploadRequest;
@@ -77,8 +78,7 @@ public class PPlatformController {
     public ResponseMessage<List<CommonQuestion>> commonQuestion(@Validated @RequestBody CommonRequest request) {
         ResponseMessage<List<CommonQuestion>> response = new ResponseMessage<>();
 
-        PageInfo page = request.getHeader().getPage();
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
 
         CommonQuestion question = new CommonQuestion();
 

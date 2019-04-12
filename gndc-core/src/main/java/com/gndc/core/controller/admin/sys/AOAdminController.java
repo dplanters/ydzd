@@ -5,6 +5,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.PlatformEnum;
@@ -12,7 +13,6 @@ import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.utils.PwdUtil;
 import com.gndc.core.api.admin.sys.*;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.mappers.AOAdminListResponseMapping;
 import com.gndc.core.mappers.AdminMapping;
 import com.gndc.core.model.Admin;
@@ -160,8 +160,7 @@ public class AOAdminController {
     @PostMapping("/adminList")
     public ResponseMessage<List<AOAdminListResponse>> adminList(@Validated @RequestBody AOAdminListRequest request) {
         ResponseMessage<List<AOAdminListResponse>> response = new ResponseMessage<>();
-        PageInfo page = request.getHeader().getPage();
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         List<Admin> admins = adminService.adminList(request);
 
         List<AOAdminListResponse> adminList = new ArrayList<>(admins.size());

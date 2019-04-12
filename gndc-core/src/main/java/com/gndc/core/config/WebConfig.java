@@ -55,9 +55,13 @@ public class WebConfig extends WebMvcConfigurationSupport {
     protected void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(openSourceInterceptor)
                 .addPathPatterns("/**")
+                //排除三方请求接口
+                .excludePathPatterns("/open/**")
                 .order(1);
         registry.addInterceptor(loginCheckInterceptor)
                 .addPathPatterns("/**")
+                //排除三方请求接口
+                .excludePathPatterns("/open/**")
                 .order(2);
     }
 

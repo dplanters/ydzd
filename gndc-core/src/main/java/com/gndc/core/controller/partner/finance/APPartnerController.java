@@ -2,6 +2,7 @@ package com.gndc.core.controller.partner.finance;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.gndc.common.api.Page;
 import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.partner.finance.account.*;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Request;
@@ -129,8 +130,7 @@ public class APPartnerController {
     @PostMapping(value = "/h5/settlementList")
     public ResponseMessage<List<APFinanceSettlement4H5Response>> settlementList4H5(@Validated @RequestBody APFinanceSettlement4H5Request request) {
         ResponseMessage<List<APFinanceSettlement4H5Response>> response = new ResponseMessage<>();
-        PageInfo page = request.getHeader().getPage();
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         List<APFinanceSettlement4H5Response> settlement4H5List = eventFeeService.settlementList4H5(request);
         PageInfo<APFinanceSettlement4H5Response> pageInfo = new PageInfo<>(settlement4H5List);
         response.setData(settlement4H5List);

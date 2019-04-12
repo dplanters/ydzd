@@ -1,16 +1,16 @@
 package com.gndc.core.controller.app.product;
 
-import com.gndc.common.enums.product.ProductDataPeriodUnitEnum;
-import com.gndc.common.enums.user.UserEventsTypeEnum;
-import com.gndc.core.api.app.product.find.PFindProductResponse;
-import com.gndc.core.api.app.product.find.PProductStaticUV;
-import com.gndc.common.api.ResponseMessage;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.gndc.common.api.ResponseMessage;
+import com.gndc.common.enums.product.ProductDataPeriodUnitEnum;
 import com.gndc.common.enums.system.SystemOptionEnum;
+import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.core.api.app.product.find.PFindProductRequest;
+import com.gndc.core.api.app.product.find.PFindProductResponse;
+import com.gndc.core.api.app.product.find.PProductStaticUV;
 import com.gndc.core.api.app.product.hot.PHotProductResponse;
 import com.gndc.core.api.common.CommonRequest;
 import com.gndc.core.model.SystemOption;
@@ -43,14 +43,13 @@ public class PProductController {
     /**
      * 首页精选爆款
      *
-     * @param commonRequest
+     * @param request
      * @return
      */
     @PostMapping("/hot/productList")
-    public ResponseMessage<List<PHotProductResponse>> hotProductList(@Validated @RequestBody CommonRequest commonRequest) {
+    public ResponseMessage<List<PHotProductResponse>> hotProductList(@Validated @RequestBody CommonRequest request) {
         ResponseMessage<List<PHotProductResponse>> response = new ResponseMessage<>();
-        PageInfo page = commonRequest.getHeader().getPage();
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         List<PHotProductResponse> pHotProductList = productService.selectPHotProductList();
         if (pHotProductList != null && pHotProductList.size() > 0) {
             for (PHotProductResponse temp : pHotProductList) {
@@ -132,15 +131,14 @@ public class PProductController {
     /**
      * 找贷款产品列表
      *
-     * @param findProductRequest
+     * @param request
      * @return
      */
     @PostMapping("/find/productList")
-    public ResponseMessage<List<PFindProductResponse>> findProductList(@Validated @RequestBody PFindProductRequest findProductRequest) {
+    public ResponseMessage<List<PFindProductResponse>> findProductList(@Validated @RequestBody PFindProductRequest request) {
         ResponseMessage<List<PFindProductResponse>> response = new ResponseMessage<>();
-        PageInfo page = findProductRequest.getHeader().getPage();
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
-        List<PFindProductResponse> pFindProductList = productService.selectPFindProductList(findProductRequest);
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
+        List<PFindProductResponse> pFindProductList = productService.selectPFindProductList(request);
         if (pFindProductList != null && pFindProductList.size() > 0) {
             List<Integer> productIds = new ArrayList<>();
             List<Byte> eventTypes = new ArrayList<>();

@@ -8,7 +8,6 @@
  ***************************************************************************/
 package com.gndc.common.api;
 
-import com.github.pagehelper.PageInfo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,12 +41,12 @@ public class Header implements Serializable {
     /**
      * 请求发起的位置-纬度
      */
-    private double locLatitude;
+    private Double locLatitude;
 
     /**
      * 请求发起的位置-经度
      */
-    private double locLongitude;
+    private Double locLongitude;
 
     /**
      * sessionId号，登录成功后服务端返回
@@ -63,13 +62,13 @@ public class Header implements Serializable {
      */
     private String sendingTime;
     /**
-     * 签名方式，预留
+     * 签名算法
      */
-    private String signMode;
+    private String algorithm;
     /**
-     * 签名信息，预留
+     * 签名信息
      */
-    private String signMsg;
+    private String sign;
 
     /**
      * 地区
@@ -79,6 +78,6 @@ public class Header implements Serializable {
     /**
      * 分页信息
      */
-    private PageInfo page;
+    private Page page;
 
 }

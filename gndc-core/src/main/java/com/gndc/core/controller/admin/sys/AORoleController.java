@@ -162,8 +162,7 @@ public class AORoleController {
     public ResponseMessage<List<Role>> roleList(@Validated @RequestBody AORoleListRequest request) {
         ResponseMessage<List<Role>> response = new ResponseMessage<>();
 
-        PageInfo page = request.getHeader().getPage();
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         List<Role> roles = roleService.selectByProperty(Role::getPlatform, request.getPlatform());
 
         PageInfo<Role> pageInfo = new PageInfo<>(roles);

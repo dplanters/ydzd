@@ -118,13 +118,11 @@ public class AOAccountController {
                 //获取所有权限id集合
                 rightIds = rightService.rightIds(PlatformEnum.OPERATOR.getCode());
                 rights = rightService.rightsTree((byte)1, PlatformEnum.OPERATOR.getCode(), 0, rightIds);
-//                admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
                 break;
             case ORDINARY_ADMIN:
                 Role role = roleService.selectByPrimaryKey(admin.getRoleId());
                 rightIds = roleRightService.getRightIds(role.getId());
                 rights = rightService.rightsTree((byte)1, PlatformEnum.OPERATOR.getCode(), 0, rightIds);
-//                admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
                 break;
             default:
                 String msg = "无效的账号类型";

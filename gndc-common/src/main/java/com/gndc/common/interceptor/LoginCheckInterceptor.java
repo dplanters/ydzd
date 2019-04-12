@@ -26,6 +26,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+/**
+ * @author <a href="jingkaihui@adpanshi.com">jingkaihui</a>
+ * @Description 用于对需要登录才能访问的资源进行登录校验
+ * @date 2019/4/11
+ */
 @Slf4j
 @Component
 public class LoginCheckInterceptor extends WebContentInterceptor {
