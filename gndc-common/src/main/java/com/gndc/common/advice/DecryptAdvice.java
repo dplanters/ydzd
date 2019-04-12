@@ -58,7 +58,7 @@ public class DecryptAdvice extends RequestBodyAdviceAdapter {
 
         JSONObject header = params.getJSONObject("header");
 
-        String str = PwdUtil.paramsJoin(treeMap, params.getString("randomStr"), key);
+        String str = PwdUtil.paramsJoin(treeMap, params.getString("randomStr"));
         String sign = header.getString("sign");
 
         String decrypt = PwdUtil.decrypt(sign);

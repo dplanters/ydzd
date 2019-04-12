@@ -93,9 +93,8 @@ public class FakerTest {
         String randomStr = RandomUtil.randomString(10);
         params.fluentPut("randomStr", randomStr);
 
-        String key = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCRXYFYTGI9uVipfl9P5loLAWLRIQPpSznBc1ACIpCO/ptKYLXjzunWz2TyCj5OV1yjs9pEIcyOnxs6ESplsUOsEakf6wDgox6sU3A51mQmQlm6ALxtfguurZGOJ0Ksg/gL1q97YWTSMsH9R1slDV95nvMKsQAd4Yd/6i+2/ihaxQIDAQAB";
         //拼接后的待签名字符串
-        String str = PwdUtil.paramsJoin(treeMap, randomStr, key);
+        String str = PwdUtil.paramsJoin(treeMap, randomStr);
 
         //签名
         String encrypt = PwdUtil.encrypt(str);

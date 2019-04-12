@@ -76,13 +76,12 @@ public class PwdUtil {
     }
 
     /**
-     * 为treeMap中的元素使用&进行拼接并拼接随机字符串和秘钥
+     * 为treeMap中的元素使用&进行拼接并拼接随机字符串
      * @param treeMap
      * @param randomStr
-     * @param key
      * @return
      */
-    public static String paramsJoin(TreeMap<String, Object> treeMap, String randomStr, String key) {
+    public static String paramsJoin(TreeMap<String, Object> treeMap, String randomStr) {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, Object> entry : treeMap.entrySet()) {
             String entryKey = entry.getKey();
@@ -93,8 +92,6 @@ public class PwdUtil {
             sb.append("&");
         }
         sb.append("randomStr=" + randomStr);
-        sb.append("&key=");
-        sb.append(key);
         return sb.toString();
     }
 
