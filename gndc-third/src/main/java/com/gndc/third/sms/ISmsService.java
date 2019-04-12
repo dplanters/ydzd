@@ -44,4 +44,9 @@ public interface ISmsService {
      */
     Map<String, String> marketSms(String phone, String message) throws Exception;
 
+    /**
+     * 发送国际即时短信
+     */
+    Map<String, String> sendIntSms(String phone, String message);
+
 }

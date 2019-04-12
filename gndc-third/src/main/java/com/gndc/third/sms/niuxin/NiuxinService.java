@@ -65,6 +65,10 @@ public class NiuxinService implements ISmsService {
     @Value("${NIUXIN_DEBUG}")
     private boolean DEBUG;
 
+    // 短信发送url
+    @Value("${NIUXIN_URI_GET_SEND_SMS_INT}")
+    private String URI_GET_SEND_SMS_INT;
+
     @Override
     public Map<String, String> sendSms(String phone, String message, SmsTemplateType smsType) throws Exception {
         // 返回结果
@@ -133,6 +137,14 @@ public class NiuxinService implements ISmsService {
     public Map<String, String> marketSms(String phone, String message) throws Exception {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public Map<String, String> sendIntSms(String phone, String message) {
+        // 返回结果
+        Map<String, String> result = new HashMap<String, String>();
+
+        return result;
     }
 
 }

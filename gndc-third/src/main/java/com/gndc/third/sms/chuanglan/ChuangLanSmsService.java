@@ -1,6 +1,7 @@
 package com.gndc.third.sms.chuanglan;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
@@ -9,8 +10,7 @@ import com.gndc.third.sms.ISmsService;
 import com.gndc.third.sms.chuanglan.enums.ChuangLanStatusType;
 import com.gndc.third.sms.chuanglan.util.ChuangLanSmsUtil;
 import com.gndc.third.sms.chuanglan.util.SmsSendRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
@@ -24,9 +24,8 @@ import java.util.UUID;
  */
 @PropertySource(value = "classpath:/third.properties")
 @Service
+@Slf4j
 public class ChuangLanSmsService implements ISmsService {
-
-    private static Logger logger = LoggerFactory.getLogger(ChuangLanSmsService.class);
 
     // private static final String CN = Constant.COUNTRY_CODE;
 
@@ -42,10 +41,18 @@ public class ChuangLanSmsService implements ISmsService {
     @Value("${CHUANGLAN_DEBUG}")
     private boolean DEBUG;
 
+    @Value("${CHUANG_LAN_ACCOUNT_INT}")
+    private String CHUANG_LAN_ACCOUNT_INT;
+
+    @Value("${CHUANG_LAN_PASSWORD_INT}")
+    private String CHUANG_LAN_PASSWORD_INT;
+
+    @Value("${CHUANGLAN_SMS_SEND_INT}")
+    private String CHUANGLAN_SMS_SEND_INT;
+
     /**
      * 短信发送
      *
-     * @param from
      * @param to
      * @param text
      * @return @
@@ -110,4 +117,34 @@ public class ChuangLanSmsService implements ISmsService {
         return null;
     }
 
+    @Override
+    public Map<String, String> sendIntSms(String phone, String message) {
+        // 发送结果
+        Map<String, String> sendResult = new HashMap<String, String>();
+
+        if (DEBUG) {
+            sendResult.put("response", "{\"code\":\"0\",\"error\":\"\",\"msgid\":\"1053100497688465408\"}");
+        } else {
+            //组装请求参数
+            JSONObject map = new JSONObject();
+            map.put("account", CHUANG_LAN_ACCOUNT_INT);
+            map.put("password", CHUANG_LAN_PASSWORD_INT);
+            map.put("msg", message);
+            map.put("mobile", phone);
+            //map.put("senderId", senderId);
+
+            String params = map.toString();
+
+            log.info("请求参数为:" + params);
+            try {
+                String result = HttpUtil.post(CHUANGLAN_SMS_SEND_INT, params);
+                log.info("返回参数为:" + result);
+                sendResult.put("response", result);
+            } catch (Exception e) {
+                // TODO: handle exception
+                log.error("请求异常：" + e);
+            }
+        }
+        return null;
+    }
 }
