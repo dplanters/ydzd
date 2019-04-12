@@ -20,3 +20,5 @@ CREATE TABLE `dc_partner_api` (
 #add by fwb at 2019-3-22#
 ALTER TABLE `gndc`.`dc_user`
 ADD COLUMN `id_card` varchar(18) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '身份证';
+
+ALTER TABLE `gndc`.`dc_right` MODIFY COLUMN `right_name` json NOT NULL COMMENT '菜单名称' AFTER `id`;

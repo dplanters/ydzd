@@ -35,7 +35,7 @@ public class TaskUtils {
         Class<?> clazz;
         try {
             clazz = Class.forName(scheduleJob.getBeanClass());
-            object = clazz.newInstance();
+            object = BeanFactoryUtil.getBean(clazz);
         } catch (Exception e) {
             e.printStackTrace();
             throw new HjException(ResultCode.SYSTEM_BUSY, e.getMessage());

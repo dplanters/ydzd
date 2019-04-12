@@ -66,7 +66,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
         List<APProductListResponse> productDatas = new ArrayList<>();
 
         for (int i = 0; i < products.size(); i++) {
-            ProductData pd = productDataMapper.selectOneByProperty("productId", products.get(i).getId());
+            ProductData pd = productDataMapper.selectOneByProperty(ProductData::getProductId, products.get(i).getId());
             APProductListResponse apProductListResponse = APProductListResponseMapper.INSTANCE.convert(products.get(i), pd);
             productDatas.add(apProductListResponse);
         }
@@ -145,7 +145,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             product.setProductStatus(OnlineStatusEnum.ONLINE.getCode());
             product.setOnlineTime(new Date());
         } else {
-            ProductHot productHot = productHotMapper.selectOneByProperty("productId", request.getId());
+            ProductHot productHot = productHotMapper.selectOneByProperty(ProductHot::getProductId, request.getId());
             if (ObjectUtil.isNotNull(productHot)) {
                 //产品处于热推中，下线热推产品
                 productHot.setHotStatus(OnlineStatusEnum.OFFLINE.getCode());

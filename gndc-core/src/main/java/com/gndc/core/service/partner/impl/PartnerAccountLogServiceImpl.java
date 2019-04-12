@@ -1,7 +1,7 @@
 package com.gndc.core.service.partner.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.gndc.common.api.Page;
 import com.gndc.common.enums.partner.PartnerAccountLogStatusEnum;
 import com.gndc.common.enums.partner.PartnerAccountLogTypeEnum;
 import com.gndc.common.service.impl.BaseServiceImpl;
@@ -73,15 +73,13 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
 
     @Override
     public List<?> rechargeList(@RequestBody APRechargeListRequest request) {
-        PageInfo page = request.getHeader().getPage();
-
         Weekend<PartnerAccountLog> weekend = Weekend.of(PartnerAccountLog.class);
         Integer partnerId = request.getApAdmin().getPartnerId();
         weekend.weekendCriteria()
                 .andEqualTo(PartnerAccountLog::getPartnerId, partnerId)
                 .andEqualTo(PartnerAccountLog::getType, PartnerAccountLogTypeEnum.RECHARGET.getCode());
 
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         List<PartnerAccountLog> rechargeList = partnerAccountLogMapper.selectByExample(weekend);
 
         return rechargeList;
@@ -89,15 +87,13 @@ public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccount
 
     @Override
     public List<?> withdrawList(@RequestBody APWithdrawListRequest request) {
-        PageInfo page = request.getHeader().getPage();
-
         Weekend<PartnerAccountLog> weekend = Weekend.of(PartnerAccountLog.class);
         Integer partnerId = request.getApAdmin().getPartnerId();
         weekend.weekendCriteria()
                 .andEqualTo(PartnerAccountLog::getPartnerId, partnerId)
                 .andEqualTo(PartnerAccountLog::getType, PartnerAccountLogTypeEnum.WITHDRAW.getCode());
 
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         List<PartnerAccountLog> withdrawCashList = partnerAccountLogMapper.selectByExample(weekend);
 
         return withdrawCashList;

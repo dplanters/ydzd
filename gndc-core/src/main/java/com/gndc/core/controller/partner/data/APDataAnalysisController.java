@@ -2,12 +2,13 @@ package com.gndc.core.controller.partner.data;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.gndc.common.api.Page;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.partner.EventFeeStatusEnum;
 import com.gndc.common.enums.partner.EventFeeTypeEnum;
 import com.gndc.common.enums.product.ProductCoopeModeEnum;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.partner.data.APDataAnalysisListRequest;
 import com.gndc.core.api.partner.data.APDataAnalysisListResponse;
 import com.gndc.core.service.partner.EventFeeService;
@@ -35,8 +36,7 @@ public class APDataAnalysisController {
     @PostMapping("/dataAnalysis")
     public ResponseMessage<List<APDataAnalysisListResponse>> apDataAnalysis(@Validated @RequestBody APDataAnalysisListRequest request) {
         ResponseMessage<List<APDataAnalysisListResponse>> response = new ResponseMessage<>();
-        PageInfo page = request.getHeader().getPage();
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         Integer partnerId = request.getApAdmin().getPartnerId();
         Integer productId = request.getProductId();
         //一个产品的统计项

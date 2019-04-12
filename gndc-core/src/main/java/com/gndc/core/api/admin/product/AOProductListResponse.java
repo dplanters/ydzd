@@ -71,6 +71,11 @@ public class AOProductListResponse implements Serializable {
     private String borrowTimeDescription;
 
     /**
+     * 1:日2:月
+     */
+    private Byte borrowPeriodUnit;
+
+    /**
      * 最新上线时间
      */
     private Date onlineTime;

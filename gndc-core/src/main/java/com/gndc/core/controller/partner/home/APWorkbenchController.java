@@ -1,12 +1,13 @@
 package com.gndc.core.controller.partner.home;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateUtil;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.enums.partner.EventFeeStatusEnum;
 import com.gndc.common.enums.partner.EventFeeTypeEnum;
 import com.gndc.common.enums.product.ProductCoopeModeEnum;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
-import com.gndc.common.utils.DateUtil;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.partner.home.APWorkbenchStatisticUVRequest;
 import com.gndc.core.api.partner.home.APWorkbenchStatisticUVResponse;
 import com.gndc.core.model.Product;
@@ -46,13 +47,13 @@ public class APWorkbenchController {
         APWorkbenchStatisticUVResponse workbenchStatisticUVResponse = new APWorkbenchStatisticUVResponse();
         if (product != null) {
             //今天开始时间
-            Date beginDate = new Date(DateUtil.getStartTime());
+            Date beginDate = DateUtil.beginOfDay(DateUtil.date()).toJdkDate();
             //今天结束时间
-            Date endDate = new Date();
+            Date endDate = DateUtil.date().toJdkDate();
             //昨天开始时间
-            Date yBeginDate = DateUtil.dateAddDays(beginDate, -1);
+            Date yBeginDate = DateUtil.date(beginDate).offset(DateField.DAY_OF_MONTH, -1);
             //昨天结束时间
-            Date yEndDate = DateUtil.dateAddDays(endDate, -1);
+            Date yEndDate = DateUtil.date(endDate).offset(DateField.DAY_OF_MONTH, -1);
 
 
             //当天0点到当前时段UV

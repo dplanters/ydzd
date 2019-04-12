@@ -3,7 +3,7 @@
 <mapper namespace="com.gndc.core.mapper.simple.SystemScheduleJobMapper">
   <select id="selectSmsJobDetailList" resultType="com.gndc.core.api.admin.sms.AOSmsScheduleListResponse">
     select ssj.id jobId, DATE_FORMAT(ssj.create_time,'%Y-%m-%d %H:%m:%s') createTime,sjc.sign_ids signIds,sc.type, st.content,sc.condition,
-    ssj.cron_expression expression,ssj.job_status jobStatus,sjc.channel_id channelId,sjc.send_start_date sendStartDate,sjc.send_end_date sendEndDate
+    ssj.cron_expression expression,ssj.job_status jobStatus,sjc.channel_id channelId
     FROM dc_system_schedule_job ssj
     left join dc_sms_job_condition sjc on ssj.extend_id = sjc.id
     left join dc_sms_condition sc on sc.id = sjc.condition_id

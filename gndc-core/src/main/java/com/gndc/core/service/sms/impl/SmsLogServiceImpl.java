@@ -1,6 +1,10 @@
 package com.gndc.core.service.sms.impl;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.constant.Constant;
 import com.gndc.common.constant.SmsEditConstant;
@@ -9,14 +13,12 @@ import com.gndc.common.enums.sms.SmsChannelEnum;
 import com.gndc.common.enums.sms.SmsTemplateType;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
-import com.gndc.common.utils.DateUtil;
 import com.gndc.common.utils.PhoneUtil;
 import com.gndc.core.api.admin.sms.AOSmsRealTimeSendRequest;
 import com.gndc.core.api.admin.sms.SmsConditionContent;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
 import com.gndc.core.api.app.platform.Sms24HourCount;
 import com.gndc.core.api.app.platform.SmsInfo;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.model.SmsCondition;
 import com.gndc.core.model.SmsGroupLog;
 import com.gndc.core.model.SmsLog;
@@ -135,7 +137,7 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
 
                 String status = null;
                 // 短信发送日志
-                Date now = DateUtil.getCountyTime();
+                Date now = DateUtil.date().toJdkDate();
                 SmsLog sl = new SmsLog();
                 sl.setMobile(phone);
                 sl.setUserId(userId);
@@ -309,9 +311,8 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
         WeekendCriteria<User, Object> criteria = weekend.weekendCriteria();
 
         //当前时间减去营销时间
-        String beginTime = DateUtil.nowDateAddDays(-marketingTime, DateUtil.FORMAT_2);
-        Date currentTime = new Date();
-        String endTime = DateUtil.timeToString(currentTime, DateUtil.FORMAT_2);
+        String beginTime = DateUtil.date().offset(DateField.DAY_OF_MONTH, -marketingTime).toString(DatePattern.NORM_DATETIME_PATTERN);
+        String endTime = DateUtil.date().toString(DatePattern.NORM_DATETIME_PATTERN);
 
         if (marketingType.equals(SmsEditConstant.MARKETING_TYPE_1)) {
             criteria.andBetween(User::getLastLoginTime, beginTime, endTime);

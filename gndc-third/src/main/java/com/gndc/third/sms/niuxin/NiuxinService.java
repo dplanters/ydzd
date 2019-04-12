@@ -8,12 +8,12 @@
  ***************************************************************************/
 package com.gndc.third.sms.niuxin;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.gndc.common.constant.Constant;
 import com.gndc.common.enums.sms.SmsTemplateType;
-import com.gndc.common.utils.DateUtil;
 import com.gndc.common.utils.HttpClientUtil;
 import com.gndc.third.sms.ISmsService;
 import org.slf4j.Logger;
@@ -23,7 +23,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,7 +92,7 @@ public class NiuxinService implements ISmsService {
             params.put("appkey", API_KEY);
             params.put("secretkey", API_SECRET);
 
-            String timestamp = String.valueOf(DateUtil.timeToLong(new Date()));
+            String timestamp = String.valueOf(DateUtil.date().getTime());
             params.put("timestamp", timestamp);
 
             String sign = SecureUtil.md5(API_KEY + API_SECRET + timestamp).toUpperCase();

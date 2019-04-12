@@ -20,8 +20,6 @@ public class AOAdminLoginInfoDTO implements Serializable {
 
     private Byte superAdmin;
 
-    private Integer partnerId;
-
     private Integer roleId;
 
     private List<RightInfoDTO> rights;

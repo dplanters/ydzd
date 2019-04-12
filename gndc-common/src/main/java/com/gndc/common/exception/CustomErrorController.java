@@ -1,6 +1,7 @@
-package com.gndc.product.controller.common;
+package com.gndc.common.exception;
 
 import com.gndc.common.enums.ResultCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.ErrorProperties.IncludeStacktrace;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
+@Slf4j
 @Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
 public class CustomErrorController extends AbstractErrorController {
@@ -77,7 +78,7 @@ public class CustomErrorController extends AbstractErrorController {
 		    body.clear();
             body.put("success", false);
             body.put("code", ResultCode.NOT_FOUND.getCode());
-            body.put("msg", ResultCode.NOT_FOUND.getI18NContent());
+            body.put("msg", ResultCode.NOT_FOUND.getMsg());
         }
         if (HttpStatus.OK.equals(status)) {
             String code = ((String) body.get("message"));
@@ -85,7 +86,7 @@ public class CustomErrorController extends AbstractErrorController {
             body.clear();
             body.put("success", true);
             body.put("code", response.getCode());
-            body.put("msg", response.getI18NContent());
+            body.put("msg", response.getMsg());
         }
 		return new ResponseEntity<>(body, status);
 	}

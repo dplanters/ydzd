@@ -1,10 +1,11 @@
 package com.gndc.third.oss;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import com.aliyun.oss.ClientConfiguration;
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSException;
-import com.gndc.common.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -76,7 +77,9 @@ public class UploadToOSS {
             return null;
         }
 
-        String yyyyMMdd = DateUtil.timeToString(new Date(), DateUtil.DATE_FORMAT_31);
+
+
+        String yyyyMMdd = DateUtil.date().toString(DatePattern.PURE_DATE_PATTERN);
         //当前时间戳
         long time = new Date().getTime();
         //重新定义文件名（文件名后加时间戳）

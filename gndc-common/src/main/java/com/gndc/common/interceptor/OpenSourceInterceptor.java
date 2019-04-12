@@ -16,7 +16,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
-
+/**
+ * @author <a href="jingkaihui@adpanshi.com">jingkaihui</a>
+ * @Description 用于对不需要授权的公共资源进行标识
+ * @date 2019/4/11
+ */
 @Slf4j
 @Component
 public class OpenSourceInterceptor extends WebContentInterceptor {

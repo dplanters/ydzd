@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.javafaker.Faker;
 import com.gndc.common.utils.PwdUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyPair;
 import java.util.Locale;
+import java.util.TreeMap;
 
 import static org.junit.Assert.assertEquals;
 
@@ -79,5 +81,40 @@ public class FakerTest {
         log.info("数据库中存储的密码:{}", md5Password);
     }
 
+    @Test
+    public void pwdUtilTest() {
+        //待发送参数
+        JSONObject params = params();
+
+        //参数放入treeMap中进行排序
+        TreeMap<String, Object> treeMap = new TreeMap<>();
+        PwdUtil.pushToTreeMap(params, treeMap);
+
+        String randomStr = RandomUtil.randomString(10);
+        params.fluentPut("randomStr", randomStr);
+
+        String key = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCRXYFYTGI9uVipfl9P5loLAWLRIQPpSznBc1ACIpCO/ptKYLXjzunWz2TyCj5OV1yjs9pEIcyOnxs6ESplsUOsEakf6wDgox6sU3A51mQmQlm6ALxtfguurZGOJ0Ksg/gL1q97YWTSMsH9R1slDV95nvMKsQAd4Yd/6i+2/ihaxQIDAQAB";
+        //拼接后的待签名字符串
+        String str = PwdUtil.paramsJoin(treeMap, randomStr, key);
+
+        //签名
+        String encrypt = PwdUtil.encrypt(str);
+
+        String decrypt = PwdUtil.decrypt(encrypt);
+        Assert.assertEquals(str, decrypt);
+    }
+
+    private JSONObject params() {
+        JSONObject params = new JSONObject();
+        params.fluentPut("header", new JSONObject()
+                                .fluentPut("deviceType", 5)
+                                .fluentPut("locale", "vn")
+                                .fluentPut("algorithm", "RSA"))
+                .fluentPut("appId", 1000011110)
+                .fluentPut("partnerId", 100001)
+                .fluentPut("name", "张三");
+
+        return params;
+    }
 
 }

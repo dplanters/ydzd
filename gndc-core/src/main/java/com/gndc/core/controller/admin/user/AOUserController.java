@@ -4,9 +4,10 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.gndc.common.api.Page;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.admin.user.AOUserDetailResponse;
 import com.gndc.core.api.admin.user.AOUserListRequest;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.model.User;
 import com.gndc.core.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,7 @@ public class AOUserController {
     public ResponseMessage<List<User>> searchUserList(@Validated @RequestBody AOUserListRequest request) {
 
         ResponseMessage<List<User>> response = new ResponseMessage<List<User>>();
-        PageInfo page = request.getHeader().getPage();
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         // 用户是否有权限
         Weekend<User> weekend = Weekend.of(User.class);
         weekend.selectProperties("id","phone","regChannel","regTime","lastLoginTime");
@@ -66,8 +66,7 @@ public class AOUserController {
     public ResponseMessage<List<AOUserDetailResponse>> aoUserEventDetailRequest(@Validated @RequestBody AOUserListRequest request) {
 
         ResponseMessage<List<AOUserDetailResponse>> response = new ResponseMessage<List<AOUserDetailResponse>>();
-        PageInfo page = request.getHeader().getPage();
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         List<AOUserDetailResponse> userDetailResponses = userService.selectUserEventsDetail(request);
         PageInfo<AOUserDetailResponse> pageInfo = new PageInfo<>();
         response.setData(userDetailResponses);

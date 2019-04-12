@@ -44,9 +44,8 @@ public class AOProductController {
     @PostMapping("/productList")
     public ResponseMessage<List<AOProductListResponse>> productList(@Validated @RequestBody AOProductListRequest request) {
         ResponseMessage<List<AOProductListResponse>> response = new ResponseMessage<>();
-        PageInfo page = request.getHeader().getPage();
 
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         List<AOProductListResponse> aoProductListResponses = productService.productList(request);
         PageInfo<AOProductListResponse> pageInfo = new PageInfo<>(aoProductListResponses);
 
@@ -185,9 +184,8 @@ public class AOProductController {
     @PostMapping("/productHotList")
     public ResponseMessage<List<AOProductHotListResponse>> productHotList(@Validated @RequestBody AOProductHotListRequest request) {
         ResponseMessage<List<AOProductHotListResponse>> response = new ResponseMessage<>();
-        PageInfo page = request.getHeader().getPage();
 
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         List<AOProductHotListResponse> aoProductHotListResponses = productService.productHotList(request);
 
         PageInfo<AOProductHotListResponse> pageInfo = new PageInfo<>(aoProductHotListResponses);

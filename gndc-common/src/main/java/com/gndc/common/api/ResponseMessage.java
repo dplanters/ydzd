@@ -35,7 +35,7 @@ public class ResponseMessage<T> implements Serializable {
      */
     private T data;
 
-    private String msg = ResultCode.OK.getI18NContent();
+    private String msg = ResultCode.OK.getMsg();
 
     private PageInfo page;
 

@@ -1,5 +1,6 @@
 package com.gndc.core.api.admin.sys;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.api.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,8 +22,7 @@ public class AORightModifyRequest extends RequestMessage {
      * 权限名
      */
     @NotNull
-    @NotBlank
-    private String rightName;
+    private JSONObject rightName;
 
     /**
      * 权限URL

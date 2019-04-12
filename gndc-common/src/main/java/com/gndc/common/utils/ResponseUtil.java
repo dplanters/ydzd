@@ -35,7 +35,7 @@ public class ResponseUtil {
             ResponseMessage<Object> responseMessage = new ResponseMessage<>();
             responseMessage.setSuccess(false)
                     .setCode(ResultCode.SYSTEM_BUSY.getCode())
-                    .setMsg(ResultCode.SYSTEM_BUSY.getI18NContent());
+                    .setMsg(ResultCode.SYSTEM_BUSY.getMsg());
             writer.print(JSONObject.toJSON(responseMessage));
             writer.flush();
             writer.close();

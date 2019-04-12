@@ -45,6 +45,9 @@ spring:
       validationQuery: SELECT 1 FROM dual
   application:
     name: gndc-core
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
 
 
 

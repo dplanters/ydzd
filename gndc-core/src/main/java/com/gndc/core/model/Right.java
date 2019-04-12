@@ -1,8 +1,11 @@
 package com.gndc.core.model;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.model.BaseEntity;
+import com.gndc.common.mybatis.type.JsonTypeHandler;
 import lombok.Getter;
 import lombok.Setter;
+import tk.mybatis.mapper.annotation.ColumnType;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,7 +18,8 @@ public class Right extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String rightName;
+    @ColumnType(typeHandler = JsonTypeHandler.class)
+    private JSONObject rightName;
 
     private String rightUrl;
 

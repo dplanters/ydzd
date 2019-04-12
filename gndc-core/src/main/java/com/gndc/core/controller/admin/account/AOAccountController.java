@@ -3,16 +3,17 @@ package com.gndc.core.controller.admin.account;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.constant.CacheConstant;
+import com.gndc.common.dto.AOAdminLoginInfoDTO;
+import com.gndc.common.dto.RightInfoDTO;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.admin.AdminSuperAdminEnum;
 import com.gndc.common.enums.common.PlatformEnum;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.exception.HjException;
-import com.gndc.common.dto.AOAdminLoginInfoDTO;
 import com.gndc.core.api.admin.account.AOLoginRequest;
 import com.gndc.core.api.admin.account.AOLoginResponse;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.mappers.AOAdminLoginInfoDTOMapping;
 import com.gndc.core.model.Admin;
 import com.gndc.core.model.Right;
@@ -22,6 +23,7 @@ import com.gndc.core.service.account.AdminService;
 import com.gndc.core.service.sys.RightService;
 import com.gndc.core.service.sys.RoleRightService;
 import com.gndc.core.service.sys.RoleService;
+import com.gndc.core.util.RightConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,24 +76,21 @@ public class AOAccountController {
         //业务校验
         String loginName = request.getLoginName();
         String password = request.getPassword();
-        Admin admin = adminService.selectOneByProperty("loginName", loginName);
+        Admin admin = adminService.selectOneByProperty(Admin::getLoginName, loginName);
 
         if (admin == null) {
-            String template = "用户名 {} 不存在";
-            String msg = StrUtil.format(template, loginName);
+            String msg = StrUtil.format("用户名 {} 不存在", loginName);
             logger.warn(msg);
-            throw new HjException(ResultCode.ADMIN_NOT_EXIST, msg);
+            throw new HjException(ResultCode.ADMIN_NOT_EXIST);
         }
 
         if (admin.getStatus().equals(StatusEnum.DELETE.getCode())) {
-            String template = "用户名 {} 已停用";
-            String msg = StrUtil.format(template, loginName);
+            String msg = StrUtil.format("用户名 {} 已停用", loginName);
             logger.warn(msg);
             throw new HjException(ResultCode.ADMIN_NOT_EXIST, msg);
         }
         //密码校验
         if (!accountService.passwordCheck(admin, password)) {
-            logger.warn(ResultCode.PASSWORD_ERROR.getI18NContent());
             throw new HjException(ResultCode.PASSWORD_ERROR);
         }
         admin.setLastLoginIp(request.getHeader().getIp());
@@ -119,21 +118,20 @@ public class AOAccountController {
                 //获取所有权限id集合
                 rightIds = rightService.rightIds(PlatformEnum.OPERATOR.getCode());
                 rights = rightService.rightsTree((byte)1, PlatformEnum.OPERATOR.getCode(), 0, rightIds);
-                admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
                 break;
             case ORDINARY_ADMIN:
                 Role role = roleService.selectByPrimaryKey(admin.getRoleId());
                 rightIds = roleRightService.getRightIds(role.getId());
                 rights = rightService.rightsTree((byte)1, PlatformEnum.OPERATOR.getCode(), 0, rightIds);
-                admin.setRights(CollUtil.isEmpty(rights) ? null : rights.get(0).getChildren());
                 break;
             default:
-                String template = "无效的账号类型";
-                String msg = StrUtil.format(template, loginName);
+                String msg = "无效的账号类型";
                 logger.warn(msg);
-                throw new HjException(ResultCode.ERROR, msg);
+                throw new HjException(ResultCode.SYSTEM_BUSY);
         }
         AOAdminLoginInfoDTO adminInfo = AOAdminLoginInfoDTOMapping.INSTANCE.convert(admin);
+        List<RightInfoDTO> rightInfoDTOS = RightConvertUtil.convertToRightInfo(rights);
+        adminInfo.setRights(CollUtil.isEmpty(rightInfoDTOS) ? null : rightInfoDTOS.get(0).getChildren());
         aoLoginResponse.setAdmin(adminInfo);
         aoLoginResponse.setSessionId(sessionId);
         //缓存半小时

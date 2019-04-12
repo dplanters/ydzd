@@ -13,7 +13,7 @@ import com.gndc.core.service.partner.PartnerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
  * @author jingkaihui
  * @date 2019/2/25
  */
-@RestController
+@Service
 public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> implements EventFeeService {
 
     private static final Logger logger = LoggerFactory.getLogger(EventFeeServiceImpl.class);

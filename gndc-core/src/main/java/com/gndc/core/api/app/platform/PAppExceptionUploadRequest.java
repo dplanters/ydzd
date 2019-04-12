@@ -13,6 +13,8 @@ import com.gndc.common.api.RequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @Setter
 public class PAppExceptionUploadRequest extends RequestMessage {
@@ -20,8 +22,16 @@ public class PAppExceptionUploadRequest extends RequestMessage {
 
     private static final long serialVersionUID = 97305921490193284L;
 
+    /**
+     * 设备类型及app版本号
+     */
+    @NotBlank
     private String deviceAndVersionInfo;
 
+    /**
+     * 异常信息描述
+     */
+    @NotBlank
     private String exception;
 
 }

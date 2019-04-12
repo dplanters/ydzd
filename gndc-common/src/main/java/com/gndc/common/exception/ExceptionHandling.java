@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.List;
+import java.util.Locale;
+
 @Slf4j
 @RestControllerAdvice
 public class ExceptionHandling {
@@ -22,7 +24,7 @@ public class ExceptionHandling {
         //处理异常
         log.error(e.getMessage(), e);
         Integer code = ResultCode.SYSTEM_BUSY.getCode();
-        String msg = ResultCode.SYSTEM_BUSY.getI18NContent();
+        String msg = ResultCode.SYSTEM_BUSY.getMsg();
         ResponseMessage<Object> response = new ResponseMessage<>();
         response.setSuccess(false)
                 .setCode(code)
@@ -35,7 +37,7 @@ public class ExceptionHandling {
         //处理异常
         log.warn(e.getMessage(), e);
         Integer code = ResultCode.NOT_FOUND.getCode();
-        String msg = ResultCode.NOT_FOUND.getI18NContent();
+        String msg = ResultCode.NOT_FOUND.getMsg();
         ResponseMessage<Object> response = new ResponseMessage<>();
         response.setSuccess(false)
                 .setCode(code)
@@ -51,7 +53,7 @@ public class ExceptionHandling {
                 .setCode(ResultCode.PARAMETER_CHECK_FAIL.getCode());
         List<ObjectError> allErrors = e.getBindingResult().getAllErrors();
         JSONArray jsonArray = new JSONArray();
-        String msg = ResultCode.PARAMETER_CHECK_FAIL.getI18NContent();
+        String msg = ResultCode.PARAMETER_CHECK_FAIL.getMsg();
         for (ObjectError error : allErrors) {
             if (error instanceof FieldError) {
                 String field = ((FieldError) error).getField();
@@ -74,7 +76,7 @@ public class ExceptionHandling {
         response.setSuccess(false)
                 .setCode(e.getCode())
                 .setMsg(e.getMsg());
-        log.warn(e.getMessage());
+        log.warn(e.getResult().getMsg(Locale.SIMPLIFIED_CHINESE));
         return response;
     }
 

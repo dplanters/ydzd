@@ -3,41 +3,14 @@ package com.gndc.core.api.admin.sms;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
 public class AOSmsTimingSendRequest extends AOSmsRealTimeSendRequest {
-
     /**
-     * 发送类型1循环发送 2非循环发送
+     * cron表达式
      */
-    @NotNull
-    private Byte timingSendType;
-
-    /**
-     * 非循环发送：发送日期
-     */
-    private String sendDate;
-
-    /**
-     * 发送时间
-     */
-    @NotNull
-    private String[] sendTime;
-
-    /**
-     * 循环发送：循环开始日期
-     */
-    private String sendStartDate;
-
-    /**
-     * 循环发送：循环结束日期
-     */
-    private String sendEndDate;
-
-    /**
-     * 循环发送：周
-     */
-    private Integer[] weeks;
+    @NotBlank
+    private String cronExpression;
 }

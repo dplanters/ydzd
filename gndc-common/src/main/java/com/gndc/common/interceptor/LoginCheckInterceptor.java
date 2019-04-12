@@ -26,6 +26,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+/**
+ * @author <a href="jingkaihui@adpanshi.com">jingkaihui</a>
+ * @Description 用于对需要登录才能访问的资源进行登录校验
+ * @date 2019/4/11
+ */
 @Slf4j
 @Component
 public class LoginCheckInterceptor extends WebContentInterceptor {
@@ -43,7 +49,6 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
             if (noHandler.equals(true)) {
                 String msg = StrUtil.format("{} 未初始化", request.getServletPath());
                 logger.warn(msg);
-                ResultCode.RIGHT_NOT_INITIALISE.setCNContent(msg);
                 ResponseUtil.sendError(response, HttpStatus.OK.value(),
                         String.valueOf(ResultCode.RIGHT_NOT_INITIALISE.getCode()));
                 return false;
@@ -57,7 +62,7 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
                     (RedisTemplate) BeanFactoryUtil.getBean("redisTemplate");
 
             if (StrUtil.isEmpty(sessionId)) {
-                logger.warn(ResultCode.NO_SESSION.getI18NContent());
+                logger.warn("缺少sessionId");
                 ResponseUtil.sendError(response, HttpStatus.OK.value(), String.valueOf(ResultCode.NO_SESSION.getCode()));
                 return false;
             } else {
@@ -115,7 +120,8 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
                         redisTemplate.opsForValue().set(CacheConstant.NAMESPACE_USER_LOGIN + sessionId, user, expire,
                                 TimeUnit.SECONDS);
                     } else {
-                        logger.warn("无效的sessionId");
+                        String msg = StrUtil.format("无效的sessionId:{}", sessionId);
+                        logger.warn(msg);
                         ResponseUtil.sendError(response, HttpStatus.OK.value(),
                                 String.valueOf(ResultCode.INVALID_SESSION.getCode()));
                         return false;
@@ -136,7 +142,7 @@ public class LoginCheckInterceptor extends WebContentInterceptor {
                         hasRight(partner.getRights(), request.getServletPath(), hasRight);
                     }
                     if (!hasRight.contains(true)) {
-                        logger.warn(ResultCode.NO_PERMISSION.getI18NContent());
+                        logger.warn("没有权限");
                         ResponseUtil.sendError(response, HttpStatus.OK.value(),
                                 String.valueOf(ResultCode.NO_PERMISSION.getCode()));
                         return false;

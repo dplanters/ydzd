@@ -1,13 +1,13 @@
 package com.gndc.core.config;
 
+import cn.hutool.core.date.DatePattern;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SimpleDateFormatSerializer;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.gndc.common.utils.DateUtil;
-import com.gndc.core.controller.common.CustomErrorController;
 import com.gndc.common.interceptor.LoginCheckInterceptor;
 import com.gndc.common.interceptor.OpenSourceInterceptor;
+import com.gndc.common.exception.CustomErrorController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
@@ -55,9 +55,13 @@ public class WebConfig extends WebMvcConfigurationSupport {
     protected void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(openSourceInterceptor)
                 .addPathPatterns("/**")
+                //排除三方请求接口
+                .excludePathPatterns("/open/**")
                 .order(1);
         registry.addInterceptor(loginCheckInterceptor)
                 .addPathPatterns("/**")
+                //排除三方请求接口
+                .excludePathPatterns("/open/**")
                 .order(2);
     }
 
@@ -77,7 +81,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
         FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter();
         //2.序列化配置
         SerializeConfig serializeConfig = new SerializeConfig();
-        serializeConfig.put(Date.class, new SimpleDateFormatSerializer(DateUtil.FORMAT_2));
+        serializeConfig.put(Date.class, new SimpleDateFormatSerializer(DatePattern.NORM_DATETIME_PATTERN));
         //3.添加fastJson的配置信息;
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setSerializeConfig(serializeConfig);

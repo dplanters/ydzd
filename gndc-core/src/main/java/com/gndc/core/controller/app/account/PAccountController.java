@@ -1,9 +1,11 @@
 package com.gndc.core.controller.app.account;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.dto.PUserLoginInfoDTO;
 import com.gndc.common.enums.ResultCode;
@@ -11,13 +13,11 @@ import com.gndc.common.enums.common.UserDeviceEnum;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.common.enums.user.UserStatusEnum;
 import com.gndc.common.exception.HjException;
-import com.gndc.common.utils.DateUtil;
 import com.gndc.common.utils.PwdUtil;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
 import com.gndc.core.api.app.platform.SmsInfo;
 import com.gndc.core.api.app.user.account.*;
 import com.gndc.core.api.common.CommonResponse;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.mappers.PUserLoginInfoDTOMapping;
 import com.gndc.core.model.User;
 import com.gndc.core.model.UserEvent;
@@ -82,10 +82,10 @@ public class PAccountController {
         User userInfo = null;
 
         if (StrUtil.isBlank(request.getHeader().getDeviceType())) {
-            throw new HjException(ResultCode.DEVICETYPE_ISNULL);
+            throw new HjException(ResultCode.DEVICE_TYPE_ISNULL);
         }
 
-        userInfo = userService.selectOneByProperty("phone", phone);
+        userInfo = userService.selectOneByProperty(User::getPhone, phone);
         byte deviceType = Byte.parseByte(request.getHeader().getDeviceType());
 
 
@@ -140,7 +140,7 @@ public class PAccountController {
         String appPackage = request.getAppPackage();
 
         if (StrUtil.isBlank(request.getHeader().getDeviceType())) {
-            throw new HjException(ResultCode.DEVICETYPE_ISNULL);
+            throw new HjException(ResultCode.DEVICE_TYPE_ISNULL);
         }
 
         byte deviceType = Byte.parseByte(request.getHeader().getDeviceType());
@@ -167,13 +167,13 @@ public class PAccountController {
             return response;
         }
 
-        Date now = DateUtil.getCountyTime();
+        Date now = DateUtil.date().toJdkDate();
 
         // 验证手机号是否已经注册
-        User user = userService.selectOneByProperty("phone", phone);
+        User user = userService.selectOneByProperty(User::getPhone, phone);
 
         if (null == user) {
-            Date date = DateUtil.getCountyTime();
+            Date date = DateUtil.date().toJdkDate();
             user.setPhone(phone);
             user.setRegDevice(deviceType);
             user.setImei(imei);
@@ -208,7 +208,7 @@ public class PAccountController {
 
     private String doLogin(Integer userId, String ip, String remark, Byte deviceType) {
 
-        Date now = DateUtil.getCountyTime();
+        Date now = DateUtil.date().toJdkDate();
         // 用户登录事件记录
         UserEvent userEvents = new UserEvent();
         userEvents.setUserId(userId);
@@ -248,14 +248,14 @@ public class PAccountController {
         String userInfoStr = (String) redisTemplate.opsForValue().get(CacheConstant.KEY_USER_LOGIN_PREFIX + sessionId);
         User user = JSONObject.parseObject(userInfoStr, User.class);
         if (user == null) {
-            throw new HjException(ResultCode.SESSIONID_ISNULL);
+            throw new HjException(ResultCode.INVALID_SESSION);
         }
         String password = request.getPassword();
         String newPassword = request.getNewPassword();
         String confirmPassword = request.getConfirmPassword();
 
         if (StrUtil.isBlank(newPassword) || StrUtil.isBlank(confirmPassword)) {
-            throw new HjException(ResultCode.PARAM_MISSING);
+            throw new HjException(ResultCode.PARAMETER_CHECK_FAIL);
         }
 
         try {
@@ -268,13 +268,13 @@ public class PAccountController {
             confirmPassword = PwdUtil.decrypt(confirmPassword);
 
         } catch (Exception e) {
-            throw new HjException(ResultCode.PARAMETER_ERROR);
+            throw new HjException(ResultCode.PARAMETER_CHECK_FAIL);
         }
 
         // 从数据获取用户信息
         User userInfo = userService.selectByPrimaryKey(user.getId());
         if (StrUtil.isNotBlank(userInfo.getPassword()) && StrUtil.isBlank(password)) {
-            throw new HjException(ResultCode.PASSWORD_ISNULL);
+            throw new HjException(ResultCode.PARAMETER_CHECK_FAIL);
         }
 
         String passwordSign = userInfo.getPasswordSign();
@@ -328,7 +328,7 @@ public class PAccountController {
         }
 
         // 根据手机号查询出当前用户
-        User user = userService.selectOneByProperty("phone", phone);
+        User user = userService.selectOneByProperty(User::getPhone, phone);
         if (null == user) {
             throw new HjException(ResultCode.USER_NOT_EXISTS);
         }

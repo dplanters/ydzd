@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.constant.SmsEditConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.common.StatusEnum;
@@ -11,13 +12,16 @@ import com.gndc.common.enums.sms.SmsChannelEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.core.api.admin.sms.*;
 import com.gndc.core.api.common.CommonResponse;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.mappers.SmsConditionMapping;
 import com.gndc.core.mappers.SmsSignMapping;
 import com.gndc.core.mappers.SmsTemplateMapping;
-import com.gndc.core.model.*;
+import com.gndc.core.model.SmsCondition;
+import com.gndc.core.model.SmsGroupLog;
+import com.gndc.core.model.SmsSign;
+import com.gndc.core.model.SmsTemplate;
 import com.gndc.core.service.platform.SystemScheduleJobService;
 import com.gndc.core.service.sms.*;
+import org.quartz.CronExpression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.weekend.Weekend;
 import tk.mybatis.mapper.weekend.WeekendCriteria;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * 短信管理
@@ -67,8 +71,7 @@ public class AOSmsController {
     @PostMapping("/statistics")
     public ResponseMessage<List<AOSmsStatisticsResponse>> statistics(@Validated @RequestBody AOSmsStatisticsRequest request) {
         ResponseMessage<List<AOSmsStatisticsResponse>> response = new ResponseMessage<>();
-        PageInfo page = request.getHeader().getPage();
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         List<AOSmsStatisticsResponse> smsStatisticsResponses = null;
         if (request.getType().equals(SmsEditConstant.STATISTICS_DIMENSION_1)) {
             smsStatisticsResponses = smsGroupLogService.groupLogStatisticsByDay(request);
@@ -153,8 +156,7 @@ public class AOSmsController {
     @PostMapping("/sign/list")
     public ResponseMessage<List<SmsSign>> signList(@Validated @RequestBody AOSmsSignListRequest request) {
         ResponseMessage<List<SmsSign>> response = new ResponseMessage<>();
-        PageInfo page = request.getHeader().getPage();
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         Weekend<SmsSign> weekend = Weekend.of(SmsSign.class);
         weekend.selectProperties("id", "name", "channelId", "channelName", "createTime");
         WeekendCriteria<SmsSign, Object> criteria = weekend.weekendCriteria();
@@ -235,16 +237,11 @@ public class AOSmsController {
     @PostMapping("/template/list")
     public ResponseMessage<List<AOSmsTemplateListResponse>> templateList(@Validated @RequestBody AOSmsTemplateListRequest request) {
         ResponseMessage<List<AOSmsTemplateListResponse>> response = new ResponseMessage<>();
-        PageInfo page = request.getHeader().getPage();
-        if (page != null) {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize());
-        }
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         List<AOSmsTemplateListResponse> smsTemplates = smsTemplateService.selectTemplateWithAdminList(request);
-        if (page != null) {
-            PageInfo<AOSmsTemplateListResponse> pageInfo = new PageInfo<>(smsTemplates);
-            pageInfo.setList(null);
-            response.setPage(pageInfo);
-        }
+        PageInfo<AOSmsTemplateListResponse> pageInfo = new PageInfo<>(smsTemplates);
+        pageInfo.setList(null);
+        response.setPage(pageInfo);
         response.setData(smsTemplates);
         return response;
     }
@@ -258,10 +255,7 @@ public class AOSmsController {
     @PostMapping("/condition/list")
     public ResponseMessage<List<AOSmsConditionListResponse>> conditionList(@Validated @RequestBody AOSmsConditionListRequest request) {
         ResponseMessage<List<AOSmsConditionListResponse>> response = new ResponseMessage<>();
-        PageInfo page = request.getHeader().getPage();
-        if (page != null) {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize());
-        }
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         List<AOSmsConditionListResponse> smsConditions = smsConditionService.selectConditionWithAdminList(request);
         if (smsConditions != null && smsConditions.size() > 0) {
             for (AOSmsConditionListResponse temp : smsConditions) {
@@ -300,11 +294,9 @@ public class AOSmsController {
                 }
             }
         }
-        if (page != null) {
-            PageInfo<AOSmsConditionListResponse> pageInfo = new PageInfo<>(smsConditions);
-            pageInfo.setList(null);
-            response.setPage(pageInfo);
-        }
+        PageInfo<AOSmsConditionListResponse> pageInfo = new PageInfo<>(smsConditions);
+        pageInfo.setList(null);
+        response.setPage(pageInfo);
         response.setData(smsConditions);
         return response;
     }
@@ -444,6 +436,9 @@ public class AOSmsController {
      */
     @PostMapping("/timingSend")
     public ResponseMessage<CommonResponse> timingSend(@Validated @RequestBody AOSmsTimingSendRequest request) throws Exception {
+        if(!CronExpression.isValidExpression(request.getCronExpression())){
+            throw new HjException(ResultCode.SMS_ILLEGAL_CRON);
+        }
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
         CommonResponse commonResponse = new CommonResponse();
         commonResponse.setResult(systemScheduleJobService.timingSendJob(request));
@@ -459,8 +454,7 @@ public class AOSmsController {
     @PostMapping("/schedule/list")
     public ResponseMessage<List<AOSmsScheduleListResponse>> scheduleList(@Validated @RequestBody AOSmsScheduleListRequest request) {
         ResponseMessage<List<AOSmsScheduleListResponse>> response = new ResponseMessage<>();
-        PageInfo page = request.getHeader().getPage();
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         List<AOSmsScheduleListResponse> smsJobDetailList = systemScheduleJobService.selectSmsJobDetailList(request);
         if (smsJobDetailList != null && smsJobDetailList.size() > 0) {
             Weekend<SmsSign> weekend = Weekend.of(SmsSign.class);
@@ -581,6 +575,9 @@ public class AOSmsController {
      */
     @PostMapping("/updateTimingSend")
     public ResponseMessage<CommonResponse> updateTimingSend(@Validated @RequestBody AOSmsUpdateTimingSendRequest request) throws Exception {
+        if(!CronExpression.isValidExpression(request.getCronExpression())){
+            throw new HjException(ResultCode.SMS_ILLEGAL_CRON);
+        }
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
         CommonResponse commonResponse = new CommonResponse();
         commonResponse.setResult(systemScheduleJobService.updateTimingSendJob(request));
@@ -596,8 +593,7 @@ public class AOSmsController {
     @PostMapping("/groupLog/list")
     public ResponseMessage<List<AOSmsGroupLogListResponse>> scheduleList(@Validated @RequestBody AOSmsGroupLogListRequest request) {
         ResponseMessage<List<AOSmsGroupLogListResponse>> response = new ResponseMessage<>();
-        PageInfo page = request.getHeader().getPage();
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         List<AOSmsGroupLogListResponse> smsGroupLogLists = smsGroupLogService.selectSmsGroupLogDetailList(request);
         PageInfo<AOSmsGroupLogListResponse> pageInfo = new PageInfo<>(smsGroupLogLists);
         pageInfo.setList(null);

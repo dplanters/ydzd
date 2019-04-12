@@ -1,7 +1,6 @@
 package com.gndc.core.service.sys.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ObjectUtil;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.mapper.simple.RightMapper;
 import com.gndc.core.model.Right;
@@ -65,7 +64,7 @@ public class RightServiceImpl extends BaseServiceImpl<Right, Integer> implements
 
     @Override
     public List<Integer> rightIds(Byte platform) {
-        List<Right> rights = rightMapper.selectByProperty("platform", platform);
+        List<Right> rights = rightMapper.selectByProperty(Right::getPlatform, platform);
         List<Integer> rightIds = new ArrayList<>(rights.size());
         rights.forEach(r -> {
             rightIds.add(r.getId());

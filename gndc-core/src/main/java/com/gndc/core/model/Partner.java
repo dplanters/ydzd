@@ -4,7 +4,6 @@ import com.gndc.common.model.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import tk.mybatis.mapper.annotation.LogicDelete;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -39,6 +38,16 @@ public class Partner extends BaseEntity {
      * 已用授信余额
      */
     private BigDecimal authBalanceUsed;
+
+    /**
+     * 机构应用ID
+     */
+    private String appId;
+
+    /**
+     * 机构公钥
+     */
+    private String publicKey;
 
     /**
      * 状态：1 正常； -1删除

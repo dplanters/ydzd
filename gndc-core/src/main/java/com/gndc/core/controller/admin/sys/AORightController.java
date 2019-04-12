@@ -1,17 +1,19 @@
 package com.gndc.core.controller.admin.sys;
 
 import cn.hutool.core.util.StrUtil;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.dto.RightInfoDTO;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.exception.HjException;
 import com.gndc.core.api.admin.sys.*;
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.mappers.RightInfoDTOMapping;
 import com.gndc.core.mappers.RightMapping;
 import com.gndc.core.model.Right;
+import com.gndc.core.model.RoleRight;
 import com.gndc.core.service.sys.RightService;
 import com.gndc.core.service.sys.RoleRightService;
+import com.gndc.core.util.RightConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,11 +79,11 @@ public class AORightController {
      * @return
      */
     @PostMapping("/rightTree")
-    public ResponseMessage<Right> rightTree(@Validated @RequestBody AORightTreeRequest request) {
-        ResponseMessage<Right> response = new ResponseMessage<>();
+    public ResponseMessage<RightInfoDTO> rightTree(@Validated @RequestBody AORightTreeRequest request) {
+        ResponseMessage<RightInfoDTO> response = new ResponseMessage<>();
         List<Right> rights = rightService.rightsTree((byte)1, request.getPlatform(), 0,
                 rightService.rightIds(request.getPlatform()));
-        response.setData(rights.get(0));
+        response.setData(RightConvertUtil.convertToRightInfo(rights).get(0));
         return response;
     }
 
@@ -107,20 +109,20 @@ public class AORightController {
     public ResponseMessage<Boolean> delete(@Validated @RequestBody AORightDeleteRequest request) {
         ResponseMessage<Boolean> resposne = new ResponseMessage<>();
         Integer id = request.getId();
-        int rightIdCount = roleRightService.selectCountByProperty("rightId", id);
+        int rightIdCount = roleRightService.selectCountByProperty(RoleRight::getRightId, id);
 
         if (rightIdCount > 0) {
             String msg = StrUtil.format("权限编号 {} 在使用，请先取消相关角色授权后再进行删除！", id);
             logger.warn(msg);
-            throw new HjException(ResultCode.RIGHT_IS_USING, msg);
+            throw new HjException(ResultCode.RIGHT_IS_USING);
         }
 
-        int superIdCount = rightService.selectCountByProperty("superId", id);
+        int superIdCount = rightService.selectCountByProperty(Right::getSuperId, id);
 
         if (superIdCount> 0) {
             String msg = StrUtil.format("权限编号 {} 存在子权限，请先删除子权限后后再进行删除！", id);
             logger.warn(msg);
-            throw new HjException(ResultCode.RIGHT_IS_USING, msg);
+            throw new HjException(ResultCode.RIGHT_IS_USING);
         }
 
         boolean success = rightService.deleteByPrimaryKey(id);
