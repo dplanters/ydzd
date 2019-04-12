@@ -362,4 +362,9 @@ public class PaasooSmsService implements ISmsService {
         logger.info("sendsms sendResult:" + JSONObject.toJSONString(result));
         return result;
     }
+
+    @Override
+    public Map<String, String> sendIntSms(String phone, String message) {
+        return null;
+    }
 }
