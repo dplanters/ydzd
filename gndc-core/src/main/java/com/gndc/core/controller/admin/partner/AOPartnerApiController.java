@@ -50,7 +50,7 @@ public class AOPartnerApiController {
     @PostMapping("/addPartnerApi")
     public ResponseMessage addPartnerApi(@Validated @RequestBody AOPartnerApiAddRequest aoPartnerApiAddRequest){
         ResponseMessage responseMessage=new ResponseMessage<>();
-        PartnerApi partnerApi = partnerApiMapping.toAddEntity(aoPartnerApiAddRequest);
+        PartnerApi partnerApi = partnerApiMapping.toEntity(aoPartnerApiAddRequest);
         partnerApiService.insert(partnerApi);
         return responseMessage;
     }
@@ -59,7 +59,7 @@ public class AOPartnerApiController {
     @PostMapping("/updatePartnerApi")
     public ResponseMessage updatePartnerApi(@Validated @RequestBody AOPartnerApiModifyRequest aoPartnerApiModifyRequest){
         ResponseMessage responseMessage=new ResponseMessage<>();
-        PartnerApi partnerApi = partnerApiMapping.toModifyEntity(aoPartnerApiModifyRequest);
+        PartnerApi partnerApi = partnerApiMapping.toEntity(aoPartnerApiModifyRequest);
         partnerApiService.updateByPrimaryKeySelective(partnerApi);
         return responseMessage;
     }
@@ -68,7 +68,7 @@ public class AOPartnerApiController {
     @PostMapping("/deletePartnerApi")
     public ResponseMessage deletePartnerApi(@Validated @RequestBody AOPartnerApiDeleteRequest aoPartnerApiDeleteRequest){
         ResponseMessage responseMessage=new ResponseMessage<>();
-        PartnerApi partnerApi = partnerApiMapping.toDelEntity(aoPartnerApiDeleteRequest);
+        PartnerApi partnerApi = partnerApiMapping.toEntity(aoPartnerApiDeleteRequest);
         Weekend<PartnerApi> weekend=new Weekend(PartnerApi.class);
         weekend.weekendCriteria().andEqualTo(PartnerApi::getId,partnerApi.getId());
         partnerApiService.updateByExampleSelective(partnerApi,weekend);
@@ -78,7 +78,7 @@ public class AOPartnerApiController {
     @PostMapping("/getPartnerApiList")
     public ResponseMessage getPartnerApiList(@Validated @RequestBody AOPartnerApiListRequest aoPartnerApiListRequest){
         ResponseMessage responseMessage=new ResponseMessage<>();
-        PartnerApi partnerApi = partnerApiMapping.toListEntity(aoPartnerApiListRequest);
+        PartnerApi partnerApi = partnerApiMapping.toEntity(aoPartnerApiListRequest);
         PageHelper.startPage(aoPartnerApiListRequest.getPageNum(), aoPartnerApiListRequest.getPageSize());
 
         Weekend<PartnerApi> weekend=new Weekend(PartnerApi.class);
