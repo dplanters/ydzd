@@ -8,7 +8,11 @@
  ***************************************************************************/
 package com.gndc.core.mappers;
 
-import com.gndc.core.api.admin.partner.AOPartnerApiRequest;
+import com.gndc.core.api.admin.partner.AOPartnerApiAddRequest;
+import com.gndc.core.api.admin.partner.AOPartnerApiDeleteRequest;
+import com.gndc.core.api.admin.partner.AOPartnerApiListRequest;
+import com.gndc.core.api.admin.partner.AOPartnerApiModifyRequest;
+import com.gndc.core.model.Partner;
 import com.gndc.core.model.PartnerApi;
 import org.mapstruct.Mapper;
 
@@ -19,8 +23,11 @@ import org.mapstruct.Mapper;
  * @date 2019/4/15  11:32
  */
 @Mapper(componentModel = "spring")
-public interface PartnerApiMapping extends EntityMapper<AOPartnerApiRequest, PartnerApi>{
+public interface PartnerApiMapping {
 
-
+    PartnerApi toAddEntity(AOPartnerApiAddRequest aoPartnerApiAddRequest);
+    PartnerApi toDelEntity(AOPartnerApiDeleteRequest aoPartnerApiDeleteRequest);
+    PartnerApi toModifyEntity(AOPartnerApiModifyRequest aoPartnerApiModifyRequest);
+    PartnerApi toListEntity(AOPartnerApiListRequest aoPartnerApiListRequest);
 
 }

@@ -12,7 +12,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.api.RequestMessage;
 import com.gndc.common.api.ResponseMessage;
-import com.gndc.core.api.admin.partner.AOPartnerApiRequest;
+import com.gndc.core.api.admin.partner.*;
 import com.gndc.core.mappers.PartnerApiMapping;
 import com.gndc.core.model.Partner;
 import com.gndc.core.model.PartnerApi;
@@ -20,12 +20,14 @@ import com.gndc.core.service.partner.PartnerApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.weekend.Weekend;
 
+import javax.validation.Valid;
 import java.util.List;
 
     /**
@@ -46,27 +48,27 @@ public class AOPartnerApiController {
     private PartnerApiService partnerApiService;
 
     @PostMapping("/addPartnerApi")
-    public ResponseMessage addPartnerApi(@RequestBody AOPartnerApiRequest aoPartnerApiRequest){
+    public ResponseMessage addPartnerApi(@Validated @RequestBody AOPartnerApiAddRequest aoPartnerApiAddRequest){
         ResponseMessage responseMessage=new ResponseMessage<>();
-        PartnerApi partnerApi = partnerApiMapping.toEntity(aoPartnerApiRequest);
+        PartnerApi partnerApi = partnerApiMapping.toAddEntity(aoPartnerApiAddRequest);
         partnerApiService.insert(partnerApi);
         return responseMessage;
     }
 
 
     @PostMapping("/updatePartnerApi")
-    public ResponseMessage updatePartnerApi(@RequestBody AOPartnerApiRequest aoPartnerApiRequest){
+    public ResponseMessage updatePartnerApi(@Validated @RequestBody AOPartnerApiModifyRequest aoPartnerApiModifyRequest){
         ResponseMessage responseMessage=new ResponseMessage<>();
-        PartnerApi partnerApi = partnerApiMapping.toEntity(aoPartnerApiRequest);
+        PartnerApi partnerApi = partnerApiMapping.toModifyEntity(aoPartnerApiModifyRequest);
         partnerApiService.updateByPrimaryKeySelective(partnerApi);
         return responseMessage;
     }
 
 
     @PostMapping("/deletePartnerApi")
-    public ResponseMessage deletePartnerApi(@RequestBody AOPartnerApiRequest aoPartnerApiRequest){
+    public ResponseMessage deletePartnerApi(@Validated @RequestBody AOPartnerApiDeleteRequest aoPartnerApiDeleteRequest){
         ResponseMessage responseMessage=new ResponseMessage<>();
-        PartnerApi partnerApi = partnerApiMapping.toEntity(aoPartnerApiRequest);
+        PartnerApi partnerApi = partnerApiMapping.toDelEntity(aoPartnerApiDeleteRequest);
         Weekend<PartnerApi> weekend=new Weekend(PartnerApi.class);
         weekend.weekendCriteria().andEqualTo(PartnerApi::getId,partnerApi.getId());
         partnerApiService.updateByExampleSelective(partnerApi,weekend);
@@ -74,10 +76,10 @@ public class AOPartnerApiController {
     }
 
     @PostMapping("/getPartnerApiList")
-    public ResponseMessage getPartnerApiList(@RequestBody AOPartnerApiRequest aoPartnerApiRequest){
+    public ResponseMessage getPartnerApiList(@Validated @RequestBody AOPartnerApiListRequest aoPartnerApiListRequest){
         ResponseMessage responseMessage=new ResponseMessage<>();
-        PartnerApi partnerApi = partnerApiMapping.toEntity(aoPartnerApiRequest);
-        PageHelper.startPage(aoPartnerApiRequest.getPageNum(), aoPartnerApiRequest.getPageSize());
+        PartnerApi partnerApi = partnerApiMapping.toListEntity(aoPartnerApiListRequest);
+        PageHelper.startPage(aoPartnerApiListRequest.getPageNum(), aoPartnerApiListRequest.getPageSize());
 
         Weekend<PartnerApi> weekend=new Weekend(PartnerApi.class);
         List<PartnerApi> partners = partnerApiService.selectByExample(weekend);

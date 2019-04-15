@@ -78,7 +78,7 @@ public class CacheDataServiceImpl implements CacheDataService {
         //机构信息加入缓存
         Weekend<PartnerApi> partnerApiWeekend = Weekend.of(PartnerApi.class);
         partnerApiWeekend.weekendCriteria().andEqualTo(PartnerApi::getStatus, StatusEnum.NORMAL.getCode());
-        List<PartnerApi> partnerApis = partnerApiService.selectByExample(weekend);
+        List<PartnerApi> partnerApis = partnerApiService.selectByExample(partnerApiWeekend);
         partnerApis.forEach(x->{
             redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_PARTNER_API_LIST,x.getPartnerId()+":"+x.getApiType(),x);
         });

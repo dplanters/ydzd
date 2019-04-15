@@ -11,10 +11,7 @@ package com.gndc.core.api.admin.partner;
 import com.gndc.common.api.RequestMessage;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -24,28 +21,28 @@ import java.util.Date;
  * @date 2019/4/15  11:28
  */
 @Data
-public class AOPartnerApiRequest extends RequestMessage {
+public class AOPartnerApiAddRequest extends RequestMessage {
 
-
-    private Integer id;
     /**
      * 机构id
      */
+    @NotNull
     private Integer partnerId;
     /**
      * 接口地址
      */
+    @NotNull
     private String apiUrl;
     /**
      * 接口类型
      */
+    @NotNull
     private Byte apiType;
-
+    @NotNull
     private Date createTime;
-
-    private Date updateTime;
     /**
      * 状态  1：正常；0：删除
      */
+    @NotNull
     private Byte status;
 }
