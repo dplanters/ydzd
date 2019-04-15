@@ -94,10 +94,10 @@ public class AORightController {
      */
     @PostMapping("/detail")
     public ResponseMessage<Right> detail(@Validated @RequestBody AORightDetailRequest request) {
-        ResponseMessage<Right> resposne = new ResponseMessage<>();
+        ResponseMessage<Right> response = new ResponseMessage<>();
         Right right = rightService.selectByPrimaryKey(request.getId());
-        resposne.setData(right);
-        return resposne;
+        response.setData(right);
+        return response;
     }
 
     /**

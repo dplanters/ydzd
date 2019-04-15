@@ -2,7 +2,7 @@ package com.gndc.core.controller.open;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.api.ResponseMessage;
-import com.gndc.core.api.open.OpenRequest;
+import com.gndc.core.api.open.OpenDemoRequestMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OpenController {
 
     @PostMapping("/openDemo")
-    public ResponseMessage<Object> helloApi(@Validated @RequestBody OpenRequest openRequest) {
+    public ResponseMessage<Object> helloApi(@Validated @RequestBody OpenDemoRequestMessage openRequest) {
         log.info(JSONObject.toJSONString(openRequest, true));
         ResponseMessage<Object> resposne = new ResponseMessage<>();
         resposne.setData(new JSONObject().fluentPut("partnerId", 123).fluentPut("money", 123423));

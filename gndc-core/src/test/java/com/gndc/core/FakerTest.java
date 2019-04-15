@@ -1,26 +1,17 @@
 package com.gndc.core;
 
-import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.SecureUtil;
-import cn.hutool.crypto.asymmetric.AsymmetricAlgorithm;
-import cn.hutool.crypto.asymmetric.KeyType;
-import cn.hutool.crypto.asymmetric.RSA;
 import com.alibaba.fastjson.JSONObject;
 import com.github.javafaker.Faker;
 import com.gndc.common.utils.PwdUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.UnsupportedEncodingException;
-import java.security.KeyPair;
 import java.util.Locale;
-import java.util.TreeMap;
 
 import static org.junit.Assert.assertEquals;
 
@@ -34,7 +25,7 @@ import static org.junit.Assert.assertEquals;
 public class FakerTest {
 
     @Test
-    public void test() throws UnsupportedEncodingException {
+    public void fakerTest() throws UnsupportedEncodingException {
         Faker faker = new Faker(Locale.CHINA);
         String name = faker.name().fullName(); // Miss Samanta Schmidt
         String firstName = faker.name().firstName(); // Emory
@@ -44,23 +35,6 @@ public class FakerTest {
         log.info(JSONObject.toJSONString(faker.address().city(), true));
         log.info(faker.friends().location());
 
-    }
-
-    @Test
-    public void rsaTest() {
-        KeyPair keyPair = SecureUtil.generateKeyPair(AsymmetricAlgorithm.RSA.getValue());
-        String privateKeyStr = Base64.encode(keyPair.getPrivate().getEncoded());
-        log.info(privateKeyStr);
-        String publicKeyStr = Base64.encode(keyPair.getPublic().getEncoded());
-        log.info(publicKeyStr);
-
-        RSA rsa = SecureUtil.rsa(privateKeyStr, publicKeyStr);
-
-        byte[] encrypt = rsa.encrypt("123456", KeyType.PublicKey);
-        String encode = Base64.encode(encrypt);
-        log.info(encode);
-        byte[] decrypt = rsa.decrypt(Base64.decode(encode), KeyType.PrivateKey);
-        log.info(StrUtil.str(decrypt, "UTF-8"));
     }
 
     @Test
@@ -79,41 +53,6 @@ public class FakerTest {
 
         log.info("passwordSign:{}", passwordSign);
         log.info("数据库中存储的密码:{}", md5Password);
-    }
-
-    @Test
-    public void pwdUtilTest() {
-        //待发送参数
-        JSONObject params = params();
-
-        //参数放入treeMap中进行排序
-        TreeMap<String, Object> treeMap = new TreeMap<>();
-        PwdUtil.pushToTreeMap(params, treeMap);
-
-        String randomStr = RandomUtil.randomString(10);
-        params.fluentPut("randomStr", randomStr);
-
-        //拼接后的待签名字符串
-        String str = PwdUtil.paramsJoin(treeMap, randomStr);
-
-        //签名
-        String encrypt = PwdUtil.encrypt(str);
-
-        String decrypt = PwdUtil.decrypt(encrypt);
-        Assert.assertEquals(str, decrypt);
-    }
-
-    private JSONObject params() {
-        JSONObject params = new JSONObject();
-        params.fluentPut("header", new JSONObject()
-                                .fluentPut("deviceType", 5)
-                                .fluentPut("locale", "vn")
-                                .fluentPut("algorithm", "RSA"))
-                .fluentPut("appId", 1000011110)
-                .fluentPut("partnerId", 100001)
-                .fluentPut("name", "张三");
-
-        return params;
     }
 
 }

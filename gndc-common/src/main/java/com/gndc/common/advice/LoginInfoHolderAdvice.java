@@ -8,7 +8,6 @@ import com.gndc.common.dto.APAdminLoginInfoDTO;
 import com.gndc.common.dto.PUserLoginInfoDTO;
 import com.gndc.common.utils.BeanFactoryUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpInputMessage;
@@ -20,7 +19,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAd
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
-import java.util.Locale;
 
 /**
  * @author <a href="jingkaihui@adpanshi.com">jingkaihui</a>
@@ -42,10 +40,6 @@ public class LoginInfoHolderAdvice extends RequestBodyAdviceAdapter {
 
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
-        String locale = ((RequestMessage) body).getHeader().getLocale();
-        if (ObjectUtil.isNotNull(locale)) {
-            LocaleContextHolder.setLocale(Locale.forLanguageTag(locale));
-        }
         RedisTemplate<String, Serializable> redisTemplate = (RedisTemplate<String, Serializable>) BeanFactoryUtil.getBean("redisTemplate");
         Object originalSessionId = RequestContextHolder.getRequestAttributes().getAttribute("sessionId",
                 RequestAttributes.SCOPE_REQUEST);

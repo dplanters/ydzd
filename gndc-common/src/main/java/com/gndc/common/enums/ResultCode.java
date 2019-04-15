@@ -50,6 +50,11 @@ public enum ResultCode {
     HTTP_EXCEPTION(1000106),
 
     /**
+     * 签名验证失败
+     */
+    CHECK_SIGN_FAIL(1000107),
+
+    /**
      * 0002为登录相关业务
      */
     NO_SESSION(1000201),

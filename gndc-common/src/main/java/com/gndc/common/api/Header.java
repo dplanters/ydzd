@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author <a href="changjunhui8173@adpanshi.com">changjunhui</a>
@@ -58,9 +59,10 @@ public class Header implements Serializable {
      */
     private String ip;
     /**
-     * 发送时间，格式：yyyy-MM-dd HH:mm:ss
+     * 发送时间，格式：yyyy-MM-dd HH:mm:ss.SSS
      */
-    private String sendingTime;
+    private Date timestamp;
+
     /**
      * 签名算法
      */

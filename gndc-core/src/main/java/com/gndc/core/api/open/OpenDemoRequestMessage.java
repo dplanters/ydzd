@@ -1,8 +1,10 @@
 package com.gndc.core.api.open;
 
-import com.gndc.common.api.RequestMessage;
+import com.gndc.common.api.OpenRequestMessage;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * @author <a href="jingkaihui@adpanshi.com">jingkaihui</a>
@@ -11,13 +13,9 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class OpenRequest extends RequestMessage {
+public class OpenDemoRequestMessage extends OpenRequestMessage {
 
-    private Integer appId;
-
-    private Integer partnerId;
-
+    @NotBlank
     private String name;
 
-    private String randomStr;
 }

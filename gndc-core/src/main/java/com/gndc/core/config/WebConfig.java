@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Web相关配置
+ */
 @Configuration
 public class WebConfig extends WebMvcConfigurationSupport {
 
