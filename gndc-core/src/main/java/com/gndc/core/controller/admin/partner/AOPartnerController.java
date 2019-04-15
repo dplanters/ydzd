@@ -3,6 +3,7 @@ package com.gndc.core.controller.admin.partner;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.api.ResponseMessage;
+import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.core.api.admin.partner.*;
 import com.gndc.core.mappers.PartnerMapping;
@@ -11,6 +12,7 @@ import com.gndc.core.service.partner.PartnerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +30,8 @@ public class AOPartnerController {
 
     @Autowired
     private PartnerService partnerService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 添加商户信息
@@ -39,6 +43,7 @@ public class AOPartnerController {
         ResponseMessage<Integer> response = new ResponseMessage<>();
         Partner partner = PartnerMapping.INSTANCE.convert(request);
         partnerService.insertSelective(partner);
+        redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_PARTNER_LIST,partner.getAppId(),partner);
         response.setData(partner.getId());
         return response;
     }
@@ -54,6 +59,7 @@ public class AOPartnerController {
         Partner partner = PartnerMapping.INSTANCE.convert(request);
         partnerService.updateByPrimaryKeySelective(partner);
         response.setData(partner.getId());
+        redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_PARTNER_LIST,partner.getAppId(),partner);
         return response;
     }
 
@@ -68,6 +74,7 @@ public class AOPartnerController {
         Partner partner = new Partner().setId(request.getId()).setStatus(StatusEnum.DELETE.getCode());
         partnerService.updateByPrimaryKeySelective(partner);
         response.setData(true);
+        redisTemplate.opsForHash().delete(CacheConstant.KEY_ALL_PARTNER_LIST,partner.getAppId(),partner);
         return response;
     }
 
