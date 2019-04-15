@@ -9,6 +9,7 @@ import com.gndc.core.mapper.simple.RoleRightMapper;
 import com.gndc.core.mappers.RightInfoDTOMapping;
 import com.gndc.core.model.*;
 import com.gndc.core.service.common.CacheDataService;
+import com.gndc.core.service.partner.PartnerApiService;
 import com.gndc.core.service.partner.PartnerService;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -43,6 +44,8 @@ public class CacheDataServiceImpl implements CacheDataService {
 
     @Autowired
     private PartnerService partnerService;
+    @Autowired
+    private PartnerApiService partnerApiService;
 
     @PostConstruct
     private void init() {
@@ -64,11 +67,20 @@ public class CacheDataServiceImpl implements CacheDataService {
             redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE_RIGHT, roleRight.getId(), roleRight);
         }
 
+        //机构信息加入缓存
         Weekend<Partner> weekend = Weekend.of(Partner.class);
         weekend.weekendCriteria().andEqualTo(Partner::getStatus, StatusEnum.NORMAL.getCode());
         List<Partner> partners = partnerService.selectByExample(weekend);
         partners.forEach(x->{
             redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_PARTNER_LIST,x.getAppId(),x);
+        });
+
+        //机构信息加入缓存
+        Weekend<PartnerApi> partnerApiWeekend = Weekend.of(PartnerApi.class);
+        partnerApiWeekend.weekendCriteria().andEqualTo(PartnerApi::getStatus, StatusEnum.NORMAL.getCode());
+        List<PartnerApi> partnerApis = partnerApiService.selectByExample(weekend);
+        partnerApis.forEach(x->{
+            redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_PARTNER_API_LIST,x.getPartnerId(),x);
         });
 
     }
