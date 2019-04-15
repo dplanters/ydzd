@@ -68,6 +68,11 @@ public class CacheConstant {
     public static final String KEY_ALL_ROLE_RIGHT = "all_role_right";
 
     /**
+     * redis中存机构 t_partner的key
+     */
+    public static final String KEY_ALL_PARTNER_LIST = "all_partner_list";
+
+    /**
      * APP用户10分钟短信验证前缀
      */
     public static final String KEY_USER_SMS_10_PREFIX = "10m_";
