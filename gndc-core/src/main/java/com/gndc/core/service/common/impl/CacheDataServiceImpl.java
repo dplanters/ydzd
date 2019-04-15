@@ -80,7 +80,7 @@ public class CacheDataServiceImpl implements CacheDataService {
         partnerApiWeekend.weekendCriteria().andEqualTo(PartnerApi::getStatus, StatusEnum.NORMAL.getCode());
         List<PartnerApi> partnerApis = partnerApiService.selectByExample(weekend);
         partnerApis.forEach(x->{
-            redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_PARTNER_API_LIST,x.getPartnerId(),x);
+            redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_PARTNER_API_LIST,x.getPartnerId()+":"+x.getApiType(),x);
         });
 
     }
