@@ -12,6 +12,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.api.RequestMessage;
 import com.gndc.common.api.ResponseMessage;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.core.api.admin.partner.*;
 import com.gndc.core.mappers.PartnerApiMapping;
 import com.gndc.core.model.Partner;
@@ -74,6 +75,7 @@ public class AOPartnerApiController {
         PartnerApi partnerApi = partnerApiMapping.toEntity(aoPartnerApiDeleteRequest);
         Weekend<PartnerApi> weekend=new Weekend(PartnerApi.class);
         weekend.weekendCriteria().andEqualTo(PartnerApi::getId,partnerApi.getId());
+        partnerApi.setStatus(StatusEnum.DELETE.getCode());
         partnerApiService.updateByExampleSelective(partnerApi,weekend);
         return responseMessage;
     }
