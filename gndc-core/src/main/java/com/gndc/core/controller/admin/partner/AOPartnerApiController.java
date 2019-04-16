@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.weekend.Weekend;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
     /**
@@ -51,7 +52,8 @@ public class AOPartnerApiController {
     public ResponseMessage addPartnerApi(@Validated @RequestBody AOPartnerApiAddRequest aoPartnerApiAddRequest){
         ResponseMessage responseMessage=new ResponseMessage<>();
         PartnerApi partnerApi = partnerApiMapping.toEntity(aoPartnerApiAddRequest);
-        partnerApiService.insert(partnerApi);
+        partnerApi.setCreateTime(new Date());
+        partnerApiService.insertSelective(partnerApi);
         return responseMessage;
     }
 
@@ -60,6 +62,7 @@ public class AOPartnerApiController {
     public ResponseMessage updatePartnerApi(@Validated @RequestBody AOPartnerApiModifyRequest aoPartnerApiModifyRequest){
         ResponseMessage responseMessage=new ResponseMessage<>();
         PartnerApi partnerApi = partnerApiMapping.toEntity(aoPartnerApiModifyRequest);
+        partnerApi.setUpdateTime(new Date());
         partnerApiService.updateByPrimaryKeySelective(partnerApi);
         return responseMessage;
     }

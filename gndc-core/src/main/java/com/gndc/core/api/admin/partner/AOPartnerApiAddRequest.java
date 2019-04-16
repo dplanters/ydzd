@@ -38,11 +38,4 @@ public class AOPartnerApiAddRequest extends RequestMessage {
      */
     @NotNull
     private Byte apiType;
-    @NotNull
-    private Date createTime;
-    /**
-     * 状态  1：正常；0：删除
-     */
-    @NotNull
-    private Byte status;
 }

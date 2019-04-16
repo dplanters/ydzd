@@ -8,6 +8,7 @@
  ***************************************************************************/
 package com.gndc.common.model;
 
+import javax.persistence.Column;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,8 +16,11 @@ import java.util.Date;
  * @author <a href="hugaoxiang8619@adpanshi.com">hugaoxiang</a>
  */
 public class BaseEntity implements Serializable {
+
+    @Column(name = "create_time")
     private Date createTime;
 
+    @Column(name = "update_time")
     private Date updateTime;
 
     public Date getCreateTime() {
