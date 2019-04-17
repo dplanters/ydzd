@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -55,9 +54,13 @@ public class WebConfig extends WebMvcConfigurationSupport {
     protected void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(openSourceInterceptor)
                 .addPathPatterns("/**")
+                //排除三方请求接口
+                .excludePathPatterns("/demo/**")
                 .order(1);
         registry.addInterceptor(loginCheckInterceptor)
                 .addPathPatterns("/**")
+                //排除三方请求接口
+                .excludePathPatterns("/demo/**")
                 .order(2);
     }
 
@@ -87,10 +90,8 @@ public class WebConfig extends WebMvcConfigurationSupport {
         //4.在convert中添加配置信息.
         fastJsonHttpMessageConverter.setSupportedMediaTypes(fastMediaTypes);
         fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
-        //如果有Jackson则移除
-        converters.removeIf(httpMessageConverter -> httpMessageConverter instanceof MappingJackson2HttpMessageConverter);
-        //将fastJsonHttpMessageConverter
-        converters.add(fastJsonHttpMessageConverter);
+        //将FastJsonHttpMessageConverter放在MappingJackson2HttpMessageConverter前边
+        converters.add(converters.size() - 1, fastJsonHttpMessageConverter);
     }
 
 }

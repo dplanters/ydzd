@@ -21,3 +21,16 @@ spring:
         max-idle: 8
         min-idle: 0
     timeout: 10000ms
+
+  cloud:
+    inetutils:
+      ignored-interfaces: #忽略docker0网卡以及 veth开头的网卡
+        - docker0
+        - veth.*
+    consul:
+      enabled: true
+      host: localhost
+      port: 8500
+      discovery:
+        enabled: true
+        prefer-ip-address: true
