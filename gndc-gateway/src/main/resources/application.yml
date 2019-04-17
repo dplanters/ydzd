@@ -1,0 +1,29 @@
+server:
+  port: 10000
+
+zuul:
+  routes:
+    gndc-demo:
+      path: /demo/**
+      url: http://localhost:12000/demo/
+    gndc-admin:
+      path: /admin/**
+      url: http://localhost:11000/admin/
+    gndc-partner:
+      path: /partner/**
+      url: http://localhost:11000/partner/
+    gndc-app:
+      path: /app/**
+      url: http://localhost:11000/app/
+
+spring:
+  application:
+    name: gndc-gateway
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      enabled: true
+      discovery:
+        enabled: true
+        prefer-ip-address: true

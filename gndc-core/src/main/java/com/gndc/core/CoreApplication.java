@@ -2,6 +2,7 @@ package com.gndc.core;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import tk.mybatis.spring.annotation.MapperScan;
 
 /**
@@ -16,6 +17,7 @@ import tk.mybatis.spring.annotation.MapperScan;
         "com.gndc.common.advice", "com.gndc.common.aspect",
         "com.gndc.common.interceptor",
         "com.gndc.third"})
+@EnableDiscoveryClient
 public class CoreApplication {
 
 

@@ -14,6 +14,7 @@
         <module>gndc-product</module>
         <module>gndc-demo</module>
         <module>gndc-third</module>
+        <module>gndc-gateway</module>
     </modules>
 
     <packaging>pom</packaging>
