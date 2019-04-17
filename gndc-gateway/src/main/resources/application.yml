@@ -15,6 +15,9 @@ zuul:
     gndc-app:
       path: /app/**
       url: http://localhost:11000/app/
+    gndc-open:
+      path: /open/**
+      url: http://localhost:11000/open/
 
 spring:
   application:

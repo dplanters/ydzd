@@ -1,5 +1,6 @@
 package com.gndc.core.controller.open;
 
+import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.open.OpenDemoRequestMessage;
@@ -26,5 +27,16 @@ public class OpenController {
         ResponseMessage<Object> resposne = new ResponseMessage<>();
         resposne.setData(new JSONObject().fluentPut("partnerId", 123).fluentPut("money", 123423));
         return resposne;
-    }  
+    }
+
+    @PostMapping("/feignProvider")
+    public ResponseMessage<JSONObject> feignProvider(@Validated @RequestBody JSONObject body) {
+        log.info("body:[{}]", body);
+        ResponseMessage<JSONObject> response = new ResponseMessage<>();
+        JSONObject json = new JSONObject();
+        json.fluentPut("name", RandomUtil.randomString(10))
+                .fluentPut("age", RandomUtil.randomInt(20, 25));
+        response.setData(json);
+        return response;
+    }
 }
