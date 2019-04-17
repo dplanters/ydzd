@@ -6,38 +6,42 @@
  * 版权说明：本软件属浙江盘石信息技术股份有限公司所有，在未获浙江盘石信息技术股份有限公司正式授权情况下，
  *          任何企业和个人，不能获取、阅读、安装、传播本软件涉及的任何受知识产权保护的内容。   
  ***************************************************************************/
-package com.gndc.common.model;
+package com.gndc.core.api.admin.partner;
 
-import javax.persistence.Column;
-import java.io.Serializable;
+import com.gndc.common.api.RequestMessage;
+import lombok.Data;
+
 import java.util.Date;
 
 /**
- * @author <a href="hugaoxiang8619@adpanshi.com">hugaoxiang</a>
+ * @author <a href="liujun8852@adpanshi.com">liujun</a>
+ * @version V1.0.1
+ * @Description
+ * @date 2019/4/15  11:28
  */
-public class BaseEntity implements Serializable {
+@Data
+public class AOPartnerApiListRequest extends RequestMessage {
 
-    @Column(name = "create_time")
+
+    private Integer id;
+    /**
+     * 机构id
+     */
+    private Integer partnerId;
+    /**
+     * 接口地址
+     */
+    private String apiUrl;
+    /**
+     * 接口类型
+     */
+    private Byte apiType;
+
     private Date createTime;
 
-    @Column(name = "update_time")
     private Date updateTime;
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-
+    /**
+     * 状态  1：正常；0：删除
+     */
+    private Byte status;
 }
