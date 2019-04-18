@@ -35,6 +35,5 @@ spring:
         enabled: true
         prefer-ip-address: true
         service-name: gndc-core
-        instance-id: gndc-core-${random.uuid}
+        instance-id: ${spring.application.name}-${random.uuid}
         hostname: gndc.core.com
-

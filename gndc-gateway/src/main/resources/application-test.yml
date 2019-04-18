@@ -1,7 +1,7 @@
 spring:
   cloud:
     consul:
-      host: gndc.consul.com
+      host: dev.gndc.consul.com
       port: 8500
       enabled: true
       discovery:
@@ -9,6 +9,6 @@ spring:
         prefer-ip-address: true
         service-name: gndc-gateway
         instance-id: ${spring.application.name}-${random.uuid}
-        hostname: gndc.gateway.com
+        hostname: dev.gndc.gateway.com
   application:
     name: gndc-gateway
