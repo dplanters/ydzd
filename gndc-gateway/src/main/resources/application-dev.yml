@@ -10,5 +10,6 @@ spring:
         service-name: gndc-gateway
         instance-id: ${spring.application.name}-${random.uuid}
         hostname: gndc.gateway.com
-  application:
-    name: gndc-gateway
+        tags:
+          - java
+          - gateway

@@ -37,3 +37,6 @@ spring:
         service-name: gndc-demo
         instance-id: ${spring.application.name}-${random.uuid}
         hostname: dev.gndc.demo.com
+        tags:
+          - java
+          - service
