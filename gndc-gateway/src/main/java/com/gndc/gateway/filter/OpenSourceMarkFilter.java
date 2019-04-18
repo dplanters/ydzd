@@ -14,8 +14,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -80,11 +78,10 @@ public class OpenSourceMarkFilter extends ZuulFilter {
                 }
             }
             //对不需要授权的请求添加requireAuth标志
-            RequestContextHolder.getRequestAttributes().setAttribute("requireAuth", requireAuth,
-                    RequestAttributes.SCOPE_REQUEST);
+            currentContext.set("requireAuth", requireAuth);
+
             //对权限表中还没有配置的权限进行标记
-            RequestContextHolder.getRequestAttributes().setAttribute("noHandler", noHandler,
-                    RequestAttributes.SCOPE_REQUEST);
+            currentContext.set("noHandler", noHandler);
         } catch (Exception e) {
             currentContext.setSendZuulResponse(false);
             currentContext.setResponseStatusCode(HttpStatus.BAD_REQUEST.value());

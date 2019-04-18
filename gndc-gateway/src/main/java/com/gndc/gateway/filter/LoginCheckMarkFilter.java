@@ -52,15 +52,14 @@ public class LoginCheckMarkFilter extends ZuulFilter {
     public boolean shouldFilter() {
         RequestContext currentContext = RequestContext.getCurrentContext();
         HttpServletRequest request = currentContext.getRequest();
-        Object noHandler = RequestContextHolder.getRequestAttributes().getAttribute("noHandler",
-                RequestAttributes.SCOPE_REQUEST);
+        Object noHandler = currentContext.get("noHandler");
         if (noHandler.equals(true)) {
             String msg = StrUtil.format("{} 未初始化", request.getServletPath());
             log.warn(msg);
             return false;
         }
 
-        Object requireAuth = RequestContextHolder.getRequestAttributes().getAttribute("requireAuth", RequestAttributes.SCOPE_REQUEST);
+        Object requireAuth = currentContext.get("requireAuth");
         //对需要授权的请求进行过滤，不需要授权的不过滤直接转发
         return requireAuth.equals(true);
     }
