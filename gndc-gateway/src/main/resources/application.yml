@@ -1,32 +1,44 @@
 server:
   port: 10000
+spring:
+  application:
+    name: gndc-gateway
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+
+  redis:
+    database: 0
+    host: localhost
+    port: 6399
+    password: guanlouyi
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+    timeout: 10000ms
 
 zuul:
   routes:
     gndc-demo:
+      serviceId: gndc-demo
       path: /demo/**
-      url: http://localhost:12000/demo/
+      url: http://gndc.core.com:12000/demo/
     gndc-admin:
+      serviceId: gndc-core
       path: /admin/**
-      url: http://localhost:11000/admin/
+      url: http://gndc.core.com:11000/admin/
     gndc-partner:
+      serviceId: gndc-core
       path: /partner/**
-      url: http://localhost:11000/partner/
+      url: http://gndc.core.com:11000/partner/
     gndc-app:
+      serviceId: gndc-core
       path: /app/**
-      url: http://localhost:11000/app/
+      url: http://gndc.core.com:11000/app/
     gndc-open:
+      serviceId: gndc-core
       path: /open/**
-      url: http://localhost:11000/open/
-
-spring:
-  application:
-    name: gndc-gateway
-  cloud:
-    consul:
-      host: localhost
-      port: 8500
-      enabled: true
-      discovery:
-        enabled: true
-        prefer-ip-address: true
+  ignored-services: "*"

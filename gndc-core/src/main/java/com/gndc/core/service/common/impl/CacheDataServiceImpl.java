@@ -17,10 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import sun.misc.Cache;
-import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.weekend.Weekend;
-import tk.mybatis.mapper.weekend.WeekendCriteria;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -32,6 +29,9 @@ public class CacheDataServiceImpl implements CacheDataService {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private RightInfoDTOMapping rightInfoDTOMapping;
 
     @Autowired
     private RightMapper rightMapper;
@@ -51,21 +51,18 @@ public class CacheDataServiceImpl implements CacheDataService {
     private void init() {
         //加载所有角色
         List<Role> roles = roleMapper.selectByExample(null);
-        for (Role role : roles) {
+        roles.forEach(role -> redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE, role.getId(), role));
 
-            redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE, role.getId(), role);
-        }
         //加载所有权限
         List<Right> rights = rightMapper.selectByExample(null);
-        for (Right right : rights) {
-            RightInfoDTO rightInfo = RightInfoDTOMapping.INSTANCE.convert(right);
+        rights.forEach(right -> {
+            RightInfoDTO rightInfo = rightInfoDTOMapping.convert(right);
             redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, rightInfo.getId(), rightInfo);
-        }
+        });
+
         //加载所有角色权限
         List<RoleRight> roleRights = roleRightMapper.selectByExample(null);
-        for (RoleRight roleRight : roleRights) {
-            redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE_RIGHT, roleRight.getId(), roleRight);
-        }
+        roleRights.forEach(roleRight -> redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE_RIGHT, roleRight.getId(), roleRight));
 
         //机构信息加入缓存
         Weekend<Partner> weekend = Weekend.of(Partner.class);

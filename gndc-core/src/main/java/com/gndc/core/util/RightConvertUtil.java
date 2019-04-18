@@ -3,6 +3,7 @@ package com.gndc.core.util;
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.dto.RightInfoDTO;
+import com.gndc.common.utils.BeanFactoryUtil;
 import com.gndc.core.mappers.RightInfoDTOMapping;
 import com.gndc.core.model.Right;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -25,7 +26,7 @@ public class RightConvertUtil {
             for (int i = 0; i < rights.size(); i++) {
                 Right right = rights.get(i);
                 List<RightInfoDTO> convert = convertToRightInfo(right.getChildren());
-                RightInfoDTO rightInfoDTO = RightInfoDTOMapping.INSTANCE.convert(right);
+                RightInfoDTO rightInfoDTO = BeanFactoryUtil.getBean(RightInfoDTOMapping.class).convert(right);
                 rightInfoDTO.setRightName(right.getRightName().getString(LocaleContextHolder.getLocale().toLanguageTag()));
                 rightInfoDTO.setChildren(convert);
                 rightsTree.add(rightInfoDTO);

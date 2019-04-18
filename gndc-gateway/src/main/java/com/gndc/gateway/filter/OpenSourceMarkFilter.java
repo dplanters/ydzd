@@ -1,51 +1,71 @@
-package com.gndc.common.interceptor;
+package com.gndc.gateway.filter;
 
+import com.alibaba.fastjson.JSONObject;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.dto.RightInfoDTO;
 import com.gndc.common.utils.BeanFactoryUtil;
-import com.gndc.common.utils.ResponseUtil;
+import com.netflix.zuul.ZuulFilter;
+import com.netflix.zuul.context.RequestContext;
+import com.netflix.zuul.exception.ZuulException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.servlet.mvc.WebContentInterceptor;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
+
 /**
- * 弃用，权限逻辑放在网关中做
  * @author <a href="jingkaihui@adpanshi.com">jingkaihui</a>
- * @Description 用于对不需要授权的公共资源进行标识
- * @date 2019/4/11
+ * @Description 根据权限表中的记录对当前请求进行标记，标记是否需要授权才能访问
+ * @date 2019/4/17
  */
 @Slf4j
 @Component
-@Deprecated
-public class OpenSourceInterceptor extends WebContentInterceptor {
+public class OpenSourceMarkFilter extends ZuulFilter {
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws ServletException {
-        //预检请求放行
+    public String filterType() {
+        return FilterConstants.PRE_TYPE;
+    }
+
+    @Override
+    public int filterOrder() {
+        return 1;
+    }
+
+    @Override
+    public boolean shouldFilter() {
+        return true;
+    }
+
+    @Override
+    public Object run() throws ZuulException {
+        RequestContext currentContext = RequestContext.getCurrentContext();
+        HttpServletRequest request = currentContext.getRequest();
         boolean requireAuth = true;
         boolean noHandler = true;
         RedisTemplate redisTemplate;
         try {
-            if (request.getMethod().equals(HttpMethod.OPTIONS.name())) {
-                return true;
-            }
             try {
                 redisTemplate =
                         (RedisTemplate) BeanFactoryUtil.getBean(
                                 "redisTemplate");
             } catch (Exception e) {
                 log.error("获取redisTemplate出现异常", e);
-                ResponseUtil.sendError(response);
-                return false;
+                //不进行路由
+                currentContext.setSendZuulResponse(false);
+                currentContext.setResponseStatusCode(HttpStatus.BAD_REQUEST.value());
+                currentContext.setResponseBody(JSONObject.toJSONString(ResponseMessage.error()));
+                currentContext.getResponse().setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+                return null;
             }
+
             Map<Integer, RightInfoDTO> entries = redisTemplate.opsForHash().entries(CacheConstant.KEY_ALL_RIGHT);
             for (Map.Entry<Integer, RightInfoDTO> entry : entries.entrySet()) {
                 String rightUrl = entry.getValue().getRightUrl();
@@ -56,18 +76,22 @@ public class OpenSourceInterceptor extends WebContentInterceptor {
                 //对当前请求路径和权限表进行匹配
                 if (rightUrl.equals(servletPath) && new Byte((byte)0).equals(entry.getValue().getRequireAuth())) {
                     requireAuth = false;
+                    break;
                 }
             }
             //对不需要授权的请求添加requireAuth标志
             RequestContextHolder.getRequestAttributes().setAttribute("requireAuth", requireAuth,
                     RequestAttributes.SCOPE_REQUEST);
+            //对权限表中还没有配置的权限进行标记
             RequestContextHolder.getRequestAttributes().setAttribute("noHandler", noHandler,
                     RequestAttributes.SCOPE_REQUEST);
         } catch (Exception e) {
-            log.error("OpenSourceInterceptor出现异常");
-            ResponseUtil.sendError(response);
-            return false;
+            currentContext.setSendZuulResponse(false);
+            currentContext.setResponseStatusCode(HttpStatus.BAD_REQUEST.value());
+            currentContext.setResponseBody(JSONObject.toJSONString(ResponseMessage.error()));
+            currentContext.getResponse().setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+            return null;
         }
-        return true;
+        return null;
     }
 }

@@ -2,6 +2,7 @@ package com.gndc.core.controller.open;
 
 import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.gndc.common.api.RequestMessage;
 import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.open.OpenDemoRequestMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class OpenController {
     }
 
     @PostMapping("/feignProvider")
-    public ResponseMessage<JSONObject> feignProvider(@Validated @RequestBody JSONObject body) {
+    public ResponseMessage<JSONObject> feignProvider(@Validated @RequestBody RequestMessage body) {
         log.info("body:[{}]", body);
         ResponseMessage<JSONObject> response = new ResponseMessage<>();
         JSONObject json = new JSONObject();

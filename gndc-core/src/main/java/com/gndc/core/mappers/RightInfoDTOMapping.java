@@ -5,12 +5,9 @@ import com.gndc.core.model.Right;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface RightInfoDTOMapping {
-
-    RightInfoDTOMapping INSTANCE = Mappers.getMapper(RightInfoDTOMapping.class);
 
     @Mappings({
         @Mapping(source = "rightName", target = "rightName", ignore = true),

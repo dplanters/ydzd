@@ -1,6 +1,8 @@
 package com.gndc.demo.controller.demo;
 
-import com.alibaba.fastjson.JSONObject;
+import cn.hutool.core.date.DateUtil;
+import com.gndc.common.api.Header;
+import com.gndc.common.api.RequestMessage;
 import com.gndc.common.api.ResponseMessage;
 import com.gndc.demo.api.demo.DemoRequest;
 import com.gndc.demo.client.OpenClient;
@@ -35,10 +37,13 @@ public class DemoController {
 
     @PostMapping("/feignDemo")
     public ResponseMessage feignDemo() {
-        JSONObject json = new JSONObject();
-        json.fluentPut("aaa", "bbb")
-                .fluentPut("ccc", "ddd");
-        ResponseMessage<Object> responseMessage = openClient.feignProvider(json);
+        RequestMessage requestMessage = new RequestMessage();
+        Header header = new Header()
+                .setDeviceType("5")
+                .setLocale("zh-CN")
+                .setTimestamp(DateUtil.date());
+        requestMessage.setHeader(header);
+        ResponseMessage<Object> responseMessage = openClient.feignProvider(requestMessage);
         return responseMessage;
     }
 }

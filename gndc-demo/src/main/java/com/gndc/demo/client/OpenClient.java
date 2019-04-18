@@ -1,6 +1,6 @@
 package com.gndc.demo.client;
 
-import com.alibaba.fastjson.JSONObject;
+import com.gndc.common.api.RequestMessage;
 import com.gndc.common.api.ResponseMessage;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @Description
  * @date 2019/4/17
  */
-@FeignClient(name = "gndc-core", url = "http://localhost:11000/open/")
+@FeignClient(name = "gndc-core")
 public interface OpenClient {
 
-    @PostMapping("/feignProvider")
-    ResponseMessage<Object> feignProvider(@Validated @RequestBody JSONObject body);
+    @PostMapping("/open/feignProvider")
+    ResponseMessage<Object> feignProvider(@Validated @RequestBody RequestMessage request);
 }

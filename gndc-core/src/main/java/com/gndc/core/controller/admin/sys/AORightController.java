@@ -41,6 +41,9 @@ public class AORightController {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private RightInfoDTOMapping rightInfoDTOMapping;
+
     /**
      * 添加权限
      * @param request
@@ -51,7 +54,7 @@ public class AORightController {
         ResponseMessage<Integer> response = new ResponseMessage<>();
         Right right = RightMapping.INSTANCE.convert(request);
         rightService.insertSelective(right);
-        RightInfoDTO rightInfo = RightInfoDTOMapping.INSTANCE.convert(right);
+        RightInfoDTO rightInfo = rightInfoDTOMapping.convert(right);
         redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, rightInfo.getId(), rightInfo);
         response.setData(right.getId());
         return response;
@@ -67,7 +70,7 @@ public class AORightController {
         ResponseMessage<Integer> response = new ResponseMessage<>();
         Right right = RightMapping.INSTANCE.convert(request);
         rightService.updateByPrimaryKeySelective(right);
-        RightInfoDTO rightInfo = RightInfoDTOMapping.INSTANCE.convert(right);
+        RightInfoDTO rightInfo = rightInfoDTOMapping.convert(right);
         redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, rightInfo.getId(), rightInfo);
         response.setData(right.getId());
         return response;

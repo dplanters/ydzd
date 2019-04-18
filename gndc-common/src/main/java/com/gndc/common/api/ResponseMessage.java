@@ -39,4 +39,17 @@ public class ResponseMessage<T> implements Serializable {
 
     private PageInfo page;
 
+    public static ResponseMessage error() {
+        return new ResponseMessage<>()
+                .setSuccess(false)
+                .setCode(ResultCode.SYSTEM_BUSY.getCode())
+                .setMsg(ResultCode.SYSTEM_BUSY.getMsg());
+    }
+
+    public static ResponseMessage error(ResultCode resultCode) {
+        return new ResponseMessage()
+                .setSuccess(false)
+                .setCode(resultCode.getCode())
+                .setMsg(resultCode.getMsg());
+    }
 }

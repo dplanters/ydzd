@@ -7,6 +7,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAdapter;
 
 import java.lang.reflect.Type;
@@ -18,7 +19,7 @@ import java.util.Locale;
  * @date 2019/4/13
  */
 @Slf4j
-//@RestControllerAdvice
+@RestControllerAdvice
 public class LocaleHolderAspect extends RequestBodyAdviceAdapter {
 
     @Override

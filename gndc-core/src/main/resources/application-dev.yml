@@ -29,9 +29,12 @@ spring:
         - veth.*
     consul:
       enabled: true
-      host: localhost
+      host: gndc.consul.com
       port: 8500
       discovery:
         enabled: true
         prefer-ip-address: true
+        service-name: gndc-core
+        instance-id: gndc-core-${random.uuid}
+        hostname: gndc.core.com
 
