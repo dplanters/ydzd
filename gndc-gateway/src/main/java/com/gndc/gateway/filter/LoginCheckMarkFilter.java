@@ -56,6 +56,10 @@ public class LoginCheckMarkFilter extends ZuulFilter {
         if (noHandler.equals(true)) {
             String msg = StrUtil.format("{} 未初始化", request.getServletPath());
             log.warn(msg);
+            currentContext.setSendZuulResponse(false);
+            currentContext.setResponseStatusCode(HttpStatus.BAD_REQUEST.value());
+            currentContext.setResponseBody(JSONObject.toJSONString(ResponseMessage.error(ResultCode.RIGHT_NOT_INITIALISE)));
+            currentContext.getResponse().setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             return false;
         }
 

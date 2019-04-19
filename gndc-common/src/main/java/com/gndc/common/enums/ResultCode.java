@@ -55,6 +55,11 @@ public enum ResultCode {
     CHECK_SIGN_FAIL(1000107),
 
     /**
+     * 请求方法不支持
+     */
+    METHOD_NOT_SUPPORTED(1000108),
+
+    /**
      * 0002为登录相关业务
      */
     NO_SESSION(1000201),

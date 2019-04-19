@@ -7,6 +7,7 @@ import com.gndc.common.enums.ResultCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -33,15 +34,13 @@ public class ExceptionHandling {
     }
 
     @ExceptionHandler
-    public ResponseMessage handler(NoHandlerFoundException e) {
+    public ResponseMessage handler(HjException e) {
         //处理异常
-        log.warn(e.getMessage(), e);
-        Integer code = ResultCode.NOT_FOUND.getCode();
-        String msg = ResultCode.NOT_FOUND.getMsg();
         ResponseMessage<Object> response = new ResponseMessage<>();
         response.setSuccess(false)
-                .setCode(code)
-                .setMsg(msg);
+                .setCode(e.getCode())
+                .setMsg(e.getMsg());
+        log.warn(e.getResult().getMsg(Locale.SIMPLIFIED_CHINESE));
         return response;
     }
 
@@ -70,13 +69,28 @@ public class ExceptionHandling {
     }
 
     @ExceptionHandler
-    public ResponseMessage handler(HjException e) {
+    public ResponseMessage handler(NoHandlerFoundException e) {
         //处理异常
+        log.warn(e.getMessage(), e);
+        Integer code = ResultCode.NOT_FOUND.getCode();
+        String msg = ResultCode.NOT_FOUND.getMsg();
         ResponseMessage<Object> response = new ResponseMessage<>();
         response.setSuccess(false)
-                .setCode(e.getCode())
-                .setMsg(e.getMsg());
-        log.warn(e.getResult().getMsg(Locale.SIMPLIFIED_CHINESE));
+                .setCode(code)
+                .setMsg(msg);
+        return response;
+    }
+
+    @ExceptionHandler
+    public ResponseMessage handler(HttpRequestMethodNotSupportedException e) {
+        //处理异常
+        log.warn(e.getMessage(), e);
+        Integer code = ResultCode.METHOD_NOT_SUPPORTED.getCode();
+        String msg = ResultCode.METHOD_NOT_SUPPORTED.getMsg();
+        ResponseMessage<Object> response = new ResponseMessage<>();
+        response.setSuccess(false)
+                .setCode(code)
+                .setMsg(msg);
         return response;
     }
 

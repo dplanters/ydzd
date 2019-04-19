@@ -28,7 +28,7 @@ public class InvokeRecordAspect {
      *
      * 申明一个切点 里面是 execution表达式
      */
-    @Pointcut("execution(public * com.gndc.*.controller.*.*.*.*(..))")
+    @Pointcut("execution(public * com.gndc.*.controller..*.*(..))")
     private void controllerAspect() {
     }
 
