@@ -16,7 +16,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableDiscoveryClient
 @SpringBootApplication(scanBasePackages = {
         "com.gndc.gateway", "com.gndc.common.config",
-        "com.gndc.common.utils"
+        "com.gndc.common.utils", "com.gndc.common.exception"
 })
 public class GatewayApplication {
 
