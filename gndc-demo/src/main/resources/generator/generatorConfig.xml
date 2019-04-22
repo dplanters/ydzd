@@ -25,9 +25,9 @@
 
         <javaModelGenerator targetPackage="com.gndc.demo.model" targetProject="src/main/java"/>
 
-        <sqlMapGenerator targetPackage="mapper/simple" targetProject="src/main/resources"/>
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
 
-        <javaClientGenerator targetPackage="com.gndc.demo.mapper.simple" targetProject="src/main/java"
+        <javaClientGenerator targetPackage="com.gndc.demo.mapper" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
         <table tableName="dc_sms_group_log" domainObjectName="SmsGroupLog" enableSelectByExample="false"

@@ -3,7 +3,7 @@ package com.gndc.core.service.sms.impl;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.admin.sms.AOSmsTemplateListRequest;
 import com.gndc.core.api.admin.sms.AOSmsTemplateListResponse;
-import com.gndc.core.mapper.simple.SmsTemplateMapper;
+import com.gndc.core.mapper.SmsTemplateMapper;
 import com.gndc.core.model.SmsTemplate;
 import com.gndc.core.service.sms.SmsTemplateService;
 import org.springframework.stereotype.Service;

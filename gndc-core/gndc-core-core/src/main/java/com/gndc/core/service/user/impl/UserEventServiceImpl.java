@@ -4,7 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import com.gndc.common.enums.user.UserEventsTypeEnum;
 import com.gndc.common.model.BaseEntity;
 import com.gndc.common.service.impl.BaseServiceImpl;
-import com.gndc.core.mapper.simple.UserEventMapper;
+import com.gndc.core.mapper.UserEventMapper;
 import com.gndc.core.model.UserEvent;
 import com.gndc.core.service.user.UserEventService;
 import org.springframework.beans.factory.annotation.Autowired;

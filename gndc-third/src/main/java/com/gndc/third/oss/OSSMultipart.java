@@ -37,8 +37,8 @@ public class OSSMultipart {
     private static final String ACCESS_ID = "<your access id>";
     private static final String ACCESS_KEY = "<your access key>";
 
-    private static final String UPLOAD_FILE_PATH = "d:/temp/测试上传大文件.zip";
-    private static final String DOWNLOAD_FILE_PATH = "d:/temp/测试下载大文件.zip";
+    private static final String UPLOAD_FILE_PATH = "d:/mapper/测试上传大文件.zip";
+    private static final String DOWNLOAD_FILE_PATH = "d:/mapper/测试下载大文件.zip";
 
     private static final long PART_SIZE = 5 * 1024 * 1024L;     // 每个Part的大小，最小为5MB
     private static final int CONCURRENCIES = 2;              // 上传Part的并发线程数。

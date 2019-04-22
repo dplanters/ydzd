@@ -1,7 +1,7 @@
 package com.gndc.core.service.product.impl;
 
 import com.gndc.common.service.impl.BaseServiceImpl;
-import com.gndc.core.mapper.simple.ProductHotMapper;
+import com.gndc.core.mapper.ProductHotMapper;
 import com.gndc.core.model.ProductHot;
 import com.gndc.core.service.product.ProductHotService;
 import org.slf4j.Logger;

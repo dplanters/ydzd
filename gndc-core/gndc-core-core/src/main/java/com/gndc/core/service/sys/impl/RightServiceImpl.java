@@ -2,7 +2,7 @@ package com.gndc.core.service.sys.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.gndc.common.service.impl.BaseServiceImpl;
-import com.gndc.core.mapper.simple.RightMapper;
+import com.gndc.core.mapper.RightMapper;
 import com.gndc.core.model.Right;
 import com.gndc.core.service.sys.RightService;
 import org.slf4j.Logger;

@@ -3,7 +3,7 @@ package com.gndc.core.service.user.impl;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.admin.user.AOUserDetailResponse;
 import com.gndc.core.api.admin.user.AOUserListRequest;
-import com.gndc.core.mapper.simple.UserMapper;
+import com.gndc.core.mapper.UserMapper;
 import com.gndc.core.model.User;
 import com.gndc.core.service.user.UserService;
 import org.springframework.stereotype.Service;

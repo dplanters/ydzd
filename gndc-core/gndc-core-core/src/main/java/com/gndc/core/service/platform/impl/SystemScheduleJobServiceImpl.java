@@ -10,7 +10,7 @@ import com.gndc.common.enums.job.JobRunStatusEnum;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.admin.sms.*;
-import com.gndc.core.mapper.simple.SystemScheduleJobMapper;
+import com.gndc.core.mapper.SystemScheduleJobMapper;
 import com.gndc.core.mappers.SmsJobConditionMapping;
 import com.gndc.core.model.SmsCondition;
 import com.gndc.core.model.SmsJobCondition;

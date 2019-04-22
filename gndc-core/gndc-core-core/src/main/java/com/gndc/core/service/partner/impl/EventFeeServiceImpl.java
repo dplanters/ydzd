@@ -5,7 +5,7 @@ import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.partner.data.APDataAnalysisListResponse;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Request;
 import com.gndc.core.api.partner.finance.settlement.APFinanceSettlement4H5Response;
-import com.gndc.core.mapper.simple.EventFeeMapper;
+import com.gndc.core.mapper.EventFeeMapper;
 import com.gndc.core.model.EventFee;
 import com.gndc.core.model.Partner;
 import com.gndc.core.service.partner.EventFeeService;

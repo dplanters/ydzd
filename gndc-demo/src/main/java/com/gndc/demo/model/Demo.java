@@ -12,13 +12,14 @@ import tk.mybatis.mapper.annotation.KeySql;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Table(name = "dc_demo")
-public class Demo {
+public class Demo implements Serializable {
     @Id
     @KeySql(genId = SnowflakeIdGenId.class)
     private Long id;

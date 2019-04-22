@@ -1,0 +1,42 @@
+#debug: true
+logging:
+  path: V1.0.0/logs
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    name: druid
+    password: dc@2019#pshj
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://127.0.0.1:3306/dc_vn?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+    username: vndc
+  redis:
+    database: 0
+    host: localhost
+    port: 6399
+    password: guanlouyi
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+    timeout: 10000ms
+
+  cloud:
+    inetutils:
+      ignored-interfaces: #忽略docker0网卡以及 veth开头的网卡
+        - docker0
+        - veth.*
+    consul:
+      enabled: true
+      host: dev.gndc.consul.com
+      port: 8500
+      discovery:
+        enabled: true
+        prefer-ip-address: true
+        service-name: gndc-open
+        instance-id: ${spring.application.name}-${random.uuid}
+        hostname: dev.gndc.core.com
+        tags:
+          - java
+          - service

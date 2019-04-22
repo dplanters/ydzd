@@ -41,6 +41,6 @@ zuul:
       path: /app/**
       url: http://gndc.core.com:11000/app/
     gndc-open:
-      serviceId: gndc-core
+      serviceId: gndc-open
       path: /open/**
   ignored-services: "*"

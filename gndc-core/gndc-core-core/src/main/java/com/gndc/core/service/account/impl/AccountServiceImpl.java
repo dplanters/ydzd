@@ -1,7 +1,7 @@
 package com.gndc.core.service.account.impl;
 
 import com.gndc.common.utils.PwdUtil;
-import com.gndc.core.mapper.simple.AdminMapper;
+import com.gndc.core.mapper.AdminMapper;
 import com.gndc.core.model.Admin;
 import com.gndc.core.service.account.AccountService;
 import org.slf4j.Logger;

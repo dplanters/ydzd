@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.admin.sys.AOAdminListRequest;
-import com.gndc.core.mapper.simple.AdminMapper;
+import com.gndc.core.mapper.AdminMapper;
 import com.gndc.core.model.Admin;
 import com.gndc.core.service.account.AdminService;
 import lombok.extern.slf4j.Slf4j;

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gndc.core.mapper.SmsConditionMapper">
+    <select id="selectConditionWithAdminList" resultType="com.gndc.core.api.admin.sms.AOSmsConditionListResponse">
+        select dsc.id,dsc.type,dsc.condition,dsc.create_time as createTime,da.name
+        from dc_sms_condition dsc
+        left join dc_admin da on da.id = dsc.create_admin_id
+        where dsc.status = 1
+        <if test="options.type">
+            and dsc.type = #{options.type}
+        </if>
+        <if test="options.createTimeStart != null and options.createTimeStart != ''">
+            and dsc.create_time <![CDATA[>=]]> #{options.createTimeStart}
+        </if>
+        <if test="options.createTimeEnd != null and options.createTimeEnd != ''">
+            and dsc.create_time <![CDATA[<=]]> #{options.createTimeEnd}
+        </if>
+        order by dsc.create_time
+    </select>
+</mapper>

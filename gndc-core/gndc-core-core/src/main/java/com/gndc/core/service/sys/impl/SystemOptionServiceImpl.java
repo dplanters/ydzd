@@ -2,7 +2,7 @@ package com.gndc.core.service.sys.impl;
 
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.partner.common.APPayeeListRequest;
-import com.gndc.core.mapper.simple.SystemOptionMapper;
+import com.gndc.core.mapper.SystemOptionMapper;
 import com.gndc.core.model.SystemOption;
 import com.gndc.core.service.sys.SystemOptionService;
 import org.slf4j.Logger;

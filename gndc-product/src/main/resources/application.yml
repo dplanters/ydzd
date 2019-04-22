@@ -22,7 +22,7 @@ pagehelper:
   offset-as-page-num: true
 
 mybatis:
-  mapper-locations: classpath:mapper/simple/*.xml
+  mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.gndc.product.model
 
 server:

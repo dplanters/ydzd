@@ -4,7 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.api.admin.operation.AOBannerListRequest;
-import com.gndc.core.mapper.simple.BannerMapper;
+import com.gndc.core.mapper.BannerMapper;
 import com.gndc.core.model.Banner;
 import com.gndc.core.service.adverts.BannerService;
 import lombok.extern.slf4j.Slf4j;

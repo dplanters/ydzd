@@ -2,7 +2,7 @@ package com.gndc.core.service.sys.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.gndc.common.service.impl.BaseServiceImpl;
-import com.gndc.core.mapper.simple.RoleRightMapper;
+import com.gndc.core.mapper.RoleRightMapper;
 import com.gndc.core.model.RoleRight;
 import com.gndc.core.service.sys.RoleRightService;
 import org.slf4j.Logger;

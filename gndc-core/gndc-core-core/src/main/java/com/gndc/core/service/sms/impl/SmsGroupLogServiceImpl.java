@@ -5,7 +5,7 @@ import com.gndc.core.api.admin.sms.AOSmsGroupLogListRequest;
 import com.gndc.core.api.admin.sms.AOSmsGroupLogListResponse;
 import com.gndc.core.api.admin.sms.AOSmsStatisticsRequest;
 import com.gndc.core.api.admin.sms.AOSmsStatisticsResponse;
-import com.gndc.core.mapper.simple.SmsGroupLogMapper;
+import com.gndc.core.mapper.SmsGroupLogMapper;
 import com.gndc.core.model.SmsGroupLog;
 import com.gndc.core.service.sms.SmsGroupLogService;
 import org.springframework.stereotype.Service;

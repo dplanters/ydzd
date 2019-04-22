@@ -8,7 +8,7 @@ import com.gndc.core.api.partner.finance.account.APRechargeListRequest;
 import com.gndc.core.api.partner.finance.account.APRechargeRequest;
 import com.gndc.core.api.partner.finance.account.APWithdrawListRequest;
 import com.gndc.core.api.partner.finance.account.APWithdrawRequest;
-import com.gndc.core.mapper.simple.PartnerAccountLogMapper;
+import com.gndc.core.mapper.PartnerAccountLogMapper;
 import com.gndc.core.model.PartnerAccountLog;
 import com.gndc.core.service.partner.PartnerAccountLogService;
 import org.slf4j.Logger;
