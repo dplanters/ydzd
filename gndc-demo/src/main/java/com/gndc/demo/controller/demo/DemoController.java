@@ -2,8 +2,8 @@ package com.gndc.demo.controller.demo;
 
 import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.open.OpenDemoRequestMessage;
+import com.gndc.core.client.OpenDemoClient;
 import com.gndc.demo.api.demo.DemoRequest;
-import com.gndc.demo.client.OpenDemoClient;
 import com.gndc.demo.model.Demo;
 import com.gndc.demo.service.demo.DemoService;
 import lombok.extern.slf4j.Slf4j;

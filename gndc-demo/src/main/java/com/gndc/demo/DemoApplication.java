@@ -1,5 +1,6 @@
 package com.gndc.demo;
 
+import com.gndc.core.client.OpenDemoClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -17,9 +18,9 @@ import tk.mybatis.spring.annotation.MapperScan;
         "com.gndc.common.utils", "com.gndc.common.exception",
         "com.gndc.common.advice", "com.gndc.common.aspect",
         "com.gndc.common.interceptor",
-        })
+        }, scanBasePackageClasses = OpenDemoClient.class)
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = {"com.gndc"})
 public class DemoApplication {
 
     public static void main(String[] args) {

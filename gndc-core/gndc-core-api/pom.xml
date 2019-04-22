@@ -2,21 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>gndc-parent</artifactId>
+        <artifactId>gndc-core</artifactId>
         <groupId>com.gndc</groupId>
         <version>1.0.0</version>
     </parent>
 
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>gndc-core</artifactId>
-    <packaging>pom</packaging>
-    <name>gndc-core</name>
+    <artifactId>gndc-core-api</artifactId>
+    <packaging>jar</packaging>
+    <name>gndc-core-api</name>
     <url>http://maven.apache.org</url>
-    <modules>
-        <module>gndc-core-api</module>
-        <module>gndc-core-core</module>
-    </modules>
 
     <dependencyManagement>
         <dependencies>
@@ -32,10 +28,19 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.gndc</groupId>
-            <artifactId>gndc-common</artifactId>
-            <version>1.0.0</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
+    <build>
+        <!--打包后的名字-->
+        <finalName>gndc-core-api</finalName>
+    </build>
 </project>
