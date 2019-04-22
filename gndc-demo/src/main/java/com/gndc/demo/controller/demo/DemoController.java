@@ -1,11 +1,9 @@
 package com.gndc.demo.controller.demo;
 
-import cn.hutool.core.date.DateUtil;
-import com.gndc.common.api.Header;
-import com.gndc.common.api.RequestMessage;
 import com.gndc.common.api.ResponseMessage;
+import com.gndc.core.api.open.OpenDemoRequestMessage;
 import com.gndc.demo.api.demo.DemoRequest;
-import com.gndc.demo.client.OpenClient;
+import com.gndc.demo.client.OpenDemoClient;
 import com.gndc.demo.model.Demo;
 import com.gndc.demo.service.demo.DemoService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +23,7 @@ public class DemoController {
     private DemoService demoService;
 
     @Autowired
-    private OpenClient openClient;
+    private OpenDemoClient openDemoClient;
 
     @PostMapping("/demo")
     public ResponseMessage<Demo> demo(@Validated @RequestBody DemoRequest request) {
@@ -36,14 +34,9 @@ public class DemoController {
     }
 
     @PostMapping("/feignDemo")
-    public ResponseMessage feignDemo() {
-        RequestMessage requestMessage = new RequestMessage();
-        Header header = new Header()
-                .setDeviceType("5")
-                .setLocale("zh-CN")
-                .setTimestamp(DateUtil.date());
-        requestMessage.setHeader(header);
-        ResponseMessage<Object> responseMessage = openClient.feignProvider(requestMessage);
+    public ResponseMessage feignDemo(@RequestBody OpenDemoRequestMessage request) {
+        log.info("come in demo");
+        ResponseMessage<Object> responseMessage = openDemoClient.openDemo(request);
         return responseMessage;
     }
 }

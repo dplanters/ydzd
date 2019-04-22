@@ -1,5 +1,9 @@
 spring:
   cloud:
+    inetutils:
+      ignored-interfaces: #忽略docker0网卡以及 veth开头的网卡
+        - docker0
+        - veth.*
     consul:
       host: gndc.consul.com
       port: 8500

@@ -1,11 +1,9 @@
 package com.gndc.demo.client;
 
-import com.gndc.common.api.RequestMessage;
 import com.gndc.common.api.ResponseMessage;
+import com.gndc.core.api.open.OpenDemoRequestMessage;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author <a href="jingkaihui@adpanshi.com">jingkaihui</a>
@@ -13,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @date 2019/4/17
  */
 @FeignClient(name = "gndc-core")
-public interface OpenClient {
+public interface OpenDemoClient {
 
-    @PostMapping("/open/feignProvider")
-    ResponseMessage<Object> feignProvider(@Validated @RequestBody RequestMessage request);
+    @PostMapping("/open/openDemo")
+    ResponseMessage<Object> openDemo(OpenDemoRequestMessage request);
 }

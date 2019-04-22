@@ -35,8 +35,8 @@
 
         <dependency>
             <groupId>com.gndc</groupId>
-            <artifactId>gndc-core</artifactId>
-            <version>1.0.0</version>
+            <artifactId>gndc-core-client-api</artifactId>
+            <version>1.0.201904192-SNAPSHOT</version>
         </dependency>
 
         <dependency>

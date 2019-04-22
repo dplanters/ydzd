@@ -34,12 +34,13 @@ public class OpenSourceMarkFilter extends ZuulFilter {
 
     @Override
     public int filterOrder() {
-        return 1;
+        return 20;
     }
 
     @Override
     public boolean shouldFilter() {
-        return true;
+        Object innerNet = RequestContext.getCurrentContext().get("innerNet");
+        return !innerNet.equals(true);
     }
 
     @Override

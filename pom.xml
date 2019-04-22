@@ -68,7 +68,8 @@
 
         <!-- 阿里云部分 -->
         <oss.version>2.8.3</oss.version>
-
+        <!-- clinet-api 版本 -->
+        <gndc.core.client.api.version>1.0.201904191-SNAPSHOT</gndc.core.client.api.version>
     </properties>
 
     <dependencyManagement>

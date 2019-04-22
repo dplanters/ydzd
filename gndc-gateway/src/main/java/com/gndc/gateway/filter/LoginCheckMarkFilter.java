@@ -45,12 +45,16 @@ public class LoginCheckMarkFilter extends ZuulFilter {
 
     @Override
     public int filterOrder() {
-        return 2;
+        return 30;
     }
 
     @Override
     public boolean shouldFilter() {
         RequestContext currentContext = RequestContext.getCurrentContext();
+        Object innerNet = currentContext.get("innerNet");
+        if (innerNet.equals(true)) {
+            return false;
+        }
         HttpServletRequest request = currentContext.getRequest();
         Object noHandler = currentContext.get("noHandler");
         if (noHandler.equals(true)) {

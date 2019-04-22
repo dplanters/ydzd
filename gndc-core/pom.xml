@@ -105,29 +105,6 @@
     </dependencies>
 
     <build>
-        <finalName>gndc-core</finalName>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <excludes>
-                    <exclude>application-dev.yml</exclude>
-                    <exclude>application-pre.yml</exclude>
-                    <exclude>application-prod.yml</exclude>
-                    <exclude>application-test.yml</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>application-${profileActive}.yml</include>
-                    <include>application-pre.yml</include>
-                    <include>application-test.yml</include>
-                    <include>application.yml</include>
-                </includes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -155,7 +132,55 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <!--打包 插件-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>client</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>client-api</classifier>
+                            <includes>
+                                <!-- model -->
+                                <include>com/gndc/core/model/**/*.class</include>
+                                <!-- api -->
+                                <include>com/gndc/core/api/**/*.class</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
+        <!--打包后的名字-->
+        <finalName>gndc-core</finalName>
+        <!--打包后加载的配置文件-->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>application-dev.yml</exclude>
+                    <exclude>application-pre.yml</exclude>
+                    <exclude>application-prod.yml</exclude>
+                    <exclude>application-test.yml</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>application-${profileActive}.yml</include>
+                    <include>application-pre.yml</include>
+                    <include>application-test.yml</include>
+                    <include>application.yml</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
     <profiles>
         <profile>
