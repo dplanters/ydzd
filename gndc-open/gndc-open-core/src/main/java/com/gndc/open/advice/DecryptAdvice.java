@@ -1,4 +1,4 @@
-package com.gndc.common.advice;
+package com.gndc.open.advice;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.crypto.SecureUtil;
@@ -25,7 +25,7 @@ import java.nio.charset.Charset;
  */
 @Slf4j
 @RestControllerAdvice(basePackages = {
-        "com.gndc.core.controller.open",
+        "com.gndc.open.controller",
 })
 public class DecryptAdvice extends RequestBodyAdviceAdapter {
 

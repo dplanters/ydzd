@@ -44,8 +44,7 @@ public class DemoController {
                 .setLocale("vn")
                 .setAlgorithm("MD5withRSA")
                 .setTimestamp(DateUtil.date(1555296403313L))
-                .setSign("LevaQQadJKyVze3VmfpE0tT5fmWyFcWHHeSw8YjT4r/KUalU1paZmWrcBuxvATae0nIky1Bc8r1qw7cnXGYYchhVcgb" +
-                        "//joYwiHa21QLBUHAVIyLDCngX1g4uhVksbLpQttgLzGUzF5rQjdH8Ju+fR3pROuFh7hnfjzvCboqJCI=");
+                .setSign("h7E0wAB9sHymLX+OpAtCAU7n9ecC6+Cw3ZtBCKwiCjPwNFYl1iwGocxcY9EiFRhIuDwJQrB7wc4koX+x1Ll0vLdIEtM+rV7i+BmsqCcoWGRhm2Ga5W6MiiVYJwjWh4BrlngK9GDtA3Hk51VpeFwKP1qUI8xxTwfK6JpZoElgO8s=");
         openDemoRequest.setHeader(header);
         openDemoRequest.setAppId(1000011110);
         openDemoRequest.setName("张三");

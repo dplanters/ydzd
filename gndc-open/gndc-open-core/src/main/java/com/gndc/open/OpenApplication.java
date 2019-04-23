@@ -15,8 +15,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @SpringBootApplication(scanBasePackages = {
         "com.gndc.open", "com.gndc.common.config",
         "com.gndc.common.utils", "com.gndc.common.exception",
-        "com.gndc.common.advice", "com.gndc.common.aspect",
-        "com.gndc.common.interceptor",
+        "com.gndc.common.aspect", "com.gndc.common.interceptor",
         "com.gndc.third"})
 @EnableDiscoveryClient
 @EnableFeignClients
