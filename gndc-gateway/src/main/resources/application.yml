@@ -1,5 +1,5 @@
 server:
-  port: 10000
+  port: 51001
 spring:
   application:
     name: gndc-gateway
@@ -27,25 +27,25 @@ zuul:
     gndc-demo:
       serviceId: gndc-demo
       path: /demo/**
-      url: http://gndc.demo.com:12000/demo/
+      url: http://gndc.demo.com:52001/demo/
     gndc-admin:
       serviceId: gndc-core
       path: /admin/**
-      url: http://gndc.core.com:11000/admin/
+      url: http://gndc.core.com:53001/admin/
     gndc-partner:
       serviceId: gndc-core
       path: /partner/**
-      url: http://gndc.core.com:11000/partner/
+      url: http://gndc.core.com:53001/partner/
     gndc-app:
       serviceId: gndc-core
       path: /app/**
-      url: http://gndc.core.com:11000/app/
+      url: http://gndc.core.com:53001/app/
     gndc-open:
       serviceId: gndc-open
       path: /open/**
-      url: http://gndc.open.com:13000/open/**
+      url: http://gndc.open.com:54001/open/**
     gndc-product:
       serviceId: gndc-product
       path: /product/**
-      url: http://gndc.product.com:13000/product/**
+      url: http://gndc.product.com:55001/product/**
   ignored-services: "*"

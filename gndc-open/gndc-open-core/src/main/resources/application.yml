@@ -26,7 +26,7 @@ mybatis:
   type-aliases-package: com.gndc.open.model
 
 server:
-  port: 13000
+  port: 54001
 
 spring:
   profiles:
