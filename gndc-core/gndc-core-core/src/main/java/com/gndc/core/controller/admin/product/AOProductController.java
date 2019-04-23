@@ -11,6 +11,7 @@ import com.gndc.core.model.Product;
 import com.gndc.core.model.ProductHot;
 import com.gndc.core.service.product.ProductHotService;
 import com.gndc.core.service.product.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,10 @@ import tk.mybatis.mapper.weekend.Weekend;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/admin/product")
 public class AOProductController {
-
-    private static final Logger logger = LoggerFactory.getLogger(AOProductController.class);
 
     @Autowired
     private ProductService productService;

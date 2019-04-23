@@ -4,6 +4,7 @@ import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.partner.product.APProductListRequest;
 import com.gndc.core.api.partner.product.APProductListResponse;
 import com.gndc.core.service.product.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/partner/product")
 public class APProductController {
-
-    private static final Logger logger = LoggerFactory.getLogger(APProductController.class);
 
     @Autowired
     private ProductService productService;

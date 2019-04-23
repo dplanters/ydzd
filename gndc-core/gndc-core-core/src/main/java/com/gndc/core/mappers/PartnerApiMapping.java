@@ -24,9 +24,12 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface PartnerApiMapping {
 
-    PartnerApi toEntity(AOPartnerApiAddRequest aoPartnerApiAddRequest);
-    PartnerApi toEntity(AOPartnerApiDeleteRequest aoPartnerApiDeleteRequest);
-    PartnerApi toEntity(AOPartnerApiModifyRequest aoPartnerApiModifyRequest);
-    PartnerApi toEntity(AOPartnerApiListRequest aoPartnerApiListRequest);
+    PartnerApi convert(AOPartnerApiAddRequest aoPartnerApiAddRequest);
+
+    PartnerApi convert(AOPartnerApiDeleteRequest aoPartnerApiDeleteRequest);
+
+    PartnerApi convert(AOPartnerApiModifyRequest aoPartnerApiModifyRequest);
+
+    PartnerApi convert(AOPartnerApiListRequest aoPartnerApiListRequest);
 
 }

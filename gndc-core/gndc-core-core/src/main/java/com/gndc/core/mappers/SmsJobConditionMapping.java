@@ -5,12 +5,9 @@ import com.gndc.core.model.SmsJobCondition;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface SmsJobConditionMapping {
-
-    SmsJobConditionMapping INSTANCE = Mappers.getMapper(SmsJobConditionMapping.class);
 
     @Mappings({
             @Mapping(target = "signIds", expression = "java(cn.hutool.core.util.StrUtil.join( \",\",request.getSmsSignIds()))"),

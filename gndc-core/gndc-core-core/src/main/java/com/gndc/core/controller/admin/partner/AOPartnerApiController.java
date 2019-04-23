@@ -8,29 +8,28 @@
  ***************************************************************************/
 package com.gndc.core.controller.admin.partner;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.gndc.common.api.ResponseMessage;
-import com.gndc.common.enums.common.StatusEnum;
-import com.gndc.core.mappers.PartnerApiMapping;
-import com.gndc.core.service.partner.PartnerApiService;
-import com.gndc.core.api.admin.partner.AOPartnerApiAddRequest;
-import com.gndc.core.api.admin.partner.AOPartnerApiListRequest;
-import com.gndc.core.api.admin.partner.AOPartnerApiModifyRequest;
-import com.gndc.core.model.PartnerApi;
-import com.gndc.core.api.admin.partner.AOPartnerApiDeleteRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import tk.mybatis.mapper.weekend.Weekend;
+    import com.github.pagehelper.PageHelper;
+    import com.github.pagehelper.PageInfo;
+    import com.gndc.common.api.ResponseMessage;
+    import com.gndc.common.enums.common.StatusEnum;
+    import com.gndc.core.api.admin.partner.AOPartnerApiAddRequest;
+    import com.gndc.core.api.admin.partner.AOPartnerApiDeleteRequest;
+    import com.gndc.core.api.admin.partner.AOPartnerApiListRequest;
+    import com.gndc.core.api.admin.partner.AOPartnerApiModifyRequest;
+    import com.gndc.core.mappers.PartnerApiMapping;
+    import com.gndc.core.model.PartnerApi;
+    import com.gndc.core.service.partner.PartnerApiService;
+    import lombok.extern.slf4j.Slf4j;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.validation.annotation.Validated;
+    import org.springframework.web.bind.annotation.PostMapping;
+    import org.springframework.web.bind.annotation.RequestBody;
+    import org.springframework.web.bind.annotation.RequestMapping;
+    import org.springframework.web.bind.annotation.RestController;
+    import tk.mybatis.mapper.weekend.Weekend;
 
-import java.util.Date;
-import java.util.List;
+    import java.util.Date;
+    import java.util.List;
 
     /**
  * @author <a href="liujun8852@adpanshi.com">liujun</a>
@@ -38,11 +37,10 @@ import java.util.List;
  * @Description
  * @date 2019/4/15  11:37
  */
+@Slf4j
 @RestController
 @RequestMapping("/admin/partnerApi")
 public class AOPartnerApiController {
-
-    private static final Logger logger = LoggerFactory.getLogger(AOPartnerApiController.class);
 
     @Autowired
     private PartnerApiMapping partnerApiMapping;
@@ -52,7 +50,7 @@ public class AOPartnerApiController {
     @PostMapping("/addPartnerApi")
     public ResponseMessage addPartnerApi(@Validated @RequestBody AOPartnerApiAddRequest aoPartnerApiAddRequest){
         ResponseMessage responseMessage=new ResponseMessage<>();
-        PartnerApi partnerApi = partnerApiMapping.toEntity(aoPartnerApiAddRequest);
+        PartnerApi partnerApi = partnerApiMapping.convert(aoPartnerApiAddRequest);
         partnerApi.setCreateTime(new Date());
         partnerApiService.insertSelective(partnerApi);
         return responseMessage;
@@ -62,7 +60,7 @@ public class AOPartnerApiController {
     @PostMapping("/updatePartnerApi")
     public ResponseMessage updatePartnerApi(@Validated @RequestBody AOPartnerApiModifyRequest aoPartnerApiModifyRequest){
         ResponseMessage responseMessage=new ResponseMessage<>();
-        PartnerApi partnerApi = partnerApiMapping.toEntity(aoPartnerApiModifyRequest);
+        PartnerApi partnerApi = partnerApiMapping.convert(aoPartnerApiModifyRequest);
         partnerApi.setUpdateTime(new Date());
         partnerApiService.updateByPrimaryKeySelective(partnerApi);
         return responseMessage;
@@ -72,7 +70,7 @@ public class AOPartnerApiController {
     @PostMapping("/deletePartnerApi")
     public ResponseMessage deletePartnerApi(@Validated @RequestBody AOPartnerApiDeleteRequest aoPartnerApiDeleteRequest){
         ResponseMessage responseMessage=new ResponseMessage<>();
-        PartnerApi partnerApi = partnerApiMapping.toEntity(aoPartnerApiDeleteRequest);
+        PartnerApi partnerApi = partnerApiMapping.convert(aoPartnerApiDeleteRequest);
         Weekend<PartnerApi> weekend=new Weekend(PartnerApi.class);
         weekend.weekendCriteria().andEqualTo(PartnerApi::getId,partnerApi.getId());
         partnerApi.setStatus(StatusEnum.DELETE.getCode());
@@ -83,7 +81,7 @@ public class AOPartnerApiController {
     @PostMapping("/getPartnerApiList")
     public ResponseMessage getPartnerApiList(@Validated @RequestBody AOPartnerApiListRequest aoPartnerApiListRequest){
         ResponseMessage responseMessage=new ResponseMessage<>();
-        PartnerApi partnerApi = partnerApiMapping.toEntity(aoPartnerApiListRequest);
+        PartnerApi partnerApi = partnerApiMapping.convert(aoPartnerApiListRequest);
         PageHelper.startPage(aoPartnerApiListRequest.getPageNum(), aoPartnerApiListRequest.getPageSize());
 
         Weekend<PartnerApi> weekend=new Weekend(PartnerApi.class);

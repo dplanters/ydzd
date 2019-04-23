@@ -12,8 +12,7 @@ import com.gndc.core.mapper.RoleRightMapper;
 import com.gndc.core.model.Role;
 import com.gndc.core.model.RoleRight;
 import com.gndc.core.service.sys.RoleService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -25,9 +24,8 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 public class RoleServiceImpl extends BaseServiceImpl<Role, Integer> implements RoleService {
-
-    private static final Logger logger = LoggerFactory.getLogger(RoleServiceImpl.class);
 
     @Autowired
     private RoleMapper roleMapper;
@@ -51,7 +49,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer> implements R
 
         if (originalRole != null) {
             String msg = StrUtil.format("{} 已经存在", roleName);
-            logger.warn(msg);
+            log.warn(msg);
             throw new HjException(ResultCode.ROLENAME_EXISTS);
         }
         role.setPlatform(request.getPlatform());

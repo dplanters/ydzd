@@ -14,8 +14,7 @@ import com.gndc.core.model.RoleRight;
 import com.gndc.core.service.sys.RightService;
 import com.gndc.core.service.sys.RoleRightService;
 import com.gndc.core.util.RightConvertUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
@@ -25,12 +24,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/admin/sys/right")
 public class AORightController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AORightController.class);
+    @Autowired
+    private RightMapping rightMapping;
 
     @Autowired
     private RightService rightService;
@@ -52,7 +52,7 @@ public class AORightController {
     @PostMapping("/addRight")
     public ResponseMessage<Integer> addRight(@Validated @RequestBody AORightAddRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
-        Right right = RightMapping.INSTANCE.convert(request);
+        Right right = rightMapping.convert(request);
         rightService.insertSelective(right);
         RightInfoDTO rightInfo = rightInfoDTOMapping.convert(right);
         redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, rightInfo.getId(), rightInfo);
@@ -68,7 +68,7 @@ public class AORightController {
     @PostMapping("/modifyRight")
     public ResponseMessage<Integer> modifyRight(@Validated @RequestBody AORightModifyRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
-        Right right = RightMapping.INSTANCE.convert(request);
+        Right right = rightMapping.convert(request);
         rightService.updateByPrimaryKeySelective(right);
         RightInfoDTO rightInfo = rightInfoDTOMapping.convert(right);
         redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_RIGHT, rightInfo.getId(), rightInfo);
@@ -116,7 +116,7 @@ public class AORightController {
 
         if (rightIdCount > 0) {
             String msg = StrUtil.format("权限编号 {} 在使用，请先取消相关角色授权后再进行删除！", id);
-            logger.warn(msg);
+            log.warn(msg);
             throw new HjException(ResultCode.RIGHT_IS_USING);
         }
 
@@ -124,7 +124,7 @@ public class AORightController {
 
         if (superIdCount> 0) {
             String msg = StrUtil.format("权限编号 {} 存在子权限，请先删除子权限后后再进行删除！", id);
-            logger.warn(msg);
+            log.warn(msg);
             throw new HjException(ResultCode.RIGHT_IS_USING);
         }
 

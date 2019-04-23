@@ -6,12 +6,9 @@ import com.gndc.core.model.SmsTemplate;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface SmsTemplateMapping {
-
-    SmsTemplateMapping INSTANCE = Mappers.getMapper(SmsTemplateMapping.class);
 
     @Mappings({
             @Mapping(target = "id", source = "templateId"),

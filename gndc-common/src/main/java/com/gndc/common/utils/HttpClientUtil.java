@@ -10,6 +10,7 @@ package com.gndc.common.utils;
 
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.exception.HjException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.NameValuePair;
@@ -29,8 +30,6 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
@@ -41,10 +40,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
-
+@Slf4j
 public class HttpClientUtil {
-
-    private static final Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 
     /**
      * 向指定URL发送GET方法的请求
@@ -89,7 +86,7 @@ public class HttpClientUtil {
         } else
         // 返回码错误，例如：404
         {
-            logger.error("调用Http请求有异常！返回码为：" + responseCode);
+            log.error("调用Http请求有异常！返回码为：" + responseCode);
             return "";
         }
     }
@@ -117,7 +114,7 @@ public class HttpClientUtil {
             return result;
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             throw new HjException(ResultCode.HTTP_EXCEPTION);
         } finally {
             if (is != null) {
@@ -181,7 +178,7 @@ public class HttpClientUtil {
             return result;
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             throw new HjException(ResultCode.HTTP_EXCEPTION);
         } finally {
             if (is != null) {
@@ -268,7 +265,7 @@ public class HttpClientUtil {
                 result.append(line);
             }
         } catch (Exception e) {
-            logger.error("发送 POST 请求出现异常！" + e.getMessage());
+            log.error("发送 POST 请求出现异常！" + e.getMessage());
             throw e;
         }
         // 使用finally块来关闭输出流、输入流

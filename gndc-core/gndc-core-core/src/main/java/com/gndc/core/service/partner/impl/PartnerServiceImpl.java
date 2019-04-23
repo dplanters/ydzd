@@ -9,18 +9,15 @@ import com.gndc.core.mapper.PartnerAccountLogMapper;
 import com.gndc.core.mapper.PartnerMapper;
 import com.gndc.core.model.Partner;
 import com.gndc.core.service.partner.PartnerService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-
+@Slf4j
 @Service
 public class PartnerServiceImpl extends BaseServiceImpl<Partner, Integer> implements PartnerService {
-
-    private static final Logger logger = LoggerFactory.getLogger(PartnerServiceImpl.class);
 
     @Resource
     private PartnerMapper partnerMapper;

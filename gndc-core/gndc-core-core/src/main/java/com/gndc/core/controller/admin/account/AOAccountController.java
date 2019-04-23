@@ -18,14 +18,13 @@ import com.gndc.core.mappers.AOAdminLoginInfoDTOMapping;
 import com.gndc.core.model.Admin;
 import com.gndc.core.model.Right;
 import com.gndc.core.model.Role;
+import com.gndc.core.service.account.AccountService;
+import com.gndc.core.service.account.AdminService;
 import com.gndc.core.service.sys.RightService;
 import com.gndc.core.service.sys.RoleRightService;
 import com.gndc.core.service.sys.RoleService;
 import com.gndc.core.util.RightConvertUtil;
-import com.gndc.core.service.account.AccountService;
-import com.gndc.core.service.account.AdminService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
@@ -37,12 +36,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
+@Slf4j
 @RestController
 @RequestMapping("/admin/account")
 public class AOAccountController {
-
-    private static final Logger logger = LoggerFactory.getLogger(AOAccountController.class);
+    @Autowired
+    private AOAdminLoginInfoDTOMapping aoAdminLoginInfoDTOMapping;
 
     @Autowired
     private AdminService adminService;
@@ -80,13 +79,13 @@ public class AOAccountController {
 
         if (admin == null) {
             String msg = StrUtil.format("用户名 {} 不存在", loginName);
-            logger.warn(msg);
+            log.warn(msg);
             throw new HjException(ResultCode.ADMIN_NOT_EXIST);
         }
 
         if (admin.getStatus().equals(StatusEnum.DELETE.getCode())) {
             String msg = StrUtil.format("用户名 {} 已停用", loginName);
-            logger.warn(msg);
+            log.warn(msg);
             throw new HjException(ResultCode.ADMIN_NOT_EXIST, msg);
         }
         //密码校验
@@ -102,7 +101,7 @@ public class AOAccountController {
         String sessionId = IdUtil.simpleUUID();
         //不是运营账号不允许登录
         if (!PlatformEnum.OPERATOR.getCode().equals(admin.getPlatform())) {
-            logger.warn("{} 不允许登录运营平台", admin.getPlatform());
+            log.warn("{} 不允许登录运营平台", admin.getPlatform());
             throw new HjException(ResultCode.NOT_ALLOW_LOGIN);
         }
 
@@ -126,10 +125,10 @@ public class AOAccountController {
                 break;
             default:
                 String msg = "无效的账号类型";
-                logger.warn(msg);
+                log.warn(msg);
                 throw new HjException(ResultCode.SYSTEM_BUSY);
         }
-        AOAdminLoginInfoDTO adminInfo = AOAdminLoginInfoDTOMapping.INSTANCE.convert(admin);
+        AOAdminLoginInfoDTO adminInfo = aoAdminLoginInfoDTOMapping.convert(admin);
         List<RightInfoDTO> rightInfoDTOS = RightConvertUtil.convertToRightInfo(rights);
         adminInfo.setRights(CollUtil.isEmpty(rightInfoDTOS) ? null : rightInfoDTOS.get(0).getChildren());
         aoLoginResponse.setAdmin(adminInfo);

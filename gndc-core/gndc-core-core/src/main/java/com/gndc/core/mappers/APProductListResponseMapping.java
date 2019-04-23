@@ -6,12 +6,9 @@ import com.gndc.core.model.ProductData;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
-public interface APProductListResponseMapper {
-
-    APProductListResponseMapper INSTANCE = Mappers.getMapper(APProductListResponseMapper.class);
+@Mapper(componentModel = "spring")
+public interface APProductListResponseMapping {
 
     @Mappings({
             @Mapping(target = "id", source = "source1.id"),

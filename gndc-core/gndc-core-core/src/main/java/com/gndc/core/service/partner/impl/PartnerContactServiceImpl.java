@@ -5,8 +5,7 @@ import com.gndc.core.api.partner.sys.APPartnerContactAddRequest;
 import com.gndc.core.mapper.PartnerContactMapper;
 import com.gndc.core.model.PartnerContact;
 import com.gndc.core.service.partner.PartnerContactService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +15,10 @@ import javax.annotation.Resource;
  * @author jingkaihui
  * @date 2019/2/25
  */
+@Slf4j
 @Service
 public class PartnerContactServiceImpl extends BaseServiceImpl<PartnerContact, Integer> implements PartnerContactService {
 
-    private static final Logger logger = LoggerFactory.getLogger(PartnerContactServiceImpl.class);
     @Resource
     private PartnerContactMapper partnerContactMapper;
 

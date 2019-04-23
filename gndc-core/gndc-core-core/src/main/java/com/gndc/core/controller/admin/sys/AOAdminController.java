@@ -21,8 +21,7 @@ import com.gndc.core.model.Role;
 import com.gndc.core.service.account.AdminService;
 import com.gndc.core.service.partner.PartnerService;
 import com.gndc.core.service.sys.RoleService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
@@ -35,12 +34,13 @@ import tk.mybatis.mapper.weekend.Weekend;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/admin/sys/admin")
 public class AOAdminController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AOAdminController.class);
+    @Autowired
+    private AdminMapping adminMapping;
 
     @Autowired
     private AdminService adminService;
@@ -53,6 +53,9 @@ public class AOAdminController {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private AOAdminListResponseMapping aoAdminListResponseMapping;
 
     /**
      * 添加管理员账号
@@ -82,7 +85,7 @@ public class AOAdminController {
         String passwordSign = RandomUtil.randomString(6);
         String md5Password = PwdUtil.passwordGenerate(passwordDec, passwordSign);
 
-        Admin admin = AdminMapping.INSTANCE.convert(request);
+        Admin admin = adminMapping.convert(request);
         admin.setPasswordSign(passwordSign);
         admin.setOperateSign(operateSign);
         admin.setPassword(md5Password);
@@ -121,7 +124,7 @@ public class AOAdminController {
             throw new HjException(ResultCode.ROLE_NOT_EXIST, msg);
         }
 
-        Admin admin = AdminMapping.INSTANCE.convert(request);
+        Admin admin = adminMapping.convert(request);
         admin.setUpdateAdminId(request.getAoAdmin().getId());
         if (PlatformEnum.PARTNER.getCode().equals(request.getPlatform())) {
             Partner partner = new Partner();
@@ -165,7 +168,7 @@ public class AOAdminController {
 
         List<AOAdminListResponse> adminList = new ArrayList<>(admins.size());
         admins.forEach(admin -> {
-            AOAdminListResponse aoAdmin = AOAdminListResponseMapping.INSTANCE.convert(admin);
+            AOAdminListResponse aoAdmin = aoAdminListResponseMapping.convert(admin);
             Role role = ((Role) redisTemplate.opsForHash().get(CacheConstant.KEY_ALL_ROLE,
                     aoAdmin.getRoleId()));
             aoAdmin.setRoleName(ObjectUtil.isNotNull(role) ? role.getRoleName() : null);

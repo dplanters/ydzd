@@ -20,6 +20,7 @@ import com.gndc.core.service.sys.RightService;
 import com.gndc.core.service.sys.RoleRightService;
 import com.gndc.core.service.sys.RoleService;
 import com.gndc.core.util.RightConvertUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,10 @@ import tk.mybatis.mapper.weekend.Weekend;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/admin/sys/role")
 public class AORoleController {
-
-    private static final Logger logger = LoggerFactory.getLogger(AORoleController.class);
 
     @Autowired
     private RoleService roleService;
@@ -99,7 +98,7 @@ public class AORoleController {
         int normalAdminCount = adminService.selectCountByExample(adminWeekend);
         if (normalAdminCount > 0) {
             String msg = StrUtil.format("角色编号 {} 存在正常用户，请先删除相关用户", request.getId());
-            logger.warn(msg);
+            log.warn(msg);
             throw new HjException(ResultCode.ROLE_HAS_NORMAL_ADMIN);
         }
 

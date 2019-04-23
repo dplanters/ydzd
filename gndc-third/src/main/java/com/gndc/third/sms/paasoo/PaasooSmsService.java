@@ -9,8 +9,7 @@ import com.gndc.third.sms.ISmsService;
 import com.gndc.third.sms.paasoo.enums.PaasooNotSupporMccmnc;
 import com.gndc.third.sms.paasoo.enums.PaasooPhoneNumberErrcodeType;
 import com.gndc.third.sms.paasoo.enums.PaasooPhoneNumberResultType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
@@ -21,11 +20,10 @@ import java.util.Map;
 /**
  * 短信http接口的java代码调用示例 基于Apache HttpClient 4.X
  */
+@Slf4j
 @PropertySource(value = "classpath:/third.properties")
 @Service
 public class PaasooSmsService implements ISmsService {
-
-    private static Logger logger = LoggerFactory.getLogger(PaasooSmsService.class);
 
     // private static final String CN = Constant.COUNTRY_CODE;
 
@@ -102,7 +100,7 @@ public class PaasooSmsService implements ISmsService {
             if (to.indexOf(Constant.COUNTRY_CODE) != 0) {
                 to = Constant.COUNTRY_CODE + to;
             }
-            logger.info("cn:" + Constant.COUNTRY_CODE);
+            log.info("cn:" + Constant.COUNTRY_CODE);
             Map<String, String> validNumberResult = getValidNumber(to);
 
             result.put("phoneValidateErrorCode", validNumberResult.get("errorCode"));
@@ -165,7 +163,7 @@ public class PaasooSmsService implements ISmsService {
             params.put("text", text);
 
             String response = HttpClientUtil.get(URI_GET_SEND_SMS, params, ENCODING);
-            logger.info("sendsms response:" + response);
+            log.info("sendsms response:" + response);
 
             // 成功 : {"bannerStatus":"0","messageid":"015bd4-d6dfa7-58w"}
             // 失败 : {"status_code":"Missing params.","bannerStatus":"2"}
@@ -177,7 +175,7 @@ public class PaasooSmsService implements ISmsService {
 
         result.putAll(sendResult);
 
-        logger.info("sendsms sendResult:" + JSONObject.toJSONString(result));
+        log.info("sendsms sendResult:" + JSONObject.toJSONString(result));
         return result;
 
     }
@@ -197,7 +195,7 @@ public class PaasooSmsService implements ISmsService {
         params.put("messageid", messageid);
 
         String response = HttpClientUtil.get(URI_GET_SEND_RECORD, params, ENCODING);
-        logger.info("getSendRecord response:" + response);
+        log.info("getSendRecord response:" + response);
 
         Map<String, String> result = JSONObject.parseObject(response, new TypeReference<Map<String, String>>() {
         });
@@ -218,7 +216,7 @@ public class PaasooSmsService implements ISmsService {
         params.put("secret", API_SECRET);
 
         String response = HttpClientUtil.get(URI_GET_USER_BALANCE, params, ENCODING);
-        logger.info("getUserBalance response:" + response);
+        log.info("getUserBalance response:" + response);
 
         // 成功 : {"bannerStatus":"0","messageid":"015bd4-d6dfa7-58w"}
         // 失败 : {"status_code":"Missing params.","bannerStatus":"2"}
@@ -245,7 +243,7 @@ public class PaasooSmsService implements ISmsService {
         params.put("nationalNumber", nationalNumber);
 
         String response = HttpClientUtil.get(URI_GET_VALID_NUMBER, params, ENCODING);
-        logger.info("getValidNumber response:" + response);
+        log.info("getValidNumber response:" + response);
 
         // 成功 : {"bannerStatus":"0","messageid":"015bd4-d6dfa7-58w"}
         // 失败 : {"status_code":"Missing params.","bannerStatus":"2"}
@@ -271,7 +269,7 @@ public class PaasooSmsService implements ISmsService {
         params.put("to", to);
 
         String response = HttpClientUtil.get(URI_GET_VALID_NUMBER, params, ENCODING);
-        logger.info("getValidNumber response:" + response);
+        log.info("getValidNumber response:" + response);
 
         // 成功 :
         // {"requestId":"200090-2367ec-0000","msgId":"200090-2367ec-0000","to":"8615990006398",
@@ -347,7 +345,7 @@ public class PaasooSmsService implements ISmsService {
 
             // 调用发送短信url
             String response = HttpClientUtil.get(URI_GET_SEND_SMS, params, ENCODING);
-            logger.info("sendsms response:" + response);
+            log.info("sendsms response:" + response);
 
             // 成功 : {"bannerStatus":"0","messageid":"015bd4-d6dfa7-58w"}
             // 失败 : {"status_code":"Missing params.","bannerStatus":"2"}
@@ -359,7 +357,7 @@ public class PaasooSmsService implements ISmsService {
 
         result.putAll(sendResult);
 
-        logger.info("sendsms sendResult:" + JSONObject.toJSONString(result));
+        log.info("sendsms sendResult:" + JSONObject.toJSONString(result));
         return result;
     }
 

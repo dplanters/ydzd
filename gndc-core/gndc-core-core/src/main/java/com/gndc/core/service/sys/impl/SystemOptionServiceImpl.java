@@ -5,8 +5,7 @@ import com.gndc.core.api.partner.common.APPayeeListRequest;
 import com.gndc.core.mapper.SystemOptionMapper;
 import com.gndc.core.model.SystemOption;
 import com.gndc.core.service.sys.SystemOptionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
+@Slf4j
 public class SystemOptionServiceImpl extends BaseServiceImpl<SystemOption, Integer> implements SystemOptionService {
-
-    private static final Logger logger = LoggerFactory.getLogger(SystemOptionServiceImpl.class);
 
     @Autowired
     private SystemOptionMapper systemOptionMapper;

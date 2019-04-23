@@ -24,8 +24,7 @@ import com.gndc.core.model.UserEvent;
 import com.gndc.core.service.sms.SmsLogService;
 import com.gndc.core.service.user.UserEventService;
 import com.gndc.core.service.user.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
@@ -40,14 +39,16 @@ import java.util.concurrent.TimeUnit;
 /**
  * 客户端用户账号相关
  */
+@Slf4j
 @RestController
 @RequestMapping("/app/user/account")
 public class PAccountController {
 
-    private static final Logger logger = LoggerFactory.getLogger(PAccountController.class);
-
     private static final String P_SMS_USER_LOGIN = "P_SMS_USER_LOGIN";
     private static final String P_SMS_USER_FORGET_PWD = "P_SMS_USER_FORGET_PWD";
+
+    @Autowired
+    private PUserLoginInfoDTOMapping pUserLoginInfoDTOMapping;
 
     @Autowired
     private UserService userService;
@@ -226,7 +227,7 @@ public class PAccountController {
         userService.updateByPrimaryKeySelective(user4update);
 
         String sessionId = IdUtil.simpleUUID();
-        PUserLoginInfoDTO userLoginInfo = PUserLoginInfoDTOMapping.INSTANCE.convert(user4update);
+        PUserLoginInfoDTO userLoginInfo = pUserLoginInfoDTOMapping.convert(user4update);
         redisTemplate.opsForValue().set(CacheConstant.NAMESPACE_USER_LOGIN + sessionId, userLoginInfo,
                 CacheConstant.EXPIRE_USER_LOGIN, TimeUnit.SECONDS);
 
@@ -347,7 +348,7 @@ public class PAccountController {
         if (flag <= 0) {
             throw new HjException(ResultCode.RECORD_MODIFY_FAIL);
         }
-        logger.info(String.format("应答:%s", JSONObject.toJSONString(response)));
+        log.info(String.format("应答:%s", JSONObject.toJSONString(response)));
         return response;
     }
 }

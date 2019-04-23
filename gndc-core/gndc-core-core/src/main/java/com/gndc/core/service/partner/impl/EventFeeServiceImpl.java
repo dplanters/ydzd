@@ -10,8 +10,7 @@ import com.gndc.core.model.EventFee;
 import com.gndc.core.model.Partner;
 import com.gndc.core.service.partner.EventFeeService;
 import com.gndc.core.service.partner.PartnerService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +26,9 @@ import java.util.concurrent.TimeUnit;
  * @author jingkaihui
  * @date 2019/2/25
  */
+@Slf4j
 @Service
 public class EventFeeServiceImpl extends BaseServiceImpl<EventFee, Long> implements EventFeeService {
-
-    private static final Logger logger = LoggerFactory.getLogger(EventFeeServiceImpl.class);
 
     /**
      * 并发线程数。

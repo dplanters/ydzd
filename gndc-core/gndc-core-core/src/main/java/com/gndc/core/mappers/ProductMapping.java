@@ -6,12 +6,9 @@ import com.gndc.core.model.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ProductMapping {
-
-    ProductMapping INSTANCE = Mappers.getMapper(ProductMapping.class);
 
     @Mappings({
             @Mapping(target = "androidLink", source = "productLink"),

@@ -5,10 +5,8 @@ import com.gndc.core.model.Admin;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface AOAdminListResponseMapping {
-
-    AOAdminListResponseMapping INSTANCE = Mappers.getMapper(AOAdminListResponseMapping.class);
 
     AOAdminListResponse convert(Admin admin);
 }

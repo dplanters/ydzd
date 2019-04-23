@@ -9,8 +9,7 @@ import com.gndc.core.api.admin.partner.*;
 import com.gndc.core.mappers.PartnerMapping;
 import com.gndc.core.model.Partner;
 import com.gndc.core.service.partner.PartnerService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
@@ -21,12 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.weekend.Weekend;
 
 import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/admin/partner")
 public class AOPartnerController {
-
-    private static final Logger logger = LoggerFactory.getLogger(AOPartnerController.class);
+    @Autowired
+    private PartnerMapping partnerMapping;
 
     @Autowired
     private PartnerService partnerService;
@@ -41,7 +40,7 @@ public class AOPartnerController {
     @PostMapping("/addPartner")
     public ResponseMessage<Integer> addPartner(@Validated @RequestBody AOPartnerAddRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
-        Partner partner = PartnerMapping.INSTANCE.convert(request);
+        Partner partner = partnerMapping.convert(request);
         partnerService.insertSelective(partner);
         redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_PARTNER_LIST,partner.getAppId(),partner);
         response.setData(partner.getId());
@@ -56,7 +55,7 @@ public class AOPartnerController {
     @PostMapping("/modifyPartner")
     public ResponseMessage<Integer> modifyPartner(@Validated @RequestBody AOPartnerModifyRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
-        Partner partner = PartnerMapping.INSTANCE.convert(request);
+        Partner partner = partnerMapping.convert(request);
         partnerService.updateByPrimaryKeySelective(partner);
         response.setData(partner.getId());
         redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_PARTNER_LIST,partner.getAppId(),partner);

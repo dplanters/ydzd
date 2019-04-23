@@ -41,8 +41,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class NiuxinSmsService implements ISmsService {
 
-	private static Logger logger = LoggerFactory.getLogger(NiuxinSmsService.class);
-
 	// private static final String CN = Constant.COUNTRY_CODE;
 
 	@Value("${NIUXIN_KEY}")
@@ -111,7 +109,7 @@ public class NiuxinSmsService implements ISmsService {
 			params.put("content", URLEncoder.encode(message, "utf8"));
 
 			String response = HttpClientUtil.get(URI_GET_SEND_SMS, params, ENCODING);
-			logger.info("sendsms response:" + response);
+			log.info("sendsms response:" + response);
 
 			// 成功 : {"bannerStatus":"0","messageid":"015bd4-d6dfa7-58w"}
 			// 失败 : {"status_code":"Missing params.","bannerStatus":"2"}

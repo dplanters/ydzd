@@ -22,8 +22,7 @@ import com.gndc.core.model.Product;
 import com.gndc.core.model.ProductData;
 import com.gndc.core.model.ProductHot;
 import com.gndc.core.service.product.ProductService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -37,11 +36,24 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Service
 public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implements ProductService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
+    @Autowired
+    private ProductDataMapping productDataMapping;
 
+    @Autowired
+    private ProductHotMapping productHotMapping;
+
+    @Autowired
+    private ProductMapping productMapping;
+
+    @Autowired
+    private APProductListResponseMapping apProductListResponseMapping;
+
+    @Autowired
+    private AOProductDetailResponseMapping aoProductDetailResponseMapping;
     @Resource
     private ProductMapper productMapper;
     @Resource
@@ -67,7 +79,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
 
         for (int i = 0; i < products.size(); i++) {
             ProductData pd = productDataMapper.selectOneByProperty(ProductData::getProductId, products.get(i).getId());
-            APProductListResponse apProductListResponse = APProductListResponseMapper.INSTANCE.convert(products.get(i), pd);
+            APProductListResponse apProductListResponse = apProductListResponseMapping.convert(products.get(i), pd);
             productDatas.add(apProductListResponse);
         }
         return productDatas;
@@ -84,8 +96,8 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     public Integer addProduct(AOProductAddRequest request) {
         AOProductDataRequest aoProductDataRequest = request.getExtra();
 
-        Product product = ProductMapping.INSTANCE.convert(request);
-        ProductData productData = ProductDataMapping.INSTANCE.convert(aoProductDataRequest);
+        Product product = productMapping.convert(request);
+        ProductData productData = productDataMapping.convert(aoProductDataRequest);
         //新增
         productMapper.insertSelective(product);
         productData.setProductId(product.getId());
@@ -99,8 +111,8 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     public Integer modifyProduct(AOProductModifyRequest request) {
         AOProductDataRequest aoProductDataRequest = request.getExtra();
 
-        Product product = ProductMapping.INSTANCE.convert(request);
-        ProductData productData = ProductDataMapping.INSTANCE.convert(aoProductDataRequest);
+        Product product = productMapping.convert(request);
+        ProductData productData = productDataMapping.convert(aoProductDataRequest);
         productMapper.updateByPrimaryKeySelective(product);
 
         Weekend<ProductData> weekend = Weekend.of(ProductData.class);
@@ -117,7 +129,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
         Product product = productMapper.selectByPrimaryKey(request.getId());
 
         if (product == null) {
-            logger.warn("产品编号{}不存在或已下线", request.getId());
+            log.warn("产品编号{}不存在或已下线", request.getId());
             throw new HjException(ResultCode.RECORD_NOT_EXIST);
         }
 
@@ -127,7 +139,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
                 .andEqualTo(ProductData::getDataType, ProductDataTypeEnum.AMOUNT.getCode());
         ProductData productData = productDataMapper.selectOneByExample(weekend);
 
-        AOProductDetailResponse aoProductDetailResponse = AOProductDetailResponseMapper.INSTANCE.convert(product, productData);
+        AOProductDetailResponse aoProductDetailResponse = aoProductDetailResponseMapping.convert(product, productData);
 
         return aoProductDetailResponse;
     }
@@ -137,7 +149,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     public Boolean productUpperAndLowerLine(AOProductOnlineOrOfflineRequest request) {
         Product product = productMapper.selectByPrimaryKey(request.getId());
         if (ObjectUtil.isNull(product)) {
-            logger.warn("产品编号{}不存在或已下线", request.getId());
+            log.warn("产品编号{}不存在或已下线", request.getId());
             throw new HjException(ResultCode.RECORD_NOT_EXIST);
         }
         Byte upperAndLowerLine = request.getUpperAndLowerLine();
@@ -165,12 +177,12 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
         Integer id = request.getId();
         Product originalProduct = productMapper.selectByPrimaryKey(id);
         if (originalProduct == null) {
-            logger.warn("产品编号{}不存在或已下线", request.getId());
+            log.warn("产品编号{}不存在或已下线", request.getId());
             throw new HjException(ResultCode.RECORD_NOT_EXIST);
         }
 
         if (originalProduct.getProductStatus().equals(OnlineStatusEnum.ONLINE.getCode())) {
-            logger.warn("产品编号{}在线不允许删除", request.getId());
+            log.warn("产品编号{}在线不允许删除", request.getId());
             throw new HjException(ResultCode.PRODUCT_ONLINE);
         }
         originalProduct.setStatus(StatusEnum.DELETE.getCode());
@@ -196,7 +208,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
     @Override
     @Transactional
     public Integer productHotAdd(AOProductHotAddRequest request) {
-        ProductHot productHot = ProductHotMapping.INSTANCE.convert(request);
+        ProductHot productHot = productHotMapping.convert(request);
 
         Product product = productMapper.selectByPrimaryKey(request.getProductId());
 
@@ -204,7 +216,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Integer> implem
             throw new HjException(ResultCode.RECORD_NOT_EXIST);
         }
         if (ObjectUtil.isNotNull(product) && !product.getProductStatus().equals(OnlineStatusEnum.ONLINE.getCode())) {
-            logger.warn("产品未上线");
+            log.warn("产品未上线");
             throw new HjException(ResultCode.PRODUCTS_NOT_ONLINE);
         }
         productHot.setHotStatus(OnlineStatusEnum.ONLINE.getCode());

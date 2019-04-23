@@ -5,6 +5,7 @@ import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.mapper.RightMapper;
 import com.gndc.core.model.Right;
 import com.gndc.core.service.sys.RightService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,9 @@ import tk.mybatis.mapper.weekend.Weekend;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class RightServiceImpl extends BaseServiceImpl<Right, Integer> implements RightService {
-
-    private static final Logger logger = LoggerFactory.getLogger(RightServiceImpl.class);
 
     @Autowired
     private RightMapper rightMapper;

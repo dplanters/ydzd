@@ -40,6 +40,9 @@ import java.util.List;
 public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemScheduleJob, Integer> implements SystemScheduleJobService {
 
     @Autowired
+    private SmsJobConditionMapping smsJobConditionMapping;
+
+    @Autowired
     private QuartzManager quartzManager;
 
     @Autowired
@@ -105,7 +108,7 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
     public Integer timingSendJob(AOSmsTimingSendRequest request) throws ParseException {
         //需要发送短信的号码用","隔开
         String phoneToSend = null;
-        SmsJobCondition smsJobCondition = SmsJobConditionMapping.INSTANCE.convert(request);
+        SmsJobCondition smsJobCondition = smsJobConditionMapping.convert(request);
         if (request.getSourceType().equals(SmsEditConstant.SOURCE_TYPE_1)) {
             SmsCondition smsCondition = smsConditionService.selectByPrimaryKey(request.getConditionId());
             //当前支持营销类

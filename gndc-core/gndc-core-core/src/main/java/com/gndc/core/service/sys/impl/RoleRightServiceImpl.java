@@ -5,8 +5,7 @@ import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.core.mapper.RoleRightMapper;
 import com.gndc.core.model.RoleRight;
 import com.gndc.core.service.sys.RoleRightService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class RoleRightServiceImpl extends BaseServiceImpl<RoleRight, Integer> implements RoleRightService {
-
-    private static final Logger logger = LoggerFactory.getLogger(RoleRightServiceImpl.class);
 
     @Autowired
     private RoleRightMapper roleRightMapper;

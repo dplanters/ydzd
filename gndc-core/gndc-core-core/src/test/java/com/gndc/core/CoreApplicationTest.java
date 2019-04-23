@@ -2,6 +2,7 @@ package com.gndc.core;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,16 +21,15 @@ import java.sql.SQLException;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CoreApplication.class)
 @Ignore
+@Slf4j
 public class CoreApplicationTest {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CoreApplicationTest.class);
 
     @Autowired
     private DruidDataSource druidDataSource;
 
     @Test
     public void dateSource() throws SQLException {
-        LOGGER.info("方法名:{};参数:{};信息:{}", "dateSource", "[]",
+        log.info("方法名:{};参数:{};信息:{}", "dateSource", "[]",
                 JSONObject.toJSONString(druidDataSource.getCreateCount(), true));
     }
 }

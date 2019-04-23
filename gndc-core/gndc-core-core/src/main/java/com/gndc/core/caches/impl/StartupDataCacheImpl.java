@@ -12,8 +12,7 @@ import com.gndc.core.model.*;
 import com.gndc.core.service.partner.PartnerApiService;
 import com.gndc.core.service.partner.PartnerService;
 import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -23,9 +22,9 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
+@Slf4j
 @Getter
 public class StartupDataCacheImpl implements StartupDataCache {
-    private static final Logger logger = LoggerFactory.getLogger(StartupDataCacheImpl.class);
 
     @Autowired
     private RedisTemplate redisTemplate;

@@ -22,8 +22,7 @@ import com.gndc.core.service.platform.MessageTemplateService;
 import com.gndc.core.service.platform.UserMessageService;
 import com.gndc.core.service.product.ProductService;
 import com.gndc.core.service.user.UserEventService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -43,11 +42,10 @@ import java.util.List;
 /**
  * 客户端用户相关
  */
+@Slf4j
 @RestController
 @RequestMapping("/app/user")
 public class PUserController {
-
-    private static final Logger logger = LoggerFactory.getLogger(PUserController.class);
 
     @Autowired
     private FeedbackService feedbackService;

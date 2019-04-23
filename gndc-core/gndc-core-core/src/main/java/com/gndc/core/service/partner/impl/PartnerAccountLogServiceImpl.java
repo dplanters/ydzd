@@ -11,8 +11,7 @@ import com.gndc.core.api.partner.finance.account.APWithdrawRequest;
 import com.gndc.core.mapper.PartnerAccountLogMapper;
 import com.gndc.core.model.PartnerAccountLog;
 import com.gndc.core.service.partner.PartnerAccountLogService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,11 +20,9 @@ import tk.mybatis.mapper.weekend.Weekend;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
-
+@Slf4j
 @Service
 public class PartnerAccountLogServiceImpl extends BaseServiceImpl<PartnerAccountLog, Integer> implements PartnerAccountLogService {
-
-    private static final Logger logger = LoggerFactory.getLogger(PartnerAccountLogServiceImpl.class);
 
     @Resource
     private PartnerAccountLogMapper partnerAccountLogMapper;

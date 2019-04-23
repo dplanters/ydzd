@@ -2,6 +2,7 @@ package com.gndc.core.controller.app.platform;
 
 import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.enums.message.SMSTypeEnum;
@@ -15,9 +16,7 @@ import com.gndc.core.api.common.CommonResponse;
 import com.gndc.core.model.User;
 import com.gndc.core.service.sms.SmsLogService;
 import com.gndc.core.service.user.UserService;
-import com.gndc.common.api.ResponseMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
@@ -29,11 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 客户端发短信相关
  */
+@Slf4j
 @RestController
 @RequestMapping("/app/sms")
 public class PSmsController {
-
-    private static final Logger logger = LoggerFactory.getLogger(PSmsController.class);
 
     private static final String P_SMS_USER_FORGET_PWD = "P_SMS_USER_FORGET_PWD";
 
@@ -80,14 +78,14 @@ public class PSmsController {
 
 
         if (!smsLogService.validateSmsCount(sms10MinuteCount, sms24HourCount, response)) {
-            logger.error(String.format("应答:%s", JSONObject.toJSONString(response)));
+            log.error(String.format("应答:%s", JSONObject.toJSONString(response)));
             return response;
         }
 
         // 生成4位短信验证码
         String valCode = RandomUtil.randomNumbers(4);
 
-        logger.info("-------" + valCode);
+        log.info("-------" + valCode);
         // paasoo短信发送
         smsLogService.sendValCodeSms(SmsChannelEnum.CHUANGLAN.getCode(), phone, smsTemplateType, valCode, 0,
                 key, sms10MinuteCount, sms24HourCount);

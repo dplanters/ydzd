@@ -2,8 +2,7 @@ package com.gndc.core.controller.common;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gndc.third.oss.UploadToOSS;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,11 +18,10 @@ import java.util.Map;
 * Date: 2019-02-23
 * Time: 上午11:17
 */
+@Slf4j
 @RestController
 @RequestMapping("/upload")
 public class OSSController {
-
-   private static final Logger logger = LoggerFactory.getLogger(OSSController.class);
 
    /**
     * 上传文件调用接口

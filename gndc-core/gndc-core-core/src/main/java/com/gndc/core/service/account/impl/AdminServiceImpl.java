@@ -9,8 +9,6 @@ import com.gndc.core.mapper.AdminMapper;
 import com.gndc.core.model.Admin;
 import com.gndc.core.service.account.AdminService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.weekend.Weekend;
@@ -21,8 +19,6 @@ import java.util.List;
 @Slf4j
 @Service
 public class AdminServiceImpl extends BaseServiceImpl<Admin, Integer> implements AdminService {
-
-    private static final Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);
 
     @Autowired
     private AdminMapper adminMapper;

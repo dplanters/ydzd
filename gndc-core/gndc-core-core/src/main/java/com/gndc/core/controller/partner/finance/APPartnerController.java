@@ -10,8 +10,7 @@ import com.gndc.core.service.partner.EventFeeService;
 import com.gndc.core.service.partner.PartnerAccountLogService;
 import com.gndc.core.service.partner.PartnerService;
 import com.gndc.core.service.product.ProductService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,12 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/partner/finance")
 public class APPartnerController {
-
-    private static final Logger logger = LoggerFactory.getLogger(APPartnerController.class);
 
     @Autowired
     private PartnerService partnerService;

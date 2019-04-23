@@ -4,10 +4,9 @@ import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.partner.common.APAllPartnerRequest;
 import com.gndc.core.api.partner.common.APPayeeListRequest;
 import com.gndc.core.model.Partner;
-import com.gndc.core.service.sys.SystemOptionService;
 import com.gndc.core.service.partner.PartnerService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.gndc.core.service.sys.SystemOptionService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,12 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/partner/common")
 public class APCommonController {
-
-    private static final Logger logger = LoggerFactory.getLogger(APCommonController.class);
 
     @Autowired
     private PartnerService partnerService;

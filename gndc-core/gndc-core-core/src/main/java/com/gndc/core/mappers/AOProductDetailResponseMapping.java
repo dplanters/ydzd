@@ -6,12 +6,9 @@ import com.gndc.core.model.ProductData;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
-public interface AOProductDetailResponseMapper {
-
-    AOProductDetailResponseMapper INSTANCE = Mappers.getMapper(AOProductDetailResponseMapper.class);
+@Mapper(componentModel = "spring")
+public interface AOProductDetailResponseMapping {
 
     @Mappings({
             @Mapping(target = "id", source = "source1.id"),

@@ -21,9 +21,8 @@ import com.gndc.core.model.SmsSign;
 import com.gndc.core.model.SmsTemplate;
 import com.gndc.core.service.platform.SystemScheduleJobService;
 import com.gndc.core.service.sms.*;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.CronExpression;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,11 +37,19 @@ import java.util.List;
 /**
  * 短信管理
  */
+@Slf4j
 @RestController
 @RequestMapping("/admin/smsManage")
 public class AOSmsController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AOSmsController.class);
+    @Autowired
+    private SmsTemplateMapping smsTemplateMapping;
+
+    @Autowired
+    private SmsSignMapping smsSignMapping;
+
+    @Autowired
+    private SmsConditionMapping smsConditionMapping;
 
     @Autowired
     private SmsTemplateService smsTemplateService;
@@ -94,7 +101,7 @@ public class AOSmsController {
     @PostMapping("/sign/add")
     public ResponseMessage<CommonResponse> signAdd(@Validated @RequestBody AOSmsSignAddRequest request) {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
-        SmsSign smsSign = SmsSignMapping.INSTANCE.convert(request);
+        SmsSign smsSign = smsSignMapping.convert(request);
         if (request.getChannelId().equals(SmsEditConstant.CHANNEL_ID_1)) {
             smsSign.setChannelName("创蓝");
         }
@@ -116,7 +123,7 @@ public class AOSmsController {
     @PostMapping("/sign/update")
     public ResponseMessage<CommonResponse> signUpdate(@Validated @RequestBody AOSmsSignUpdateRequest request) {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
-        SmsSign smsSign = SmsSignMapping.INSTANCE.convert(request);
+        SmsSign smsSign = smsSignMapping.convert(request);
         CommonResponse commonResponse = new CommonResponse();
         if (request.getChannelId().equals(SmsEditConstant.CHANNEL_ID_1)) {
             smsSign.setChannelName("创蓝");
@@ -187,7 +194,7 @@ public class AOSmsController {
     @PostMapping("/template/add")
     public ResponseMessage<CommonResponse> templateAdd(@Validated @RequestBody AOSmsTemplateAddRequest request) {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
-        SmsTemplate smsTemplate = SmsTemplateMapping.INSTANCE.convert(request);
+        SmsTemplate smsTemplate = smsTemplateMapping.convert(request);
         CommonResponse commonResponse = new CommonResponse();
         commonResponse.setResult(smsTemplateService.insertSelective(smsTemplate));
         response.setData(commonResponse);
@@ -203,7 +210,7 @@ public class AOSmsController {
     @PostMapping("/template/update")
     public ResponseMessage<CommonResponse> templateUpdate(@Validated @RequestBody AOSmsTemplateUpdateRequest request) {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
-        SmsTemplate smsTemplate = SmsTemplateMapping.INSTANCE.convert(request);
+        SmsTemplate smsTemplate = smsTemplateMapping.convert(request);
         CommonResponse commonResponse = new CommonResponse();
         commonResponse.setResult(smsTemplateService.updateByPrimaryKeySelective(smsTemplate));
         response.setData(commonResponse);
@@ -310,7 +317,7 @@ public class AOSmsController {
     @PostMapping("/condition/add")
     public ResponseMessage<CommonResponse> conditionAdd(@Validated @RequestBody AOSmsConditionAddRequest request) {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
-        SmsCondition condition = SmsConditionMapping.INSTANCE.convert(request);
+        SmsCondition condition = smsConditionMapping.convert(request);
         CommonResponse commonResponse = new CommonResponse();
         commonResponse.setResult(smsConditionService.insertSelective(condition));
         response.setData(commonResponse);
@@ -326,7 +333,7 @@ public class AOSmsController {
     @PostMapping("/condition/update")
     public ResponseMessage<CommonResponse> conditionUpdate(@Validated @RequestBody AOSmsConditionUpdateRequest request) {
         ResponseMessage<CommonResponse> response = new ResponseMessage<>();
-        SmsCondition condition = SmsConditionMapping.INSTANCE.convert(request);
+        SmsCondition condition = smsConditionMapping.convert(request);
         CommonResponse commonResponse = new CommonResponse();
         commonResponse.setResult(smsConditionService.updateByPrimaryKeySelective(condition));
         response.setData(commonResponse);

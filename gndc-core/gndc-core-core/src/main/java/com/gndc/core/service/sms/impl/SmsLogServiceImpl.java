@@ -14,7 +14,6 @@ import com.gndc.common.enums.sms.SmsTemplateType;
 import com.gndc.common.exception.HjException;
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.common.utils.PhoneUtil;
-import com.gndc.core.service.user.UserService;
 import com.gndc.core.api.admin.sms.AOSmsRealTimeSendRequest;
 import com.gndc.core.api.admin.sms.SmsConditionContent;
 import com.gndc.core.api.app.platform.Sms10MinuteCount;
@@ -26,11 +25,11 @@ import com.gndc.core.model.SmsLog;
 import com.gndc.core.model.User;
 import com.gndc.core.service.sms.SmsGroupLogService;
 import com.gndc.core.service.sms.SmsLogService;
+import com.gndc.core.service.user.UserService;
 import com.gndc.third.sms.chuanglan.ChuangLanSmsService;
 import com.gndc.third.sms.paasoo.PaasooSmsService;
 import com.gndc.third.sms.paasoo.enums.PaasooSendResultType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -46,9 +45,9 @@ import java.util.concurrent.TimeUnit;
 /**
  * 短信记录
  */
+@Slf4j
 @Service
 public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implements SmsLogService {
-    private static final Logger logger = LoggerFactory.getLogger(SmsLogServiceImpl.class);
     /**
      * 发送短信并发线程数。
      */
@@ -290,7 +289,7 @@ public class SmsLogServiceImpl extends BaseServiceImpl<SmsLog, Integer> implemen
                 smsGroupLog.setSuccessNum(Integer.parseInt(successNum));
             }
             smsGroupLog.setUid(sendResult.get("uid"));
-            logger.info(JSONObject.toJSONString(sendResult));
+            log.info(JSONObject.toJSONString(sendResult));
             smsGroupLog.setPaasooPhoneValStr(sendResult.get("phoneValidateStr"));
         }
 
