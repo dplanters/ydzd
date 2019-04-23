@@ -44,4 +44,8 @@ zuul:
       serviceId: gndc-open
       path: /open/**
       url: http://gndc.open.com:13000/open/**
+    gndc-product:
+      serviceId: gndc-product
+      path: /product/**
+      url: http://gndc.product.com:13000/product/**
   ignored-services: "*"

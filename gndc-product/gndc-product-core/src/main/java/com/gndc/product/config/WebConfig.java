@@ -6,8 +6,6 @@ import com.alibaba.fastjson.serializer.SimpleDateFormatSerializer;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.gndc.common.exception.CustomErrorController;
-import com.gndc.common.interceptor.LoginCheckInterceptor;
-import com.gndc.common.interceptor.OpenSourceInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
@@ -18,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import java.util.ArrayList;
@@ -34,13 +31,6 @@ public class WebConfig extends WebMvcConfigurationSupport {
     @Autowired
     private List<ErrorViewResolver> errorViewResolvers;
 
-
-    @Autowired
-    private OpenSourceInterceptor openSourceInterceptor;
-
-    @Autowired
-    private LoginCheckInterceptor loginCheckInterceptor;
-
     @Override
     protected void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
@@ -48,16 +38,6 @@ public class WebConfig extends WebMvcConfigurationSupport {
                 .allowedHeaders("*")
                 .allowedMethods("*")
                 .allowedOrigins("*");
-    }
-
-    @Override
-    protected void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(openSourceInterceptor)
-                .addPathPatterns("/**")
-                .order(1);
-        registry.addInterceptor(loginCheckInterceptor)
-                .addPathPatterns("/**")
-                .order(2);
     }
 
     @Bean

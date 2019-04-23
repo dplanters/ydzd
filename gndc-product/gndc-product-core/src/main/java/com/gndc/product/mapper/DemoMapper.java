@@ -1,4 +1,4 @@
-package com.gndc.product.mapper.simple;
+package com.gndc.product.mapper;
 
 
 import com.gndc.common.mybatis.MyMapper;
