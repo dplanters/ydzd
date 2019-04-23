@@ -29,6 +29,12 @@
         <relativePath/>
     </parent>
     <properties>
+        <!-- api 版本 -->
+        <gndc.common.version>1.0.0-SNAPSHOT</gndc.common.version>
+        <gndc.core.api.version>1.0.201904235-SNAPSHOT</gndc.core.api.version>
+        <gndc.open.api.version>1.0.201904231-SNAPSHOT</gndc.open.api.version>
+        <gndc.demo.api.version>1.0.201904234-SNAPSHOT</gndc.demo.api.version>
+
         <!-- 基础框架 -->
         <!-- Spring Boot -->
         <springboot.version>2.0.6.RELEASE</springboot.version>
@@ -69,8 +75,6 @@
 
         <!-- 阿里云部分 -->
         <oss.version>2.8.3</oss.version>
-        <!-- clinet-api 版本 -->
-        <gndc.core.client.api.version>1.0.201904191-SNAPSHOT</gndc.core.client.api.version>
     </properties>
 
     <dependencyManagement>
@@ -152,10 +156,18 @@
             <version>${fastjson.version}</version>
         </dependency>
 
+        <!-- 工具包 hutool https://hutool.cn/docs/#/ -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool-all.version}</version>
+        </dependency>
+
         <!-- 工具 lombok https://projectlombok.org/features/all -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- 工具 http://mapstruct.org/ -->
@@ -163,13 +175,7 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
-        </dependency>
-
-        <!-- 工具包 hutool https://hutool.cn/docs/#/ -->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>${hutool-all.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- 数据模拟工具 https://github.com/DiUS/java-faker/ -->

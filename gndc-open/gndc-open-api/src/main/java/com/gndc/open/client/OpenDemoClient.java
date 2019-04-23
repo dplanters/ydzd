@@ -1,7 +1,7 @@
 package com.gndc.open.client;
 
 import com.gndc.common.api.ResponseMessage;
-import com.gndc.open.api.OpenDemoRequestMessage;
+import com.gndc.open.api.OpenDemoRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -14,6 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 public interface OpenDemoClient {
 
     @PostMapping("/open/openDemo")
-    ResponseMessage<Object> openDemo(OpenDemoRequestMessage request);
+    ResponseMessage<Object> openDemo(OpenDemoRequest request);
 }
 

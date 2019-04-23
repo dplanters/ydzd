@@ -29,6 +29,9 @@ public class AOBannerController {
     @Autowired
     private BannerService bannerService;
 
+    @Autowired
+    private BannerMapping bannerMapping;
+
     /**
      * 添加Banner
      * @param request
@@ -37,7 +40,7 @@ public class AOBannerController {
     @PostMapping("/addBanner")
     public ResponseMessage<Integer> addBanner(@Validated @RequestBody AOBannerAddRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
-        Banner banner = BannerMapping.INSTANCE.conver(request);
+        Banner banner = bannerMapping.convert(request);
 
         Weekend<Banner> weekend = Weekend.of(Banner.class);
         weekend.orderBy("position").desc();
@@ -60,8 +63,8 @@ public class AOBannerController {
     @PostMapping("/sort")
     public ResponseMessage<Boolean> sort(@Validated @RequestBody AOBannerSortRequest request) {
         ResponseMessage<Boolean> response = new ResponseMessage<>();
-        bannerService.updateByPrimaryKeySelective(request.getOne());
-        bannerService.updateByPrimaryKeySelective(request.getTwo());
+        bannerService.updateByPrimaryKeySelective(bannerMapping.convert(request.getOne()));
+        bannerService.updateByPrimaryKeySelective(bannerMapping.convert(request.getTwo()));
         response.setData(true);
         return response;
     }
@@ -74,7 +77,7 @@ public class AOBannerController {
     @PostMapping("/modifyBanner")
     public ResponseMessage<Integer> modifyBanner(@Validated @RequestBody AOBannerModifyRequest request) {
         ResponseMessage<Integer> response = new ResponseMessage<>();
-        Banner banner = BannerMapping.INSTANCE.conver(request);
+        Banner banner = bannerMapping.convert(request);
         bannerService.updateByPrimaryKeySelective(banner);
         response.setData(banner.getId());
         return response;

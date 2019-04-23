@@ -29,6 +29,12 @@
     <dependencies>
 
         <dependency>
+            <groupId>com.gndc</groupId>
+            <artifactId>gndc-common</artifactId>
+            <version>${gndc.common.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
         </dependency>
@@ -46,12 +52,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-consul-discovery</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.gndc</groupId>
-            <artifactId>gndc-common</artifactId>
-            <version>1.0.0</version>
         </dependency>
 
         <!-- redis 在用请勿删除 -->

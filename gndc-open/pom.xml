@@ -35,7 +35,7 @@
         <dependency>
             <groupId>com.gndc</groupId>
             <artifactId>gndc-common</artifactId>
-            <version>1.0.0</version>
+            <version>${gndc.common.version}</version>
         </dependency>
     </dependencies>
 </project>

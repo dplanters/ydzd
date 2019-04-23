@@ -1,8 +1,9 @@
 package com.gndc.open.controller;
 
+import cn.hutool.core.util.RandomUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.api.ResponseMessage;
-import com.gndc.core.api.open.OpenDemoRequestMessage;
-import com.gndc.open.model.Open;
+import com.gndc.open.api.OpenDemoRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,9 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class OpenController {
 
 
-    @PostMapping("/demo")
-    public ResponseMessage<Open> demo(@Validated @RequestBody OpenDemoRequestMessage request) {
-        return null;
+    @PostMapping("/openDemo")
+    public ResponseMessage<Object> demo(@Validated @RequestBody OpenDemoRequest request) {
+        ResponseMessage<Object> response = new ResponseMessage<>();
+        response.setData(new JSONObject()
+                .fluentPut("youName", request.getName())
+                .fluentPut("myName", RandomUtil.randomString(5)));
+        return response;
     }
 
 }

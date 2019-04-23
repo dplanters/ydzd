@@ -27,7 +27,7 @@ zuul:
     gndc-demo:
       serviceId: gndc-demo
       path: /demo/**
-      url: http://gndc.core.com:12000/demo/
+      url: http://gndc.demo.com:12000/demo/
     gndc-admin:
       serviceId: gndc-core
       path: /admin/**
@@ -43,4 +43,5 @@ zuul:
     gndc-open:
       serviceId: gndc-open
       path: /open/**
+      url: http://gndc.open.com:13000/open/**
   ignored-services: "*"
