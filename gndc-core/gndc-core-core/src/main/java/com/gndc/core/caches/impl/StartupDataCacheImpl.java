@@ -1,14 +1,14 @@
-package com.gndc.core.service.common.impl;
+package com.gndc.core.caches.impl;
 
 import com.gndc.common.constant.CacheConstant;
 import com.gndc.common.dto.RightInfoDTO;
 import com.gndc.common.enums.common.StatusEnum;
+import com.gndc.core.caches.StartupDataCache;
 import com.gndc.core.mapper.RightMapper;
 import com.gndc.core.mapper.RoleMapper;
 import com.gndc.core.mapper.RoleRightMapper;
 import com.gndc.core.mappers.RightInfoDTOMapping;
 import com.gndc.core.model.*;
-import com.gndc.core.service.common.CacheDataService;
 import com.gndc.core.service.partner.PartnerApiService;
 import com.gndc.core.service.partner.PartnerService;
 import lombok.Getter;
@@ -24,8 +24,8 @@ import java.util.List;
 
 @Service
 @Getter
-public class CacheDataServiceImpl implements CacheDataService {
-    private static final Logger logger = LoggerFactory.getLogger(CacheDataServiceImpl.class);
+public class StartupDataCacheImpl implements StartupDataCache {
+    private static final Logger logger = LoggerFactory.getLogger(StartupDataCacheImpl.class);
 
     @Autowired
     private RedisTemplate redisTemplate;
