@@ -35,7 +35,11 @@
         <dependency>
             <groupId>com.gndc</groupId>
             <artifactId>gndc-common</artifactId>
-            <version>${gndc.common.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.gndc</groupId>
+            <artifactId>gndc-product-api</artifactId>
+            <version>${version}</version>
         </dependency>
     </dependencies>
 </project>

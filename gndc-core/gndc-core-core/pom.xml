@@ -30,7 +30,6 @@
         <dependency>
             <groupId>com.gndc</groupId>
             <artifactId>gndc-core-api</artifactId>
-            <version>${gndc.core.api.version}</version>
         </dependency>
         <dependency>
             <groupId>com.gndc</groupId>
