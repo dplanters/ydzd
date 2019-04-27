@@ -27,19 +27,16 @@
         <dependency>
             <groupId>com.gndc</groupId>
             <artifactId>gndc-demo-api</artifactId>
-            <version>${gndc.demo.api.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.gndc</groupId>
             <artifactId>gndc-core-api</artifactId>
-            <version>${gndc.core.api.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.gndc</groupId>
             <artifactId>gndc-open-api</artifactId>
-            <version>${gndc.open.api.version}</version>
         </dependency>
 
         <dependency>

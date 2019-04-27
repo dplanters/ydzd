@@ -29,12 +29,6 @@
         <relativePath/>
     </parent>
     <properties>
-        <!-- api 版本 -->
-        <gndc.common.version>1.0.0-SNAPSHOT</gndc.common.version>
-        <gndc.core.api.version>1.0.201904235-SNAPSHOT</gndc.core.api.version>
-        <gndc.open.api.version>1.0.201904231-SNAPSHOT</gndc.open.api.version>
-        <gndc.demo.api.version>1.0.201904234-SNAPSHOT</gndc.demo.api.version>
-
         <!-- 基础框架 -->
         <!-- Spring Boot -->
         <springboot.version>2.0.6.RELEASE</springboot.version>
@@ -80,6 +74,29 @@
     <dependencyManagement>
         <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies -->
         <dependencies>
+
+            <dependency>
+                <groupId>com.gndc</groupId>
+                <artifactId>gndc-common</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.gndc</groupId>
+                <artifactId>gndc-core-api</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gndc</groupId>
+                <artifactId>gndc-demo-api</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gndc</groupId>
+                <artifactId>gndc-open-api</artifactId>
+                <version>${version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
