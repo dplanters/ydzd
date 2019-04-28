@@ -36,11 +36,6 @@
             <artifactId>gndc-common</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.gndc</groupId>
-            <artifactId>gndc-core-api</artifactId>
-            <version>${version}</version>
-        </dependency>
     </dependencies>
 
 </project>

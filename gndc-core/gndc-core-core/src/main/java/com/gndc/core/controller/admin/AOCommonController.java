@@ -2,7 +2,9 @@ package com.gndc.core.controller.admin;
 
 import com.gndc.common.api.ResponseMessage;
 import com.gndc.core.api.partner.common.APAllPartnerRequest;
+import com.gndc.core.model.Area;
 import com.gndc.core.model.Partner;
+import com.gndc.core.service.area.AreaService;
 import com.gndc.core.service.partner.PartnerService;
 import com.gndc.core.service.sys.SystemOptionService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +23,10 @@ public class AOCommonController {
 
     @Autowired
     private PartnerService partnerService;
-
+    @Autowired
+    private AreaService areaService;
     @Autowired
     private SystemOptionService systemOptionService;
-
     @Autowired
     private RedisTemplate redisTemplate;
 
@@ -40,6 +42,19 @@ public class AOCommonController {
         List<Partner> partners = partnerService.selectAll();
         response.setData(partners);
 
+        return response;
+    }
+
+
+    /**
+     * 获取所有城市
+     * @return
+     */
+    @RequestMapping(value = "/getAllArea")
+    public ResponseMessage<List<Area>> getAllArea() {
+        ResponseMessage<List<Area>> response = new ResponseMessage<>();
+        List<Area> areas = areaService.selectAll();
+        response.setData(areas);
         return response;
     }
 
