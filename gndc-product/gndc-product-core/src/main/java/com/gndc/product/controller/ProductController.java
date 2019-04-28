@@ -11,6 +11,7 @@ package com.gndc.product.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.api.ResponseMessage;
+import com.gndc.common.enums.common.StatusEnum;
 import com.gndc.product.api.product.ProductAddRequest;
 import com.gndc.product.api.product.ProductSearchRequest;
 import com.gndc.product.api.product.ProductUpdateRequest;
@@ -68,6 +69,16 @@ public class ProductController {
         ResponseMessage responseMessage=new ResponseMessage();
         Product product = productMapping.convert(request);
         product.setOperatorId(request.getAoAdmin().getId());
+        productService.updateByPrimaryKeySelective(product);
+        return responseMessage;
+    }
+
+    @PostMapping("/delete/{id}")
+    public ResponseMessage delete(@PathVariable Integer id){
+        ResponseMessage responseMessage=new ResponseMessage();
+        Product product = new Product();
+        product.setId(id);
+        product.setStatus(StatusEnum.DELETE.getCode());
         productService.updateByPrimaryKeySelective(product);
         return responseMessage;
     }
