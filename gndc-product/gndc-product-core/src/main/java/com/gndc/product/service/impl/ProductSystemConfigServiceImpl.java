@@ -6,14 +6,13 @@
  * 版权说明：本软件属浙江盘石信息技术股份有限公司所有，在未获浙江盘石信息技术股份有限公司正式授权情况下，
  *          任何企业和个人，不能获取、阅读、安装、传播本软件涉及的任何受知识产权保护的内容。   
  ***************************************************************************/
-package com.gndc.product.service;
+package com.gndc.product.service.impl;
 
-import com.gndc.common.service.BaseService;
-import com.gndc.product.api.product.ProductSearchRequest;
-import com.gndc.product.dto.ProductListDTO;
-import com.gndc.product.model.Product;
-
-import java.util.List;
+import com.gndc.common.service.impl.BaseServiceImpl;
+import com.gndc.product.model.SystemConfig;
+import com.gndc.product.service.ProductSystemConfigService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 /**
  * @author <a href="liujun8852@adpanshi.com">liujun</a>
@@ -21,8 +20,8 @@ import java.util.List;
  * @Description
  * @date 2019/4/27  14:55
  */
-public interface ProductService extends BaseService<Product,Integer> {
-
-    List<ProductListDTO> selectProduct(ProductSearchRequest param);
+@Slf4j
+@Service
+public class ProductSystemConfigServiceImpl extends BaseServiceImpl<SystemConfig,Integer> implements ProductSystemConfigService {
 
 }

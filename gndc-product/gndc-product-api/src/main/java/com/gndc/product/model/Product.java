@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
 @Table(name = "dc_product")
@@ -11,6 +12,9 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "product_id")
+    private Long productId;
 
     /**
      * logo url
@@ -272,11 +276,16 @@ public class Product {
      * 记录状态  1：正常；0：删除；
      */
     private Byte status;
-
     /**
      * 更新者id
      */
     @Column(name = "operator_id")
     private Integer operatorId;
+    //最新上线时间
+    @Column(name = "last_online_time")
+    private Date lastOnlineTime;
+    //最新下线时间
+    @Column(name = "last_offline_time")
+    private Date lastOfflineTime;
 
 }

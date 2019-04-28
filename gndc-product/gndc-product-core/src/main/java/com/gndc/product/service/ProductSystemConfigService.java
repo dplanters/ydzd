@@ -9,11 +9,7 @@
 package com.gndc.product.service;
 
 import com.gndc.common.service.BaseService;
-import com.gndc.product.api.product.ProductSearchRequest;
-import com.gndc.product.dto.ProductListDTO;
-import com.gndc.product.model.Product;
-
-import java.util.List;
+import com.gndc.product.model.SystemConfig;
 
 /**
  * @author <a href="liujun8852@adpanshi.com">liujun</a>
@@ -21,8 +17,6 @@ import java.util.List;
  * @Description
  * @date 2019/4/27  14:55
  */
-public interface ProductService extends BaseService<Product,Integer> {
-
-    List<ProductListDTO> selectProduct(ProductSearchRequest param);
+public interface ProductSystemConfigService extends BaseService<SystemConfig,Integer> {
 
 }

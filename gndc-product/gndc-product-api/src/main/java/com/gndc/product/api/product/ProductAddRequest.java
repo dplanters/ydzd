@@ -6,7 +6,7 @@
  * 版权说明：本软件属浙江盘石信息技术股份有限公司所有，在未获浙江盘石信息技术股份有限公司正式授权情况下，
  *          任何企业和个人，不能获取、阅读、安装、传播本软件涉及的任何受知识产权保护的内容。   
  ***************************************************************************/
-package com.gndc.api.product;
+package com.gndc.product.api.product;
 
 import com.gndc.common.api.RequestMessage;
 import lombok.Data;
@@ -21,13 +21,12 @@ import java.math.BigDecimal;
  * @date 2019/4/27  13:54
  */
 @Data
-public class ProductUpdateRequest extends RequestMessage  {
+public class ProductAddRequest extends RequestMessage  {
 
-    @NotNull
-    private Integer id;
     /**
      * logo url
      */
+    @NotNull
     private String logoUrl;
     /**
      * 借贷金额开始
@@ -197,13 +196,5 @@ public class ProductUpdateRequest extends RequestMessage  {
      * 产品状态  1：上线；0：下线；
      */
     private Byte productStatus;
-    /**
-     * 记录状态  1：正常；0：删除；
-     */
-    private Byte status;
-    /**
-     * 更新者id
-     */
-    private Integer operatorId;
 
 }

@@ -7,6 +7,7 @@
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
+    <result column="product_id"  property="productId" />
     <result column="borrow_amount_min" jdbcType="DECIMAL" property="borrowAmountMin" />
     <result column="borrow_amount_max" jdbcType="DECIMAL" property="borrowAmountMax" />
     <result column="borrow_period_unit" jdbcType="BIT" property="borrowPeriodUnit" />
@@ -53,4 +54,32 @@
     <result column="operator_id" jdbcType="INTEGER" property="operatorId" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+  <select id="selectProduct" parameterType="com.gndc.product.api.product.ProductSearchRequest"  resultType="com.gndc.product.dto.ProductListDTO">
+    SELECT
+        product.product_id,product.logo_url,product.name AS productName,
+        product.loan_amount_min,product.loan_amount_max,
+        product.loan_period_unit,product.loan_period_start,product.loan_period_end,
+        partner.name AS partnerName,product.settlement_mode,product.settlement_price,product.create_time,
+        product.product_status,product.last_online_time,product.last_offline_time
+    FROM dc_product product INNER JOIN dc_partner partner ON product.partner_id=partner.id
+    <where>
+      <if test="productId!=null">
+        product.id=#{productId}
+      </if>
+      <if test="productStatus!=null">
+        and product.product_status=#{product_status}
+      </if>
+      <if test="partnerId!=null">
+        and partner.id=#{partnerId}
+      </if>
+      <if test="startTime!=null">
+        and product.create_time <![CDATA[ >=  ]]>  str_to_date( #{startTime}, '%Y-%m-%d %H:%I:%S');
+      </if>
+      <if test="endTime!=null">
+        and product.create_time <![CDATA[ <=   ]]> str_to_date( #{endTime}, '%Y-%m-%d %H:%I:%S');
+      </if>
+    </where>
+  </select>
+
 </mapper>

@@ -8,8 +8,8 @@
  ***************************************************************************/
 package com.gndc.product.mappers;
 
-import com.gndc.api.product.productaccessconfig.ProductAccessConfigAddRquest;
-import com.gndc.api.product.productaccessconfig.ProductAccessConfigUpdateRquest;
+import com.gndc.product.api.product.productaccessconfig.ProductAccessConfigAddRquest;
+import com.gndc.product.api.product.productaccessconfig.ProductAccessConfigUpdateRquest;
 import com.gndc.product.model.ProductAccessConfig;
 import org.mapstruct.Mapper;
 

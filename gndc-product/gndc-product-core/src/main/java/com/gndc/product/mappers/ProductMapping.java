@@ -8,8 +8,8 @@
  ***************************************************************************/
 package com.gndc.product.mappers;
 
-import com.gndc.api.product.ProductAddRequest;
-import com.gndc.api.product.ProductUpdateRequest;
+import com.gndc.product.api.product.ProductAddRequest;
+import com.gndc.product.api.product.ProductUpdateRequest;
 import com.gndc.product.model.Product;
 import org.mapstruct.Mapper;
 

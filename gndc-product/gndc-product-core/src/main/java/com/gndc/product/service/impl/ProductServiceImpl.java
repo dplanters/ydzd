@@ -9,10 +9,16 @@
 package com.gndc.product.service.impl;
 
 import com.gndc.common.service.impl.BaseServiceImpl;
+import com.gndc.product.api.product.ProductSearchRequest;
+import com.gndc.product.dto.ProductListDTO;
+import com.gndc.product.mapper.ProductMapper;
 import com.gndc.product.model.Product;
 import com.gndc.product.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author <a href="liujun8852@adpanshi.com">liujun</a>
@@ -23,5 +29,15 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class ProductServiceImpl extends BaseServiceImpl<Product,Integer> implements ProductService {
+
+    @Autowired
+    private ProductMapper productMapper;
+
+
+    @Override
+    public List<ProductListDTO> selectProduct(ProductSearchRequest param){
+        return productMapper.selectProduct(param);
+    }
+
 
 }

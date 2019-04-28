@@ -1,16 +1,19 @@
-package com.gndc.api.product.productaccessconfig;
+package com.gndc.product.api.product.productaccessconfig;
 
-import com.gndc.common.model.BaseEntity;
+import com.gndc.common.api.RequestMessage;
+import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-public class ProductAccessConfigAddRquest extends BaseEntity {
+@Data
+public class ProductAccessConfigUpdateRquest extends RequestMessage {
 
+    @NotNull
+    private Integer id;
     /**
      * 产品id
      */
-    @NotNull
     private Integer productId;
     /**
      * 年龄开始
@@ -64,12 +67,4 @@ public class ProductAccessConfigAddRquest extends BaseEntity {
      * 芝麻分  用户分值应大于字段值
      */
     private BigDecimal aliScore;
-    /**
-     * 记录状态  1：正常；0：删除；
-     */
-    private Byte status;
-    /**
-     * 更新者id
-     */
-    private Integer operatorId;
 }
