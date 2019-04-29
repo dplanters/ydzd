@@ -55,7 +55,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
 
-  <select id="selectProduct" parameterType="com.gndc.product.api.product.ProductSearchRequest"  resultType="com.gndc.product.dto.ProductListDTO">
+  <select id="selectProduct" parameterType="com.gndc.product.api.admin.product.AOProductSearchRequest"  resultType="com.gndc.product.dto.ProductListDTO">
     SELECT
         product.product_id,product.logo_url,product.name AS productName,
         product.loan_amount_min,product.loan_amount_max,

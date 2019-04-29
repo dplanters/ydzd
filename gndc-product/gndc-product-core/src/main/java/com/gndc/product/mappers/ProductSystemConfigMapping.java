@@ -8,8 +8,8 @@
  ***************************************************************************/
 package com.gndc.product.mappers;
 
-import com.gndc.product.api.systemconfig.SystemConfigAddRequest;
-import com.gndc.product.api.systemconfig.SystemConfigUpdateRequest;
+import com.gndc.product.api.admin.systemconfig.AOSystemConfigAddRequest;
+import com.gndc.product.api.admin.systemconfig.AOSystemConfigUpdateRequest;
 import com.gndc.product.model.SystemConfig;
 import org.mapstruct.Mapper;
 
@@ -22,8 +22,8 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ProductSystemConfigMapping {
 
-    SystemConfig convert(SystemConfigAddRequest request);
+    SystemConfig convert(AOSystemConfigAddRequest request);
 
-    SystemConfig convert(SystemConfigUpdateRequest request);
+    SystemConfig convert(AOSystemConfigUpdateRequest request);
 
 }

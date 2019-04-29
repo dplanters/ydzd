@@ -8,9 +8,10 @@
  ***************************************************************************/
 package com.gndc.product.controller;
 
-import com.gndc.product.api.product.productaccessconfig.ProductAccessConfigAddRquest;
-import com.gndc.product.api.product.productaccessconfig.ProductAccessConfigUpdateRquest;
 import com.gndc.common.api.ResponseMessage;
+import com.gndc.product.api.admin.product.productaccessconfig.AOProductAccessConfigAddRquest;
+import com.gndc.product.api.admin.product.productaccessconfig.AOProductAccessConfigGetByIdRquest;
+import com.gndc.product.api.admin.product.productaccessconfig.AOProductAccessConfigUpdateRquest;
 import com.gndc.product.mappers.ProductAccessConfigMapping;
 import com.gndc.product.model.ProductAccessConfig;
 import com.gndc.product.service.ProductAccessConfigService;
@@ -38,7 +39,7 @@ public class ProductAccessConfigController {
 
 
     @PostMapping("/insert")
-    public ResponseMessage insert(@RequestBody @Validated ProductAccessConfigAddRquest request){
+    public ResponseMessage insert(@RequestBody @Validated AOProductAccessConfigAddRquest request){
         ResponseMessage responseMessage=new ResponseMessage();
         ProductAccessConfig productAccessConfig = productAccessConfigMapping.convert(request);
         productAccessConfig.setOperatorId(request.getAoAdmin().getId());
@@ -47,7 +48,7 @@ public class ProductAccessConfigController {
     }
 
     @PostMapping("/updateById")
-    public ResponseMessage updateById(@RequestBody @Validated ProductAccessConfigUpdateRquest request){
+    public ResponseMessage updateById(@RequestBody @Validated AOProductAccessConfigUpdateRquest request){
         ResponseMessage responseMessage=new ResponseMessage();
         ProductAccessConfig productAccessConfig = productAccessConfigMapping.convert(request);
         productAccessConfig.setOperatorId(request.getAoAdmin().getId());
@@ -59,6 +60,14 @@ public class ProductAccessConfigController {
     public ResponseMessage<ProductAccessConfig> getById(@PathVariable Integer id){
         ResponseMessage responseMessage=new ResponseMessage();
         ProductAccessConfig productAccessConfig = productAccessConfigService.selectByPrimaryKey(id);
+        responseMessage.setData(productAccessConfig);
+        return responseMessage;
+    }
+
+    @PostMapping("/getById")
+    public ResponseMessage<ProductAccessConfig> getById(@PathVariable AOProductAccessConfigGetByIdRquest request){
+        ResponseMessage responseMessage=new ResponseMessage();
+        ProductAccessConfig productAccessConfig = productAccessConfigService.selectByPrimaryKey(request.getId());
         responseMessage.setData(productAccessConfig);
         return responseMessage;
     }

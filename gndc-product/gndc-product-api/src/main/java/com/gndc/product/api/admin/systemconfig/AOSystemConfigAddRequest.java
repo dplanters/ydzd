@@ -1,10 +1,10 @@
-package com.gndc.product.api.systemconfig;
+package com.gndc.product.api.admin.systemconfig;
 
 import com.gndc.common.api.RequestMessage;
 import lombok.Data;
 
 @Data
-public class SystemConfigAddRequest extends RequestMessage {
+public class AOSystemConfigAddRequest extends RequestMessage {
 
     /**
      * 配置项key

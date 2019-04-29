@@ -8,13 +8,12 @@
  ***************************************************************************/
 package com.gndc.product.controller;
 
+import cn.hutool.core.util.IdUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gndc.common.api.ResponseMessage;
 import com.gndc.common.enums.common.StatusEnum;
-import com.gndc.product.api.product.ProductAddRequest;
-import com.gndc.product.api.product.ProductSearchRequest;
-import com.gndc.product.api.product.ProductUpdateRequest;
+import com.gndc.product.api.admin.product.*;
 import com.gndc.product.dto.ProductInfoDTO;
 import com.gndc.product.dto.ProductListDTO;
 import com.gndc.product.mappers.ProductMapping;
@@ -54,18 +53,19 @@ public class ProductController {
 
 
     @PostMapping("/insert")
-    public ResponseMessage insert(@RequestBody @Validated ProductAddRequest request){
+    public ResponseMessage insert(@RequestBody @Validated AOProductAddRequest request){
         ResponseMessage responseMessage=new ResponseMessage();
         //todo productId  生成策略待确认
         Product product = productMapping.convert(request);
+        product.setProductNo(IdUtil.simpleUUID());
         product.setOperatorId(request.getAoAdmin().getId());
-        productService.insert(product);
+        productService.insertSelective(product);
         return responseMessage;
     }
 
 
     @PostMapping("/updateById")
-    public ResponseMessage update(@RequestBody @Validated ProductUpdateRequest request){
+    public ResponseMessage update(@RequestBody @Validated AOProductUpdateRequest request){
         ResponseMessage responseMessage=new ResponseMessage();
         Product product = productMapping.convert(request);
         product.setOperatorId(request.getAoAdmin().getId());
@@ -73,11 +73,11 @@ public class ProductController {
         return responseMessage;
     }
 
-    @PostMapping("/delete/{id}")
-    public ResponseMessage delete(@PathVariable Integer id){
+    @PostMapping("/delete")
+    public ResponseMessage delete(@RequestBody @Validated AOProductDeleteRequest request){
         ResponseMessage responseMessage=new ResponseMessage();
         Product product = new Product();
-        product.setId(id);
+        product.setId(request.getId());
         product.setStatus(StatusEnum.DELETE.getCode());
         productService.updateByPrimaryKeySelective(product);
         return responseMessage;
@@ -91,6 +91,14 @@ public class ProductController {
         return responseMessage;
     }
 
+    @PostMapping("/getById")
+    public ResponseMessage<Product> getById(@RequestBody @Validated AOProductGetByIdRequest request){
+        ResponseMessage responseMessage=new ResponseMessage();
+        Product product = productService.selectByPrimaryKey(request.getId());
+        responseMessage.setData(product);
+        return responseMessage;
+    }
+
 
 
     /**
@@ -98,14 +106,14 @@ public class ProductController {
      * @Description
      * @author <a href="liujun8852@adpanshi.com">liujun</a>
      */
-    @PostMapping("/getProductInfo/{id}")
-    public ResponseMessage<ProductInfoDTO> getProductInfo(@PathVariable Integer id){
+    @PostMapping("/getProductInfo/")
+    public ResponseMessage<ProductInfoDTO> getProductInfo(@RequestBody AOProductGetProductInfoRequest request){
         ResponseMessage<ProductInfoDTO> responseMessage=new ResponseMessage<ProductInfoDTO>();
-        Product product = productService.selectByPrimaryKey(id);
+        Product product = productService.selectByPrimaryKey(request.getId());
 
-        List<SystemConfig> systemConfigs = systemConfigService.selectByProperty(SystemConfig::getGroup,id);
+        List<SystemConfig> systemConfigs = systemConfigService.selectByProperty(SystemConfig::getGroup,request.getId());
 
-        ProductAccessConfig productAccessConfig = productAccessConfigService.selectOneByProperty(ProductAccessConfig::getProductId,id);
+        ProductAccessConfig productAccessConfig = productAccessConfigService.selectOneByProperty(ProductAccessConfig::getProductId,request.getId());
 
         ProductInfoDTO productInfoDTO=new ProductInfoDTO();
         productInfoDTO.setProduct(product);
@@ -124,7 +132,7 @@ public class ProductController {
      * @author <a href="liujun8852@adpanshi.com">liujun</a>
      */
     @PostMapping("/selectProductPage")
-    public ResponseMessage<List<ProductListDTO>> selectProductInfoPage(@RequestBody ProductSearchRequest request){
+    public ResponseMessage<List<ProductListDTO>> selectProductInfoPage(@RequestBody AOProductSearchRequest request){
 
         ResponseMessage<List<ProductListDTO>> responseMessage=new ResponseMessage<List<ProductListDTO>>();
 

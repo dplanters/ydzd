@@ -1,4 +1,4 @@
-package com.gndc.product.api.product.productaccessconfig;
+package com.gndc.product.api.admin.product.productaccessconfig;
 
 import com.gndc.common.api.RequestMessage;
 import lombok.Data;
@@ -7,12 +7,13 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Data
-public class ProductAccessConfigAddRquest extends RequestMessage {
+public class AOProductAccessConfigUpdateRquest extends RequestMessage {
 
+    @NotNull
+    private Integer id;
     /**
      * 产品id
      */
-    @NotNull
     private Integer productId;
     /**
      * 年龄开始

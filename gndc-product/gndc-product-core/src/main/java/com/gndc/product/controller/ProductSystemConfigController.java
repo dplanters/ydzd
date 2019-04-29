@@ -8,10 +8,11 @@
  ***************************************************************************/
 package com.gndc.product.controller;
 
-import com.gndc.common.enums.system.SystemConfigGroupKeyEnum;
-import com.gndc.product.api.systemconfig.SystemConfigAddRequest;
-import com.gndc.product.api.systemconfig.SystemConfigUpdateRequest;
 import com.gndc.common.api.ResponseMessage;
+import com.gndc.common.enums.system.SystemConfigGroupKeyEnum;
+import com.gndc.product.api.admin.systemconfig.AOSystemConfigAddRequest;
+import com.gndc.product.api.admin.systemconfig.AOSystemConfigGetByIdRequest;
+import com.gndc.product.api.admin.systemconfig.AOSystemConfigUpdateRequest;
 import com.gndc.product.mappers.ProductSystemConfigMapping;
 import com.gndc.product.model.SystemConfig;
 import com.gndc.product.service.ProductSystemConfigService;
@@ -39,7 +40,7 @@ public class ProductSystemConfigController {
 
 
     @PostMapping("/insert")
-    public ResponseMessage insert(@RequestBody @Validated SystemConfigAddRequest request){
+    public ResponseMessage insert(@RequestBody @Validated AOSystemConfigAddRequest request){
         ResponseMessage responseMessage=new ResponseMessage();
         SystemConfig systemConfig = productSystemConfigMapping.convert(request);
         systemConfig.setGroup(SystemConfigGroupKeyEnum.PRODUCT.getCode()+":"+request.getProductId());
@@ -50,7 +51,7 @@ public class ProductSystemConfigController {
 
 
     @PostMapping("/updateById")
-    public ResponseMessage update(@RequestBody @Validated SystemConfigUpdateRequest request){
+    public ResponseMessage update(@RequestBody @Validated AOSystemConfigUpdateRequest request){
         ResponseMessage responseMessage=new ResponseMessage();
         SystemConfig systemConfig = productSystemConfigMapping.convert(request);
         systemConfig.setOperatorId(request.getAoAdmin().getId());
@@ -62,6 +63,14 @@ public class ProductSystemConfigController {
     public ResponseMessage<SystemConfig> getById(@PathVariable Integer id){
         ResponseMessage responseMessage=new ResponseMessage();
         SystemConfig systemConfig = systemConfigService.selectByPrimaryKey(id);
+        responseMessage.setData(systemConfig);
+        return responseMessage;
+    }
+
+    @PostMapping("/getById")
+    public ResponseMessage<SystemConfig> getById(@RequestBody @Validated AOSystemConfigGetByIdRequest request){
+        ResponseMessage responseMessage=new ResponseMessage();
+        SystemConfig systemConfig = systemConfigService.selectByPrimaryKey(request.getId());
         responseMessage.setData(systemConfig);
         return responseMessage;
     }

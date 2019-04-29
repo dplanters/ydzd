@@ -8,8 +8,8 @@
  ***************************************************************************/
 package com.gndc.product.mappers;
 
-import com.gndc.product.api.product.productaccessconfig.ProductAccessConfigAddRquest;
-import com.gndc.product.api.product.productaccessconfig.ProductAccessConfigUpdateRquest;
+import com.gndc.product.api.admin.product.productaccessconfig.AOProductAccessConfigAddRquest;
+import com.gndc.product.api.admin.product.productaccessconfig.AOProductAccessConfigUpdateRquest;
 import com.gndc.product.model.ProductAccessConfig;
 import org.mapstruct.Mapper;
 
@@ -22,8 +22,8 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ProductAccessConfigMapping {
 
-    ProductAccessConfig convert(ProductAccessConfigAddRquest request);
+    ProductAccessConfig convert(AOProductAccessConfigAddRquest request);
 
-    ProductAccessConfig convert(ProductAccessConfigUpdateRquest request);
+    ProductAccessConfig convert(AOProductAccessConfigUpdateRquest request);
 
 }

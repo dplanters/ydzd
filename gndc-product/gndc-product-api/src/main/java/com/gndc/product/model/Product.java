@@ -13,8 +13,8 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "product_id")
-    private Long productId;
+    @Column(name = "product_no")
+    private String productNo;
 
     /**
      * logo url

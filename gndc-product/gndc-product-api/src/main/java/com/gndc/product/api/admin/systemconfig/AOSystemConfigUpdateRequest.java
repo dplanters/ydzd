@@ -1,10 +1,10 @@
-package com.gndc.product.api.systemconfig;
+package com.gndc.product.api.admin.systemconfig;
 
 import com.gndc.common.api.RequestMessage;
 import lombok.Data;
 
 @Data
-public class SystemConfigUpdateRequest extends RequestMessage {
+public class AOSystemConfigUpdateRequest extends RequestMessage {
 
 
     private Integer id;

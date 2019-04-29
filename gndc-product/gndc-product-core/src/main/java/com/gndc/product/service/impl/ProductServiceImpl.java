@@ -9,7 +9,7 @@
 package com.gndc.product.service.impl;
 
 import com.gndc.common.service.impl.BaseServiceImpl;
-import com.gndc.product.api.product.ProductSearchRequest;
+import com.gndc.product.api.admin.product.AOProductSearchRequest;
 import com.gndc.product.dto.ProductListDTO;
 import com.gndc.product.mapper.ProductMapper;
 import com.gndc.product.model.Product;
@@ -35,7 +35,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product,Integer> impleme
 
 
     @Override
-    public List<ProductListDTO> selectProduct(ProductSearchRequest param){
+    public List<ProductListDTO> selectProduct(AOProductSearchRequest param){
         return productMapper.selectProduct(param);
     }
 

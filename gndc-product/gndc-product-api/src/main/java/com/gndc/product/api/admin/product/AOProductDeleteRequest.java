@@ -6,23 +6,23 @@
  * 版权说明：本软件属浙江盘石信息技术股份有限公司所有，在未获浙江盘石信息技术股份有限公司正式授权情况下，
  *          任何企业和个人，不能获取、阅读、安装、传播本软件涉及的任何受知识产权保护的内容。   
  ***************************************************************************/
-package com.gndc.product.service;
+package com.gndc.product.api.admin.product;
 
-import com.gndc.common.service.BaseService;
-import com.gndc.product.api.admin.product.AOProductSearchRequest;
-import com.gndc.product.dto.ProductListDTO;
-import com.gndc.product.model.Product;
+import com.gndc.common.api.RequestMessage;
+import lombok.Data;
 
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author <a href="liujun8852@adpanshi.com">liujun</a>
  * @version V1.0.1
  * @Description
- * @date 2019/4/27  14:55
+ * @date 2019/4/27  13:54
  */
-public interface ProductService extends BaseService<Product,Integer> {
+@Data
+public class AOProductDeleteRequest extends RequestMessage  {
 
-    List<ProductListDTO> selectProduct(AOProductSearchRequest param);
+    @NotNull
+    private Integer id;
 
 }
