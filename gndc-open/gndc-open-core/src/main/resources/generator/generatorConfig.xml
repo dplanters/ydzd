@@ -18,7 +18,7 @@
         </plugin>
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://192.168.40.241:3306/gndc?useSSL=false"
+                        connectionURL="jdbc:mysql://192.168.40.241:3306/dc_india?useSSL=false"
                         userId="root"
                         password="20.112@,l">
         </jdbcConnection>

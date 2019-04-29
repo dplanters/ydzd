@@ -20,6 +20,6 @@ public class RoleRight extends BaseEntity {
 
     private Integer rightId;
 
-    private Integer updateAdminId;
+    private Integer operatorId;
 
 }

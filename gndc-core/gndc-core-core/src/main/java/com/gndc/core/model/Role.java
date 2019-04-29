@@ -23,7 +23,5 @@ public class Role extends BaseEntity {
 
     private Byte status;
 
-    private Integer createAdminId;
-
-    private Integer updateAdminId;
+    private Integer operatorId;
 }
