@@ -4,10 +4,9 @@ import com.gndc.common.model.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Date;
+
 @Getter
 @Setter
 @Table(name = "dc_sms_sign")
@@ -32,8 +31,26 @@ public class SmsSign extends BaseEntity {
     private String name;
 
     /**
-     * 状态 1正常 -1删除
+     * 记录状态  1：正常；0：删除；
      */
     private Byte status;
+
+    /**
+     * 创建时间
+     */
+    @Column(name = "create_time")
+    private Date createTime;
+
+    /**
+     * 更新者id
+     */
+    @Column(name = "operator_id")
+    private Integer operatorId;
+
+    /**
+     * 修改时间
+     */
+    @Column(name = "update_time")
+    private Date updateTime;
 
 }

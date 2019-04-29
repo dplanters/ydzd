@@ -74,13 +74,29 @@ public class SmsGroupLog implements Serializable {
     private Integer successNum;
 
     /**
+     * 手机号
+     */
+    private String phone;
+    /**
+     * 记录状态  1：正常；0：删除；
+     */
+    private Byte status;
+
+    /**
      * 创建时间
      */
     @Column(name = "create_time")
     private Date createTime;
 
     /**
-     * 手机号
+     * 更新者id
      */
-    private String phone;
+    @Column(name = "operator_id")
+    private Integer operatorId;
+
+    /**
+     * 修改时间
+     */
+    @Column(name = "update_time")
+    private Date updateTime;
 }

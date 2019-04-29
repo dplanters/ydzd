@@ -132,7 +132,7 @@ public class SystemScheduleJobServiceImpl extends BaseServiceImpl<SystemSchedule
         systemScheduleJob.setJobStatus(JobRunStatusEnum.STATUS_RUNNING.getCode());
         systemScheduleJob.setJobGroup(JobGroupEnum.SMS_TIMING_SEND.getCode());
         systemScheduleJob.setExtendId(smsJobCondition.getId());
-        systemScheduleJob.setCreateAdminId(request.getAoAdmin().getId());
+        systemScheduleJob.setOperatorId(request.getAoAdmin().getId());
         systemScheduleJobService.saveJob(systemScheduleJob);
         return null;
     }
