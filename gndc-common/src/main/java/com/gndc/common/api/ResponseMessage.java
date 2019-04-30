@@ -39,6 +39,10 @@ public class ResponseMessage<T> implements Serializable {
 
     private PageInfo page;
 
+    public static ResponseMessage ok(Object data) {
+        return new ResponseMessage().setData(data);
+    }
+
     public static ResponseMessage error() {
         return new ResponseMessage<>()
                 .setSuccess(false)

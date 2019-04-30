@@ -10,6 +10,7 @@ import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import cn.hutool.crypto.asymmetric.Sign;
 import cn.hutool.crypto.asymmetric.SignAlgorithm;
+import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.exception.HjException;
 import lombok.extern.slf4j.Slf4j;
@@ -96,6 +97,19 @@ public class PwdUtil {
      * @return
      */
     public static String sign(Map<String, Object> params) {
+        return signInternal(params);
+    }
+
+    /**
+     * 对数据进行签名
+     * @param params
+     * @return
+     */
+    public static String sign(JSONObject params) {
+        return signInternal(params);
+    }
+
+    private static String signInternal(Map<String, Object> params) {
         String joinStr = paramsJoin(params, RandomUtil.randomString(10));
         //对待发送数据进行签名
         byte[] originalSign = sign.sign(joinStr.getBytes(Charset.forName("UTF-8")));
@@ -103,5 +117,4 @@ public class PwdUtil {
         //对签名进行Base64编码
         return Base64.encode(originalSign, Charset.forName("UTF-8"));
     }
-
 }
