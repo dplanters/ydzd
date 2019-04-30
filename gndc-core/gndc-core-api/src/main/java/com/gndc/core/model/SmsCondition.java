@@ -3,9 +3,9 @@ package com.gndc.core.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "dc_sms_condition")

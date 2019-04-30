@@ -63,7 +63,7 @@ public class PwdUtilTest {
 
         log.info("待发送数据:[{}]", joinStr);
 
-        //对待发送数据的Base64编码进行签名
+        //对待发送数据进行签名
         byte[] originalSign = partnerSign.sign(joinStr.getBytes(Charset.forName("UTF-8")));
 
         //对签名进行Base64编码

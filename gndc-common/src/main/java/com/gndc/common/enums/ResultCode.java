@@ -55,9 +55,14 @@ public enum ResultCode {
     CHECK_SIGN_FAIL(1000107),
 
     /**
+     * 签名失败
+     */
+    SIGN_FAIL(1000108),
+
+    /**
      * 请求方法不支持
      */
-    METHOD_NOT_SUPPORTED(1000108),
+    METHOD_NOT_SUPPORTED(1000109),
 
     /**
      * 0002为登录相关业务

@@ -4,7 +4,6 @@ import com.gndc.common.model.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import tk.mybatis.mapper.annotation.LogicDelete;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

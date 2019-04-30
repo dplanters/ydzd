@@ -18,7 +18,7 @@ import tk.mybatis.spring.annotation.MapperScan;
         "com.gndc.common.aspect", "com.gndc.common.interceptor",
         "com.gndc.third"})
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.gndc")
 public class OpenApplication {
 
 

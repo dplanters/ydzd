@@ -3,10 +3,13 @@ package com.gndc.common.utils;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
+import cn.hutool.crypto.asymmetric.Sign;
+import cn.hutool.crypto.asymmetric.SignAlgorithm;
 import com.gndc.common.enums.ResultCode;
 import com.gndc.common.exception.HjException;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import javax.annotation.PostConstruct;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 @Slf4j
@@ -30,9 +34,12 @@ public class PwdUtil {
 
     public static RSA rsa;
 
+    public static Sign sign;
+
     @PostConstruct
     public void init() {
         rsa = SecureUtil.rsa(privateKey, publicKey);
+        sign = SecureUtil.sign(SignAlgorithm.MD5withRSA, privateKey, null);
     }
 
     /**
@@ -50,7 +57,7 @@ public class PwdUtil {
      * @return 原数据
      */
     public static String decrypt(String data) {
-        String decrypt = null;
+        String decrypt;
         try {
             decrypt = StrUtil.str(rsa.decrypt(Base64.decode(data), KeyType.PrivateKey), "UTF-8");
         } catch (Exception e) {
@@ -81,6 +88,20 @@ public class PwdUtil {
     public static String paramsJoin(Map<String, Object> params, String randomStr) {
         params.put("randomStr", randomStr);
         return MapUtil.join(MapUtil.sort(params), "&", "=", true);
+    }
+
+    /**
+     * 对数据进行签名
+     * @param params
+     * @return
+     */
+    public static String sign(Map<String, Object> params) {
+        String joinStr = paramsJoin(params, RandomUtil.randomString(10));
+        //对待发送数据进行签名
+        byte[] originalSign = sign.sign(joinStr.getBytes(Charset.forName("UTF-8")));
+
+        //对签名进行Base64编码
+        return Base64.encode(originalSign, Charset.forName("UTF-8"));
     }
 
 }
