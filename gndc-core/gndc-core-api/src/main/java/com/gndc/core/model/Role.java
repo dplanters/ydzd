@@ -8,18 +8,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 @Getter
 @Setter
-@Table(name = "dc_role_right")
-public class RoleRight extends BaseEntity {
+@Table(name = "dc_role")
+public class Role extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer roleId;
+    private String roleName;
 
-    private Integer rightId;
+    private Byte platform;
 
-    private Integer updateAdminId;
+    private Byte status;
 
+    private Integer operatorId;
 }

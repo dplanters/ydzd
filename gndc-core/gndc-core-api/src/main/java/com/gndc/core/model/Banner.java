@@ -8,22 +8,31 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
+import java.util.Date;
 @Getter
 @Setter
-@Table(name = "dc_role")
-public class Role extends BaseEntity {
+@Table(name = "dc_operation_banner")
+public class Banner extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String roleName;
+    private Integer productId;
 
-    private Byte platform;
+    private String title;
 
     private Byte status;
 
-    private Integer createAdminId;
+    private Byte bannerStatus;
 
-    private Integer updateAdminId;
+    private Byte position;
+
+    private String link;
+
+    private String imgUrl;
+
+    private Date beginTime;
+
+    private Date endTime;
+
 }

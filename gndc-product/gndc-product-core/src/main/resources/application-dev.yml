@@ -7,7 +7,7 @@ spring:
     name: druid
     password: 20.112@,l
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://192.168.40.241:3306/gndc?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
+    url: jdbc:mysql://192.168.40.241:3306/dc_india?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
     username: root
   redis:
     database: 0

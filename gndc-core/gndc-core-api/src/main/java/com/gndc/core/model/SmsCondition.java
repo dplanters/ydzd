@@ -3,9 +3,9 @@ package com.gndc.core.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "dc_sms_condition")
@@ -34,7 +34,7 @@ public class SmsCondition implements Serializable {
     private Integer createAdminId;
 
     /**
-     * 状态  1存在；-1删除
+     * 记录状态  1：正常；0：删除；
      */
     private Byte status;
 
@@ -43,6 +43,12 @@ public class SmsCondition implements Serializable {
      */
     @Column(name = "create_time")
     private Date createTime;
+
+    /**
+     * 更新者id
+     */
+    @Column(name = "operator_id")
+    private Integer operatorId;
 
     /**
      * 修改时间

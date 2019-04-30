@@ -54,8 +54,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer> implements R
         }
         role.setPlatform(request.getPlatform());
         role.setRoleName(roleName);
-        role.setCreateAdminId(request.getAoAdmin().getId());
-        role.setUpdateAdminId(request.getAoAdmin().getId());
+        role.setOperatorId(request.getAoAdmin().getId());
         roleMapper.insertSelective(role);
         redisTemplate.opsForHash().put(CacheConstant.KEY_ALL_ROLE, role.getId(), role);
 
@@ -63,7 +62,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer> implements R
             RoleRight roleRight = new RoleRight();
             roleRight.setRoleId(role.getId());
             roleRight.setRightId(rightId);
-            roleRight.setUpdateAdminId(request.getAoAdmin().getId());
+            roleRight.setOperatorId(request.getAoAdmin().getId());
             Date now = new Date();
             roleRight.setCreateTime(now);
             roleRight.setUpdateTime(now);
@@ -113,7 +112,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer> implements R
             RoleRight roleRight = new RoleRight();
             roleRight.setRoleId(role.getId());
             roleRight.setRightId(rightId);
-            roleRight.setUpdateAdminId(request.getAoAdmin().getId());
+            roleRight.setOperatorId(request.getAoAdmin().getId());
             Date now = new Date();
             roleRight.setCreateTime(now);
             roleRight.setUpdateTime(now);

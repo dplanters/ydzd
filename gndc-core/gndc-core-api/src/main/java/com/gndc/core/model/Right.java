@@ -50,6 +50,8 @@ public class Right extends BaseEntity {
 
     private String remark;
 
+    private String operatorId;
+
     @Transient
     private List<Right> children;
 

@@ -31,20 +31,26 @@ public class SmsTemplate implements Serializable {
     private String content;
 
     /**
-     * 状态 1正常 -1删除
+     * 记录状态  1：正常；0：删除；
      */
     private Byte status;
 
+    /**
+     * 创建时间
+     */
     @Column(name = "create_time")
     private Date createTime;
 
-    @Column(name = "update_time")
-    private Date updateTime;
+    /**
+     * 更新者id
+     */
+    @Column(name = "operator_id")
+    private Integer operatorId;
 
     /**
-     * 创建者id
+     * 修改时间
      */
-    @Column(name = "create_admin_id")
-    private Integer createAdminId;
+    @Column(name = "update_time")
+    private Date updateTime;
 
 }

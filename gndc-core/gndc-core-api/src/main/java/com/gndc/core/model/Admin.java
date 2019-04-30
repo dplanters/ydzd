@@ -15,8 +15,6 @@ public class Admin extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer operId;
-
     private String name;
 
     private String loginName;
@@ -55,9 +53,7 @@ public class Admin extends BaseEntity {
 
     private Byte status;
 
-    private Integer createAdminId;
-
-    private Integer updateAdminId;
+    private Integer operatorId;
 
     @Transient
     private List<Right> rights;

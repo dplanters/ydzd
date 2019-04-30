@@ -55,7 +55,12 @@ public class SmsJobCondition implements Serializable {
     private Integer createAdminId;
 
     /**
-     * 状态  1：正常；0：删除
+     * 电话
+     */
+    private String phones;
+
+    /**
+     * 记录状态  1：正常；0：删除；
      */
     private Byte status;
 
@@ -66,13 +71,14 @@ public class SmsJobCondition implements Serializable {
     private Date createTime;
 
     /**
+     * 更新者id
+     */
+    @Column(name = "operator_id")
+    private Integer operatorId;
+
+    /**
      * 修改时间
      */
     @Column(name = "update_time")
     private Date updateTime;
-
-    /**
-     * 电话
-     */
-    private String phones;
 }
