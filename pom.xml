@@ -16,6 +16,7 @@
         <module>gndc-third</module>
         <module>gndc-gateway</module>
         <module>gndc-open</module>
+        <module>gndc-admin</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -78,6 +79,12 @@
             <dependency>
                 <groupId>com.gndc</groupId>
                 <artifactId>gndc-common</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.gndc</groupId>
+                <artifactId>gndc-third</artifactId>
                 <version>${version}</version>
             </dependency>
 
