@@ -10,6 +10,7 @@ package com.gndc.product.service.product.productincomingconfig.impl;
 
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.product.api.admin.product.productincomingconfig.AOProductIncomingConfigSearchRequest;
+import com.gndc.product.dto.ProductIncomingConfigListDTO;
 import com.gndc.product.mapper.ProductIncomingConfigMapper;
 import com.gndc.product.model.ProductIncomingConfig;
 import com.gndc.product.service.product.productincomingconfig.ProductIncomingConfigService;
@@ -33,8 +34,34 @@ public class ProductIncomingConfigServiceImpl extends BaseServiceImpl<ProductInc
     private ProductIncomingConfigMapper productIncomingConfigMapper;
 
     @Override
-    public List<Object> selectProductIncomingConfigPage(AOProductIncomingConfigSearchRequest param) {
+    public List<ProductIncomingConfigListDTO> selectProductIncomingConfigPage(AOProductIncomingConfigSearchRequest param) {
+        List<ProductIncomingConfigListDTO> productIncomingConfigListDTOS = productIncomingConfigMapper.selectProductIncomingConfigPage(param);
+        productIncomingConfigListDTOS.forEach(x->{
+            Integer countSameDayNewGuestsOrder = this.countSameDayNewGuestsOrder(x.getProductId());
+            Integer countSameDayOldGuestsOrder = this.countSameDayOldGuestsOrder(x.getProductId());
+            x.setSameDayNewUser(countSameDayNewGuestsOrder);
+            x.setSameDayOldUser(countSameDayOldGuestsOrder);
+        });
+        return productIncomingConfigListDTOS;
+    }
 
-        return null;
+    @Override
+    public Integer countSameDayOldGuestsOrder(Integer productId) {
+        return productIncomingConfigMapper.countSameDayOldGuestsOrder(productId);
+    }
+
+    @Override
+    public Integer countSameDayNewGuestsOrder(Integer productId) {
+        return productIncomingConfigMapper.countSameDayNewGuestsOrder(productId);
+    }
+
+    @Override
+    public Integer countNewGuests(Integer productId) {
+        return productIncomingConfigMapper.countNewGuests(productId);
+    }
+
+    @Override
+    public Integer countOldGuests(Integer productId) {
+        return productIncomingConfigMapper.countOldGuests(productId);
     }
 }

@@ -9,6 +9,7 @@
 package com.gndc.product.mappers;
 
 import com.gndc.product.api.admin.product.AOProductAddRequest;
+import com.gndc.product.api.admin.product.AOProductUpdateOnLineStatusRequest;
 import com.gndc.product.api.admin.product.AOProductUpdateRequest;
 import com.gndc.product.model.Product;
 import org.mapstruct.Mapper;
@@ -25,5 +26,7 @@ public interface ProductMapping {
     Product convert(AOProductAddRequest request);
 
     Product convert(AOProductUpdateRequest request);
+
+    Product convert(AOProductUpdateOnLineStatusRequest request);
 
 }

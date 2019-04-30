@@ -288,4 +288,6 @@ public class Product {
     @Column(name = "last_offline_time")
     private Date lastOfflineTime;
 
+    //产品支持的银行卡列表id，逗号隔开。对应systemconfig 表
+    private String bankIds;
 }

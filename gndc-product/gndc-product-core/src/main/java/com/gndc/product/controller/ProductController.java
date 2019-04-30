@@ -20,8 +20,8 @@ import com.gndc.product.mappers.ProductMapping;
 import com.gndc.product.model.Product;
 import com.gndc.product.model.ProductAccessConfig;
 import com.gndc.product.model.SystemConfig;
-import com.gndc.product.service.product.productaccessconfig.ProductAccessConfigService;
 import com.gndc.product.service.product.ProductService;
+import com.gndc.product.service.product.productaccessconfig.ProductAccessConfigService;
 import com.gndc.product.service.product.productsystemconfig.ProductSystemConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +60,14 @@ public class ProductController {
         product.setProductNo(IdUtil.simpleUUID());
         product.setOperatorId(request.getAoAdmin().getId());
         productService.insertSelective(product);
+        return responseMessage;
+    }
+
+    @PostMapping("/updateOnlineStatus")
+    public ResponseMessage updateOnlineStatus(@RequestBody @Validated AOProductUpdateOnLineStatusRequest request){
+        ResponseMessage responseMessage=new ResponseMessage();
+        Product product = productMapping.convert(request);
+        productService.updateByPrimaryKeySelective(product);
         return responseMessage;
     }
 

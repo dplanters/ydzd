@@ -10,7 +10,12 @@ package com.gndc.product.service.product.productshowconfig;
 
 import com.gndc.common.service.BaseService;
 import com.gndc.product.api.admin.product.productshowconfig.AOProductShowConfigAddRequest;
+import com.gndc.product.api.admin.product.productshowconfig.AOProductShowConfigSearchRequest;
+import com.gndc.product.api.admin.product.productshowconfig.AOProductShowConfigUpdateRequest;
+import com.gndc.product.dto.ProductShowConfigListDTO;
 import com.gndc.product.model.ProductShowConfig;
+
+import java.util.List;
 
 /**
  * @author <a href="liujun8852@adpanshi.com">liujun</a>
@@ -21,5 +26,15 @@ import com.gndc.product.model.ProductShowConfig;
 public interface ProductShowConfigService extends BaseService<ProductShowConfig, Integer> {
 
     void insert(AOProductShowConfigAddRequest request);
+
+    void update(AOProductShowConfigUpdateRequest request);
+
+    /**
+     * 分页查询
+     * @param param
+     * @Description
+     * @author <a href="liujun8852@adpanshi.com">liujun</a>
+     */
+    List<ProductShowConfigListDTO > selectProductShowConfigPage(AOProductShowConfigSearchRequest param);
 
 }

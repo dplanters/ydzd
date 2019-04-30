@@ -21,19 +21,17 @@ import java.util.Date;
  * @date 2019/4/30  9:49
  */
 @Data
-public class ProductIncomingConfigListDTO implements Serializable {
+public class ProductShowConfigListDTO implements Serializable {
 
-    private Integer productId;
     private String productName;
     private String partnerName;
+    private String appName;
+    private Byte showModule;//展示模块 1：首页-精选爆款；5：找贷款；15：极速贷；
     private Byte settlementMode;//结算方式
     private BigDecimal settlementPrice;//结算价格
-    private Byte dockingMode;//对接模式
-    private Integer newUser;//新客限制进件数量
-    private Integer oldUser;//老客限制进件数量
-    private Integer sameDayNewUser;//当日新客已进件数量
-    private Integer sameDayOldUser;//当日老客已进件数量
-    private Date createTime;
-    private Date updateTime;//修改时间
+    private Byte online_status;//上线状态
+    private Date createTime;//添加时间
+    private Date lastOnlineTime;//上线时间
+    private Date lastOfflineTime;//下线时间
 
 }

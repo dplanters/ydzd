@@ -9,6 +9,8 @@
 package com.gndc.product.mappers;
 
 import com.gndc.product.api.admin.product.productshowconfig.AOProductShowConfigAddRequest;
+import com.gndc.product.api.admin.product.productshowconfig.AOProductShowConfigUpdateOnLineStatusRequest;
+import com.gndc.product.api.admin.product.productshowconfig.AOProductShowConfigUpdateRequest;
 import com.gndc.product.model.ProductShowConfig;
 import org.mapstruct.Mapper;
 
@@ -22,5 +24,9 @@ import org.mapstruct.Mapper;
 public interface ProductShowConfigMapping {
 
     ProductShowConfig convert(AOProductShowConfigAddRequest request);
+
+    ProductShowConfig convert(AOProductShowConfigUpdateRequest request);
+
+    ProductShowConfig convert(AOProductShowConfigUpdateOnLineStatusRequest request);
 
 }

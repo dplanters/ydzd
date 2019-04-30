@@ -197,4 +197,7 @@ public class AOProductAddRequest extends RequestMessage  {
      */
     private Byte productStatus;
 
+    //产品支持的银行卡列表id，逗号隔开。对应systemconfig 表
+    private String bankIds;
+
 }

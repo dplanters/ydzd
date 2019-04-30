@@ -19,4 +19,32 @@
     <result column="operator_id" jdbcType="INTEGER" property="operatorId" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+
+  <select id="selectProductShowConfigPage" parameterType="com.gndc.product.api.admin.product.productshowconfig.AOProductShowConfigSearchRequest"
+          resultType="com.gndc.product.dto.ProductShowConfigListDTO">
+    SELECT
+        product.name AS ProductName, partner.name AS PartnerName ,channel.app_name AS AppName,
+        psc.show_module,product.settlement_mode,product.settlement_price,psc.online_status,
+        psc.create_time,psc.last_online_time,psc.last_offline_time
+     FROM
+     dc_product_show_config psc INNER JOIN  dc_product product ON  psc.product_id=product.id
+     INNER JOIN dc_partner partner ON product.partner_id=partner.id
+     INNER JOIN dc_app_channel channel ON psc.channel_id =channel.id
+     <where>
+       <if test="productId!=null">
+            and product.id=#{productId}
+       </if>
+       <if test="partnerId!=null">
+            and partner.id=#{partnerId}
+       </if>
+       <if test="channelId!=null">
+         and channel.id=#{productId}
+       </if>
+       <if test="showModule!=null">
+         and psc.show_module=#{showModule}
+       </if>
+     </where>
+  </select>
+
 </mapper>

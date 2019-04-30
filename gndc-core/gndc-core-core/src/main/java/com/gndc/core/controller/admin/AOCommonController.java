@@ -1,6 +1,7 @@
 package com.gndc.core.controller.admin;
 
 import com.gndc.common.api.ResponseMessage;
+import com.gndc.common.enums.system.SystemConfigGroupKeyEnum;
 import com.gndc.core.api.partner.common.APAllPartnerRequest;
 import com.gndc.core.model.Area;
 import com.gndc.core.model.Partner;
@@ -55,6 +56,29 @@ public class AOCommonController {
         ResponseMessage<List<Area>> response = new ResponseMessage<>();
         List<Area> areas = areaService.selectAll();
         response.setData(areas);
+        return response;
+    }
+
+    /**
+     * 获取所有银行卡列表
+     * @return
+     */
+    @RequestMapping(value = "/getProductBankList")
+    public ResponseMessage getProductBankList() {
+        ResponseMessage response = new ResponseMessage<>();
+        Object json = redisTemplate.opsForValue().get(SystemConfigGroupKeyEnum.PRODUCT_BANK_LIST.getCode());
+        response.setData(json);
+        return response;
+    }
+    /**
+     * 获取产品所有标签列表
+     * @return
+     */
+    @RequestMapping(value = "/getProductLabelList")
+    public ResponseMessage getProductLabelList() {
+        ResponseMessage response = new ResponseMessage<>();
+        Object json = redisTemplate.opsForValue().get(SystemConfigGroupKeyEnum.PRODUCT_LABEL_LIST.getCode());
+        response.setData(json);
         return response;
     }
 

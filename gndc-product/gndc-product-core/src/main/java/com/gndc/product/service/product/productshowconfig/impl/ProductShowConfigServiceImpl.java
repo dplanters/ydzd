@@ -10,6 +10,10 @@ package com.gndc.product.service.product.productshowconfig.impl;
 
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.product.api.admin.product.productshowconfig.AOProductShowConfigAddRequest;
+import com.gndc.product.api.admin.product.productshowconfig.AOProductShowConfigSearchRequest;
+import com.gndc.product.api.admin.product.productshowconfig.AOProductShowConfigUpdateRequest;
+import com.gndc.product.dto.ProductShowConfigListDTO;
+import com.gndc.product.mapper.ProductShowConfigMapper;
 import com.gndc.product.mappers.ProductShowConfigMapping;
 import com.gndc.product.model.ProductFilterLabel;
 import com.gndc.product.model.ProductShowConfig;
@@ -18,8 +22,11 @@ import com.gndc.product.service.product.productshowconfig.ProductShowConfigServi
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.weekend.Weekend;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,10 +40,13 @@ import java.util.List;
 public class ProductShowConfigServiceImpl extends BaseServiceImpl<ProductShowConfig,Integer> implements ProductShowConfigService {
 
     @Autowired
+    private ProductShowConfigMapper productShowConfigMapper;
+    @Autowired
     private ProductShowConfigMapping productShowConfigMapping;
     @Autowired
     private ProductFilterLabelService productFilterLabelService;
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void insert(AOProductShowConfigAddRequest request) {
         Integer adminId = request.getAoAdmin().getId();
@@ -48,11 +58,57 @@ public class ProductShowConfigServiceImpl extends BaseServiceImpl<ProductShowCon
             productFilterLabel.setProductId(request.getProductId());
             productFilterLabelService.insert(productFilterLabel);
         }
-
         ProductShowConfig productShowConfig = productShowConfigMapping.convert(request);
         productShowConfig.setOperatorId(adminId);
         this.insert(productShowConfig);
+        this.showPositionAdaptUpdate(productShowConfig);
+    }
 
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void update(AOProductShowConfigUpdateRequest request) {
+        Integer adminId = request.getAoAdmin().getId();
+        String[] labels = request.getLabels();
+        //筛选标签
+        if(labels!=null&&labels.length>0){
+            List<ProductFilterLabel> productFilterLabels = productFilterLabelService.selectByProperty(ProductFilterLabel::getLabelId, request.getProductId());
+            List<String> newlabelsList = Arrays.asList(labels);
+            List<String> oldLabelList=new ArrayList<>();
+            productFilterLabels.forEach(x->{
+                oldLabelList.add(x.getLabelId().toString());
+                if (newlabelsList.indexOf(x.getLabelId().toString())<0){
+                    productFilterLabelService.delete(x);
+                }
+            });
+            newlabelsList.forEach(x->{
+                if (oldLabelList.indexOf(x)<0){
+                    ProductFilterLabel productFilterLabel=new ProductFilterLabel();
+                    productFilterLabel.setOperatorId(adminId);
+                    productFilterLabel.setProductId(request.getProductId());
+                    productFilterLabel.setProductId(Integer.valueOf(x));
+                    productFilterLabelService.insertSelective(productFilterLabel);
+                }
+            });
+        }
+        ProductShowConfig productShowConfig = productShowConfigMapping.convert(request);
+        productShowConfig.setOperatorId(adminId);
+        this.updateByPrimaryKeySelective(productShowConfig);
+        this.showPositionAdaptUpdate(productShowConfig);
+    }
+
+
+    @Override
+    public List<ProductShowConfigListDTO > selectProductShowConfigPage(AOProductShowConfigSearchRequest param) {
+        return productShowConfigMapper.selectProductShowConfigPage(param);
+    }
+
+    /**
+     * 更改一个产品的位置后对应的将其他产品位置更改
+     * @Description
+     * @author <a href="liujun8852@adpanshi.com">liujun</a>
+     */
+    private void showPositionAdaptUpdate(ProductShowConfig productShowConfig){
         //排序位置更改，只更改属于同一个模块同一个渠道的
         Weekend<ProductShowConfig> weekend=new Weekend(ProductShowConfig.class);
         weekend.weekendCriteria()

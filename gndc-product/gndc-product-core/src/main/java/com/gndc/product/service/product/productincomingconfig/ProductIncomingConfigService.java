@@ -10,6 +10,7 @@ package com.gndc.product.service.product.productincomingconfig;
 
 import com.gndc.common.service.BaseService;
 import com.gndc.product.api.admin.product.productincomingconfig.AOProductIncomingConfigSearchRequest;
+import com.gndc.product.dto.ProductIncomingConfigListDTO;
 import com.gndc.product.model.ProductIncomingConfig;
 
 import java.util.List;
@@ -27,5 +28,35 @@ public interface ProductIncomingConfigService extends BaseService<ProductIncomin
      * @Description
      * @author <a href="liujun8852@adpanshi.com">liujun</a>
      */
-    List<Object> selectProductIncomingConfigPage(AOProductIncomingConfigSearchRequest param);
+    List<ProductIncomingConfigListDTO> selectProductIncomingConfigPage(AOProductIncomingConfigSearchRequest param);
+
+    /**
+     * count当天老客进件
+     * @param productId 产品id
+     * @Description
+     * @author <a href="liujun8852@adpanshi.com">liujun</a>
+     */
+    Integer countSameDayOldGuestsOrder(Integer productId);
+    /**
+     * count当天新客进件
+     * @param productId 产品id
+     * @Description
+     * @author <a href="liujun8852@adpanshi.com">liujun</a>
+     */
+    Integer countSameDayNewGuestsOrder(Integer productId);
+
+    /**
+     * 新客进件
+     * @param productId 产品id
+     * @Description
+     * @author <a href="liujun8852@adpanshi.com">liujun</a>
+     */
+    Integer countNewGuests(Integer productId);
+    /**
+     * 老客进件
+     * @param productId 产品id
+     * @Description
+     * @author <a href="liujun8852@adpanshi.com">liujun</a>
+     */
+    Integer countOldGuests(Integer productId);
 }

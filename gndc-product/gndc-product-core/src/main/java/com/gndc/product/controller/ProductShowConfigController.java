@@ -8,18 +8,23 @@
  ***************************************************************************/
 package com.gndc.product.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gndc.common.api.ResponseMessage;
-import com.gndc.product.api.admin.product.productshowconfig.AOProductShowConfigAddRequest;
-import com.gndc.product.api.admin.product.productshowconfig.AOProductShowConfigUpdateRequest;
+import com.gndc.common.enums.common.StatusEnum;
+import com.gndc.product.api.admin.product.productshowconfig.*;
+import com.gndc.product.dto.ProductShowConfigListDTO;
 import com.gndc.product.mappers.ProductShowConfigMapping;
+import com.gndc.product.model.ProductFilterLabel;
+import com.gndc.product.model.ProductShowConfig;
+import com.gndc.product.service.product.productfilterlabel.ProductFilterLabelService;
 import com.gndc.product.service.product.productshowconfig.ProductShowConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 /**
@@ -37,6 +42,8 @@ public class ProductShowConfigController {
     private ProductShowConfigService productShowConfigService;
     @Autowired
     private ProductShowConfigMapping productShowConfigMapping;
+    @Autowired
+    private ProductFilterLabelService productFilterLabelService;
 
 
     @PostMapping("/insert")
@@ -49,7 +56,44 @@ public class ProductShowConfigController {
     @PostMapping("/update")
     public ResponseMessage update(@RequestBody @Validated AOProductShowConfigUpdateRequest request){
         ResponseMessage responseMessage=new ResponseMessage();
+        productShowConfigService.update(request);
+        return responseMessage;
+    }
 
+    @PostMapping("/getLable/{productId}")
+    public ResponseMessage getLable(@PathVariable Integer productId){
+        ResponseMessage responseMessage=new ResponseMessage();
+        List<ProductFilterLabel> productFilterLabels = productFilterLabelService.selectByProperty(ProductFilterLabel::getProductId, productId);
+        responseMessage.setData(productFilterLabels);
+        return responseMessage;
+    }
+
+    @PostMapping("/updateOnlineStatus")
+    public ResponseMessage updateOnlineStatus(@RequestBody @Validated AOProductShowConfigUpdateOnLineStatusRequest request){
+        ResponseMessage responseMessage=new ResponseMessage();
+        ProductShowConfig productShowConfig= productShowConfigMapping.convert(request);
+        productShowConfigService.updateByPrimaryKeySelective(productShowConfig);
+        return responseMessage;
+    }
+
+    @PostMapping("/delete")
+    public ResponseMessage delete(@RequestBody @Validated AOProductShowConfigDeleteRequest request){
+        ResponseMessage responseMessage=new ResponseMessage();
+        ProductShowConfig productShowConfig = new ProductShowConfig();
+        productShowConfig.setId(request.getId());
+        productShowConfig.setStatus(StatusEnum.DELETE.getCode());
+        productShowConfigService.updateByPrimaryKeySelective(productShowConfig);
+        return responseMessage;
+    }
+
+    @PostMapping("/selectProductShowConfigPage")
+    public ResponseMessage selectProductShowConfigPage(@RequestBody @Validated AOProductShowConfigSearchRequest request){
+        ResponseMessage responseMessage=new ResponseMessage();
+        PageHelper.startPage(request.getPageNum(),request.getPageSize());
+        List<ProductShowConfigListDTO> data = productShowConfigService.selectProductShowConfigPage(request);
+        PageInfo<ProductShowConfigListDTO> pageInfo=new PageInfo<>(data);
+        responseMessage.setData(data);
+        responseMessage.setPage(pageInfo);
         return responseMessage;
     }
 }

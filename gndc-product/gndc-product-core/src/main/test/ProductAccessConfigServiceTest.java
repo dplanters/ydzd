@@ -1,10 +1,10 @@
-package com.gndc.product.service;
 
 
 import com.gndc.product.ProductApplication;
 import com.gndc.product.dto.ProductListDTO;
 import com.gndc.product.mapper.ProductAccessConfigMapper;
 import com.gndc.product.model.ProductAccessConfig;
+import com.gndc.product.service.product.ProductService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

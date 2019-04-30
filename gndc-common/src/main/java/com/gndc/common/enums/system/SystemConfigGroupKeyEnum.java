@@ -6,8 +6,10 @@ package com.gndc.common.enums.system;
 public enum SystemConfigGroupKeyEnum {
 
 
-    //具体是 PRODUCT+产品id
-    PRODUCT("PRODUCT", "产品group");
+    //
+    PRODUCT("PRODUCT", "产品group"),//具体是 PRODUCT+产品id
+    PRODUCT_BANK_LIST("PRODUCT_BANK_LIST", "产品银行卡列表group"),
+    PRODUCT_LABEL_LIST("PRODUCT_LABEL_LIST", "产品标签列表group");
 
     private String code;
     private String name;

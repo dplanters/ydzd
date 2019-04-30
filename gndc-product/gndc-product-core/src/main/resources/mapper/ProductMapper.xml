@@ -53,6 +53,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="operator_id" jdbcType="INTEGER" property="operatorId" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="bank_ids"  property="bankIds" />
   </resultMap>
 
   <select id="selectProduct" parameterType="com.gndc.product.api.admin.product.AOProductSearchRequest"  resultType="com.gndc.product.dto.ProductListDTO">
@@ -77,7 +78,7 @@
         and product.create_time <![CDATA[ >=  ]]>  str_to_date( #{startTime}, '%Y-%m-%d %H:%I:%S');
       </if>
       <if test="endTime!=null">
-        and product.create_time <![CDATA[ <=   ]]> str_to_date( #{endTime}, '%Y-%m-%d %H:%I:%S');
+        and product.create_time <![CDATA[ <   ]]> str_to_date( #{endTime}, '%Y-%m-%d %H:%I:%S');
       </if>
     </where>
   </select>

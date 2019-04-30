@@ -9,10 +9,15 @@
 package com.gndc.product.controller;
 
 import cn.hutool.core.date.DateUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gndc.common.api.ResponseMessage;
 import com.gndc.product.api.admin.product.productincomingconfig.AOProductIncomingConfigAddRequest;
+import com.gndc.product.api.admin.product.productincomingconfig.AOProductIncomingConfigIncomingInfoRequest;
 import com.gndc.product.api.admin.product.productincomingconfig.AOProductIncomingConfigSearchRequest;
 import com.gndc.product.api.admin.product.productincomingconfig.AOProductIncomingConfigUpdateRequest;
+import com.gndc.product.dto.ProductIncomingConfigListDTO;
+import com.gndc.product.dto.ProductIncomingConfigUpdateDTO;
 import com.gndc.product.mappers.ProductIncmingConfigMapping;
 import com.gndc.product.model.ProductIncomingConfig;
 import com.gndc.product.service.product.productincomingconfig.ProductIncomingConfigService;
@@ -26,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -85,13 +91,41 @@ public class ProductIncomingConfigController {
     }
 
 
+    @PostMapping("/getIncomingInfo")
+    public ResponseMessage<ProductIncomingConfigUpdateDTO> getIncomingInfo(@RequestBody @Validated AOProductIncomingConfigIncomingInfoRequest request){
+        ResponseMessage<ProductIncomingConfigUpdateDTO> responseMessage=new ResponseMessage();
+
+        Integer countNewGuests = productIncomingConfigService.countNewGuests(request.getProductId());
+        Integer countOldGuests = productIncomingConfigService.countOldGuests(request.getProductId());
+        Integer countSameDayNewGuestsOrder = productIncomingConfigService.countSameDayNewGuestsOrder(request.getProductId());
+        Integer countSameDayOldGuestsOrder = productIncomingConfigService.countSameDayOldGuestsOrder(request.getProductId());
+        ProductIncomingConfig productIncomingConfig = productIncomingConfigService.selectOneByProperty(ProductIncomingConfig::getProductId, request.getProductId());
+
+        ProductIncomingConfigUpdateDTO productIncomingConfigUpdateDTO=new ProductIncomingConfigUpdateDTO();
+        productIncomingConfigUpdateDTO.setNewUser(countNewGuests);
+        productIncomingConfigUpdateDTO.setOldUser(countOldGuests);
+        productIncomingConfigUpdateDTO.setSameDayNewUser(countSameDayNewGuestsOrder);
+        productIncomingConfigUpdateDTO.setSameDayOldUser(countSameDayOldGuestsOrder);
+        productIncomingConfigUpdateDTO.setProductIncomingConfig(productIncomingConfig);
+
+        responseMessage.setData(productIncomingConfigUpdateDTO);
+        return responseMessage;
+    }
 
 
+    /**
+     * 分页查询
+     * @Description
+     * @author <a href="liujun8852@adpanshi.com">liujun</a>
+     */
     @PostMapping("/selectProductIncomingConfigPage")
     public ResponseMessage selectPage(@RequestBody @Validated AOProductIncomingConfigSearchRequest request){
         ResponseMessage responseMessage=new ResponseMessage();
-
-
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
+        List<ProductIncomingConfigListDTO> data = productIncomingConfigService.selectProductIncomingConfigPage(request);
+        PageInfo<ProductIncomingConfigListDTO> pageInfo = new PageInfo<>(data);
+        responseMessage.setData(data);
+        responseMessage.setPage(pageInfo);
         return responseMessage;
     }
 

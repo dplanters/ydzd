@@ -12,40 +12,17 @@ import com.gndc.common.api.RequestMessage;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * @author <a href="liujun8852@adpanshi.com">liujun</a>
  * @version V1.0.1
  * @Description
- * @date 2019/4/29  14:58
+ * @date 2019/4/27  13:54
  */
 @Data
-public class AOProductShowConfigUpdateRequest extends RequestMessage implements Serializable {
+public class AOProductShowConfigDeleteRequest extends RequestMessage  {
 
     @NotNull
     private Integer id;
-    /**
-     * 产品id
-     */
-    @NotNull
-    private Integer productId;
-    /**
-     * 马甲包渠道id
-     */
-    @NotNull
-    private Integer channelId;
-    /**
-     * 展示模块 1：首页-精选爆款；5：找贷款；15：极速贷；
-     */
-    @NotNull
-    private Byte showModule;
-    //标签id
-    private String[] labels;
-    /**
-     * 展示位置
-     */
-    private Byte showPosition;
-
 
 }
