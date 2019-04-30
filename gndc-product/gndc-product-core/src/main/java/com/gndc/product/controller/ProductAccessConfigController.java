@@ -14,7 +14,7 @@ import com.gndc.product.api.admin.product.productaccessconfig.AOProductAccessCon
 import com.gndc.product.api.admin.product.productaccessconfig.AOProductAccessConfigUpdateRquest;
 import com.gndc.product.mappers.ProductAccessConfigMapping;
 import com.gndc.product.model.ProductAccessConfig;
-import com.gndc.product.service.ProductAccessConfigService;
+import com.gndc.product.service.product.productaccessconfig.ProductAccessConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

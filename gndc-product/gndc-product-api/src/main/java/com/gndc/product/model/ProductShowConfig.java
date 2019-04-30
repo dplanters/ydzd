@@ -39,7 +39,7 @@ public class ProductShowConfig extends BaseEntity {
     private Byte showPosition;
 
     /**
-     * 马甲 1：上线；0：下线
+     * 马甲 1：上线；0：下线  OnlineStatusEnum
      */
     @Column(name = "online_status")
     private Byte onlineStatus;

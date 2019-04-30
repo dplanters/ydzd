@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gndc.product.mapper.ProductIncomingConfigMapper">
+  <resultMap id="BaseResultMap" type="com.gndc.product.model.ProductIncomingConfig">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="new_user" jdbcType="INTEGER" property="newUser" />
+    <result column="new_user_limit" jdbcType="BIT" property="newUserLimit" />
+    <result column="old_user" jdbcType="INTEGER" property="oldUser" />
+    <result column="old_user_limit" jdbcType="BIT" property="oldUserLimit" />
+    <result column="uv" jdbcType="INTEGER" property="uv" />
+    <result column="uv_limit" jdbcType="BIT" property="uvLimit" />
+    <result column="cpa" jdbcType="INTEGER" property="cpa" />
+    <result column="cpa_limit" jdbcType="BIT" property="cpaLimit" />
+    <result column="cps" jdbcType="INTEGER" property="cps" />
+    <result column="cps_limit" jdbcType="BIT" property="cpsLimit" />
+    <result column="effect_time" jdbcType="TIMESTAMP" property="effectTime" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="operator_id" jdbcType="INTEGER" property="operatorId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+</mapper>

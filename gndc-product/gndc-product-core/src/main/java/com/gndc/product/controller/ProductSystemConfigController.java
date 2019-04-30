@@ -15,7 +15,7 @@ import com.gndc.product.api.admin.systemconfig.AOSystemConfigGetByIdRequest;
 import com.gndc.product.api.admin.systemconfig.AOSystemConfigUpdateRequest;
 import com.gndc.product.mappers.ProductSystemConfigMapping;
 import com.gndc.product.model.SystemConfig;
-import com.gndc.product.service.ProductSystemConfigService;
+import com.gndc.product.service.product.productsystemconfig.ProductSystemConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -30,12 +30,12 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
-@RequestMapping("/productCertificationItem")
+@RequestMapping("/productSystemConfig")
 public class ProductSystemConfigController {
 
     @Autowired
     private ProductSystemConfigService systemConfigService;
-
+    @Autowired
     private ProductSystemConfigMapping productSystemConfigMapping;
 
 

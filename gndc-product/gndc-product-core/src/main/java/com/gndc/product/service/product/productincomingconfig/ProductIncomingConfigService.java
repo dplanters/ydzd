@@ -6,10 +6,13 @@
  * 版权说明：本软件属浙江盘石信息技术股份有限公司所有，在未获浙江盘石信息技术股份有限公司正式授权情况下，
  *          任何企业和个人，不能获取、阅读、安装、传播本软件涉及的任何受知识产权保护的内容。   
  ***************************************************************************/
-package com.gndc.product.service;
+package com.gndc.product.service.product.productincomingconfig;
 
 import com.gndc.common.service.BaseService;
-import com.gndc.product.model.ProductAccessConfig;
+import com.gndc.product.api.admin.product.productincomingconfig.AOProductIncomingConfigSearchRequest;
+import com.gndc.product.model.ProductIncomingConfig;
+
+import java.util.List;
 
 /**
  * @author <a href="liujun8852@adpanshi.com">liujun</a>
@@ -17,7 +20,12 @@ import com.gndc.product.model.ProductAccessConfig;
  * @Description
  * @date 2019/4/28  9:14
  */
-public interface ProductAccessConfigService extends BaseService<ProductAccessConfig, Integer> {
+public interface ProductIncomingConfigService extends BaseService<ProductIncomingConfig, Integer> {
 
-
+    /**
+     * 列表分页查询
+     * @Description
+     * @author <a href="liujun8852@adpanshi.com">liujun</a>
+     */
+    List<Object> selectProductIncomingConfigPage(AOProductIncomingConfigSearchRequest param);
 }

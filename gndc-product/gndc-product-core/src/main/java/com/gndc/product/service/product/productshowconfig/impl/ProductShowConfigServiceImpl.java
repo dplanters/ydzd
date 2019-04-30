@@ -6,15 +6,15 @@
  * 版权说明：本软件属浙江盘石信息技术股份有限公司所有，在未获浙江盘石信息技术股份有限公司正式授权情况下，
  *          任何企业和个人，不能获取、阅读、安装、传播本软件涉及的任何受知识产权保护的内容。   
  ***************************************************************************/
-package com.gndc.product.service.impl;
+package com.gndc.product.service.product.productshowconfig.impl;
 
 import com.gndc.common.service.impl.BaseServiceImpl;
 import com.gndc.product.api.admin.product.productshowconfig.AOProductShowConfigAddRequest;
 import com.gndc.product.mappers.ProductShowConfigMapping;
 import com.gndc.product.model.ProductFilterLabel;
 import com.gndc.product.model.ProductShowConfig;
-import com.gndc.product.service.ProductFilterLabelService;
-import com.gndc.product.service.ProductShowConfigService;
+import com.gndc.product.service.product.productfilterlabel.ProductFilterLabelService;
+import com.gndc.product.service.product.productshowconfig.ProductShowConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

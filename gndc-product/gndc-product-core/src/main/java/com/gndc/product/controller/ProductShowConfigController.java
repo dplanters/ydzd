@@ -12,7 +12,7 @@ import com.gndc.common.api.ResponseMessage;
 import com.gndc.product.api.admin.product.productshowconfig.AOProductShowConfigAddRequest;
 import com.gndc.product.api.admin.product.productshowconfig.AOProductShowConfigUpdateRequest;
 import com.gndc.product.mappers.ProductShowConfigMapping;
-import com.gndc.product.service.ProductShowConfigService;
+import com.gndc.product.service.product.productshowconfig.ProductShowConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

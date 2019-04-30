@@ -6,23 +6,20 @@
  * 版权说明：本软件属浙江盘石信息技术股份有限公司所有，在未获浙江盘石信息技术股份有限公司正式授权情况下，
  *          任何企业和个人，不能获取、阅读、安装、传播本软件涉及的任何受知识产权保护的内容。   
  ***************************************************************************/
-package com.gndc.product.service;
+package com.gndc.product.service.product.productshowconfig;
 
 import com.gndc.common.service.BaseService;
-import com.gndc.product.api.admin.product.AOProductSearchRequest;
-import com.gndc.product.dto.ProductListDTO;
-import com.gndc.product.model.Product;
-
-import java.util.List;
+import com.gndc.product.api.admin.product.productshowconfig.AOProductShowConfigAddRequest;
+import com.gndc.product.model.ProductShowConfig;
 
 /**
  * @author <a href="liujun8852@adpanshi.com">liujun</a>
  * @version V1.0.1
  * @Description
- * @date 2019/4/27  14:55
+ * @date 2019/4/28  9:14
  */
-public interface ProductService extends BaseService<Product,Integer> {
+public interface ProductShowConfigService extends BaseService<ProductShowConfig, Integer> {
 
-    List<ProductListDTO> selectProduct(AOProductSearchRequest param);
+    void insert(AOProductShowConfigAddRequest request);
 
 }
