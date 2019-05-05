@@ -6,7 +6,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import tk.mybatis.spring.annotation.MapperScan;
 
-@MapperScan(basePackages = "com.gndc.product.mapper")
+@MapperScan(basePackages = "com.gndc.common.mapper")
 @SpringBootApplication(scanBasePackages = {
         "com.gndc.product", "com.gndc.common.config",
         "com.gndc.common.utils", "com.gndc.common.exception",

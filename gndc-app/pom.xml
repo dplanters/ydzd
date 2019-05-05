@@ -32,10 +32,6 @@
             <groupId>com.gndc</groupId>
             <artifactId>gndc-common</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.gndc</groupId>
-            <artifactId>gndc-third</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -94,11 +90,6 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-quartz</artifactId>
         </dependency>
     </dependencies>
 

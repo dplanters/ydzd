@@ -1,11 +1,13 @@
 package com.gndc.common.model;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 
 @Data
 @Table(name = "dc_partner_api")
+@Accessors(chain = true)
 @Entity
 public class PartnerApi extends BaseEntity {
 

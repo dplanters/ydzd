@@ -29,23 +29,12 @@
     <dependencies>
         <dependency>
             <groupId>com.gndc</groupId>
-            <artifactId>gndc-core-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.gndc</groupId>
             <artifactId>gndc-open-api</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.gndc</groupId>
             <artifactId>gndc-demo-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.gndc</groupId>
-            <artifactId>gndc-third</artifactId>
-            <version>1.0.0</version>
         </dependency>
 
         <dependency>

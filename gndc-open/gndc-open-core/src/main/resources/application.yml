@@ -23,7 +23,7 @@ pagehelper:
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.gndc.open.model
+  type-aliases-package: com.gndc.common.model
 
 server:
   port: 55001

@@ -4,11 +4,8 @@ import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.api.Header;
 import com.gndc.common.api.ResponseMessage;
-import com.gndc.core.api.admin.account.AOLoginRequest;
-import com.gndc.core.api.admin.account.AOLoginResponse;
-import com.gndc.core.client.AOAccountClient;
+import com.gndc.common.model.Demo;
 import com.gndc.demo.api.DemoRequest;
-import com.gndc.demo.model.Demo;
 import com.gndc.demo.service.demo.DemoService;
 import com.gndc.open.api.OpenDemoRequest;
 import com.gndc.open.client.OpenDemoClient;
@@ -30,9 +27,6 @@ public class DemoController {
 
     @Autowired
     private OpenDemoClient openDemoClient;
-
-    @Autowired
-    private AOAccountClient aoAccountClient;
 
     @PostMapping("/demo")
     public ResponseMessage<Object> demo(@Validated @RequestBody DemoRequest request) {
@@ -57,12 +51,4 @@ public class DemoController {
         return response;
     }
 
-    @PostMapping("/login")
-    ResponseMessage<Object> login(@Validated @RequestBody AOLoginRequest request) {
-        ResponseMessage<Object> response = new ResponseMessage<>();
-        log.info("调用登录服务");
-        ResponseMessage<AOLoginResponse> login = aoAccountClient.login(request);
-        response.setData(new JSONObject().fluentPut("hello", "feign").fluentPut("loginResponse", login));
-        return response;
-    }
 }

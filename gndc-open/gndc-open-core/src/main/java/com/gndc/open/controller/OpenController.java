@@ -3,11 +3,12 @@ package com.gndc.open.controller;
 import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.api.ResponseMessage;
-import com.gndc.core.client.PartnerApiClient;
-import com.gndc.core.model.PartnerApi;
+import com.gndc.common.enums.partner.PartnerApiTypeEnum;
+import com.gndc.common.model.PartnerApi;
 import com.gndc.open.api.OpenDemoRequest;
 import com.gndc.open.api.UserJudgeRequest;
 import com.gndc.open.manager.PartnerManager;
+import com.gndc.open.service.PartnerApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -25,7 +26,7 @@ public class OpenController {
     private PartnerManager partnerManager;
 
     @Autowired
-    private PartnerApiClient partnerApiClient;
+    private PartnerApiService partnerApiService;
 
     /**
      * 判断用户是否可贷款接口
@@ -34,14 +35,14 @@ public class OpenController {
      */
     @PostMapping("/userJudge")
     public ResponseMessage<Object> userJudge(@Validated @RequestBody UserJudgeRequest request) {
-        ResponseMessage<PartnerApi> partnerApiDetail = partnerApiClient.detail(request.getPartnerId(), 1);
 
+        PartnerApi partnerApi = partnerApiService.getPartnerApi(request.getPartnerId(), PartnerApiTypeEnum.LOAN_JUDGEMENT);
         JSONObject params = new JSONObject();
         params.fluentPut("idCard", request.getIdCard())
                 .fluentPut("phone", request.getPhone())
                 .fluentPut("productId", request.getProductNo());
 
-        return partnerManager.post(partnerApiDetail.getData().getApiUrl(), params);
+        return partnerManager.post(partnerApi.getApiUrl(), params);
     }
 
 
