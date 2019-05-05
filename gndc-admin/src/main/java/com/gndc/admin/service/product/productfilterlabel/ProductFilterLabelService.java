@@ -6,27 +6,18 @@
  * 版权说明：本软件属浙江盘石信息技术股份有限公司所有，在未获浙江盘石信息技术股份有限公司正式授权情况下，
  *          任何企业和个人，不能获取、阅读、安装、传播本软件涉及的任何受知识产权保护的内容。   
  ***************************************************************************/
-package com.gndc.admin.mappers;
+package com.gndc.admin.service.product.productfilterlabel;
 
-import com.gndc.common.api.admin.product.AOProductAddRequest;
-import com.gndc.common.api.admin.product.AOProductUpdateOnLineStatusRequest;
-import com.gndc.common.api.admin.product.AOProductUpdateRequest;
-import com.gndc.common.model.Product;
-import org.mapstruct.Mapper;
+import com.gndc.common.model.ProductFilterLabel;
+import com.gndc.common.service.BaseService;
 
 /**
  * @author <a href="liujun8852@adpanshi.com">liujun</a>
  * @version V1.0.1
  * @Description
- * @date 2019/4/27  13:52
+ * @date 2019/4/28  9:14
  */
-@Mapper(componentModel = "spring")
-public interface ProductMapping {
+public interface ProductFilterLabelService extends BaseService<ProductFilterLabel, Integer> {
 
-    Product convert(AOProductAddRequest request);
-
-    Product convert(AOProductUpdateRequest request);
-
-    Product convert(AOProductUpdateOnLineStatusRequest request);
 
 }

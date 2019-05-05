@@ -8,10 +8,10 @@
  ***************************************************************************/
 package com.gndc.admin.mappers;
 
-import com.gndc.common.api.admin.product.AOProductAddRequest;
-import com.gndc.common.api.admin.product.AOProductUpdateOnLineStatusRequest;
-import com.gndc.common.api.admin.product.AOProductUpdateRequest;
-import com.gndc.common.model.Product;
+import com.gndc.common.api.admin.product.productshowconfig.AOProductShowConfigAddRequest;
+import com.gndc.common.api.admin.product.productshowconfig.AOProductShowConfigUpdateOnLineStatusRequest;
+import com.gndc.common.api.admin.product.productshowconfig.AOProductShowConfigUpdateRequest;
+import com.gndc.common.model.ProductShowConfig;
 import org.mapstruct.Mapper;
 
 /**
@@ -21,12 +21,12 @@ import org.mapstruct.Mapper;
  * @date 2019/4/27  13:52
  */
 @Mapper(componentModel = "spring")
-public interface ProductMapping {
+public interface ProductShowConfigMapping {
 
-    Product convert(AOProductAddRequest request);
+    ProductShowConfig convert(AOProductShowConfigAddRequest request);
 
-    Product convert(AOProductUpdateRequest request);
+    ProductShowConfig convert(AOProductShowConfigUpdateRequest request);
 
-    Product convert(AOProductUpdateOnLineStatusRequest request);
+    ProductShowConfig convert(AOProductShowConfigUpdateOnLineStatusRequest request);
 
 }

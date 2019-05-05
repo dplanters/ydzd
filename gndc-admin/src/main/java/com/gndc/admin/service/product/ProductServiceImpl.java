@@ -10,8 +10,12 @@ package com.gndc.admin.service.product;
 
 import com.gndc.common.api.admin.product.AOProductSearchRequest;
 import com.gndc.common.dto.ProductListDTO;
+import com.gndc.common.mapper.ProductMapper;
 import com.gndc.common.model.Product;
-import com.gndc.common.service.BaseService;
+import com.gndc.common.service.impl.BaseServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -21,8 +25,18 @@ import java.util.List;
  * @Description
  * @date 2019/4/27  14:55
  */
-public interface ProductService extends BaseService<Product,Integer> {
+@Slf4j
+@Service
+public class ProductServiceImpl extends BaseServiceImpl<Product,Integer> implements ProductService {
 
-    List<ProductListDTO> selectProduct(AOProductSearchRequest param);
+    @Autowired
+    private ProductMapper productMapper;
+
+
+    @Override
+    public List<ProductListDTO> selectProduct(AOProductSearchRequest param){
+        return productMapper.selectProduct(param);
+    }
+
 
 }

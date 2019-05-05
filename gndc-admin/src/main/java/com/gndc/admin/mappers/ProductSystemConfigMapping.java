@@ -8,10 +8,9 @@
  ***************************************************************************/
 package com.gndc.admin.mappers;
 
-import com.gndc.common.api.admin.product.AOProductAddRequest;
-import com.gndc.common.api.admin.product.AOProductUpdateOnLineStatusRequest;
-import com.gndc.common.api.admin.product.AOProductUpdateRequest;
-import com.gndc.common.model.Product;
+import com.gndc.common.api.admin.systemconfig.AOSystemConfigAddRequest;
+import com.gndc.common.api.admin.systemconfig.AOSystemConfigUpdateRequest;
+import com.gndc.common.model.SystemConfig;
 import org.mapstruct.Mapper;
 
 /**
@@ -21,12 +20,10 @@ import org.mapstruct.Mapper;
  * @date 2019/4/27  13:52
  */
 @Mapper(componentModel = "spring")
-public interface ProductMapping {
+public interface ProductSystemConfigMapping {
 
-    Product convert(AOProductAddRequest request);
+    SystemConfig convert(AOSystemConfigAddRequest request);
 
-    Product convert(AOProductUpdateRequest request);
-
-    Product convert(AOProductUpdateOnLineStatusRequest request);
+    SystemConfig convert(AOSystemConfigUpdateRequest request);
 
 }
