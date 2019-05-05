@@ -31,11 +31,6 @@
 
         <dependency>
             <groupId>com.gndc</groupId>
-            <artifactId>gndc-core-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.gndc</groupId>
             <artifactId>gndc-open-api</artifactId>
         </dependency>
 
