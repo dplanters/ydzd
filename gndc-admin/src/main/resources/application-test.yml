@@ -36,7 +36,7 @@ spring:
         prefer-ip-address: true
         service-name: gndc-admin
         instance-id: ${spring.application.name}-${random.uuid}
-        hostname: dev.gndc.core.com
+        hostname: dev.gndc.admin.com
         tags:
           - java
           - service

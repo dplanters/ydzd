@@ -98,40 +98,40 @@
         </trim>
     </select>
 
-    <select id="apDataAnalysis" resultType="com.gndc.admin.api.partner.data.APDataAnalysisListResponse">
-        select date(create_time) date, count(*) count
-        from dc_event_fee
-        where
-        <trim prefix="(" prefixOverrides="and" suffix=")">
-            <if test="partnerId != null and partnerId != ''">
-                and partner_id = #{partnerId,jdbcType=INTEGER}
-            </if>
-            <if test="productId != null and productId != ''">
-                and product_id = #{productId,jdbcType=INTEGER}
-            </if>
-            <if test="feeType != null and feeType != ''">
-                and fee_type = #{feeType,jdbcType=TINYINT}
-            </if>
-            <if test="coopeMode != null and coopeMode != ''">
-                and coope_mode = #{coopeMode,jdbcType=TINYINT}
-            </if>
-            <if test="eventType != null and eventType != ''">
-                and event_type in (1, 2, 8)
-            </if>
-            <if test="feeStatus != null and feeStatus != ''">
-                and fee_status = #{feeStatus,jdbcType=TINYINT}
-            </if>
-            <if test="startDate != null and startDate != ''">
-                and date(create_time) &gt;= str_to_date(#{startDate}, '%Y-%m-%d %H:%i:%s')
-            </if>
-            <if test="endDate != null and endDate != ''">
-                and date(create_time) &lt;= str_to_date(#{endDate},'%Y-%m-%d %H:%i:%s')
-            </if>
-            and status = 1
-        </trim>
-        group by year(create_time), month(create_time), day(create_time)
-        order by create_time desc
-    </select>
+<!--    <select id="apDataAnalysis" resultType="com.gndc.admin.api.partner.data.APDataAnalysisListResponse">-->
+<!--        select date(create_time) date, count(*) count-->
+<!--        from dc_event_fee-->
+<!--        where-->
+<!--        <trim prefix="(" prefixOverrides="and" suffix=")">-->
+<!--            <if test="partnerId != null and partnerId != ''">-->
+<!--                and partner_id = #{partnerId,jdbcType=INTEGER}-->
+<!--            </if>-->
+<!--            <if test="productId != null and productId != ''">-->
+<!--                and product_id = #{productId,jdbcType=INTEGER}-->
+<!--            </if>-->
+<!--            <if test="feeType != null and feeType != ''">-->
+<!--                and fee_type = #{feeType,jdbcType=TINYINT}-->
+<!--            </if>-->
+<!--            <if test="coopeMode != null and coopeMode != ''">-->
+<!--                and coope_mode = #{coopeMode,jdbcType=TINYINT}-->
+<!--            </if>-->
+<!--            <if test="eventType != null and eventType != ''">-->
+<!--                and event_type in (1, 2, 8)-->
+<!--            </if>-->
+<!--            <if test="feeStatus != null and feeStatus != ''">-->
+<!--                and fee_status = #{feeStatus,jdbcType=TINYINT}-->
+<!--            </if>-->
+<!--            <if test="startDate != null and startDate != ''">-->
+<!--                and date(create_time) &gt;= str_to_date(#{startDate}, '%Y-%m-%d %H:%i:%s')-->
+<!--            </if>-->
+<!--            <if test="endDate != null and endDate != ''">-->
+<!--                and date(create_time) &lt;= str_to_date(#{endDate},'%Y-%m-%d %H:%i:%s')-->
+<!--            </if>-->
+<!--            and status = 1-->
+<!--        </trim>-->
+<!--        group by year(create_time), month(create_time), day(create_time)-->
+<!--        order by create_time desc-->
+<!--    </select>-->
 
     <select id="apDataAnalysisCount" resultType="long">
         select
@@ -217,27 +217,27 @@
         </trim>
     </select>
 
-    <select id="settlementList4H5" resultType="com.gndc.admin.api.partner.finance.settlement.APFinanceSettlement4H5Response">
-        select
-        f.id,u.phone,f.fee,f.fee_status as feeStatus,f.create_time as createTime
-        from dc_event_fee f
-        left join dc_user_events e on f.event_id = e.id
-        left join dc_user u on e.user_id = u.id
-        where f.status = 1
-        <if test="option != null">
-            <if test="option.id != null and option.id != 0">
-                and f.id = #{option.id,jdbcType=INTEGER}
-            </if>
-            <if test="option.productId != null and option.id != 0">
-                and e.product_id = #{option.productId,jdbcType=INTEGER}
-            </if>
-            <if test="option.startDate != null and option.startDate != ''">
-                and f.create_time <![CDATA[>=]]> #{option.startDate,jdbcType=VARCHAR}
-            </if>
-            <if test="option.endDate != null and option.endDate != ''">
-                and f.create_time <![CDATA[<=]]> #{option.endDate,jdbcType=INTEGER}
-            </if>
-        </if>
-        order by f.create_time desc
-    </select>
+<!--    <select id="settlementList4H5" resultType="com.gndc.admin.api.partner.finance.settlement.APFinanceSettlement4H5Response">-->
+<!--        select-->
+<!--        f.id,u.phone,f.fee,f.fee_status as feeStatus,f.create_time as createTime-->
+<!--        from dc_event_fee f-->
+<!--        left join dc_user_events e on f.event_id = e.id-->
+<!--        left join dc_user u on e.user_id = u.id-->
+<!--        where f.status = 1-->
+<!--        <if test="option != null">-->
+<!--            <if test="option.id != null and option.id != 0">-->
+<!--                and f.id = #{option.id,jdbcType=INTEGER}-->
+<!--            </if>-->
+<!--            <if test="option.productId != null and option.id != 0">-->
+<!--                and e.product_id = #{option.productId,jdbcType=INTEGER}-->
+<!--            </if>-->
+<!--            <if test="option.startDate != null and option.startDate != ''">-->
+<!--                and f.create_time <![CDATA[>=]]> #{option.startDate,jdbcType=VARCHAR}-->
+<!--            </if>-->
+<!--            <if test="option.endDate != null and option.endDate != ''">-->
+<!--                and f.create_time <![CDATA[<=]]> #{option.endDate,jdbcType=INTEGER}-->
+<!--            </if>-->
+<!--        </if>-->
+<!--        order by f.create_time desc-->
+<!--    </select>-->
 </mapper>
