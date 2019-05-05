@@ -36,19 +36,15 @@ public class OpenController {
     public ResponseMessage<Object> userJudge(@Validated @RequestBody UserJudgeRequest request) {
         ResponseMessage<PartnerApi> partnerApiDetail = partnerApiClient.detail(request.getPartnerId(), 1);
 
-        if (partnerApiDetail.getSuccess()) {
-            JSONObject params = new JSONObject();
-            params.fluentPut("idCard", request.getIdCard())
-                    .fluentPut("phone", request.getPhone())
-                    .fluentPut("productId", request.getProductNo());
+        JSONObject params = new JSONObject();
+        params.fluentPut("idCard", request.getIdCard())
+                .fluentPut("phone", request.getPhone())
+                .fluentPut("productId", request.getProductNo());
 
-            partnerManager.userJudge(partnerApiDetail.getData().getApiUrl(), params);
-
-        } else {
-
-        }
-        return null;
+        return partnerManager.post(partnerApiDetail.getData().getApiUrl(), params);
     }
+
+
 
     @PostMapping("/openDemo")
     public ResponseMessage<Object> demo(@Validated @RequestBody OpenDemoRequest request) {

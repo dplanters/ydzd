@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gndc.product.mapper.ProductIncomingConfigMapper">
+  <resultMap id="BaseResultMap" type="com.gndc.common.model.ProductIncomingConfig">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="new_user" jdbcType="INTEGER" property="newUser" />
+    <result column="new_user_limit" jdbcType="BIT" property="newUserLimit" />
+    <result column="old_user" jdbcType="INTEGER" property="oldUser" />
+    <result column="old_user_limit" jdbcType="BIT" property="oldUserLimit" />
+    <result column="uv" jdbcType="INTEGER" property="uv" />
+    <result column="uv_limit" jdbcType="BIT" property="uvLimit" />
+    <result column="cpa" jdbcType="INTEGER" property="cpa" />
+    <result column="cpa_limit" jdbcType="BIT" property="cpaLimit" />
+    <result column="cps" jdbcType="INTEGER" property="cps" />
+    <result column="cps_limit" jdbcType="BIT" property="cpsLimit" />
+    <result column="effect_time" jdbcType="TIMESTAMP" property="effectTime" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="operator_id" jdbcType="INTEGER" property="operatorId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+
+
+  <select id="selectProductIncomingConfigPage" parameterType="com.gndc.common.api.admin.product.productincomingconfig.AOProductIncomingConfigSearchRequest" resultType="com.gndc.common.dto.ProductIncomingConfigListDTO">
+    SELECT
+        incoming.create_time,incoming.update_time,product.name AS ProductName,
+        partner.name AS PartnerName,product.settlement_mode,product.settlement_price,
+        incoming.new_user,incoming.old_user,
+        product.id as productId
+    FROM dc_product product LEFT JOIN dc_partner partner ON partner.id=product.partner_id
+    LEFT JOIN dc_product_incoming_config incoming ON product.id=incoming.product_id
+    <where>
+      <if test="productId!=null">
+        product.id=#{productId}
+      </if>
+      <if test="partnerId!=null">
+        and partner.id=#{partnerId}
+      </if>
+      <if test="startTime!=null">
+        and incoming.create_time <![CDATA[ >=  ]]> str_to_date( #{startTime}, '%Y-%m-%d %H:%I:%S');
+      </if>
+      <if test="endTime!=null">
+        and incoming.update_time <![CDATA[ <  ]]> str_to_date( #{endTime}, '%Y-%m-%d %H:%I:%S');
+      </if>
+    </where>
+  </select>
+
+  <select id="countSameDayOldGuestsOrder" parameterType="Integer" resultType="Integer">
+    SELECT COUNT(*) FROM dc_order o WHERE o.status=1 AND o.product_id=#{productId} AND o.user_id IN
+    (SELECT user_id FROM dc_order o WHERE o.status=1 AND o.product_id=#{productId} AND o.create_time=NOW())
+    GROUP BY o.user_id HAVING COUNT(o.user_id)>1
+  </select>
+  <select id="countSameDayNewGuestsOrder" parameterType="Integer" resultType="Integer">
+    SELECT COUNT(*) FROM dc_order o WHERE o.status=1 AND o.product_id=#{productId} AND o.user_id IN
+    (SELECT user_id FROM dc_order o WHERE o.status=1 AND o.product_id=#{productId} AND o.create_time=NOW())
+    GROUP BY o.user_id HAVING COUNT(o.user_id)=1
+  </select>
+
+  <select id="countOldGuests" parameterType="Integer" resultType="Integer">
+    SELECT COUNT(*) FROM dc_order o WHERE o.status=1 AND o.product_id=#{productId}  GROUP BY o.user_id HAVING COUNT(o.user_id)>1
+  </select>
+  <select id="countNewGuests" parameterType="Integer" resultType="Integer">
+    SELECT COUNT(*) FROM dc_order o WHERE o.status=1 AND o.product_id=#{productId}  GROUP BY o.user_id HAVING COUNT(o.user_id)=1
+  </select>
+</mapper>
