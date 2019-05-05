@@ -8,6 +8,9 @@
  ***************************************************************************/
 package com.gndc.common.enums.product;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author <a href="liujun8852@adpanshi.com">liujun</a>
  * @version V1.0.1
@@ -16,12 +19,10 @@ package com.gndc.common.enums.product;
  */
 public enum  SettlementModeEnum {
 
-    // 结算模式 1：UV浏览量（每天仅记一次）；2：注册推送（注册成功即收费）；3：下载收费（下载一次收费一次）；4：API计费；5：API加提成收费；
-    UV((byte)1,"UV浏览量（每天仅记一次）"),
-    REGISTER_PUSH((byte)2,"注册推送（注册成功即收费）"),
-    DOWNLOAD((byte)3,"下载收费（下载一次收费一次）"),
-    API((byte)4,"API计费"),
-    API_AND_EXTRA_INCOME((byte)5,"API加提成收费");
+    //  1：UV量；5：CPA-注册成功(H5对接) 或 一推成功(API对接)；10：CPS-放款成功；
+    UV((byte)1,"UV量"),
+    CPA((byte)5,"CPA-注册成功(H5对接) 或 一推成功(API对接)"),
+    CPS((byte)10,"CPS-放款成功");
 
     private Byte code;
     private String name;
@@ -29,6 +30,17 @@ public enum  SettlementModeEnum {
     SettlementModeEnum(Byte code, String name) {
         this.code = code;
         this.name = name;
+    }
+    private static Map<Byte,SettlementModeEnum> map;
+    static{
+        SettlementModeEnum[] values = SettlementModeEnum.values();
+        map=new HashMap<>();
+        for (int i = 0; i < values.length; i++) {
+            map.put(values[i].getCode(),values[i]);
+        }
+    }
+    public static SettlementModeEnum valueOfCode(Byte code){
+        return map.get(code);
     }
 
     public Byte getCode() {

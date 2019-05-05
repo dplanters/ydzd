@@ -15,6 +15,11 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 用于打印方法执行前参数及执行后的结果
@@ -45,7 +50,12 @@ public class InvokeRecordAspect {
         log.info("请求方式:" + request.getMethod());
         log.info("请求类方法:" + joinPoint.getSignature());
         Object[] args = joinPoint.getArgs();
-        log.info("请求类方法参数:" + JSONObject.toJSONString(args, new SimplePropertyPreFilter() {
+        Stream<Object> stream = Arrays.stream(args);
+        List<Object> logArgs = stream
+                .filter(arg -> (!(arg instanceof HttpServletRequest) && !(arg instanceof HttpServletResponse)))
+                .collect(Collectors.toList());
+
+        log.info("请求类方法参数:" + JSONObject.toJSONString(logArgs, new SimplePropertyPreFilter() {
             @Override
             public boolean apply(JSONSerializer serializer, Object object, String name) {
                 return !StrUtil.containsAnyIgnoreCase(name, "rights");

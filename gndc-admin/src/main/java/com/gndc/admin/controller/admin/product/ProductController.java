@@ -114,7 +114,7 @@ public class ProductController {
      * @Description
      * @author <a href="liujun8852@adpanshi.com">liujun</a>
      */
-    @PostMapping("/getProductInfo/")
+    @PostMapping("/getProductInfo")
     public ResponseMessage<ProductInfoDTO> getProductInfo(@RequestBody AOProductGetProductInfoRequest request){
         ResponseMessage<ProductInfoDTO> responseMessage=new ResponseMessage<ProductInfoDTO>();
         Product product = productService.selectByPrimaryKey(request.getId());

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gndc.common.mapper.SettlementMapper">
+  <resultMap id="BaseResultMap" type="com.gndc.common.model.Settlement">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="partner_id" jdbcType="INTEGER" property="partnerId" />
+    <result column="fee" jdbcType="DECIMAL" property="fee" />
+    <result column="settlement_mode" jdbcType="TINYINT" property="settlementMode" />
+    <result column="settlement_status" jdbcType="TINYINT" property="settlementStatus" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="operator_id" jdbcType="INTEGER" property="operatorId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+
+  <select id="sumFeeByCreateTimeGroupSettlementMode" parameterType="String"  resultMap="BaseResultMap">
+      SELECT SUM(fee) as fee ,settlement_mode  FROM dc_settlement  WHERE SUBSTRING(create_time,1,7)=#{value} GROUP BY settlement_mode
+  </select>
+
+  <select id="countByCreateTime" parameterType="String"  resultType="Integer">
+      SELECT count(*)  FROM dc_settlement  WHERE SUBSTRING(create_time,1,7)=#{value}
+  </select>
+
+  <select id="selectRecordInfoPage" parameterType="com.gndc.common.api.admin.settlement.SettlementRecordInfoRequest"  resultType="com.gndc.common.dto.SettlementRecordInfoDTO">
+      SELECT
+          st.settlement_time as settlementTime,st.settlement_mode as settlementMode,st.fee,st.remarks,
+          u.first_name as firstName,u.middle_name as middleName,u.last_name as lastName,u.phone,
+          product.name as productName,
+          partner.name as partnerName
+      FROM dc_settlement st LEFT JOIN dc_user u ON st.user_id=u.id LEFT JOIN dc_product product ON st.product_id=product.id
+      LEFT JOIN dc_partner partner ON product.partner_id=partner.id
+      <where>
+          <if test="settlementStartTime">
+              and st.settlement_time <![CDATA[ >=  ]]>  #{settlementStartTime}
+          </if>
+          <if test="settlementStartTime">
+              and st.settlement_time <![CDATA[ <  ]]>   #{settlementEndTime}
+          </if>
+      </where>
+  </select>
+
+
+
+</mapper>

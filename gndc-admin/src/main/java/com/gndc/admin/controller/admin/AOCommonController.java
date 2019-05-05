@@ -1,12 +1,13 @@
 package com.gndc.admin.controller.admin;
 
-import com.gndc.common.api.ResponseMessage;
 import com.gndc.admin.api.partner.common.APAllPartnerRequest;
-import com.gndc.common.model.Area;
-import com.gndc.common.model.Partner;
 import com.gndc.admin.service.area.AreaService;
 import com.gndc.admin.service.partner.PartnerService;
 import com.gndc.admin.service.sys.SystemOptionService;
+import com.gndc.common.api.ResponseMessage;
+import com.gndc.common.enums.system.SystemConfigGroupKeyEnum;
+import com.gndc.common.model.Area;
+import com.gndc.common.model.Partner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -59,4 +60,27 @@ public class AOCommonController {
         return response;
     }
 
+
+    /**
+     * 获取所有银行卡列表
+     * @return
+     */
+    @RequestMapping(value = "/getProductBankList")
+    public ResponseMessage getProductBankList() {
+        ResponseMessage response = new ResponseMessage<>();
+        Object json = redisTemplate.opsForValue().get(SystemConfigGroupKeyEnum.PRODUCT_BANK_LIST.getCode());
+        response.setData(json);
+        return response;
+    }
+    /**
+     * 获取产品所有标签列表
+     * @return
+     */
+    @RequestMapping(value = "/getProductLabelList")
+    public ResponseMessage getProductLabelList() {
+        ResponseMessage response = new ResponseMessage<>();
+        Object json = redisTemplate.opsForValue().get(SystemConfigGroupKeyEnum.PRODUCT_LABEL_LIST.getCode());
+        response.setData(json);
+        return response;
+    }
 }
