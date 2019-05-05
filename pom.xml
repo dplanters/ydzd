@@ -17,6 +17,7 @@
         <module>gndc-gateway</module>
         <module>gndc-open</module>
         <module>gndc-admin</module>
+        <module>gndc-app</module>
     </modules>
 
     <packaging>pom</packaging>

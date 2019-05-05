@@ -23,10 +23,10 @@ pagehelper:
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.gndc.product.model
+  type-aliases-package: com.gndc.common.model
 
 server:
-  port: 56001
+  port: 54001
 
 spring:
   profiles:
@@ -44,11 +44,10 @@ spring:
       testOnReturn: false
       validationQuery: SELECT 1 FROM dual
   application:
-    name: gndc-product
+    name: gndc-app
   messages:
     basename: i18n/messages
     encoding: UTF-8
-
 
 
 

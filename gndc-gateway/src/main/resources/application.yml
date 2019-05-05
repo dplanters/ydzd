@@ -29,23 +29,23 @@ zuul:
       path: /demo/**
       url: http://gndc.demo.com:52001/demo/
     gndc-admin:
-      serviceId: gndc-core
+      serviceId: gndc-admin
       path: /admin/**
-      url: http://gndc.core.com:53001/admin/
+      url: http://gndc.admin.com:53001/admin/
     gndc-partner:
-      serviceId: gndc-core
+      serviceId: gndc-admin
       path: /partner/**
-      url: http://gndc.core.com:53001/partner/
+      url: http://gndc.admin.com:53001/partner/
     gndc-app:
-      serviceId: gndc-core
+      serviceId: gndc-app
       path: /app/**
-      url: http://gndc.core.com:53001/app/
+      url: http://gndc.app.com:54001/app/
     gndc-open:
       serviceId: gndc-open
       path: /open/**
-      url: http://gndc.open.com:54001/open/**
+      url: http://gndc.open.com:55001/open/**
     gndc-product:
       serviceId: gndc-product
       path: /product/**
-      url: http://gndc.product.com:55001/product/**
+      url: http://gndc.product.com:56001/product/**
   ignored-services: "*"

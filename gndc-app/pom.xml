@@ -2,16 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+    <artifactId>gndc-app</artifactId>
     <parent>
         <artifactId>gndc-parent</artifactId>
         <groupId>com.gndc</groupId>
         <version>1.0.0</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>gndc-admin</artifactId>
     <packaging>jar</packaging>
-    <name>gndc-admin</name>
+    <name>gndc-app</name>
     <url>http://maven.apache.org</url>
 
     <dependencyManagement>
@@ -132,7 +132,7 @@
             </plugin>
         </plugins>
         <!--打包后的名字-->
-        <finalName>gndc-admin</finalName>
+        <finalName>gndc-app</finalName>
         <!--打包后加载的配置文件-->
         <resources>
             <resource>
