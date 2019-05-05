@@ -1,4 +1,4 @@
-package com.gndc.open.model;
+package com.gndc.common.model;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gndc.common.mybatis.SnowflakeIdGenId;

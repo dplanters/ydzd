@@ -1,7 +1,7 @@
 package com.gndc.open.service.impl;
 
 import com.gndc.common.service.impl.BaseServiceImpl;
-import com.gndc.open.model.Open;
+import com.gndc.common.model.Open;
 import com.gndc.open.service.OpenService;
 import org.springframework.stereotype.Service;
 

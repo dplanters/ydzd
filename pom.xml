@@ -10,7 +10,6 @@
 
     <modules>
         <module>gndc-common</module>
-        <module>gndc-core</module>
         <module>gndc-product</module>
         <module>gndc-demo</module>
         <module>gndc-third</module>
@@ -89,11 +88,6 @@
                 <version>${version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.gndc</groupId>
-                <artifactId>gndc-core-api</artifactId>
-                <version>${version}</version>
-            </dependency>
             <dependency>
                 <groupId>com.gndc</groupId>
                 <artifactId>gndc-demo-api</artifactId>

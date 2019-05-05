@@ -1,7 +1,8 @@
-package com.gndc.open.mapper;
+package com.gndc.common.mapper;
 
+
+import com.gndc.common.model.Open;
 import com.gndc.common.mybatis.MyMapper;
-import com.gndc.open.model.Open;
 
 public interface OpenMapper extends MyMapper<Open, Long> {
 }

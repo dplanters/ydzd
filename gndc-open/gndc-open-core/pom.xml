@@ -30,16 +30,12 @@
         <dependency>
             <groupId>com.gndc</groupId>
             <artifactId>gndc-open-api</artifactId>
+            <version>${version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.gndc</groupId>
             <artifactId>gndc-demo-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.gndc</groupId>
-            <artifactId>gndc-third</artifactId>
         </dependency>
 
         <dependency>
