@@ -79,24 +79,31 @@
             <dependency>
                 <groupId>com.gndc</groupId>
                 <artifactId>gndc-common</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.gndc</groupId>
                 <artifactId>gndc-third</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.gndc</groupId>
                 <artifactId>gndc-demo-api</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.gndc</groupId>
                 <artifactId>gndc-open-api</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.gndc</groupId>
+                <artifactId>gndc-product-api</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
