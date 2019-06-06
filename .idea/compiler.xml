@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="bbjh-admin" />
+        <module name="bbjh-app" />
+        <module name="bbjh-common" />
+        <module name="bbjh-gateway" />
+        <module name="bbjh-open-api" />
+        <module name="bbjh-open-core" />
+        <module name="bbjh-third" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="bbjh-admin" target="1.8" />
+      <module name="bbjh-app" target="1.8" />
+      <module name="bbjh-common" target="1.8" />
+      <module name="bbjh-gateway" target="1.8" />
+      <module name="bbjh-open" target="1.8" />
+      <module name="bbjh-open-api" target="1.8" />
+      <module name="bbjh-open-core" target="1.8" />
+      <module name="bbjh-parent" target="1.8" />
+      <module name="bbjh-third" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

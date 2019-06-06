@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bbjh-admin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bbjh-app" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bbjh-common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bbjh-demo" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bbjh-demo/bbjh-demo-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bbjh-demo/bbjh-demo-core" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bbjh-gateway" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bbjh-open" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bbjh-open/bbjh-open-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bbjh-open/bbjh-open-core" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bbjh-product" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bbjh-product/bbjh-product-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bbjh-product/bbjh-product-core" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bbjh-third" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>
