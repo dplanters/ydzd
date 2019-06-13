@@ -25,12 +25,6 @@ public class RequestMessage implements Serializable {
      * 请求的header
      */
     protected Header header;
-
-//    @ApiModelProperty(hidden = true)
-//    protected AdminLoginInfoDTO aoAdmin;
-//
-//    @ApiModelProperty(hidden = true)
-//    protected APAdminLoginInfoDTO apAdmin;
 //
     @ApiModelProperty(required = true)
     public Header getHeader() {
@@ -39,20 +33,6 @@ public class RequestMessage implements Serializable {
     public void setHeader(Header header) {
         this.header = header;
     }
-//
-//    public AdminLoginInfoDTO getAoAdmin() {
-//        return aoAdmin;
-//    }
-//    public void setAoAdmin(AdminLoginInfoDTO aoAdmin) {
-//        this.aoAdmin = aoAdmin;
-//    }
-//
-//    public APAdminLoginInfoDTO getApAdmin() {
-//        return apAdmin;
-//    }
-//    public void setApAdmin(APAdminLoginInfoDTO apAdmin) {
-//        this.apAdmin = apAdmin;
-//    }
 
     /**
     * 快速获取当前page的pageNum

@@ -63,7 +63,7 @@
         <xxl-job.version>2.0.2</xxl-job.version>
 
         <!-- 分布式服务部分 -->
-
+        <redisson-spring-boot-starter.version>3.10.7</redisson-spring-boot-starter.version>
         <!-- 测试部分 -->
 
         <!-- 插件部分 -->
@@ -178,6 +178,13 @@
                 <artifactId>java-jwt</artifactId>
                 <version>${java-jwt.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson-spring-boot-starter.version}</version>
+            </dependency>
+
             <!-- http://www.xuxueli.com/xxl-job/#/?id=xxl-job -->
             <dependency>
                 <groupId>com.xuxueli</groupId>
@@ -194,6 +201,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
         </dependency>
 
         <!-- 工具包 hutool https://hutool.cn/docs/#/ -->

@@ -7,7 +7,7 @@ spring:
     name: druid
     password: Scxx!#%&9
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://211.143.54.76:3306/bbjh_test?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
+    url: jdbc:mysql://192.168.2.111:3306/bbjh_test?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
     username: scxx
   redis:
     database: 0
@@ -40,3 +40,12 @@ spring:
         tags:
           - java
           - service
+  rabbitmq:
+    host: 192.168.2.111
+    port: 5672
+    username: scxx
+    password: scxx
+    listener:
+      simple:
+        # 手动ACK 不开启自动ACK模式，目的是防止报错后未正确处理消息丢失，默认 为 none
+        acknowledge-mode: manual

@@ -11,7 +11,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  * @author fwb
  * @date 2018/11/9
  */
-@MapperScan(basePackages = "com.bbjh.common.mapper")
+@MapperScan(basePackages = "com.bbjh.open.mapper")
 @SpringBootApplication(scanBasePackages = {
         "com.bbjh.open", "com.bbjh.common.config",
         "com.bbjh.common.utils", "com.bbjh.common.exception",

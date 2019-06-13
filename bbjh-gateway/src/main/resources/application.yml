@@ -1,5 +1,5 @@
 server:
-  port: 51001
+  port: 11001
 spring:
   application:
     name: bbjh-gateway
@@ -11,9 +11,9 @@ spring:
 
   redis:
     database: 0
-    host: localhost
+    host: 39.106.30.153
     port: 6399
-    password: guanlouyi
+    password: scxx
     lettuce:
       pool:
         max-active: 8
@@ -27,13 +27,13 @@ zuul:
     bbjh-admin:
       serviceId: bbjh-admin
       path: /admin/**
-      url: http://127.0.0.1:53001/admin/
+      url: http://127.0.0.1:13001/admin/
     bbjh-app:
       serviceId: bbjh-app
       path: /app/**
-      url: http://127.0.0.1:54001/app/
+      url: http://127.0.0.1:14001/app/
     bbjh-open:
       serviceId: bbjh-open
       path: /open/**
-      url: http://127.0.0.1:55001/
+      url: http://127.0.0.1:15001/
   ignored-services: "*"

@@ -8,7 +8,7 @@ package com.bbjh.common.constant;
 public class RabbitConstant {
 
     /**
-     * 一推成功计费队列
+     * 疫苗库存变化消息队列
      */
-    public static final String QUEUE_FIRST_PUSH_SETTLEMENT= "FIRST_PUSH_SETTLEMENT";
+    public static final String QUEUE_VACCINE_CHANGE= "QUEUE_VACCINE_CHANGE";
 }

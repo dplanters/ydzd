@@ -26,7 +26,7 @@ mybatis:
   type-aliases-package: com.bbjh.common.model
 
 server:
-  port: 53001
+  port: 13001
   servlet:
     context-path: /admin
 spring:
