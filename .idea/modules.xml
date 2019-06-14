@@ -5,11 +5,14 @@
       <module fileurl="file://$PROJECT_DIR$/bbjh-admin/bbjh-admin.iml" filepath="$PROJECT_DIR$/bbjh-admin/bbjh-admin.iml" />
       <module fileurl="file://$PROJECT_DIR$/bbjh-app/bbjh-app.iml" filepath="$PROJECT_DIR$/bbjh-app/bbjh-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/bbjh-common/bbjh-common.iml" filepath="$PROJECT_DIR$/bbjh-common/bbjh-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbjh-common/bbjh-common.iml" filepath="$PROJECT_DIR$/bbjh-common/bbjh-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/bbjh-gateway/bbjh-gateway.iml" filepath="$PROJECT_DIR$/bbjh-gateway/bbjh-gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/bbjh-open/bbjh-open.iml" filepath="$PROJECT_DIR$/bbjh-open/bbjh-open.iml" />
       <module fileurl="file://$PROJECT_DIR$/bbjh-open/bbjh-open-api/bbjh-open-api.iml" filepath="$PROJECT_DIR$/bbjh-open/bbjh-open-api/bbjh-open-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/bbjh-open/bbjh-open-core/bbjh-open-core.iml" filepath="$PROJECT_DIR$/bbjh-open/bbjh-open-core/bbjh-open-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/bbjh-parent.iml" filepath="$PROJECT_DIR$/bbjh-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbjh-parent.iml" filepath="$PROJECT_DIR$/bbjh-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbjh-third/bbjh-third.iml" filepath="$PROJECT_DIR$/bbjh-third/bbjh-third.iml" />
       <module fileurl="file://$PROJECT_DIR$/bbjh-third/bbjh-third.iml" filepath="$PROJECT_DIR$/bbjh-third/bbjh-third.iml" />
     </modules>
   </component>
